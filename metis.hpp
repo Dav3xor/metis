@@ -14,53 +14,62 @@
 #define STACK_POP_LOC              9
 
 
-#define CMD_ERROR                  0   //     if we get a 0, it's an error
+#define INS_ERROR                  0   //     if we get a 0, it's an error
 
 // jumps, stack
-#define CMD_JUMP                   1   // *   jump to index ...
-#define CMD_JUMPI                  2   //     jump to immediate index
-#define CMD_JIZZ                   3   // *   jump to index ... if zero
-#define CMD_PUSH                   4   // *   push from immediate value
-#define CMD_POP                    5   // *   pull from stack to ...
-#define CMD_STORE                  6   // *   store ... into stack offset #...
-
+#define INS_JUMP                   1   // *   jump to index ...
+#define INS_JUMPI                  2   //     jump to immediate index
+#define INS_JIZZ                   3   // *   jump to index ... if zero
+#define INS_PUSH                   4   // *   push from immediate value
+#define INS_POP                    5   // *   pull from stack to ...
+#define INS_STORE                  6   // *   store ... into stack offset #...
+#define INS_STOREI                 7   // *   store immediate value into 
 
 // Math
-#define CMD_INC                    7   // *   increment ... 
-#define CMD_DEC                    8   // *   decrement ... 
-#define CMD_ADD                    9   // *   A = A+...  (integer)
-#define CMD_SUB                   10   // *   A = A-...  (integer)
-#define CMD_MUL                   11   // *   A = A*...  (integer)
-#define CMD_DIV                   12   // *   A = A/...  (integer)
-#define CMD_MOD                   13   // *   A = A%...  (integer)
+#define INS_INC                    8   // *   increment ... 
+#define INS_DEC                    9   // *   decrement ... 
+#define INS_ADD                   10   // *   A = A+...  (integer)
+#define INS_SUB                   11   // *   A = A-...  (integer)
+#define INS_MUL                   12   // *   A = A*...  (integer)
+#define INS_DIV                   13   // *   A = A/...  (integer)
+#define INS_MOD                   14   // *   A = A%...  (integer)
 
 // Bitwise
-#define CMD_AND                   14   // *   A = A&...  (integer) 
-#define CMD_OR                    15   // *   A = A|...  (integer) 
-#define CMD_XOR                   16   // *   A = A^...  (integer) 
-#define CMD_NOT                   17   // *   A = A&...  (integer) 
+#define INS_AND                   15   // *   A = A&...  (integer) 
+#define INS_OR                    16   // *   A = A|...  (integer) 
+#define INS_XOR                   17   // *   A = A^...  (integer) 
+#define INS_NOT                   18   // *   A = A&...  (integer) 
 
-#define CMD_GLDRAW_ES             32   //     GLDrawElements, using stack args
-#define CMD_GLDRAW_EI             33   //     GLDrawElements, using immediate
-#define CMD_GLDRAW_AS             34   //     GLDrawArrays, using stack args
-#define CMD_GLDRAW_AI             35   //     GLDrawArrays, using immediate
+#define INS_GLDRAW_ES             32   //     GLDrawElements, using stack args
+#define INS_GLDRAW_EI             33   //     GLDrawElements, using immediate
+#define INS_GLDRAW_AS             34   //     GLDrawArrays, using stack args
+#define INS_GLDRAW_AI             35   //     GLDrawArrays, using immediate
 
-#define CMD_LOG                  192   //     log string pointed at by command
+#define INS_LOG                  192   //     log string pointed at by command
 
-#define CMD_END                  255   //     End Program
+#define INS_END                  255   //     End Program
 
 #define ADDR_MODES               instruction->commands.extended.addr_mode
+
+#define BUILD_ADDR(src, dest)    ((dest << 4) + src)
 
 #define MATH_OPERATION(op)       set_val(ADDR_MODES, \
                                          get_dest_val(ADDR_MODES) op \
                                          get_val(ADDR_MODES));
 
+#define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
+//#define ADVANCE(extended, data)  1+extended+data
 
 struct MetisInstruction {
   uint8_t type;
   union commands_t {
     struct extended_t {
       uint8_t addr_mode;
+      union ext_t {
+        struct ext_jump_t {
+          uint64_t value;
+        }jump;
+      }ext; 
     } extended;
     struct gldrawelements_t {
       GLenum mode;
@@ -100,6 +109,118 @@ class MetisVM {
       registers[REGERR_LOC] = 0;
       numcommands           = 0;
     };
+
+    void add_jump(uint8_t src, uint8_t dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_JUMP;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      cur += ADVANCE(1, 0);
+    };
+
+    void add_jumpi(uint64_t location) {
+      MetisInstruction *instruction                 = (MetisInstruction *)cur;
+      instruction->type                             = INS_JUMPI;      
+      instruction->commands.extended.ext.jump.value = location;
+      cur += ADVANCE(1, sizeof(ext_jump_t));
+    };
+
+    void add_jizz(uint8_t src, uint8_t dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_JIZZ;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      cur += ADVANCE(1, 0);
+    }; 
+
+    bool eval() {
+      cur = start;
+      while(cur <= end) {
+        MetisInstruction *instruction = (MetisInstruction *)cur;
+        switch (instruction->type) {
+          // instruction index and stack instructions
+          case INS_JUMP:
+            cur = start + get_val(ADDR_MODES);
+            break;
+          case INS_JUMPI:
+            cur = start + instruction->commands.jump.value;
+            break;
+          case INS_JIZZ:
+            if (get_val(ADDR_MODES)==0) {
+              cur = start + get_dest_val(ADDR_MODES);
+            }
+            break;
+          case INS_PUSH:
+            push(get_val(ADDR_MODES));
+            break;
+          case INS_POP:
+            set_val(ADDR_MODES, pop());
+            break;
+          case INS_STORE:
+            set_val(ADDR_MODES,
+                    get_val(ADDR_MODES));
+            break;
+          case INS_STOREI:
+            set_val(ADDR_MODES,
+                    instruction->commands.extended.ext.jump.value);
+            break;
+
+          // math instructions
+          case INS_INC:
+            set_val(ADDR_MODES,
+                    get_val(ADDR_MODES)+1);
+            break;
+          case INS_DEC:
+            set_val(ADDR_MODES,
+                    get_val(ADDR_MODES)-1);
+            break;
+          case INS_ADD:
+            MATH_OPERATION(+);
+            break;
+          case INS_SUB:
+            MATH_OPERATION(-);
+            break;
+          case INS_MUL:
+            MATH_OPERATION(*);
+            break;
+          case INS_DIV:
+            MATH_OPERATION(/);
+            break;
+          case INS_MOD:
+            MATH_OPERATION(%);
+            break;
+          
+          // logical operation          
+          case INS_AND:
+            MATH_OPERATION(&);
+            break;
+          case INS_OR:
+            MATH_OPERATION(|);
+            break;
+          case INS_XOR:
+            MATH_OPERATION(^);
+            break;
+          case INS_NOT:
+            set_val(ADDR_MODES, ~get_val(ADDR_MODES));
+            break;
+
+          case INS_END:
+            return true;
+            break;
+          case INS_ERROR:
+          default:
+            return false;
+            break;
+        };
+      };
+    };
+
+  private:
+    uint64_t    registers[8];
+    uint64_t    stack[STACK_SIZE];
+    uint64_t    numcommands;
+    
+    uint8_t    *start;
+    uint8_t    *cur;
+    uint8_t    *end;
 
     void push(uint64_t val) {
       if( registers[REGS_LOC] >= STACK_SIZE-1) {
@@ -175,90 +296,6 @@ class MetisVM {
       }
     }     
       
-    bool Eval() {
-      while(cur <= end) {
-        MetisInstruction *instruction = (MetisInstruction *)cur;
-        switch (instruction->type) {
-          // instruction index and stack instructions
-          case CMD_JUMP:
-            cur = start + get_val(ADDR_MODES);
-            break;
-          case CMD_JUMPI:
-            cur = start + instruction->commands.jump.value;
-            break;
-          case CMD_JIZZ:
-            if (get_val(ADDR_MODES)==0) {
-              cur = (uint8_t *)get_dest_val(ADDR_MODES);
-            }
-          case CMD_PUSH:
-            push(get_val(ADDR_MODES));
-            break;
-          case CMD_POP:
-            set_val(ADDR_MODES, pop());
-            break;
-          case CMD_STORE:
-            set_val(ADDR_MODES,
-                    get_val(ADDR_MODES));
-
-          // math instructions
-          case CMD_INC:
-            set_val(ADDR_MODES,
-                    get_val(ADDR_MODES)+1);
-            break;
-          case CMD_DEC:
-            set_val(ADDR_MODES,
-                    get_val(ADDR_MODES)-1);
-            break;
-          case CMD_ADD:
-            MATH_OPERATION(+);
-            break;
-          case CMD_SUB:
-            MATH_OPERATION(-);
-            break;
-          case CMD_MUL:
-            MATH_OPERATION(*);
-            break;
-          case CMD_DIV:
-            MATH_OPERATION(/);
-            break;
-          case CMD_MOD:
-            MATH_OPERATION(%);
-            break;
-          
-          // logical operation          
-          case CMD_AND:
-            MATH_OPERATION(&);
-            break;
-          case CMD_OR:
-            MATH_OPERATION(|);
-            break;
-          case CMD_XOR:
-            MATH_OPERATION(^);
-            break;
-          case CMD_NOT:
-            set_val(ADDR_MODES, ~get_val(ADDR_MODES));
-            break;
-
-          case CMD_END:
-            return true;
-            break;
-          case CMD_ERROR:
-          default:
-            return false;
-            break;
-        };
-      };
-    };
-            
-      
-  private:
-    uint64_t    registers[8];
-    uint64_t    stack[STACK_SIZE];
-    uint64_t    numcommands;
-    
-    uint8_t    *start;
-    uint8_t    *cur;
-    uint8_t    *end;
 };
 
 
