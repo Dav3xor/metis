@@ -130,7 +130,19 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     }; 
-
+    void add_push(uint8_t src) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_PUSH;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
+      cur += ADVANCE(1, 0);
+    }
+    void add_pop(uint8_t dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_POP;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
+      cur += ADVANCE(1, 0);
+    }
+    
     bool eval() {
       cur = start;
       while(cur <= end) {
