@@ -66,9 +66,12 @@ struct MetisInstruction {
     struct extended_t {
       uint8_t addr_mode;
       union ext_t {
-        struct ext_jump_t {
+        struct ext_jumpi_t {
           uint64_t value;
-        }jump;
+        }jumpi;
+        struct ext_storei_t {
+          uint64_t value;
+        }storei;
       }ext; 
     } extended;
     struct gldrawelements_t {
@@ -82,9 +85,9 @@ struct MetisInstruction {
       GLint first;
       GLsizei count;
     }gldrawarrays;
-    struct jump_t {
+    struct jumpi_t {
       uint64_t value;
-    } jump;
+    } jumpi;
     struct push_t {
       uint64_t value;
     } push;
@@ -120,8 +123,8 @@ class MetisVM {
     void add_jumpi(uint64_t location) {
       MetisInstruction *instruction                 = (MetisInstruction *)cur;
       instruction->type                             = INS_JUMPI;      
-      instruction->commands.extended.ext.jump.value = location;
-      cur += ADVANCE(1, sizeof(ext_jump_t));
+      instruction->commands.jumpi.value = location;
+      cur += ADVANCE(1, sizeof(ext_jumpi_t));
     };
 
     void add_jizz(uint8_t src, uint8_t dest) {
@@ -142,6 +145,18 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
       cur += ADVANCE(1, 0);
     }
+    void add_store(uint8_t src, uint8_t dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_STORE;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      cur += ADVANCE(1, 0);
+    }; 
+    void add_storei(uint8_t dest, uint64_t value) {
+      MetisInstruction *instruction                 = (MetisInstruction *)cur;
+      instruction->type                             = INS_STOREI;      
+      instruction->commands.extended.ext.storei.value = value;
+      cur += ADVANCE(1, sizeof(ext_storei_t));
+    };
     
     bool eval() {
       cur = start;
@@ -153,7 +168,7 @@ class MetisVM {
             cur = start + get_val(ADDR_MODES);
             break;
           case INS_JUMPI:
-            cur = start + instruction->commands.jump.value;
+            cur = start + instruction->commands.jumpi.value;
             break;
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
@@ -172,7 +187,7 @@ class MetisVM {
             break;
           case INS_STOREI:
             set_val(ADDR_MODES,
-                    instruction->commands.extended.ext.jump.value);
+                    instruction->commands.extended.ext.storei.value);
             break;
 
           // math instructions
