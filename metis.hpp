@@ -60,6 +60,12 @@
 #define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)  1+extended+data
 
+#define MATH_METHOD(method_name,byte_code) void method_name(uint8_t src, uint8_t dest) { \
+      MetisInstruction *instruction                   = (MetisInstruction *)cur; \
+      instruction->type                               = byte_code; \
+      instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
+      cur += ADVANCE(1, 0); \
+    };
 struct MetisInstruction {
   uint8_t type;
   union commands_t {
@@ -154,10 +160,29 @@ class MetisVM {
     void add_storei(uint8_t dest, uint64_t value) {
       MetisInstruction *instruction                 = (MetisInstruction *)cur;
       instruction->type                             = INS_STOREI;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
       instruction->commands.extended.ext.storei.value = value;
       cur += ADVANCE(1, sizeof(ext_storei_t));
     };
     
+    MATH_METHOD(add_inc,INS_INC); 
+    MATH_METHOD(add_dec,INS_DEC);
+    MATH_METHOD(add_add,INS_ADD); 
+    MATH_METHOD(add_sub,INS_SUB); 
+    MATH_METHOD(add_mul,INS_MUL); 
+    MATH_METHOD(add_div,INS_DIV); 
+    MATH_METHOD(add_mod,INS_MOD); 
+    MATH_METHOD(add_and,INS_AND); 
+    MATH_METHOD(add_or, INS_OR); 
+    MATH_METHOD(add_xor,INS_XOR); 
+
+    void add_not(uint8_t src, uint8_t dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_NOT;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      cur += ADVANCE(1, 0);
+    };
+      
     bool eval() {
       cur = start;
       while(cur <= end) {
