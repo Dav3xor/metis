@@ -12,42 +12,7 @@
 #define REGERR_LOC                 5
 #define STACK_PUSH_LOC             8
 #define STACK_POP_LOC              9
-
-
-#define INS_ERROR                  0   //     if we get a 0, it's an error
-
-// jumps, stack
-#define INS_JUMP                   1   // *   jump to index ...
-#define INS_JUMPI                  2   //     jump to immediate index
-#define INS_JIZZ                   3   // *   jump to index ... if zero
-#define INS_PUSH                   4   // *   push from immediate value
-#define INS_POP                    5   // *   pull from stack to ...
-#define INS_STORE                  6   // *   store ... into stack offset #...
-#define INS_STOREI                 7   // *   store immediate value into 
-
-// Math
-#define INS_INC                    8   // *   increment ... 
-#define INS_DEC                    9   // *   decrement ... 
-#define INS_ADD                   10   // *   A = A+...  (integer)
-#define INS_SUB                   11   // *   A = A-...  (integer)
-#define INS_MUL                   12   // *   A = A*...  (integer)
-#define INS_DIV                   13   // *   A = A/...  (integer)
-#define INS_MOD                   14   // *   A = A%...  (integer)
-
-// Bitwise
-#define INS_AND                   15   // *   A = A&...  (integer) 
-#define INS_OR                    16   // *   A = A|...  (integer) 
-#define INS_XOR                   17   // *   A = A^...  (integer) 
-#define INS_NOT                   18   // *   A = A&...  (integer) 
-
-#define INS_GLDRAW_ES             32   //     GLDrawElements, using stack args
-#define INS_GLDRAW_EI             33   //     GLDrawElements, using immediate
-#define INS_GLDRAW_AS             34   //     GLDrawArrays, using stack args
-#define INS_GLDRAW_AI             35   //     GLDrawArrays, using immediate
-
-#define INS_LOG                  192   //     log string pointed at by command
-
-#define INS_END                  255   //     End Program
+#define STACK_SIZE                 128
 
 #define ADDR_MODES               instruction->commands.extended.addr_mode
 
@@ -67,42 +32,6 @@
       instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
       cur += ADVANCE(1, 0); \
     };
-struct MetisInstruction {
-  uint8_t type;
-  union commands_t {
-    struct extended_t {
-      uint8_t addr_mode;
-      union ext_t {
-        struct ext_jumpi_t {
-          uint64_t value;
-        }jumpi;
-        struct ext_storei_t {
-          uint64_t value;
-        }storei;
-      }ext; 
-    } extended;
-    struct gldrawelements_t {
-      GLenum mode;
-      GLsizei count;
-      GLenum type;
-      GLvoid * indices;
-    } gldrawelements;
-    struct gldrawarrays_t {
-      GLenum mode;
-      GLint first;
-      GLsizei count;
-    }gldrawarrays;
-    struct jumpi_t {
-      uint64_t value;
-    } jumpi;
-    struct push_t {
-      uint64_t value;
-    } push;
-    struct log_t {
-      uint8_t length;
-    } log;
-  } commands;
-};
 
 
 class MetisVM {
@@ -284,7 +213,76 @@ class MetisVM {
     uint8_t    *start;
     uint8_t    *cur;
     uint8_t    *end;
+    enum instruction: uint8_t {INS_ERROR                =    0,   //     should never happen
+                               INS_JUMP                 =    1,   // *   jump to index ...
+                               INS_JUMPI                =    2,   //     jump to immediate index
+                               INS_JIZZ                 =    3,   // *   jump to index ... if zero
+                               INS_PUSH                 =    4,   // *   push from immediate value
+                               INS_POP                  =    5,   // *   pull from stack to ...
+                               INS_STORE                =    6,   // *   store ... into stack offset #...
+                               INS_STOREI               =    7,   // *   store immediate value into 
 
+                               // Math
+                               INS_INC                  =    8,   // *   increment ... 
+                               INS_DEC                  =    9,   // *   decrement ... 
+                               INS_ADD                  =   10,   // *   A = A+...  (integer)
+                               INS_SUB                  =   11,   // *   A = A-...  (integer)
+                               INS_MUL                  =   12,   // *   A = A*...  (integer)
+                               INS_DIV                  =   13,   // *   A = A/...  (integer)
+                               INS_MOD                  =   14,   // *   A = A%...  (integer)
+
+                               // Bitwise
+                               INS_AND                  =   15,   // *   A = A&...  (integer) 
+                               INS_OR                   =   16,   // *   A = A|...  (integer) 
+                               INS_XOR                  =   17,   // *   A = A^...  (integer) 
+                               INS_NOT                  =   18,   // *   A = A&...  (integer) 
+
+                               INS_GLDRAW_ES            =   32,   //     GLDrawElements, using stack args
+                               INS_GLDRAW_EI            =   33,   //     GLDrawElements, using immediate
+                               INS_GLDRAW_AS            =   34,   //     GLDrawArrays, using stack args
+                               INS_GLDRAW_AI            =   35,   //     GLDrawArrays, using immediate
+ 
+                               INS_LOG                  =  192,   //     log string pointed at by command
+
+                               INS_END                  =  255,   //     End Program 
+                               };
+
+    struct MetisInstruction {
+      instruction type;
+      union commands_t {
+        struct extended_t {
+          uint8_t addr_mode;
+          union ext_t {
+            struct ext_jumpi_t {
+              uint64_t value;
+            }jumpi;
+            struct ext_storei_t {
+              uint64_t value;
+            }storei;
+          }ext; 
+        } extended;
+        struct gldrawelements_t {
+          GLenum mode;
+          GLsizei count;
+          GLenum type;
+          GLvoid * indices;
+        } gldrawelements;
+        struct gldrawarrays_t {
+          GLenum mode;
+          GLint first;
+          GLsizei count;
+        }gldrawarrays;
+        struct jumpi_t {
+          uint64_t value;
+        } jumpi;
+        struct push_t {
+          uint64_t value;
+        } push;
+        struct log_t {
+          uint8_t length;
+        } log;
+      } commands;
+    };
     void push(uint64_t val) {
       if( registers[REGS_LOC] >= STACK_SIZE-1) {
         throw "Metis: pushing to full stack";
