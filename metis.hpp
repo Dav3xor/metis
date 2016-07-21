@@ -55,7 +55,8 @@
 
 #define MATH_OPERATION(op)       set_val(ADDR_MODES, \
                                          get_dest_val(ADDR_MODES) op \
-                                         get_val(ADDR_MODES));
+                                         get_val(ADDR_MODES)); \
+                                 cur += ADVANCE(1, 0);
 
 #define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)  1+extended+data
@@ -130,7 +131,7 @@ class MetisVM {
       MetisInstruction *instruction                 = (MetisInstruction *)cur;
       instruction->type                             = INS_JUMPI;      
       instruction->commands.jumpi.value = location;
-      cur += ADVANCE(1, sizeof(ext_jumpi_t));
+      cur += ADVANCE(0, sizeof(ext_jumpi_t));
     };
 
     void add_jizz(uint8_t src, uint8_t dest) {
@@ -165,16 +166,16 @@ class MetisVM {
       cur += ADVANCE(1, sizeof(ext_storei_t));
     };
     
-    MATH_METHOD(add_inc,INS_INC); 
-    MATH_METHOD(add_dec,INS_DEC);
-    MATH_METHOD(add_add,INS_ADD); 
-    MATH_METHOD(add_sub,INS_SUB); 
-    MATH_METHOD(add_mul,INS_MUL); 
-    MATH_METHOD(add_div,INS_DIV); 
-    MATH_METHOD(add_mod,INS_MOD); 
-    MATH_METHOD(add_and,INS_AND); 
-    MATH_METHOD(add_or, INS_OR); 
-    MATH_METHOD(add_xor,INS_XOR); 
+    MATH_METHOD(add_inc, INS_INC); 
+    MATH_METHOD(add_dec, INS_DEC);
+    MATH_METHOD(add_add, INS_ADD); 
+    MATH_METHOD(add_sub, INS_SUB); 
+    MATH_METHOD(add_mul, INS_MUL); 
+    MATH_METHOD(add_div, INS_DIV); 
+    MATH_METHOD(add_mod, INS_MOD); 
+    MATH_METHOD(add_and, INS_AND); 
+    MATH_METHOD(add_or,  INS_OR); 
+    MATH_METHOD(add_xor, INS_XOR); 
 
     void add_not(uint8_t src, uint8_t dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
@@ -191,38 +192,47 @@ class MetisVM {
           // instruction index and stack instructions
           case INS_JUMP:
             cur = start + get_val(ADDR_MODES);
+            cur += ADVANCE(1, 0);
             break;
           case INS_JUMPI:
             cur = start + instruction->commands.jumpi.value;
+            cur += ADVANCE(0, sizeof(ext_jumpi_t));
             break;
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
               cur = start + get_dest_val(ADDR_MODES);
             }
+            cur += ADVANCE(1, 0);
             break;
           case INS_PUSH:
             push(get_val(ADDR_MODES));
+            cur += ADVANCE(1, 0);
             break;
           case INS_POP:
             set_val(ADDR_MODES, pop());
+            cur += ADVANCE(1, 0);
             break;
           case INS_STORE:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES));
+            cur += ADVANCE(1, 0);
             break;
           case INS_STOREI:
             set_val(ADDR_MODES,
                     instruction->commands.extended.ext.storei.value);
+            cur += ADVANCE(1, sizeof(ext_storei_t));
             break;
 
           // math instructions
           case INS_INC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)+1);
+            cur += ADVANCE(1, 0);
             break;
           case INS_DEC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)-1);
+            cur += ADVANCE(1, 0);
             break;
           case INS_ADD:
             MATH_OPERATION(+);
@@ -252,6 +262,7 @@ class MetisVM {
             break;
           case INS_NOT:
             set_val(ADDR_MODES, ~get_val(ADDR_MODES));
+            cur += ADVANCE(1, 0);
             break;
 
           case INS_END:
