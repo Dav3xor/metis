@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <GL/gl.h>
-#include <iostream>
+#include <cstdio>
 
 using namespace std;
 
@@ -39,18 +39,23 @@ using namespace std;
 
 class MetisVM {
   public:
-    MetisVM(uint8_t *buf, uint64_t buflen) {
-      start                 = buf;
-      cur                   = buf;
-      end                   = buf+buflen;
+    void reset(void) {
+      cur                   = start;
       registers[REGA_LOC]   = 0;
       registers[REGB_LOC]   = 0;
       registers[REGC_LOC]   = 0;
       registers[REGD_LOC]   = 0;
       registers[REGS_LOC]   = 0;
       registers[REGERR_LOC] = 0;
-      numcommands           = 0;
     };
+    
+   MetisVM(uint8_t *buf, uint64_t buflen) { 
+      start                 = buf;
+      end                   = buf+buflen;
+      numcommands           = 0;
+      reset();
+    }
+
     void add_end(void) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_END;      
@@ -122,7 +127,7 @@ class MetisVM {
     };
       
     bool eval() {
-      cur = start;
+      reset();
       while(cur <= end) {
         MetisInstruction *instruction = (MetisInstruction *)cur;
         switch (instruction->type) {
@@ -203,6 +208,8 @@ class MetisVM {
             break;
 
           case INS_END:
+            // don't advance, then we can add instructions over
+            // the end instruction...
             return true;
             break;
           case INS_ERROR:
@@ -339,7 +346,7 @@ class MetisVM {
     }
     uint64_t get_val(uint8_t location) {
       // low bits are source
-      location = location && 0x0F;
+      location = location & 0x0F;
       switch (location) {
         case REGA_LOC:
         case REGB_LOC:
@@ -354,6 +361,7 @@ class MetisVM {
           break;
         default:
           throw "Metis: unknown addressing mode (read)";
+          break;
       }
     }     
     uint64_t get_dest_val(uint8_t location) {
@@ -372,7 +380,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw "Metis: unknown addressing mode (read)";
+          throw "Metis: unknown addressing mode (dest read)";
       }
     }     
       
