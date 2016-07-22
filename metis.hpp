@@ -1,5 +1,8 @@
 #include <cstdint>
 #include <GL/gl.h>
+#include <iostream>
+
+using namespace std;
 
 #define STACK_SIZE                 128
 
@@ -47,6 +50,11 @@ class MetisVM {
       registers[REGS_LOC]   = 0;
       registers[REGERR_LOC] = 0;
       numcommands           = 0;
+    };
+    void add_end(void) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_END;      
+      cur += ADVANCE(0, 0);
     };
 
     void add_jump(uint8_t src, uint8_t dest) {
@@ -203,7 +211,18 @@ class MetisVM {
             break;
         };
       };
+      return false;
     };
+
+    uint64_t *get_registers  (void)  { return registers; };
+    uint64_t  cur_stack_val  (void)  {
+      if ( registers[REGS_LOC] > 0) {
+        return stack[registers[REGS_LOC]-1]; 
+      } else {
+        throw "Metis: stack empty";
+      }
+    }
+    uint64_t  cur_stack_size (void)  { return registers[REGS_LOC]; };
 
   private:
     uint64_t    registers[8];
