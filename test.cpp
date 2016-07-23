@@ -38,6 +38,24 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA_LOC] == 103);
   REQUIRE( m.cur_stack_size() == 4);
   REQUIRE( m.cur_stack_val() == 103 );
+
+  m.add_pop(REGB_LOC);
+  
+  m.eval();
+  
+  REQUIRE( m.get_registers()[REGA_LOC] == 103);
+  REQUIRE( m.get_registers()[REGB_LOC] == 103);
+  REQUIRE( m.cur_stack_size() == 3);
+  REQUIRE( m.cur_stack_val() == 102 );
+  
+  m.add_pop(REGA_LOC);
+  
+  m.eval();
+  
+  REQUIRE( m.get_registers()[REGA_LOC] == 102);
+  REQUIRE( m.get_registers()[REGB_LOC] == 103);
+  REQUIRE( m.cur_stack_size() == 2);
+  REQUIRE( m.cur_stack_val() == 101 );
 }
 
 

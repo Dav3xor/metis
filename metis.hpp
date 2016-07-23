@@ -322,7 +322,7 @@ class MetisVM {
         throw "Metis: popping empty stack";
       }
       registers[REGS_LOC] -= 1;
-      return stack[registers[REGS_LOC]+1];
+      return stack[registers[REGS_LOC]];
     }
 
     void set_val(uint8_t location, uint64_t value) {
