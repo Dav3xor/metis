@@ -83,18 +83,6 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     }; 
-    void add_push(address_mode src) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
-      instruction->type                        = INS_PUSH;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
-      cur += ADVANCE(1, 0);
-    }
-    void add_pop(address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
-      instruction->type                        = INS_POP;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
-      cur += ADVANCE(1, 0);
-    }
     void add_store(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_STORE;      
@@ -145,14 +133,6 @@ class MetisVM {
             if (get_val(ADDR_MODES)==0) {
               cur = start + get_dest_val(ADDR_MODES);
             }
-            cur += ADVANCE(1, 0);
-            break;
-          case INS_PUSH:
-            push(get_val(ADDR_MODES));
-            cur += ADVANCE(1, 0);
-            break;
-          case INS_POP:
-            set_val(ADDR_MODES, pop());
             cur += ADVANCE(1, 0);
             break;
           case INS_STORE:
@@ -247,8 +227,6 @@ class MetisVM {
                                INS_JUMP                 =    1,   // *   jump to index ...
                                INS_JUMPI                =    2,   //     jump to immediate index
                                INS_JIZZ                 =    3,   // *   jump to index ... if zero
-                               INS_PUSH                 =    4,   // *   push from immediate value
-                               INS_POP                  =    5,   // *   pull from stack to ...
                                INS_STORE                =    6,   // *   store ... into stack offset #...
                                INS_STOREI               =    7,   // *   store immediate value into 
 

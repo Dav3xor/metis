@@ -7,7 +7,9 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   MetisVM m(buf,10000, stack, 5);
-  
+ 
+
+  // test that a simple store works 
   m.add_storei(STACK_PUSH,100);
   m.add_end();
 
@@ -16,6 +18,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_size() == 1);
   REQUIRE( m.cur_stack_val() == 100 );
 
+  // test that we can have more than one item on the stack...
   m.add_storei(STACK_PUSH,101);
  
   m.eval();
@@ -23,8 +26,10 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_size() == 2);
   REQUIRE( m.cur_stack_val() == 101 );
 
+  // test that you can move a value from a register
+  // onto the stack.
   m.add_storei(REGA, 102);
-  m.add_push(REGA);
+  m.add_store(REGA,STACK_PUSH);
   
   m.eval();
 
@@ -40,7 +45,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_size() == 4);
   REQUIRE( m.cur_stack_val() == 103 );
 
-  m.add_pop(REGB);
+  m.add_store(STACK_POP,REGB);
   
   m.eval();
   
@@ -49,7 +54,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_size() == 3);
   REQUIRE( m.cur_stack_val() == 102 );
   
-  m.add_pop(REGA);
+  m.add_store(STACK_POP,REGA);
   
   m.eval();
   
