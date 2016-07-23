@@ -6,17 +6,6 @@ using namespace std;
 
 #define STACK_SIZE                 128
 
-// addressing modes
-#define REGA_LOC                   0
-#define REGB_LOC                   1
-#define REGC_LOC                   2
-#define REGD_LOC                   3
-#define REGS_LOC                   4  // stack register
-#define REGERR_LOC                 5
-#define STACK_PUSH_LOC             8
-#define STACK_POP_LOC              9
-#define STACK_SIZE                 128
-
 #define ADDR_MODES               instruction->commands.extended.addr_mode
 
 #define BUILD_ADDR(src, dest)    ((dest << 4) + src)
@@ -29,7 +18,7 @@ using namespace std;
 #define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)  1+extended+data
 
-#define MATH_METHOD(method_name,byte_code) void method_name(uint8_t src, uint8_t dest) { \
+#define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
       MetisInstruction *instruction                   = (MetisInstruction *)cur; \
       instruction->type                               = byte_code; \
       instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
@@ -37,16 +26,26 @@ using namespace std;
     };
 
 
+// addressing modes
+enum address_mode: uint8_t {REGA                    =    0,
+                            REGB                    =    1,
+                            REGC                    =    2,
+                            REGD                    =    3,
+                            REGS                    =    4,  // stack register
+                            REGERR                  =    5,
+                            STACK_PUSH              =    8,
+                            STACK_POP               =    9 };
+
 class MetisVM {
   public:
     void reset(void) {
       cur                   = start;
-      registers[REGA_LOC]   = 0;
-      registers[REGB_LOC]   = 0;
-      registers[REGC_LOC]   = 0;
-      registers[REGD_LOC]   = 0;
-      registers[REGS_LOC]   = 0;
-      registers[REGERR_LOC] = 0;
+      registers[REGA    ]   = 0;
+      registers[REGB    ]   = 0;
+      registers[REGC    ]   = 0;
+      registers[REGD    ]   = 0;
+      registers[REGS    ]   = 0;
+      registers[REGERR    ] = 0;
     };
     
    MetisVM(uint8_t *buf, uint64_t buflen) { 
@@ -62,7 +61,7 @@ class MetisVM {
       cur += ADVANCE(0, 0);
     };
 
-    void add_jump(uint8_t src, uint8_t dest) {
+    void add_jump(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_JUMP;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
@@ -76,31 +75,31 @@ class MetisVM {
       cur += ADVANCE(0, sizeof(ext_jumpi_t));
     };
 
-    void add_jizz(uint8_t src, uint8_t dest) {
+    void add_jizz(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_JIZZ;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     }; 
-    void add_push(uint8_t src) {
+    void add_push(address_mode src) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_PUSH;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
       cur += ADVANCE(1, 0);
     }
-    void add_pop(uint8_t dest) {
+    void add_pop(address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_POP;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
       cur += ADVANCE(1, 0);
     }
-    void add_store(uint8_t src, uint8_t dest) {
+    void add_store(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_STORE;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     }; 
-    void add_storei(uint8_t dest, uint64_t value) {
+    void add_storei(address_mode dest, uint64_t value) {
       MetisInstruction *instruction                 = (MetisInstruction *)cur;
       instruction->type                             = INS_STOREI;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
@@ -119,7 +118,7 @@ class MetisVM {
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
 
-    void add_not(uint8_t src, uint8_t dest) {
+    void add_not(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_NOT;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
@@ -223,14 +222,14 @@ class MetisVM {
 
     uint64_t *get_registers  (void)  { return registers; };
     uint64_t  cur_stack_val  (void)  {
-      if ( registers[REGS_LOC] > 0) {
-        return stack[registers[REGS_LOC]-1]; 
+      if ( registers[REGS    ] > 0) {
+        return stack[registers[REGS    ]-1]; 
       } else {
         throw "Metis: stack empty";
       }
     }
-    uint64_t  cur_stack_size (void)  { return registers[REGS_LOC]; };
-
+    uint64_t  cur_stack_size (void)  { return registers[REGS    ]; };
+  
   private:
     uint64_t    registers[8];
     uint64_t    stack[STACK_SIZE];
@@ -239,6 +238,8 @@ class MetisVM {
     uint8_t    *start;
     uint8_t    *cur;
     uint8_t    *end;
+
+
     enum instruction: uint8_t {INS_ERROR                =    0,   //     should never happen
                                INS_JUMP                 =    1,   // *   jump to index ...
                                INS_JUMPI                =    2,   //     jump to immediate index
@@ -310,34 +311,34 @@ class MetisVM {
       } commands;
     };
     void push(uint64_t val) {
-      if( registers[REGS_LOC] >= STACK_SIZE-1) {
+      if( registers[REGS] >= STACK_SIZE-1) {
         throw "Metis: pushing to full stack";
       }
-      stack[registers[REGS_LOC]] = val;
-      registers[REGS_LOC] += 1;
+      stack[registers[REGS]] = val;
+      registers[REGS] += 1;
     }
 
     uint64_t pop() {
-      if(registers[REGS_LOC] == 0) {
+      if(registers[REGS] == 0) {
         throw "Metis: popping empty stack";
       }
-      registers[REGS_LOC] -= 1;
-      return stack[registers[REGS_LOC]];
+      registers[REGS] -= 1;
+      return stack[registers[REGS]];
     }
 
     void set_val(uint8_t location, uint64_t value) {
       // high bits are destination
       location = location >> 4;
       switch (location) {
-        case REGA_LOC:
-        case REGB_LOC:
-        case REGC_LOC:
-        case REGD_LOC:
-        case REGS_LOC:
-        case REGERR_LOC:
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGS:
+        case REGERR:
           registers[location] = value;
           break;
-        case STACK_PUSH_LOC:
+        case STACK_PUSH:
           push(value);
           break;
         default:
@@ -348,15 +349,15 @@ class MetisVM {
       // low bits are source
       location = location & 0x0F;
       switch (location) {
-        case REGA_LOC:
-        case REGB_LOC:
-        case REGC_LOC:
-        case REGD_LOC:
-        case REGS_LOC:
-        case REGERR_LOC:
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGS:
+        case REGERR:
           return registers[location];
           break;
-        case STACK_POP_LOC:
+        case STACK_POP:
           return pop();
           break;
         default:
@@ -368,15 +369,15 @@ class MetisVM {
       // low bits are source
       location = location >> 4;
       switch (location) {
-        case REGA_LOC:
-        case REGB_LOC:
-        case REGC_LOC:
-        case REGD_LOC:
-        case REGS_LOC:
-        case REGERR_LOC:
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGS:
+        case REGERR:
           return registers[location];
           break;
-        case STACK_POP_LOC:
+        case STACK_POP:
           return pop();
           break;
         default:
