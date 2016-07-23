@@ -40,17 +40,19 @@ class MetisVM {
   public:
     void reset(void) {
       cur                   = start;
-      registers[REGA    ]   = 0;
-      registers[REGB    ]   = 0;
-      registers[REGC    ]   = 0;
-      registers[REGD    ]   = 0;
-      registers[REGS    ]   = 0;
-      registers[REGERR    ] = 0;
+      registers[REGA]   = 0;
+      registers[REGB]   = 0;
+      registers[REGC]   = 0;
+      registers[REGD]   = 0;
+      registers[REGS]   = 0;
+      registers[REGERR] = 0;
     };
     
-   MetisVM(uint8_t *buf, uint64_t buflen) { 
-      start                 = buf;
-      end                   = buf+buflen;
+   MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
+      start                 = buf_loc;
+      end                   = buf_loc+buf_len;
+      stack                 = stack_loc;
+      stack_size            = stack_len;
       numcommands           = 0;
       reset();
     }
@@ -232,7 +234,8 @@ class MetisVM {
   
   private:
     uint64_t    registers[8];
-    uint64_t    stack[STACK_SIZE];
+    uint64_t    *stack;
+    uint64_t    stack_size;
     uint64_t    numcommands;
     
     uint8_t    *start;
