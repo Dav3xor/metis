@@ -3,6 +3,16 @@
 #include "metis.hpp"
 #include "catch.hpp"
 
+TEST_CASE( "addressing modes", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  
+  REQUIRE( BUILD_ADDR(REGB, REGC) == 0x21);
+  REQUIRE( GET_SRC(0x21) == 1);
+  REQUIRE( GET_DEST(0x21) == 2);
+};
+
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
@@ -74,10 +84,20 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   
   m.add_store(REGA,STACK_PUSH);
  
-  // should throw an exception 
+  // should throw a stack full exception 
   REQUIRE_THROWS_AS(m.eval(),MetisException);
 
   REQUIRE( m.cur_stack_size() == 5);
+  
+  memset(buf, 0, 10000);
+  m.reset(); 
+  m.add_store(STACK_POP, REGA);
+  
+  // should throw an empty stack exception
+  REQUIRE_THROWS_AS(m.eval(), MetisException);
+
+  // ditto
+  REQUIRE_THROWS_AS(m.cur_stack_val(), MetisException);
 }
 
 

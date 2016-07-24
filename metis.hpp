@@ -3,19 +3,22 @@
 #include <sstream>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <GL/gl.h>
 
 using namespace std;
 
 
-#define ADDR_MODES               instruction->commands.extended.addr_mode
+#define ADDR_MODES                instruction->commands.extended.addr_mode
 
-#define BUILD_ADDR(src, dest)    ((dest << 4) + src)
+#define BUILD_ADDR(src, dest)     ((dest << 4) + src)
+#define GET_DEST(location) (location >> 4)
+#define GET_SRC(location)      (location & 0x0F)
 
-#define MATH_OPERATION(op)       set_val(ADDR_MODES, \
-                                         get_dest_val(ADDR_MODES) op \
-                                         get_val(ADDR_MODES)); \
-                                 cur += ADVANCE(1, 0);
+#define MATH_OPERATION(op)        set_val(ADDR_MODES, \
+                                          get_dest_val(ADDR_MODES) op \
+                                          get_val(ADDR_MODES)); \
+                                  cur += ADVANCE(1, 0);
 
 #define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)  1+extended+data
@@ -327,7 +330,7 @@ class MetisVM {
 
     void set_val(uint8_t location, uint64_t value) {
       // high bits are destination
-      location = location >> 4;
+      location = GET_DEST(location);
       switch (location) {
         case REGA:
         case REGB:
@@ -346,7 +349,7 @@ class MetisVM {
     }
     uint64_t get_val(uint8_t location) {
       // low bits are source
-      location = location & 0x0F;
+      location = GET_SRC(location);
       switch (location) {
         case REGA:
         case REGB:
