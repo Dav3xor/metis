@@ -62,6 +62,22 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 103);
   REQUIRE( m.cur_stack_size() == 2);
   REQUIRE( m.cur_stack_val() == 101 );
+
+  // make sure we can fill the stack, but not go over...
+  m.add_store(REGA,STACK_PUSH);
+  m.add_store(REGA,STACK_PUSH);
+  m.add_store(REGA,STACK_PUSH);
+  
+  m.eval();
+
+  REQUIRE( m.cur_stack_size() == 5);
+  
+  m.add_store(REGA,STACK_PUSH);
+ 
+  // should throw an exception 
+  REQUIRE_THROWS_AS(m.eval(),MetisException);
+
+  REQUIRE( m.cur_stack_size() == 5);
 }
 
 

@@ -1,10 +1,12 @@
+#include <exception>
+#include <stdexcept>
+#include <sstream>
 #include <cstdint>
-#include <GL/gl.h>
 #include <cstdio>
+#include <GL/gl.h>
 
 using namespace std;
 
-#define STACK_SIZE                 128
 
 #define ADDR_MODES               instruction->commands.extended.addr_mode
 
@@ -36,6 +38,22 @@ enum address_mode: uint8_t {REGA                    =    0,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
+class MetisException: public runtime_error {
+  public:
+    MetisException(const char *error): runtime_error("Metis VM"), error_str(error) {};
+  private:  
+    const char *error_str;
+    virtual const char* what() const throw()
+    {
+      cnvt.str("");
+      cnvt << runtime_error::what() << ": " << error_str;
+      return cnvt.str().c_str();
+    }
+    static ostringstream cnvt;
+};
+
+ostringstream MetisException::cnvt;
+   
 class MetisVM {
   public:
     void reset(void) {
@@ -207,7 +225,7 @@ class MetisVM {
       if ( registers[REGS    ] > 0) {
         return stack[registers[REGS    ]-1]; 
       } else {
-        throw "Metis: stack empty";
+        throw MetisException("stack empty (cur_stack_val)");
       }
     }
     uint64_t  cur_stack_size (void)  { return registers[REGS    ]; };
@@ -292,8 +310,8 @@ class MetisVM {
       } commands;
     };
     void push(uint64_t val) {
-      if( registers[REGS] >= STACK_SIZE-1) {
-        throw "Metis: pushing to full stack";
+      if( registers[REGS] >= stack_size) {
+        throw MetisException("stack full (push)");
       }
       stack[registers[REGS]] = val;
       registers[REGS] += 1;
@@ -301,7 +319,7 @@ class MetisVM {
 
     uint64_t pop() {
       if(registers[REGS] == 0) {
-        throw "Metis: popping empty stack";
+        throw MetisException("stack empty (pop)");
       }
       registers[REGS] -= 1;
       return stack[registers[REGS]];
@@ -323,7 +341,7 @@ class MetisVM {
           push(value);
           break;
         default:
-          throw "Metis: unknown addressing mode (write)";
+          throw MetisException("unknown addressing mode (set_val)");
       } 
     }
     uint64_t get_val(uint8_t location) {
@@ -342,7 +360,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw "Metis: unknown addressing mode (read)";
+          throw MetisException("unknown addressing mode (get_val)");
           break;
       }
     }     
@@ -362,7 +380,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw "Metis: unknown addressing mode (dest read)";
+          throw MetisException("unknown addressing mode (get_dest_val)");
       }
     }     
       
