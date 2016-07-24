@@ -13,6 +13,21 @@ TEST_CASE( "addressing modes", "[MetisVM]" ) {
   REQUIRE( GET_DEST(0x21) == 2);
 };
 
+TEST_CASE( "labels", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.add_label("start");
+  m.add_storei(REGA,100);
+  m.add_storei(REGB,100);
+  m.add_label("end");
+
+  m.eval();
+  REQUIRE( m.get_label("start") == 0);
+  REQUIRE( m.get_label("end") == 64);
+  REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
+}
+
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];

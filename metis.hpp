@@ -1,9 +1,13 @@
 #include <exception>
 #include <stdexcept>
 #include <sstream>
+#include <unordered_map>
+#include <memory>
+
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+
 #include <GL/gl.h>
 
 using namespace std;
@@ -14,6 +18,7 @@ using namespace std;
 #define BUILD_ADDR(src, dest)     ((dest << 4) + src)
 #define GET_DEST(location) (location >> 4)
 #define GET_SRC(location)      (location & 0x0F)
+#define GET_LABEL(instruction)  ((char *)(&instruction->type)+1)
 
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
                                           get_dest_val(ADDR_MODES) op \
@@ -83,7 +88,7 @@ class MetisVM {
       instruction->type                        = INS_END;      
       cur += ADVANCE(0, 0);
     };
-
+    
     void add_jump(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_JUMP;      
@@ -117,6 +122,12 @@ class MetisVM {
       instruction->commands.extended.ext.storei.value = value;
       cur += ADVANCE(1, sizeof(ext_storei_t));
     };
+    
+    void add_label(const char *label) {
+      // not really an instruction, but it basically acts like one...
+      labels[label] = (uint64_t)(cur-start);
+    }
+
     
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
@@ -166,7 +177,7 @@ class MetisVM {
                     instruction->commands.extended.ext.storei.value);
             cur += ADVANCE(1, sizeof(ext_storei_t));
             break;
-
+          
           // math instructions
           case INS_INC:
             set_val(ADDR_MODES,
@@ -223,6 +234,11 @@ class MetisVM {
       return false;
     };
 
+
+    uint64_t get_label(const char *label) {
+      return labels.at(label);
+    }
+
     uint64_t *get_registers  (void)  { return registers; };
     uint64_t  cur_stack_val  (void)  {
       if ( registers[REGS    ] > 0) {
@@ -237,6 +253,9 @@ class MetisVM {
     uint64_t    registers[8];
     uint64_t    *stack;
     uint64_t    stack_size;
+
+    unordered_map<string, uint64_t> labels;
+
     uint64_t    numcommands;
     
     uint8_t    *start;
@@ -252,19 +271,19 @@ class MetisVM {
                                INS_STOREI               =    7,   // *   store immediate value into 
 
                                // Math
-                               INS_INC                  =    8,   // *   increment ... 
-                               INS_DEC                  =    9,   // *   decrement ... 
-                               INS_ADD                  =   10,   // *   A = A+...  (integer)
-                               INS_SUB                  =   11,   // *   A = A-...  (integer)
-                               INS_MUL                  =   12,   // *   A = A*...  (integer)
-                               INS_DIV                  =   13,   // *   A = A/...  (integer)
-                               INS_MOD                  =   14,   // *   A = A%...  (integer)
+                               INS_INC                  =    9,   // *   increment ... 
+                               INS_DEC                  =   10,   // *   decrement ... 
+                               INS_ADD                  =   11,   // *   A = A+...  (integer)
+                               INS_SUB                  =   12,   // *   A = A-...  (integer)
+                               INS_MUL                  =   13,   // *   A = A*...  (integer)
+                               INS_DIV                  =   14,   // *   A = A/...  (integer)
+                               INS_MOD                  =   15,   // *   A = A%...  (integer)
 
                                // Bitwise
-                               INS_AND                  =   15,   // *   A = A&...  (integer) 
-                               INS_OR                   =   16,   // *   A = A|...  (integer) 
-                               INS_XOR                  =   17,   // *   A = A^...  (integer) 
-                               INS_NOT                  =   18,   // *   A = A&...  (integer) 
+                               INS_AND                  =   16,   // *   A = A&...  (integer) 
+                               INS_OR                   =   17,   // *   A = A|...  (integer) 
+                               INS_XOR                  =   18,   // *   A = A^...  (integer) 
+                               INS_NOT                  =   19,   // *   A = A&...  (integer) 
 
                                INS_GLDRAW_ES            =   32,   //     GLDrawElements, using stack args
                                INS_GLDRAW_EI            =   33,   //     GLDrawElements, using immediate
