@@ -153,7 +153,6 @@ class MetisVM {
       ofstream outfile(filename, ios::out|ios::binary);
       outfile.write("METIS  1",8);
       uint16_t header_len = 0;
-      outfile.write("",1);
       outfile.write((char *) &header_len, 2);
       for (auto kv : labels) {
         uint16_t label_len = kv.first.length();
