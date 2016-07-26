@@ -123,8 +123,16 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   
   m.add_label("hi!");
   m.add_storei(REGA, 0xDEADBEEF);
+  m.add_label("hi again!");
   m.add_end();
 
   m.save("test.metis");
-
+  m.load("test.metis"); 
+ 
+  REQUIRE(m.get_label("hi!") == 0);
+  REQUIRE(m.get_label("hi again!") == 32);
+  
+  m.eval();
+  
+  REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
 };

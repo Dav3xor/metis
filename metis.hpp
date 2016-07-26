@@ -13,21 +13,22 @@
 
 using namespace std;
 
-
+#define MAX_LABEL_LEN             128
 #define ADDR_MODES                instruction->commands.extended.addr_mode
 
 #define BUILD_ADDR(src, dest)     ((dest << 4) + src)
-#define GET_DEST(location) (location >> 4)
-#define GET_SRC(location)      (location & 0x0F)
-#define GET_LABEL(instruction)  ((char *)(&instruction->type)+1)
+#define GET_DEST(location)        (location >> 4)
+#define GET_SRC(location)         (location & 0x0F)
+#define GET_LABEL(instruction)    ((char *)(&instruction->type)+1)
 
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
                                           get_dest_val(ADDR_MODES) op \
                                           get_val(ADDR_MODES)); \
                                   cur += ADVANCE(1, 0);
 
-#define ADVANCE(extended, data)  sizeof(MetisInstruction)                 
-//#define ADVANCE(extended, data)  1+extended+data
+#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
+
+//#define ADVANCE(extended, data)   (1+extended+data)
 
 #define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
       MetisInstruction *instruction                   = (MetisInstruction *)cur; \
@@ -149,34 +150,69 @@ class MetisVM {
     };
     
     void save(const string &filename) {
-      printf("1\n");
       ofstream outfile(filename, ios::out|ios::binary);
-      printf("2\n");
       outfile.write("METIS  1",8);
-      printf("3\n");
       uint16_t header_len = 0;
-      printf("4\n");
       outfile.write("",1);
-      printf("5\n");
       outfile.write((char *) &header_len, 2);
-      printf("6\n");
       for (auto kv : labels) {
-        printf("1\n");
         uint16_t label_len = kv.first.length();
-        printf("%s\n",kv.first.c_str());
         outfile.write("L",1);
         outfile.write((char *) &label_len,2);
         outfile.write(kv.first.c_str(), kv.first.length());
         outfile.write((char *) &kv.second, sizeof(uint64_t));
       }
-      outfile.write("I",1);
       uint64_t code_len = cur-start;
-      printf("--> %ld\n",code_len);
       outfile.write((char *)&code_len, 8);
       outfile.write((char *)start, start-cur);
       outfile.close();
     }
+    void load(const string &filename) {
+      char header[9];
+      char label[MAX_LABEL_LEN+1];
+      uint16_t label_len;
+      uint64_t code_len;
+      uint64_t value;
 
+      reset();
+      labels.clear();
+
+      ifstream infile(filename, ios::in|ios::binary);
+
+      infile.read(header,8);
+      header[8] = '\0';
+      while(!(infile.eof())) {
+        char type;
+        infile.read(&type,1);
+        switch(type) {
+          case 'L':
+            infile.read((char *)&label_len,2);
+            if (label_len > MAX_LABEL_LEN) {
+              throw MetisException("label too big?!? (load)");
+            }
+            infile.read(label, label_len);
+            label[label_len]='\0';
+
+            infile.read((char *)&value,8);
+
+            labels[label] = value;
+            break;
+          case 'C':
+            // TODO: allow multiple code segments, load 
+            //       them one after another...
+            infile.read((char *)&code_len,8);
+            if (code_len > end-start) {
+              throw MetisException("code too big?!? (load)");
+            }
+            infile.read((char *) start, code_len);
+            break;
+        }
+      }
+      infile.close();
+    }
+            
+            
+            
     bool eval() {
       reset();
       while(cur <= end) {
