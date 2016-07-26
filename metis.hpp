@@ -1,6 +1,7 @@
 #include <exception>
 #include <stdexcept>
 #include <sstream>
+#include <fstream>
 #include <unordered_map>
 #include <memory>
 
@@ -146,7 +147,36 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     };
-      
+    
+    void save(const string &filename) {
+      printf("1\n");
+      ofstream outfile(filename, ios::out|ios::binary);
+      printf("2\n");
+      outfile.write("METIS  1",8);
+      printf("3\n");
+      uint16_t header_len = 0;
+      printf("4\n");
+      outfile.write("",1);
+      printf("5\n");
+      outfile.write((char *) &header_len, 2);
+      printf("6\n");
+      for (auto kv : labels) {
+        printf("1\n");
+        uint16_t label_len = kv.first.length();
+        printf("%s\n",kv.first.c_str());
+        outfile.write("L",1);
+        outfile.write((char *) &label_len,2);
+        outfile.write(kv.first.c_str(), kv.first.length());
+        outfile.write((char *) &kv.second, sizeof(uint64_t));
+      }
+      outfile.write("I",1);
+      uint64_t code_len = cur-start;
+      printf("--> %ld\n",code_len);
+      outfile.write((char *)&code_len, 8);
+      outfile.write((char *)start, start-cur);
+      outfile.close();
+    }
+
     bool eval() {
       reset();
       while(cur <= end) {

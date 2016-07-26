@@ -116,3 +116,15 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 }
 
 
+TEST_CASE( "load/save", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  
+  m.add_label("hi!");
+  m.add_storei(REGA, 0xDEADBEEF);
+  m.add_end();
+
+  m.save("test.metis");
+
+};
