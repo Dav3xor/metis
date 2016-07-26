@@ -66,6 +66,7 @@ ostringstream MetisException::cnvt;
    
 class MetisVM {
   public:
+    // simple reset, do not remove existing code
     void reset(void) {
       cur                   = start;
       registers[REGA]   = 0;
@@ -75,7 +76,11 @@ class MetisVM {
       registers[REGS]   = 0;
       registers[REGERR] = 0;
     };
-    
+    void hard_reset(void) {
+      labels.empty();
+      memset(start,0,end-start);
+      reset();
+    }
    MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
       start                 = buf_loc;
       end                   = buf_loc+buf_len;
@@ -151,8 +156,9 @@ class MetisVM {
     
     void save(const string &filename) {
       ofstream outfile(filename, ios::out|ios::binary);
-      outfile.write("METIS  1",8);
+      outfile.write("METIS  1  ",10);
       uint16_t header_len = 0;
+      outfile.write("H",1);
       outfile.write((char *) &header_len, 2);
       for (auto kv : labels) {
         uint16_t label_len = kv.first.length();
@@ -161,15 +167,18 @@ class MetisVM {
         outfile.write(kv.first.c_str(), kv.first.length());
         outfile.write((char *) &kv.second, sizeof(uint64_t));
       }
+
       uint64_t code_len = cur-start;
+      outfile.write("C",1);
       outfile.write((char *)&code_len, 8);
-      outfile.write((char *)start, start-cur);
+      outfile.write((char *)start, code_len);
       outfile.close();
     }
     void load(const string &filename) {
       char header[9];
       char label[MAX_LABEL_LEN+1];
       uint16_t label_len;
+      uint16_t header_len;
       uint64_t code_len;
       uint64_t value;
 
@@ -178,12 +187,15 @@ class MetisVM {
 
       ifstream infile(filename, ios::in|ios::binary);
 
-      infile.read(header,8);
+      infile.read(header,10);
       header[8] = '\0';
       while(!(infile.eof())) {
         char type;
         infile.read(&type,1);
         switch(type) {
+          case 'H':     // header, ignore for now...
+            infile.read((char *)&header_len, 2);
+            break;
           case 'L':
             infile.read((char *)&label_len,2);
             if (label_len > MAX_LABEL_LEN) {

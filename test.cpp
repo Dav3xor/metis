@@ -104,7 +104,6 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 
   REQUIRE( m.cur_stack_size() == 5);
   
-  memset(buf, 0, 10000);
   m.reset(); 
   m.add_store(STACK_POP, REGA);
   
@@ -127,6 +126,9 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   m.add_end();
 
   m.save("test.metis");
+
+  m.hard_reset();
+
   m.load("test.metis"); 
  
   REQUIRE(m.get_label("hi!") == 0);
