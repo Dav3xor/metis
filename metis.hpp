@@ -153,7 +153,9 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     };
-    
+    // TODO: work on cleaning this up... 
+    // 1. move into separate file
+    // 2. abstract sections better
     void save(const string &filename) {
       ofstream outfile(filename, ios::out|ios::binary);
       outfile.write("METIS  1  ",10);

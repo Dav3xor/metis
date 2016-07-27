@@ -13,6 +13,7 @@ TEST_CASE( "addressing modes", "[MetisVM]" ) {
   REQUIRE( GET_DEST(0x21) == 2);
 };
 
+
 TEST_CASE( "labels", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
@@ -114,6 +115,28 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(m.cur_stack_val(), MetisException);
 }
 
+TEST_CASE( "inc/dec", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+  m.add_storei(REGA, 0);
+  m.add_inc(REGA,REGA);
+
+  m.eval();
+
+  REQUIRE(m.get_registers()[REGA] == 1);
+
+  m.add_inc(REGA,REGA);
+
+  m.eval();
+  REQUIRE(m.get_registers()[REGA] == 2);
+
+  m.add_dec(REGA,REGA);
+
+  m.eval();
+  REQUIRE(m.get_registers()[REGA] == 1);
+} 
 
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
