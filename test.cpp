@@ -144,6 +144,7 @@ TEST_CASE( "jump,jumpi", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5);
   m.hard_reset();
   m.add_storei(REGA,1);
+  // TODO: I don't think 64 is right?
   m.add_jumpi(64);
   m.add_storei(REGA,2);
   m.add_storei(REGB,3);
