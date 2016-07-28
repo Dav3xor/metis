@@ -26,8 +26,8 @@ using namespace std;
                                           get_val(ADDR_MODES)); \
                                   cur += ADVANCE(1, 0);
 
-#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
-
+#define ADVANCE(extended, data) (32)
+//#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)   (1+extended+data)
 
 #define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
@@ -88,7 +88,6 @@ class MetisVM {
       stack_size            = stack_len;
       numcommands           = 0;
       reset();
-      printf("isize = %ld\n",sizeof(MetisInstruction));
     }
 
     void add_end(void) {
@@ -235,11 +234,9 @@ class MetisVM {
           // instruction index and stack instructions
           case INS_JUMP:
             cur = start + get_val(ADDR_MODES);
-            cur += ADVANCE(1, 0);
             break;
           case INS_JUMPI:
             cur = start + instruction->commands.jumpi.value;
-            cur += ADVANCE(0, sizeof(ext_jumpi_t));
             break;
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {

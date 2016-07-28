@@ -146,7 +146,7 @@ TEST_CASE( "jumpi", "[MetisVM]" ) {
   m.hard_reset();
   m.add_storei(REGA,1);
   // TODO: I don't think 64 is right?
-  m.add_jumpi(64);
+  m.add_jumpi(96);
   m.add_storei(REGA,2);
   m.add_storei(REGB,3);
   m.add_end();
@@ -162,18 +162,35 @@ TEST_CASE( "jump", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   MetisVM m(buf,10000, stack, 5);
+
   m.hard_reset();
-  m.add_storei(REGA,64);
-  // TODO: I don't think 64 is right?
-  m.add_jump(REGA);
-  m.add_storei(REGA,2);
+  m.add_label("1");         // 0
+  m.add_storei(REGA,96);
+
+  m.add_label("2");         // 32
+  m.add_jump(REGA);         // 64
+
+  m.add_label("3");
+   m.add_storei(REGA,2);
+
+  m.add_label("4");
   m.add_storei(REGB,3);
+
+  m.add_label("5");
   m.add_end();
+
+  m.add_label("6");
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 1 );
+  REQUIRE( m.get_registers()[REGA] == 96 );
   REQUIRE( m.get_registers()[REGB] == 3 );
+  REQUIRE( m.get_label("1") == 0 );
+  REQUIRE( m.get_label("2") == 32 );
+  REQUIRE( m.get_label("3") == 64 );
+  REQUIRE( m.get_label("4") == 96 );
+  REQUIRE( m.get_label("5") == 128 );
+  REQUIRE( m.get_label("6") == 160 );
 }
 
 TEST_CASE( "load/save", "[MetisVM]" ) {
