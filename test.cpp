@@ -193,6 +193,29 @@ TEST_CASE( "jump", "[MetisVM]" ) {
   REQUIRE( m.get_label("6") == 160 );
 }
 
+TEST_CASE( "jump if zero", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+
+
+  m.add_storei(REGA,5);
+  m.add_storei(REGB,0);
+  m.add_storei(REGC, 256);
+  m.add_label("loop start");        
+  m.add_inc(REGB, REGB);
+  m.add_dec(REGA, REGA);
+  m.add_jizz(REGA,REGC);
+  m.add_jumpi(m.get_label("loop start"));
+  m.add_end();
+
+  m.eval();
+
+  REQUIRE( m.get_registers()[REGA] == 0 );
+  REQUIRE( m.get_registers()[REGB] == 5 );
+  REQUIRE( m.get_registers()[REGC] == 256 );
+}
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
