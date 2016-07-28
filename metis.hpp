@@ -88,6 +88,7 @@ class MetisVM {
       stack_size            = stack_len;
       numcommands           = 0;
       reset();
+      printf("isize = %ld\n",sizeof(MetisInstruction));
     }
 
     void add_end(void) {
@@ -96,10 +97,10 @@ class MetisVM {
       cur += ADVANCE(0, 0);
     };
     
-    void add_jump(address_mode src, address_mode dest) {
+    void add_jump(address_mode src) {
       MetisInstruction *instruction            = (MetisInstruction *)cur;
       instruction->type                        = INS_JUMP;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
       cur += ADVANCE(1, 0);
     };
 
