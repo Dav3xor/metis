@@ -275,8 +275,8 @@ TEST_CASE( "math", "[MetisVM]" ) {
   m.hard_reset();
   m.add_storei(REGA,5);
   m.add_storei(REGB,2);
-  m.add_inc(REGA, REGA);        // 6
-  m.add_dec(REGA, REGA);        // 5
+  m.add_inc(REGA, REGA);  // 6
+  m.add_dec(REGA, REGA);  // 5
   m.add_add(REGB, REGA);  // 7
   m.add_sub(REGB, REGA);  // 5
   m.add_mul(REGB, REGA);  // 10
