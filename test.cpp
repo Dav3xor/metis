@@ -243,6 +243,24 @@ TEST_CASE( "store", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGD] == 4);
 }
 
+TEST_CASE( "storei", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+  
+  m.add_storei(REGA, 1);
+  m.add_storei(REGB, 2);
+  m.add_storei(REGC, 3);
+  m.add_storei(REGD, 4);
+  
+  m.eval();
+
+  REQUIRE( m.get_registers()[REGA] == 1);
+  REQUIRE( m.get_registers()[REGB] == 2);
+  REQUIRE( m.get_registers()[REGC] == 3);
+  REQUIRE( m.get_registers()[REGD] == 4);
+}
   
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
