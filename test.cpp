@@ -234,6 +234,8 @@ TEST_CASE( "store", "[MetisVM]" ) {
   
   m.add_storei(STACK_PUSH,4);
   m.add_store(STACK_POP,REGD);
+
+  m.add_store(REGA, STACK_PUSH);
   
   m.eval();
 
@@ -241,6 +243,8 @@ TEST_CASE( "store", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 2);
   REQUIRE( m.get_registers()[REGC] == 3);
   REQUIRE( m.get_registers()[REGD] == 4);
+  REQUIRE( m.cur_stack_val() == 1);
+  
 }
 
 TEST_CASE( "storei", "[MetisVM]" ) {
@@ -253,6 +257,7 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   m.add_storei(REGB, 2);
   m.add_storei(REGC, 3);
   m.add_storei(REGD, 4);
+  m.add_storei(STACK_PUSH, 5);
   
   m.eval();
 
@@ -260,6 +265,7 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 2);
   REQUIRE( m.get_registers()[REGC] == 3);
   REQUIRE( m.get_registers()[REGD] == 4);
+  REQUIRE( m.cur_stack_val() == 5);
 }
   
 TEST_CASE( "load/save", "[MetisVM]" ) {
