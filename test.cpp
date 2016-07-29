@@ -268,10 +268,31 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val() == 5);
 }
   
+TEST_CASE( "math", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+  m.add_storei(REGA,5);
+  m.add_storei(REGB,2);
+  m.add_inc(REGA, REGA);        // 6
+  m.add_dec(REGA, REGA);        // 5
+  m.add_add(REGB, REGA);  // 7
+  m.add_sub(REGB, REGA);  // 5
+  m.add_mul(REGB, REGA);  // 10
+  m.add_div(REGB, REGA);  // 5
+  m.add_mod(REGB, REGA);  // 1
+  m.eval();
+  
+  REQUIRE( m.get_registers()[REGA] == 1);
+  REQUIRE( m.get_registers()[REGB] == 2);
+}
+
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
   
   m.add_label("hi!");
   m.add_storei(REGA, 0xDEADBEEF);
