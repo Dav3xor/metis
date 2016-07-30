@@ -153,6 +153,16 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       cur += ADVANCE(1, 0);
     };
+    
+    void add_draw_elements(void) {
+      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      instruction->type                        = INS_GLDRAW_ES;      
+      cur += ADVANCE(0, 0);
+    }; 
+
+
+
+
     // TODO: work on cleaning this up... 
     // 1. move into separate file
     // 2. abstract sections better
@@ -228,6 +238,10 @@ class MetisVM {
             
     bool eval() {
       reset();
+      GLenum mode           = pop();
+      GLsizei count         = pop();
+      GLenum type           = pop();     
+      GLvoid *indices       = (GLvoid *)pop();
       while(cur <= end) {
         MetisInstruction *instruction = (MetisInstruction *)cur;
         switch (instruction->type) {
@@ -297,6 +311,15 @@ class MetisVM {
             cur += ADVANCE(1, 0);
             break;
 
+          case INS_GLDRAW_ES:
+            mode    = pop();
+            count   = pop();
+            type    = pop();     
+            indices = (GLvoid *)pop();
+            glDrawElements(mode, count, type, indices);
+            cur += ADVANCE(0,0);
+            break;
+
           case INS_END:
             // don't advance, then we can add instructions over
             // the end instruction...
@@ -317,6 +340,7 @@ class MetisVM {
     }
 
     uint64_t *get_registers  (void)  { return registers; };
+
     uint64_t  cur_stack_val  (void)  {
       if ( registers[REGS    ] > 0) {
         return stack[registers[REGS    ]-1]; 
