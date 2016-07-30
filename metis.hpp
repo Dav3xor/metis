@@ -224,7 +224,7 @@ class MetisVM {
             // TODO: allow multiple code segments, load 
             //       them one after another...
             infile.read((char *)&code_len,8);
-            if (code_len > end-start) {
+            if (code_len > (uint64_t)(end-start)) {
               throw MetisException("code too big?!? (load)");
             }
             infile.read((char *) start, code_len);
