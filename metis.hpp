@@ -134,7 +134,19 @@ class MetisVM {
       // not really an instruction, but it basically acts like one...
       labels[label] = (uint64_t)(cur-start);
     }
+    void add_data(const uint8_t *data, const uint64_t length, const char *label) {
+      MetisInstruction *instruction     = (MetisInstruction *)cur;
+      instruction->type                 = INS_DATA;      
+      instruction->commands.data.length = length; 
+      if (cur + length > end) {
+        throw MetisException("data blob doesn't fit (add_data)");
+      }
+      cur += ADVANCE(0, sizeof(data_t));
+      add_label(label);
 
+      memcpy(cur,data,length);
+      cur += length;
+    }
     
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
@@ -238,10 +250,11 @@ class MetisVM {
             
     bool eval() {
       reset();
-      GLenum mode           = pop();
-      GLsizei count         = pop();
-      GLenum type           = pop();     
-      GLvoid *indices       = (GLvoid *)pop();
+      GLenum mode;
+      GLsizei count;
+      GLenum type;
+      GLvoid *indices;
+      uint64_t advance;
       while(cur <= end) {
         MetisInstruction *instruction = (MetisInstruction *)cur;
         switch (instruction->type) {
@@ -312,6 +325,7 @@ class MetisVM {
             break;
 
           case INS_GLDRAW_ES:
+            exit(0);
             mode    = pop();
             count   = pop();
             type    = pop();     
@@ -319,7 +333,11 @@ class MetisVM {
             glDrawElements(mode, count, type, indices);
             cur += ADVANCE(0,0);
             break;
-
+          case INS_DATA:
+            advance = instruction->commands.data.length;
+            cur += ADVANCE(0,sizeof(data_t));
+            cur += advance;
+            break;
           case INS_END:
             // don't advance, then we can add instructions over
             // the end instruction...
@@ -392,6 +410,7 @@ class MetisVM {
                                INS_GLDRAW_AI            =   35,   //     GLDrawArrays, using immediate
  
                                INS_LOG                  =  192,   //     log string pointed at by command
+                               INS_DATA                 =  193,   //     global data
 
                                INS_END                  =  255,   //     End Program 
                                };
@@ -430,6 +449,9 @@ class MetisVM {
         struct log_t {
           uint8_t length;
         } log;
+        struct data_t {
+          uint64_t length;
+        } data;
       } commands;
     };
     void push(uint64_t val) {
