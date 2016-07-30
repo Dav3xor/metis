@@ -288,6 +288,24 @@ TEST_CASE( "math", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 2);
 }
 
+TEST_CASE( "logic ops", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+  m.add_storei(REGA,10);
+  m.add_storei(REGB,2);
+  m.add_and(REGB, REGA);  // 2
+  m.add_storei(REGB,3);
+  m.add_or(REGB, REGA);  // 3
+  m.add_storei(REGB,5);
+  m.add_xor(REGB, REGA);  // 6
+  m.add_not(REGB, REGA);  // 5
+  m.eval();
+  
+  REQUIRE( m.get_registers()[REGA] == 0xfffffffffffffffa);
+  REQUIRE( m.get_registers()[REGB] == 5);
+}
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
