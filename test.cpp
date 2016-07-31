@@ -323,6 +323,12 @@ TEST_CASE( "data", "[MetisVM]" ) {
 
   REQUIRE( m.get_registers()[REGA] == 11);
   REQUIRE( m.get_registers()[REGB] == 10);
+  float *ins_data = (float *)m.get_ptr_from_label("data");
+  REQUIRE( ins_data[0] == 1.1f);
+  REQUIRE( ins_data[1] == 2.2f);
+  REQUIRE( ins_data[2] == 3.3f);
+  REQUIRE( ins_data[3] == 4.4f);
+  REQUIRE( ins_data[4] == 5.5f);
 }
   
 TEST_CASE( "load/save", "[MetisVM]" ) {
