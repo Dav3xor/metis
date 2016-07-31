@@ -24,17 +24,17 @@ using namespace std;
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
                                           get_dest_val(ADDR_MODES) op \
                                           get_val(ADDR_MODES)); \
-                                  cur += ADVANCE(1, 0);
+                                  registers[REGIP] += ADVANCE(1, 0);
 
 #define ADVANCE(extended, data) (32)
 //#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)   (1+extended+data)
 
 #define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
-      MetisInstruction *instruction                   = (MetisInstruction *)cur; \
+      MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \
       instruction->type                               = byte_code; \
       instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
-      cur += ADVANCE(1, 0); \
+      registers[REGIP] += ADVANCE(1, 0); \
     };
 
 
@@ -43,8 +43,9 @@ enum address_mode: uint8_t {REGA                    =    0,
                             REGB                    =    1,
                             REGC                    =    2,
                             REGD                    =    3,
-                            REGS                    =    4,  // stack register
-                            REGERR                  =    5,
+                            REGSP                   =    4,  // stack pointer
+                            REGIP                   =    5,  // instruction pointer
+                            REGERR                  =    6,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
@@ -68,12 +69,12 @@ class MetisVM {
   public:
     // simple reset, do not remove existing code
     void reset(void) {
-      cur                   = start;
       registers[REGA]   = 0;
       registers[REGB]   = 0;
       registers[REGC]   = 0;
       registers[REGD]   = 0;
-      registers[REGS]   = 0;
+      registers[REGSP]  = 0;
+      registers[REGIP]  = (uint64_t)start;
       registers[REGERR] = 0;
     };
     void hard_reset(void) {
@@ -91,61 +92,61 @@ class MetisVM {
     }
 
     void add_end(void) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_END;      
-      cur += ADVANCE(0, 0);
+      registers[REGIP] += ADVANCE(0, 0);
     };
     
     void add_jump(address_mode src) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_JUMP;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
-      cur += ADVANCE(1, 0);
+      registers[REGIP] += ADVANCE(1, 0);
     };
 
     void add_jumpi(uint64_t location) {
-      MetisInstruction *instruction                 = (MetisInstruction *)cur;
+      MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
       instruction->type                             = INS_JUMPI;      
       instruction->commands.jumpi.value = location;
-      cur += ADVANCE(0, sizeof(ext_jumpi_t));
+      registers[REGIP] += ADVANCE(0, sizeof(ext_jumpi_t));
     };
 
     void add_jizz(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_JIZZ;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      cur += ADVANCE(1, 0);
+      registers[REGIP] += ADVANCE(1, 0);
     }; 
     void add_store(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_STORE;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      cur += ADVANCE(1, 0);
+      registers[REGIP] += ADVANCE(1, 0);
     }; 
     void add_storei(address_mode dest, uint64_t value) {
-      MetisInstruction *instruction                 = (MetisInstruction *)cur;
+      MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
       instruction->type                             = INS_STOREI;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
       instruction->commands.extended.ext.storei.value = value;
-      cur += ADVANCE(1, sizeof(ext_storei_t));
+      registers[REGIP] += ADVANCE(1, sizeof(ext_storei_t));
     };
     
     void add_label(const char *label) {
       // not really an instruction, but it basically acts like one...
-      labels[label] = (uint64_t)(cur-start);
+      labels[label] = (registers[REGIP]-(uint64_t)start);
     }
     void add_data(const uint8_t *data, const uint64_t length, const char *label) {
-      MetisInstruction *instruction     = (MetisInstruction *)cur;
+      MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
       instruction->type                 = INS_DATA;      
       instruction->commands.data.length = length; 
-      if (cur + length > end) {
+      if (registers[REGIP] + length > (uint64_t)end) {
         throw MetisException("data blob doesn't fit (add_data)");
       }
-      cur += ADVANCE(0, sizeof(data_t));
+      registers[REGIP] += ADVANCE(0, sizeof(data_t));
       add_label(label);
 
-      memcpy(cur,data,length);
-      cur += length;
+      memcpy((void *)registers[REGIP],data,length);
+      registers[REGIP] += length;
     }
     
     MATH_METHOD(add_inc, INS_INC); 
@@ -160,16 +161,16 @@ class MetisVM {
     MATH_METHOD(add_xor, INS_XOR); 
 
     void add_not(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_NOT;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      cur += ADVANCE(1, 0);
+      registers[REGIP] += ADVANCE(1, 0);
     };
     
     void add_draw_elements(void) {
-      MetisInstruction *instruction            = (MetisInstruction *)cur;
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_GLDRAW_ES;      
-      cur += ADVANCE(0, 0);
+      registers[REGIP] += ADVANCE(0, 0);
     }; 
 
 
@@ -192,7 +193,7 @@ class MetisVM {
         outfile.write((char *) &kv.second, sizeof(uint64_t));
       }
 
-      uint64_t code_len = cur-start;
+      uint64_t code_len = registers[REGIP]-(uint64_t)start;
       outfile.write("C",1);
       outfile.write((char *)&code_len, 8);
       outfile.write((char *)start, code_len);
@@ -255,43 +256,43 @@ class MetisVM {
       GLenum type;
       GLvoid *indices;
       uint64_t advance;
-      while(cur <= end) {
-        MetisInstruction *instruction = (MetisInstruction *)cur;
+      while(registers[REGIP] <= (uint64_t)end) {
+        MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
         switch (instruction->type) {
           // instruction index and stack instructions
           case INS_JUMP:
-            cur = start + get_val(ADDR_MODES);
+            registers[REGIP] = (uint64_t)start + get_val(ADDR_MODES);
             break;
           case INS_JUMPI:
-            cur = start + instruction->commands.jumpi.value;
+            registers[REGIP] = (uint64_t)start + instruction->commands.jumpi.value;
             break;
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
-              cur = start + get_dest_val(ADDR_MODES);
+              registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
             }
-            cur += ADVANCE(1, 0);
+            registers[REGIP] += ADVANCE(1, 0);
             break;
           case INS_STORE:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES));
-            cur += ADVANCE(1, 0);
+            registers[REGIP] += ADVANCE(1, 0);
             break;
           case INS_STOREI:
             set_val(ADDR_MODES,
                     instruction->commands.extended.ext.storei.value);
-            cur += ADVANCE(1, sizeof(ext_storei_t));
+            registers[REGIP] += ADVANCE(1, sizeof(ext_storei_t));
             break;
           
           // math instructions
           case INS_INC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)+1);
-            cur += ADVANCE(1, 0);
+            registers[REGIP] += ADVANCE(1, 0);
             break;
           case INS_DEC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)-1);
-            cur += ADVANCE(1, 0);
+            registers[REGIP] += ADVANCE(1, 0);
             break;
           case INS_ADD:
             MATH_OPERATION(+);
@@ -321,7 +322,7 @@ class MetisVM {
             break;
           case INS_NOT:
             set_val(ADDR_MODES, ~get_val(ADDR_MODES));
-            cur += ADVANCE(1, 0);
+            registers[REGIP] += ADVANCE(1, 0);
             break;
 
           case INS_GLDRAW_ES:
@@ -331,12 +332,12 @@ class MetisVM {
             type    = pop();     
             indices = (GLvoid *)pop();
             glDrawElements(mode, count, type, indices);
-            cur += ADVANCE(0,0);
+            registers[REGIP] += ADVANCE(0,0);
             break;
           case INS_DATA:
             advance = instruction->commands.data.length;
-            cur += ADVANCE(0,sizeof(data_t));
-            cur += advance;
+            registers[REGIP] += ADVANCE(0,sizeof(data_t));
+            registers[REGIP] += advance;
             break;
           case INS_END:
             // don't advance, then we can add instructions over
@@ -364,13 +365,13 @@ class MetisVM {
     uint64_t *get_registers  (void)  { return registers; };
 
     uint64_t  cur_stack_val  (void)  {
-      if ( registers[REGS    ] > 0) {
-        return stack[registers[REGS    ]-1]; 
+      if ( registers[REGSP] > 0) {
+        return stack[registers[REGSP]-1]; 
       } else {
         throw MetisException("stack empty (cur_stack_val)");
       }
     }
-    uint64_t  cur_stack_size (void)  { return registers[REGS    ]; };
+    uint64_t  cur_stack_size (void)  { return registers[REGSP]; };
   
   private:
     uint64_t    registers[8];
@@ -382,7 +383,6 @@ class MetisVM {
     uint64_t    numcommands;
     
     uint8_t    *start;
-    uint8_t    *cur;
     uint8_t    *end;
 
 
@@ -459,19 +459,19 @@ class MetisVM {
       } commands;
     };
     void push(uint64_t val) {
-      if( registers[REGS] >= stack_size) {
+      if( registers[REGSP] >= stack_size) {
         throw MetisException("stack full (push)");
       }
-      stack[registers[REGS]] = val;
-      registers[REGS] += 1;
+      stack[registers[REGSP]] = val;
+      registers[REGSP] += 1;
     }
 
     uint64_t pop() {
-      if(registers[REGS] == 0) {
+      if(registers[REGSP] == 0) {
         throw MetisException("stack empty (pop)");
       }
-      registers[REGS] -= 1;
-      return stack[registers[REGS]];
+      registers[REGSP] -= 1;
+      return stack[registers[REGSP]];
     }
 
     void set_val(uint8_t location, uint64_t value) {
@@ -482,7 +482,7 @@ class MetisVM {
         case REGB:
         case REGC:
         case REGD:
-        case REGS:
+        case REGSP:
         case REGERR:
           registers[location] = value;
           break;
@@ -501,7 +501,7 @@ class MetisVM {
         case REGB:
         case REGC:
         case REGD:
-        case REGS:
+        case REGSP:
         case REGERR:
           return registers[location];
           break;
@@ -521,7 +521,7 @@ class MetisVM {
         case REGB:
         case REGC:
         case REGD:
-        case REGS:
+        case REGSP:
         case REGERR:
           return registers[location];
           break;
