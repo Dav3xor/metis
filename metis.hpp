@@ -299,8 +299,9 @@ class MetisVM {
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
               registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
+            } else {
+              registers[REGIP] += ADVANCE(1, 0);
             }
-            registers[REGIP] += ADVANCE(1, 0);
             break;
           case INS_STORE:
             set_val(ADDR_MODES,
