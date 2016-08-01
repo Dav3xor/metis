@@ -117,6 +117,22 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       registers[REGIP] += ADVANCE(1, 0);
     }; 
+
+    void add_jne(address_mode src, address_mode dest, uint64_t location) {
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+      instruction->type                        = INS_JNE;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      instruction->commands.jne.value          = location;
+      registers[REGIP] += ADVANCE(1, sizeof(ext_jne_t));
+    }
+    void add_jmpe(address_mode src, address_mode dest, uint64_t location) {
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+      instruction->type                        = INS_JMPE;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      instruction->commands.jmpe.value          = location;
+      registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
+    }
+
     void add_store(address_mode src, address_mode dest) {
       MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_STORE;      
@@ -390,6 +406,8 @@ class MetisVM {
                                INS_JUMP                 =    1,   // *   jump to index ...
                                INS_JUMPI                =    2,   //     jump to immediate index
                                INS_JIZZ                 =    3,   // *   jump to index ... if zero
+                               INS_JNE                  =    4,   // *   jump if not equal
+                               INS_JMPE                 =    5,   // *   jump if equal
                                INS_STORE                =    6,   // *   store ... into stack offset #...
                                INS_STOREI               =    7,   // *   store immediate value into 
 
@@ -447,6 +465,12 @@ class MetisVM {
         struct jumpi_t {
           uint64_t value;
         } jumpi;
+        struct jne_t {
+          uint64_t value;
+        } jne;
+        struct jmpe_t {
+          uint64_t value;
+        } jmpe;
         struct push_t {
           uint64_t value;
         } push;
