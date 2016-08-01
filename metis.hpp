@@ -282,6 +282,20 @@ class MetisVM {
           case INS_JUMPI:
             registers[REGIP] = (uint64_t)start + instruction->commands.jumpi.value;
             break;
+          case INS_JNE:
+            if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
+              registers[REGIP] = (uint64_t)start + instruction->commands.jne.value;
+            } else {
+              registers[REGIP] += ADVANCE(1, sizeof(ext_jne_t));
+            }
+            break; 
+          case INS_JMPE:
+            if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
+              registers[REGIP] = (uint64_t)start + instruction->commands.jmpe.value;
+            } else {
+              registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
+            }
+            break; 
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
               registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
