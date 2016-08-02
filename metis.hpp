@@ -283,6 +283,7 @@ class MetisVM {
             registers[REGIP] = (uint64_t)start + instruction->commands.jumpi.value;
             break;
           case INS_JNE:
+            printf("%.2X\n", instruction->type);
             if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
               registers[REGIP] = (uint64_t)start + instruction->commands.jne.value;
             } else {

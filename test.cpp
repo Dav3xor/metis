@@ -217,6 +217,26 @@ TEST_CASE( "jump if zero", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGC] == 256 );
 }
 
+TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5);
+  m.hard_reset();
+
+
+  m.add_storei(REGA,5);
+  m.add_storei(REGB,0);
+  m.add_jne(REGA, REGB, 128);
+  m.add_storei(REGC, 256);
+
+  m.eval();
+  REQUIRE( m.get_registers()[REGA] == 0 );
+  REQUIRE( m.get_registers()[REGB] == 5 );
+  REQUIRE( m.get_registers()[REGC] == 0 );
+
+
+}
+
 TEST_CASE( "store", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
