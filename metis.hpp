@@ -122,14 +122,15 @@ class MetisVM {
       MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
       instruction->type                        = INS_JNE;      
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      instruction->commands.jne.value          = location;
+      instruction->commands.extended.ext.jne.value = location;
       registers[REGIP] += ADVANCE(1, sizeof(ext_jne_t));
     }
+
     void add_jmpe(address_mode src, address_mode dest, uint64_t location) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_JMPE;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      instruction->commands.jmpe.value          = location;
+      MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
+      instruction->type                          = INS_JMPE;      
+      instruction->commands.extended.addr_mode   = BUILD_ADDR(src, dest);
+      instruction->commands.extended.ext.jmpe.value  = location;
       registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
     }
 
@@ -283,16 +284,15 @@ class MetisVM {
             registers[REGIP] = (uint64_t)start + instruction->commands.jumpi.value;
             break;
           case INS_JNE:
-            printf("%.2X\n", instruction->type);
             if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
-              registers[REGIP] = (uint64_t)start + instruction->commands.jne.value;
+              registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jne.value;
             } else {
               registers[REGIP] += ADVANCE(1, sizeof(ext_jne_t));
             }
             break; 
           case INS_JMPE:
             if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
-              registers[REGIP] = (uint64_t)start + instruction->commands.jmpe.value;
+              registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jmpe.value;
             } else {
               registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
             }
@@ -465,6 +465,14 @@ class MetisVM {
             struct ext_storei_t {
               uint64_t value;
             }storei;
+
+            struct ext_jne_t {
+              uint64_t value;
+            } jne;
+            struct ext_jmpe_t {
+              uint64_t value;
+            } jmpe;
+
           }ext; 
         } extended;
         struct gldrawelements_t {
@@ -481,12 +489,6 @@ class MetisVM {
         struct jumpi_t {
           uint64_t value;
         } jumpi;
-        struct jne_t {
-          uint64_t value;
-        } jne;
-        struct jmpe_t {
-          uint64_t value;
-        } jmpe;
         struct push_t {
           uint64_t value;
         } push;

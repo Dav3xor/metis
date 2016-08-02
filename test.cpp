@@ -228,13 +228,14 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
   m.add_storei(REGB,0);
   m.add_jne(REGA, REGB, 128);
   m.add_storei(REGC, 256);
+  m.add_storei(REGA, 6);
+  m.add_end();
 
   m.eval();
-  REQUIRE( m.get_registers()[REGA] == 0 );
-  REQUIRE( m.get_registers()[REGB] == 5 );
+
+  REQUIRE( m.get_registers()[REGA] == 6 );
+  REQUIRE( m.get_registers()[REGB] == 0 );
   REQUIRE( m.get_registers()[REGC] == 0 );
-
-
 }
 
 TEST_CASE( "store", "[MetisVM]" ) {
