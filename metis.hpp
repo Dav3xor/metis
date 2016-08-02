@@ -291,7 +291,7 @@ class MetisVM {
             }
             break; 
           case INS_JMPE:
-            if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
+            if(get_val(ADDR_MODES) == get_dest_val(ADDR_MODES)) {
               registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jmpe.value;
             } else {
               registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
