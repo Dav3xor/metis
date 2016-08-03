@@ -155,9 +155,11 @@ class MetisVM {
       registers[REGIP] += ADVANCE(1, sizeof(ext_storei_t));
     };
     
-    void add_label(const char *label) {
+    uint64_t add_label(const char *label) {
       // not really an instruction, but it basically acts like one...
-      labels[label] = (registers[REGIP]-(uint64_t)start);
+      uint64_t new_loc = (registers[REGIP]-(uint64_t)start);
+      labels[label] = new_loc;
+      return new_loc;
     }
     void add_data(const uint8_t *data, const uint64_t length, const char *label) {
       MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
