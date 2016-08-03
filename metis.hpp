@@ -117,6 +117,13 @@ class MetisVM {
       instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
       registers[REGIP] += ADVANCE(1, 0);
     }; 
+    
+   void add_jnz(address_mode src, address_mode dest) {
+      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+      instruction->type                        = INS_JNZ;      
+      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+      registers[REGIP] += ADVANCE(1, 0);
+    }; 
 
     void add_jne(address_mode src, address_mode dest, uint64_t location) {
       MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -304,6 +311,13 @@ class MetisVM {
               registers[REGIP] += ADVANCE(1, 0);
             }
             break;
+          case INS_JNZ:
+            if (get_val(ADDR_MODES)!=0) {
+              registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
+            } else {
+              registers[REGIP] += ADVANCE(1, 0);
+            }
+            break;
           case INS_STORE:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES));
@@ -422,10 +436,11 @@ class MetisVM {
                                INS_JUMP                 =    1,   // *   jump to index ...
                                INS_JUMPI                =    2,   //     jump to immediate index
                                INS_JIZZ                 =    3,   // *   jump to index ... if zero
-                               INS_JNE                  =    4,   // *   jump if not equal
-                               INS_JMPE                 =    5,   // *   jump if equal
-                               INS_STORE                =    6,   // *   store ... into stack offset #...
-                               INS_STOREI               =    7,   // *   store immediate value into 
+                               INS_JNZ                  =    4,   // *   jump to index ... if zero
+                               INS_JNE                  =    5,   // *   jump if not equal
+                               INS_JMPE                 =    6,   // *   jump if equal
+                               INS_STORE                =    7,   // *   store ... into stack offset #...
+                               INS_STOREI               =    8,   // *   store immediate value into 
 
                                // Math
                                INS_INC                  =    9,   // *   increment ... 
