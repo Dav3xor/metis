@@ -543,6 +543,7 @@ class MetisVM {
         case REGD:
         case REGSP:
         case REGERR:
+        case REGIP:
           registers[location] = value;
           break;
         case STACK_PUSH:
@@ -562,6 +563,7 @@ class MetisVM {
         case REGD:
         case REGSP:
         case REGERR:
+        case REGIP:
           return registers[location];
           break;
         case STACK_POP:
@@ -582,6 +584,7 @@ class MetisVM {
         case REGD:
         case REGSP:
         case REGERR:
+        case REGIP:
           return registers[location];
           break;
         case STACK_POP:

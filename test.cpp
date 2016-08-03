@@ -431,6 +431,44 @@ TEST_CASE( "data", "[MetisVM]" ) {
   REQUIRE( ins_data[4] == 5.5f);
 }
   
+  
+TEST_CASE( "basic performance test", "[MetisVM]" ) {
+  uint8_t buf[1000000];
+  uint64_t stack[50];
+  float data[5] = {1.1,2.2,3.3,4.4,5.5};
+  uint64_t start_loop;
+  
+  char loop_label[2] = {'\0','\0'};
+  MetisVM m(buf,1000000, stack, 50);
+  m.hard_reset();
+  
+  m.add_storei(REGA,1000000);
+  m.add_storei(REGD,32);
+
+  for(int i=0; i<50; i++) {
+    loop_label[0] = 'a' + i;
+    m.add_data((uint8_t *)data, sizeof(data), loop_label);
+     
+    m.add_inc(REGB,REGB);
+    m.add_add(REGB,REGC);
+    m.add_sub(REGB,REGC);
+    m.add_mul(REGB,REGC);
+    m.add_div(REGB,REGC);
+    m.add_mod(REGB,REGC);
+    m.add_store(REGC, STACK_PUSH);
+    m.add_store(STACK_POP, REGC);
+    
+    m.add_dec(REGB,REGB);
+  }
+  
+  m.add_jnz(REGA, REGD);
+  m.add_end();
+
+  m.eval();
+}
+    
+
+
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
