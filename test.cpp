@@ -473,7 +473,12 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   m.add_jnz(REGA, REGD);
   m.add_end();
 
+  auto start = std::chrono::steady_clock::now(); 
   m.eval();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now() - start);
+  printf("---------------------------------\n");
+  printf("perf test duration: %ldms\n", duration.count());
+  printf("---------------------------------\n");
 }
     
 
@@ -497,7 +502,7 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
  
   REQUIRE(m.get_label("hi!") == 0);
   REQUIRE(m.get_label("hi again!") == 32);
-  
+ 
   m.eval();
   
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
