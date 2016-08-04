@@ -1,3 +1,7 @@
+#ifndef METIS_VM
+#define METIS_VM
+
+
 #include <exception>
 #include <stdexcept>
 #include <sstream>
@@ -63,7 +67,6 @@ class MetisException: public runtime_error {
     static ostringstream cnvt;
 };
 
-ostringstream MetisException::cnvt;
    
 class MetisVM {
   public:
@@ -91,90 +94,18 @@ class MetisVM {
       reset();
     }
 
-    void add_end(void) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_END;      
-      registers[REGIP] += ADVANCE(0, 0);
-    };
-    
-    void add_jump(address_mode src) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_JUMP;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
-      registers[REGIP] += ADVANCE(1, 0);
-    };
+    void     add_end       (void);   
+    void     add_jump      (address_mode src);
+    void     add_jumpi     (uint64_t location);
+    void     add_jizz      (address_mode src, address_mode dest);
+    void     add_jnz       (address_mode src, address_mode dest);
+    void     add_jne       (address_mode src, address_mode dest, uint64_t location);
+    void     add_jmpe      (address_mode src, address_mode dest, uint64_t location);
+    void     add_store     (address_mode src, address_mode dest);
+    void     add_storei    (address_mode dest, uint64_t value);
+    uint64_t add_label     (const char *label);
+    void     add_data      (const uint8_t *data, const uint64_t length, const char *label);
 
-    void add_jumpi(uint64_t location) {
-      MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
-      instruction->type                             = INS_JUMPI;      
-      instruction->commands.jumpi.value = location;
-      registers[REGIP] += ADVANCE(0, sizeof(ext_jumpi_t));
-    };
-
-    void add_jizz(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_JIZZ;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      registers[REGIP] += ADVANCE(1, 0);
-    }; 
-    
-   void add_jnz(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_JNZ;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      registers[REGIP] += ADVANCE(1, 0);
-    }; 
-
-    void add_jne(address_mode src, address_mode dest, uint64_t location) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_JNE;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      instruction->commands.extended.ext.jne.value = location;
-      registers[REGIP] += ADVANCE(1, sizeof(ext_jne_t));
-    }
-
-    void add_jmpe(address_mode src, address_mode dest, uint64_t location) {
-      MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
-      instruction->type                          = INS_JMPE;      
-      instruction->commands.extended.addr_mode   = BUILD_ADDR(src, dest);
-      instruction->commands.extended.ext.jmpe.value  = location;
-      registers[REGIP] += ADVANCE(1, sizeof(ext_jmpe_t));
-    }
-
-    void add_store(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_STORE;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      registers[REGIP] += ADVANCE(1, 0);
-    }; 
-    void add_storei(address_mode dest, uint64_t value) {
-      MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
-      instruction->type                             = INS_STOREI;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
-      instruction->commands.extended.ext.storei.value = value;
-      registers[REGIP] += ADVANCE(1, sizeof(ext_storei_t));
-    };
-    
-    uint64_t add_label(const char *label) {
-      // not really an instruction, but it basically acts like one...
-      uint64_t new_loc = (registers[REGIP]-(uint64_t)start);
-      labels[label] = new_loc;
-      return new_loc;
-    }
-    void add_data(const uint8_t *data, const uint64_t length, const char *label) {
-      MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
-      instruction->type                 = INS_DATA;      
-      instruction->commands.data.length = length; 
-      if (registers[REGIP] + length > (uint64_t)end) {
-        throw MetisException("data blob doesn't fit (add_data)");
-      }
-      registers[REGIP] += ADVANCE(0, sizeof(data_t));
-      add_label(label);
-
-      memcpy((void *)registers[REGIP],data,length);
-      registers[REGIP] += length;
-    }
-    
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
     MATH_METHOD(add_add, INS_ADD); 
@@ -186,20 +117,8 @@ class MetisVM {
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
 
-    void add_not(address_mode src, address_mode dest) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_NOT;      
-      instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-      registers[REGIP] += ADVANCE(1, 0);
-    };
-    
-    void add_draw_elements(void) {
-      MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-      instruction->type                        = INS_GLDRAW_ES;      
-      registers[REGIP] += ADVANCE(0, 0);
-    }; 
-
-
+    void add_not(address_mode src, address_mode dest);
+    void add_draw_elements(void);
 
 
     // TODO: work on cleaning this up... 
@@ -597,4 +516,4 @@ class MetisVM {
       
 };
 
-
+#endif
