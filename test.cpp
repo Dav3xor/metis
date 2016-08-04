@@ -1,7 +1,14 @@
 #define CATCH_CONFIG_MAIN
 
+#include <chrono>
+
 #include "metis.hpp"
 #include "catch.hpp"
+
+
+
+
+
 
 TEST_CASE( "addressing modes", "[MetisVM]" ) {
   uint8_t buf[10000];
@@ -437,13 +444,15 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   uint64_t stack[50];
   float data[5] = {1.1,2.2,3.3,4.4,5.5};
   uint64_t start_loop;
-  
+  uint64_t elapsed;
+ 
   char loop_label[2] = {'\0','\0'};
+
   MetisVM m(buf,1000000, stack, 50);
   m.hard_reset();
   
   m.add_storei(REGA,1000000);
-  m.add_storei(REGD,32);
+  m.add_storei(REGD,64);
 
   for(int i=0; i<50; i++) {
     loop_label[0] = 'a' + i;
@@ -460,7 +469,7 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
     
     m.add_dec(REGB,REGB);
   }
-  
+  m.add_dec(REGA,REGA); 
   m.add_jnz(REGA, REGD);
   m.add_end();
 
