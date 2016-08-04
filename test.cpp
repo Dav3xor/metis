@@ -444,7 +444,6 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   uint64_t stack[50];
   float data[5] = {1.1,2.2,3.3,4.4,5.5};
   uint64_t start_loop;
-  uint64_t elapsed;
  
   char loop_label[2] = {'\0','\0'};
 
@@ -475,9 +474,12 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
 
   auto start = std::chrono::steady_clock::now(); 
   m.eval();
-  auto duration = std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now() - start);
+  auto duration  = std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now() - start);
+  auto elapsed   = duration.count();
+  double ipers   = 505000000.0/(elapsed/1000.0);
   printf("---------------------------------\n");
-  printf("perf test duration: %ldms\n", duration.count());
+  printf("perf test duration:      %ldms\n", duration.count());
+  printf("instructions per second: %f\n", ipers);
   printf("---------------------------------\n");
 }
     
