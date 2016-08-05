@@ -69,6 +69,43 @@ class MetisException: public runtime_error {
 
    
 class MetisVM {
+  private:
+    // first, the list of instructions...
+    enum instruction: uint8_t {INS_ERROR                =    0,   //     should never happen
+                               INS_JUMP                 =    1,   // *   jump to index ...
+                               INS_JUMPI                =    2,   //     jump to immediate index
+                               INS_JIZZ                 =    3,   // *   jump to index ... if zero
+                               INS_JNZ                  =    4,   // *   jump to index ... if zero
+                               INS_JNE                  =    5,   // *   jump if not equal
+                               INS_JMPE                 =    6,   // *   jump if equal
+                               INS_STORE                =    7,   // *   store ... into stack offset #...
+                               INS_STOREI               =    8,   // *   store immediate value into 
+
+                               // Math
+                               INS_INC                  =    9,   // *   increment ... 
+                               INS_DEC                  =   10,   // *   decrement ... 
+                               INS_ADD                  =   11,   // *   A = A+...  (integer)
+                               INS_SUB                  =   12,   // *   A = A-...  (integer)
+                               INS_MUL                  =   13,   // *   A = A*...  (integer)
+                               INS_DIV                  =   14,   // *   A = A/...  (integer)
+                               INS_MOD                  =   15,   // *   A = A%...  (integer)
+
+                               // Bitwise
+                               INS_AND                  =   16,   // *   A = A&...  (integer) 
+                               INS_OR                   =   17,   // *   A = A|...  (integer) 
+                               INS_XOR                  =   18,   // *   A = A^...  (integer) 
+                               INS_NOT                  =   19,   // *   A = A&...  (integer) 
+
+                               INS_GLDRAW_ES            =   32,   //     GLDrawElements, using stack args
+                               INS_GLDRAW_EI            =   33,   //     GLDrawElements, using immediate
+                               INS_GLDRAW_AS            =   34,   //     GLDrawArrays, using stack args
+                               INS_GLDRAW_AI            =   35,   //     GLDrawArrays, using immediate
+ 
+                               INS_LOG                  =  192,   //     log string pointed at by command
+                               INS_DATA                 =  193,   //     global data
+
+                               INS_END                  =  255,   //     End Program 
+                               };
   public:
     // simple reset, do not remove existing code
     void reset(void) {
@@ -284,41 +321,6 @@ class MetisVM {
     uint8_t    *end;
 
 
-    enum instruction: uint8_t {INS_ERROR                =    0,   //     should never happen
-                               INS_JUMP                 =    1,   // *   jump to index ...
-                               INS_JUMPI                =    2,   //     jump to immediate index
-                               INS_JIZZ                 =    3,   // *   jump to index ... if zero
-                               INS_JNZ                  =    4,   // *   jump to index ... if zero
-                               INS_JNE                  =    5,   // *   jump if not equal
-                               INS_JMPE                 =    6,   // *   jump if equal
-                               INS_STORE                =    7,   // *   store ... into stack offset #...
-                               INS_STOREI               =    8,   // *   store immediate value into 
-
-                               // Math
-                               INS_INC                  =    9,   // *   increment ... 
-                               INS_DEC                  =   10,   // *   decrement ... 
-                               INS_ADD                  =   11,   // *   A = A+...  (integer)
-                               INS_SUB                  =   12,   // *   A = A-...  (integer)
-                               INS_MUL                  =   13,   // *   A = A*...  (integer)
-                               INS_DIV                  =   14,   // *   A = A/...  (integer)
-                               INS_MOD                  =   15,   // *   A = A%...  (integer)
-
-                               // Bitwise
-                               INS_AND                  =   16,   // *   A = A&...  (integer) 
-                               INS_OR                   =   17,   // *   A = A|...  (integer) 
-                               INS_XOR                  =   18,   // *   A = A^...  (integer) 
-                               INS_NOT                  =   19,   // *   A = A&...  (integer) 
-
-                               INS_GLDRAW_ES            =   32,   //     GLDrawElements, using stack args
-                               INS_GLDRAW_EI            =   33,   //     GLDrawElements, using immediate
-                               INS_GLDRAW_AS            =   34,   //     GLDrawArrays, using stack args
-                               INS_GLDRAW_AI            =   35,   //     GLDrawArrays, using immediate
- 
-                               INS_LOG                  =  192,   //     log string pointed at by command
-                               INS_DATA                 =  193,   //     global data
-
-                               INS_END                  =  255,   //     End Program 
-                               };
 
     struct MetisInstruction {
       instruction type;
