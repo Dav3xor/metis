@@ -93,8 +93,8 @@ void MetisVM::add_not(address_mode src, address_mode dest) {
   registers[REGIP] += ADVANCE(1, 0);
 };
 
-void MetisVM::add_draw_elements(void) {
+void MetisVM::add_gldrawelements(void) {
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-  instruction->type                        = INS_GLDRAW_ES;      
+  instruction->type                        = INS_GLDRAWELEMENTS;      
   registers[REGIP] += ADVANCE(0, 0);
 }; 

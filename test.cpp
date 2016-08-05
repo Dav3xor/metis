@@ -140,6 +140,8 @@ TEST_CASE( "inc/dec", "[MetisVM]" ) {
   REQUIRE(m.get_registers()[REGA] == 2);
 
   m.add_dec(REGA,REGA);
+  m.add_end();
+
 
   m.eval();
   REQUIRE(m.get_registers()[REGA] == 1);
@@ -343,6 +345,8 @@ TEST_CASE( "store", "[MetisVM]" ) {
   m.add_store(STACK_POP,REGD);
 
   m.add_store(REGA, STACK_PUSH);
+  m.add_end();
+
   
   m.eval();
 
@@ -365,6 +369,8 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   m.add_storei(REGC, 3);
   m.add_storei(REGD, 4);
   m.add_storei(STACK_PUSH, 5);
+  m.add_end();
+
   
   m.eval();
 
@@ -389,6 +395,8 @@ TEST_CASE( "math", "[MetisVM]" ) {
   m.add_mul(REGB, REGA);  // 10
   m.add_div(REGB, REGA);  // 5
   m.add_mod(REGB, REGA);  // 1
+  m.add_end();
+
   m.eval();
   
   REQUIRE( m.get_registers()[REGA] == 1);
@@ -408,6 +416,8 @@ TEST_CASE( "logic ops", "[MetisVM]" ) {
   m.add_storei(REGB,5);
   m.add_xor(REGB, REGA);  // 6
   m.add_not(REGB, REGA);  // 5
+  m.add_end();
+
   m.eval();
   
   REQUIRE( m.get_registers()[REGA] == 0xfffffffffffffffa);
@@ -425,6 +435,7 @@ TEST_CASE( "data", "[MetisVM]" ) {
   m.add_storei(REGB,10);
   m.add_data((uint8_t *)data, sizeof(data), "data");
   m.add_storei(REGA,11);
+  m.add_end();
   
   m.eval();
 

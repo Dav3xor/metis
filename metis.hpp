@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include <GL/gl.h>
+#include <GLFW/glfw3.h>
 
 using namespace std;
 
@@ -67,6 +67,7 @@ class MetisException: public runtime_error {
     static ostringstream cnvt;
 };
 
+void error_callback(int error, const char* description);
    
 class MetisVM {
   private:
@@ -96,10 +97,10 @@ class MetisVM {
                                INS_XOR                  =   18,   // *   A = A^...  (integer) 
                                INS_NOT                  =   19,   // *   A = A&...  (integer) 
 
-                               INS_GLDRAW_ES            =   32,   //     GLDrawElements, using stack args
-                               INS_GLDRAW_EI            =   33,   //     GLDrawElements, using immediate
-                               INS_GLDRAW_AS            =   34,   //     GLDrawArrays, using stack args
-                               INS_GLDRAW_AI            =   35,   //     GLDrawArrays, using immediate
+                               INS_GLDRAWELEMENTS       =   32,   //     GLDrawElements, using stack args
+                               INS_GLDRAWELEMENTSI      =   33,   //     GLDrawElements, using immediate
+                               INS_GLDRAWARRAYS         =   34,   //     GLDrawArrays, using stack args
+                               INS_GLDRAWARRAYSI        =   35,   //     GLDrawArrays, using immediate
  
                                INS_LOG                  =  192,   //     log string pointed at by command
                                INS_DATA                 =  193,   //     global data
@@ -122,13 +123,21 @@ class MetisVM {
       memset(start,0,end-start);
       reset();
     }
-   MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
+    MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
       start                 = buf_loc;
       end                   = buf_loc+buf_len;
       stack                 = stack_loc;
       stack_size            = stack_len;
       numcommands           = 0;
       reset();
+      if (!glfwInit())
+      {
+        printf("glfwInit failed\n");
+      }
+      glfwSetErrorCallback(error_callback); 
+    }
+    ~MetisVM() {
+      glfwTerminate();
     }
 
     void     add_end       (void);   
@@ -155,7 +164,7 @@ class MetisVM {
     MATH_METHOD(add_xor, INS_XOR); 
 
     void add_not(address_mode src, address_mode dest);
-    void add_draw_elements(void);
+    void add_gldrawelements(void);
 
 
     void save(const string &filename);
@@ -171,6 +180,7 @@ class MetisVM {
       uint64_t advance;
       while(registers[REGIP] <= (uint64_t)end) {
         MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
+        //printf("--> %u\n", instruction->type);
         switch (instruction->type) {
           // instruction index and stack instructions
           case INS_JUMP:
@@ -260,8 +270,8 @@ class MetisVM {
             registers[REGIP] += ADVANCE(1, 0);
             break;
 
-          case INS_GLDRAW_ES:
-            exit(0);
+          case INS_GLDRAWELEMENTS:
+            printf("\n\nx\n\n\n");
             mode    = pop();
             count   = pop();
             type    = pop();     
