@@ -103,3 +103,12 @@ void MetisVM::add_gldrawelements(GLenum mode, GLsizei count,
   instruction->commands.gldrawelements.indices = indices;
   registers[REGIP] += ADVANCE(0, sizeof(gldrawelements_t));
 }; 
+
+void MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_GLDRAWARRAYS;      
+  instruction->commands.gldrawarrays.mode = mode;
+  instruction->commands.gldrawarrays.first = first;
+  instruction->commands.gldrawarrays.count = count;
+  registers[REGIP] += ADVANCE(0, sizeof(gldrawarrays_t));
+}; 

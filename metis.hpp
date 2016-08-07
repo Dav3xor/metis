@@ -177,7 +177,7 @@ class MetisVM {
     void add_not(address_mode src, address_mode dest);
     void add_gldrawelements(GLenum mode, GLsizei count, 
                             GLenum type, GLvoid *indices);
-
+    void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
 
     void save(const string &filename);
     void load(const string &filename);           
