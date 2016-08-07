@@ -8,8 +8,6 @@
 
 
 
-
-
 TEST_CASE( "addressing modes", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
@@ -451,14 +449,14 @@ TEST_CASE( "data", "[MetisVM]" ) {
   
   
 TEST_CASE( "basic performance test", "[MetisVM]" ) {
-  uint8_t buf[1000000];
+  uint8_t buf[20000];
   uint64_t stack[50];
   float data[5] = {1.1,2.2,3.3,4.4,5.5};
   uint64_t start_loop;
  
   char loop_label[2] = {'\0','\0'};
 
-  MetisVM m(buf,1000000, stack, 50);
+  MetisVM m(buf,20000, stack, 50);
   m.hard_reset();
   
   m.add_storei(REGA,1000000);
@@ -520,3 +518,5 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
 };
+
+

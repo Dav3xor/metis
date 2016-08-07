@@ -74,6 +74,19 @@ class MetisException: public runtime_error {
 
 void error_callback(int error, const char* description);
    
+class MetisContext {
+  public:
+    MetisContext() {
+      if(!glfwInit()) {
+        printf("glfwInit failed\n");
+      }
+      glfwSetErrorCallback(error_callback); 
+    }
+    ~MetisContext() {
+      glfwTerminate();
+    }
+};
+
 class MetisVM {
   private:
     // first, the list of instructions...
@@ -123,11 +136,13 @@ class MetisVM {
       registers[REGIP]  = (uint64_t)start;
       registers[REGERR] = 0;
     };
+
     void hard_reset(void) {
       labels.empty();
       memset(start,0,end-start);
       reset();
     }
+
     MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
       start                 = buf_loc;
       end                   = buf_loc+buf_len;
@@ -135,14 +150,6 @@ class MetisVM {
       stack_size            = stack_len;
       numcommands           = 0;
       reset();
-      if (!glfwInit())
-      {
-        printf("glfwInit failed\n");
-      }
-      glfwSetErrorCallback(error_callback); 
-    }
-    ~MetisVM() {
-      glfwTerminate();
     }
 
     void     add_end       (void);   
@@ -335,7 +342,7 @@ class MetisVM {
     uint8_t    *start;
     uint8_t    *end;
 
-
+    static MetisContext context;
 
     struct MetisInstruction {
       instruction type;
@@ -463,5 +470,6 @@ class MetisVM {
     }     
       
 };
+
 
 #endif
