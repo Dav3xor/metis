@@ -80,6 +80,7 @@ class MetisContext {
       if(!glfwInit()) {
         printf("glfwInit failed\n");
       }
+      printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
     }
     ~MetisContext() {
@@ -116,9 +117,7 @@ class MetisVM {
                                INS_NOT                  =   19,   // *   A = A&...  (integer) 
 
                                INS_GLDRAWELEMENTS       =   32,   //     GLDrawElements, using stack args
-                               INS_GLDRAWELEMENTSI      =   33,   //     GLDrawElements, using immediate
                                INS_GLDRAWARRAYS         =   34,   //     GLDrawArrays, using stack args
-                               INS_GLDRAWARRAYSI        =   35,   //     GLDrawArrays, using immediate
  
                                INS_LOG                  =  192,   //     log string pointed at by command
                                INS_DATA                 =  193,   //     global data
@@ -176,7 +175,8 @@ class MetisVM {
     MATH_METHOD(add_xor, INS_XOR); 
 
     void add_not(address_mode src, address_mode dest);
-    void add_gldrawelements(void);
+    void add_gldrawelements(GLenum mode, GLsizei count, 
+                            GLenum type, GLvoid *indices);
 
 
     void save(const string &filename);

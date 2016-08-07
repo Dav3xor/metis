@@ -93,8 +93,13 @@ void MetisVM::add_not(address_mode src, address_mode dest) {
   registers[REGIP] += ADVANCE(1, 0);
 };
 
-void MetisVM::add_gldrawelements(void) {
+void MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
+                                 GLenum type, GLvoid *indices) {
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_GLDRAWELEMENTS;      
-  registers[REGIP] += ADVANCE(0, 0);
+  instruction->commands.gldrawelements.mode = mode;
+  instruction->commands.gldrawelements.count = count;
+  instruction->commands.gldrawelements.type = type;
+  instruction->commands.gldrawelements.indices = indices;
+  registers[REGIP] += ADVANCE(0, sizeof(gldrawelements_t));
 }; 

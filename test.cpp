@@ -38,11 +38,10 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   MetisVM m(buf,10000, stack, 5);
- 
+  m.hard_reset(); 
 
   // test that a simple store works 
   m.add_storei(STACK_PUSH,100);
-  m.add_end();
 
   m.eval();
 
