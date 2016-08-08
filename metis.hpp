@@ -118,6 +118,9 @@ class MetisVM {
 
                                INS_GLDRAWELEMENTS       =   32,   //     GLDrawElements, using stack args
                                INS_GLDRAWARRAYS         =   34,   //     GLDrawArrays, using stack args
+                               INS_GLGENBUFFERS         =   35,   //     GLDrawArrays, using stack args
+                               INS_GLBINDBUFFER         =   36,   //     GLDrawArrays, using stack args
+                               INS_GLBUFFERDATA         =   37,   //     GLDrawArrays, using stack args
  
                                INS_LOG                  =  192,   //     log string pointed at by command
                                INS_DATA                 =  193,   //     global data
@@ -178,6 +181,9 @@ class MetisVM {
     void add_gldrawelements(GLenum mode, GLsizei count, 
                             GLenum type, GLvoid *indices);
     void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
+    void add_glgenbuffers(GLsizei n, GLuint *buffers);
+    void add_glbindbuffer(GLenum target, GLuint buffer);
+    void add_glbufferdata(GLenum target, const GLvoid *data, GLenum usage);
 
     void save(const string &filename);
     void load(const string &filename);           
@@ -377,6 +383,20 @@ class MetisVM {
           GLint first;
           GLsizei count;
         }gldrawarrays;
+        struct glgenbuffers_t {
+          GLsizei n;
+          GLuint  *buffers;
+        }glgenbuffers;
+        struct glbindbuffer_t {
+          GLenum target;
+          GLuint buffer;
+        }glbindbuffer;
+        struct glbufferdata_t {
+          GLenum target;
+          GLsizeiptr size;
+          GLvoid *data; 
+          GLenum usage;
+        }glbufferdata;
         struct jumpi_t {
           uint64_t value;
         } jumpi;
