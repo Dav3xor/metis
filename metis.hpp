@@ -121,6 +121,9 @@ class MetisVM {
                                INS_GLGENBUFFERS         =   35,   //     GLDrawArrays, using stack args
                                INS_GLBINDBUFFER         =   36,   //     GLDrawArrays, using stack args
                                INS_GLBUFFERDATA         =   37,   //     GLDrawArrays, using stack args
+                               INS_GLENABLEVERTEXAA     =   38,   //     GLDrawArrays, using stack args
+                               INS_GLVERTATTRIBPOINTER  =   39,   //     GLDrawArrays, using stack args
+                               INS_GLDISABLEVERTEXAA    =   40,   //     GLDrawArrays, using stack args
  
                                INS_LOG                  =  192,   //     log string pointed at by command
                                INS_DATA                 =  193,   //     global data
@@ -183,7 +186,12 @@ class MetisVM {
     void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
     void add_glgenbuffers(GLsizei n, GLuint *buffers);
     void add_glbindbuffer(GLenum target, GLuint buffer);
-    void add_glbufferdata(GLenum target, const GLvoid *data, GLenum usage);
+    void add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
+    void add_glenablevertexattribarray(GLuint index);
+    void add_glvertattribpointer(GLuint index, GLint size, 
+                                 GLenum type, GLboolean normalized, 
+                                 GLsizei stride, GLvoid *pointer);
+    void add_gldisablevertexattribarray(GLuint index);
 
     void save(const string &filename);
     void load(const string &filename);           
@@ -359,6 +367,7 @@ class MetisVM {
             struct ext_jumpi_t {
               uint64_t value;
             }jumpi;
+
             struct ext_storei_t {
               uint64_t value;
             }storei;
@@ -366,49 +375,78 @@ class MetisVM {
             struct ext_jne_t {
               uint64_t value;
             } jne;
+
             struct ext_jmpe_t {
               uint64_t value;
             } jmpe;
 
           }ext; 
         } extended;
+
         struct gldrawelements_t {
           GLenum mode;
           GLsizei count;
           GLenum type;
           GLvoid * indices;
         } gldrawelements;
+
         struct gldrawarrays_t {
           GLenum mode;
           GLint first;
           GLsizei count;
         }gldrawarrays;
+
         struct glgenbuffers_t {
           GLsizei n;
           GLuint  *buffers;
         }glgenbuffers;
+
         struct glbindbuffer_t {
           GLenum target;
           GLuint buffer;
         }glbindbuffer;
+
         struct glbufferdata_t {
           GLenum target;
           GLsizeiptr size;
           GLvoid *data; 
           GLenum usage;
         }glbufferdata;
+
+
+        struct glenablevertexattribarray_t {
+          GLuint index;
+        }glenablevertexattribarray;
+
+        struct glvertattribpointer_t {
+          GLuint index;
+          GLint size;
+          GLenum type;
+          GLboolean normalized;
+          GLsizei stride;
+          GLvoid *pointer;
+        }glvertattribpointer;
+
+        struct gldisablevertexattribarray_t {
+          GLuint index;
+        }gldisablevertexattribarray;
+
         struct jumpi_t {
           uint64_t value;
         } jumpi;
+
         struct push_t {
           uint64_t value;
         } push;
+
         struct log_t {
           uint8_t length;
         } log;
+
         struct data_t {
           uint64_t length;
         } data;
+
       } commands;
     };
     void push(uint64_t val) {

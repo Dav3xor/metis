@@ -111,4 +111,61 @@ void MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   instruction->commands.gldrawarrays.first = first;
   instruction->commands.gldrawarrays.count = count;
   registers[REGIP] += ADVANCE(0, sizeof(gldrawarrays_t));
-}; 
+};
+
+void MetisVM::add_glgenbuffers(GLsizei n, GLuint *buffers) {
+  MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
+  instruction->type                          = INS_GLGENBUFFERS;      
+  instruction->commands.glgenbuffers.n       = n;
+  instruction->commands.glgenbuffers.buffers = buffers;
+  registers[REGIP] += ADVANCE(0, sizeof(glgenbuffers_t));
+};
+
+void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer) {
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLBINDBUFFER;      
+  instruction->commands.glbindbuffer.target = target;
+  instruction->commands.glbindbuffer.buffer = buffer;
+  registers[REGIP] += ADVANCE(0, sizeof(glbindbuffer_t));
+};
+
+void MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage) {
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLBUFFERDATA;      
+  instruction->commands.glbufferdata.target = target;
+  instruction->commands.glbufferdata.size   = size;
+  instruction->commands.glbufferdata.data   = data;
+  instruction->commands.glbufferdata.usage  = usage;
+  registers[REGIP] += ADVANCE(0, sizeof(gldrawarrays_t));
+};
+
+
+void MetisVM::add_glenablevertexattribarray(GLuint index) {
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLENABLEVERTEXAA;      
+  instruction->commands.glenablevertexattribarray.index = index;
+  registers[REGIP] += ADVANCE(0, sizeof(glenablevertexattribarray_t));
+};
+
+void MetisVM::add_glvertattribpointer(GLuint index, GLint size, 
+                             GLenum type, GLboolean normalized, 
+                             GLsizei stride, GLvoid *pointer) {
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLENABLEVERTEXAA;      
+  instruction->commands.glvertattribpointer.index = index;
+  instruction->commands.glvertattribpointer.size = size;
+  instruction->commands.glvertattribpointer.type = type;
+  instruction->commands.glvertattribpointer.normalized = normalized;
+  instruction->commands.glvertattribpointer.stride = stride;
+  instruction->commands.glvertattribpointer.pointer = pointer;
+  registers[REGIP] += ADVANCE(0, sizeof(glglvertattribpointer_t));
+};
+
+void MetisVM::add_gldisablevertexattribarray(GLuint index) {
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLDISABLEVERTEXAA;      
+  instruction->commands.glenablevertexattribarray.index = index;
+  registers[REGIP] += ADVANCE(0, sizeof(glenablevertexattribarray_t));
+};
+
+
