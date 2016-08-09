@@ -199,10 +199,6 @@ class MetisVM {
             
     bool eval() {
       reset();
-      GLenum mode;
-      GLsizei count;
-      GLenum type;
-      GLvoid *indices;
       uint64_t advance;
       while(registers[REGIP] <= (uint64_t)end) {
         MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -297,14 +293,34 @@ class MetisVM {
             break;
 
           case INS_GLDRAWELEMENTS:
-            printf("\n\nx\n\n\n");
-            mode    = pop();
-            count   = pop();
-            type    = pop();     
-            indices = (GLvoid *)pop();
-            glDrawElements(mode, count, type, indices);
-            registers[REGIP] += ADVANCE(0,0);
+            glDrawElements(instruction->commands.gldrawelements.mode, 
+                           instruction->commands.gldrawelements.count, 
+                           instruction->commands.gldrawelements.type, 
+                           instruction->commands.gldrawelements.indices);
+            registers[REGIP] += ADVANCE(0,sizeof(gldrawelements_t));
             break;
+          case INS_GLDRAWARRAYS:
+            glDrawArrays(instruction->commands.gldrawarrays.mode, 
+                         instruction->commands.gldrawarrays.first, 
+                         instruction->commands.gldrawarrays.count);
+            registers[REGIP] += ADVANCE(0,sizeof(gldrawarrays_t));
+            break;
+          case INS_GLGENBUFFERS:
+            glGenBuffers(instruction->commands.glgenbuffers.n, 
+                         instruction->commands.glgenbuffers.buffers);
+            registers[REGIP] += ADVANCE(0,sizeof(glgenbuffers_t));
+            break;
+          case INS_GLBINDBUFFER:
+            glBindBuffer(instruction->commands.glbindbuffer.target, 
+                         instruction->commands.glbindbuffer.buffer);
+            registers[REGIP] += ADVANCE(0,sizeof(glbindbuffer_t));
+            break;
+            
+          case INS_GLBUFFERDATA:
+          case INS_GLENABLEVERTEXAA:
+          case INS_GLVERTATTRIBPOINTER:
+          case INS_GLDISABLEVERTEXAA:
+            break; 
           case INS_DATA:
             advance = instruction->commands.data.length;
             registers[REGIP] += ADVANCE(0,sizeof(data_t));
