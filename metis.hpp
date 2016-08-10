@@ -94,44 +94,44 @@ class MetisContext {
 class MetisVM {
   private:
     // first, the list of instructions...
-    enum instruction: uint8_t {INS_ERROR                =    0,   //     should never happen
-                               INS_JUMP                 =    1,   // *   jump to index ...
-                               INS_JUMPI                =    2,   //     jump to immediate index
-                               INS_JIZZ                 =    3,   // *   jump to index ... if zero
-                               INS_JNZ                  =    4,   // *   jump to index ... if zero
-                               INS_JNE                  =    5,   // *   jump if not equal
-                               INS_JMPE                 =    6,   // *   jump if equal
-                               INS_STORE                =    7,   // *   store ... into stack offset #...
-                               INS_STOREI               =    8,   // *   store immediate value into 
+    enum instruction: uint8_t {INS_ERROR                         =    0,   //     should never happen
+                               INS_JUMP                          =    1,   // *   jump to index ...
+                               INS_JUMPI                         =    2,   //     jump to immediate index
+                               INS_JIZZ                          =    3,   // *   jump to index ... if zero
+                               INS_JNZ                           =    4,   // *   jump to index ... if zero
+                               INS_JNE                           =    5,   // *   jump if not equal
+                               INS_JMPE                          =    6,   // *   jump if equal
+                               INS_STORE                         =    7,   // *   store ... into stack offset #...
+                               INS_STOREI                        =    8,   // *   store immediate value into 
 
                                // Math
-                               INS_INC                  =    9,   // *   increment ... 
-                               INS_DEC                  =   10,   // *   decrement ... 
-                               INS_ADD                  =   11,   // *   A = A+...  (integer)
-                               INS_SUB                  =   12,   // *   A = A-...  (integer)
-                               INS_MUL                  =   13,   // *   A = A*...  (integer)
-                               INS_DIV                  =   14,   // *   A = A/...  (integer)
-                               INS_MOD                  =   15,   // *   A = A%...  (integer)
+                               INS_INC                           =    9,   // *   increment ... 
+                               INS_DEC                           =   10,   // *   decrement ... 
+                               INS_ADD                           =   11,   // *   A = A+...  (integer)
+                               INS_SUB                           =   12,   // *   A = A-...  (integer)
+                               INS_MUL                           =   13,   // *   A = A*...  (integer)
+                               INS_DIV                           =   14,   // *   A = A/...  (integer)
+                               INS_MOD                           =   15,   // *   A = A%...  (integer)
 
                                // Bitwise
-                               INS_AND                  =   16,   // *   A = A&...  (integer) 
-                               INS_OR                   =   17,   // *   A = A|...  (integer) 
-                               INS_XOR                  =   18,   // *   A = A^...  (integer) 
-                               INS_NOT                  =   19,   // *   A = A&...  (integer) 
+                               INS_AND                           =   16,   // *   A = A&...  (integer) 
+                               INS_OR                            =   17,   // *   A = A|...  (integer) 
+                               INS_XOR                           =   18,   // *   A = A^...  (integer) 
+                               INS_NOT                           =   19,   // *   A = A&...  (integer) 
 
-                               INS_GLDRAWELEMENTS       =   32,   //     GLDrawElements, using stack args
-                               INS_GLDRAWARRAYS         =   34,   //     GLDrawArrays, using stack args
-                               INS_GLGENBUFFERS         =   35,   //     GLDrawArrays, using stack args
-                               INS_GLBINDBUFFER         =   36,   //     GLDrawArrays, using stack args
-                               INS_GLBUFFERDATA         =   37,   //     GLDrawArrays, using stack args
-                               INS_GLENABLEVERTEXAA     =   38,   //     GLDrawArrays, using stack args
-                               INS_GLVERTATTRIBPOINTER  =   39,   //     GLDrawArrays, using stack args
-                               INS_GLDISABLEVERTEXAA    =   40,   //     GLDrawArrays, using stack args
+                               INS_GLDRAWELEMENTS                =   32,   //     GLDrawElements, using stack args
+                               INS_GLDRAWARRAYS                  =   34,   //     GLDrawArrays, using stack args
+                               INS_GLGENBUFFERS                  =   35,   //     GLDrawArrays, using stack args
+                               INS_GLBINDBUFFER                  =   36,   //     GLDrawArrays, using stack args
+                               INS_GLBUFFERDATA                  =   37,   //     GLDrawArrays, using stack args
+                               INS_GLENABLEVERTEXATTRIBARRAY     =   38,   //     GLDrawArrays, using stack args
+                               INS_GLVERTEXATTRIBPOINTER         =   39,   //     GLDrawArrays, using stack args
+                               INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   //     GLDrawArrays, using stack args
  
-                               INS_LOG                  =  192,   //     log string pointed at by command
-                               INS_DATA                 =  193,   //     global data
+                               INS_LOG                           =  192,   //     log string pointed at by command
+                               INS_DATA                          =  193,   //     global data
 
-                               INS_END                  =  255,   //     End Program 
+                               INS_END                           =  255,   //     End Program 
                                };
   public:
     // simple reset, do not remove existing code
@@ -191,7 +191,7 @@ class MetisVM {
     void add_glbindbuffer(GLenum target, GLuint buffer);
     void add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
     void add_glenablevertexattribarray(GLuint index);
-    void add_glvertattribpointer(GLuint index, GLint size, 
+    void add_glvertexattribpointer(GLuint index, GLint size, 
                                  GLenum type, GLboolean normalized, 
                                  GLsizei stride, GLvoid *pointer);
     void add_gldisablevertexattribarray(GLuint index);
@@ -326,12 +326,20 @@ class MetisVM {
                          instruction->commands.glbufferdata.usage);
             registers[REGIP] += ADVANCE(0,sizeof(glbufferdata_t));
             break;
-          case INS_GLENABLEVERTEXAA:
+          case INS_GLENABLEVERTEXATTRIBARRAY:
             glEnableVertexAttribArray(instruction->commands.glenablevertexattribarray.index);
             registers[REGIP] += ADVANCE(0,sizeof(glenablevertexattribarray_t));
             break;
-          case INS_GLVERTATTRIBPOINTER:
-          case INS_GLDISABLEVERTEXAA:
+          case INS_GLVERTEXATTRIBPOINTER:
+            glVertexAttribPointer(instruction->commands.glvertexattribpointer.index, 
+                                  instruction->commands.glvertexattribpointer.size,
+                                  instruction->commands.glvertexattribpointer.type,
+                                  instruction->commands.glvertexattribpointer.normalized,
+                                  instruction->commands.glvertexattribpointer.stride,
+                                  instruction->commands.glvertexattribpointer.pointer);
+            registers[REGIP] += ADVANCE(0,sizeof(glvertexattribpointer));
+            break;
+          case INS_GLDISABLEVERTEXATTRIBARRAY:
             glDisableVertexAttribArray(instruction->commands.gldisablevertexattribarray.index);
             registers[REGIP] += ADVANCE(0,sizeof(gldisablevertexattribarray_t));
             break;
@@ -449,14 +457,14 @@ class MetisVM {
           GLuint index;
         }glenablevertexattribarray;
 
-        struct glvertattribpointer_t {
+        struct glvertexattribpointer_t {
           GLuint index;
           GLint size;
           GLenum type;
           GLboolean normalized;
           GLsizei stride;
           GLvoid *pointer;
-        }glvertattribpointer;
+        }glvertexattribpointer;
 
         struct gldisablevertexattribarray_t {
           GLuint index;

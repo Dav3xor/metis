@@ -142,28 +142,28 @@ void MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLe
 
 void MetisVM::add_glenablevertexattribarray(GLuint index) {
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
-  instruction->type                         = INS_GLENABLEVERTEXAA;      
+  instruction->type                         = INS_GLENABLEVERTEXATTRIBARRAY;      
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += ADVANCE(0, sizeof(glenablevertexattribarray_t));
 };
 
-void MetisVM::add_glvertattribpointer(GLuint index, GLint size, 
+void MetisVM::add_glvertexattribpointer(GLuint index, GLint size, 
                              GLenum type, GLboolean normalized, 
                              GLsizei stride, GLvoid *pointer) {
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
-  instruction->type                         = INS_GLENABLEVERTEXAA;      
-  instruction->commands.glvertattribpointer.index = index;
-  instruction->commands.glvertattribpointer.size = size;
-  instruction->commands.glvertattribpointer.type = type;
-  instruction->commands.glvertattribpointer.normalized = normalized;
-  instruction->commands.glvertattribpointer.stride = stride;
-  instruction->commands.glvertattribpointer.pointer = pointer;
-  registers[REGIP] += ADVANCE(0, sizeof(glglvertattribpointer_t));
+  instruction->type                         = INS_GLVERTEXATTRIBPOINTER;      
+  instruction->commands.glvertexattribpointer.index = index;
+  instruction->commands.glvertexattribpointer.size = size;
+  instruction->commands.glvertexattribpointer.type = type;
+  instruction->commands.glvertexattribpointer.normalized = normalized;
+  instruction->commands.glvertexattribpointer.stride = stride;
+  instruction->commands.glvertexattribpointer.pointer = pointer;
+  registers[REGIP] += ADVANCE(0, sizeof(glglvertexattribpointer_t));
 };
 
 void MetisVM::add_gldisablevertexattribarray(GLuint index) {
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
-  instruction->type                         = INS_GLDISABLEVERTEXAA;      
+  instruction->type                         = INS_GLDISABLEVERTEXATTRIBARRAY;      
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += ADVANCE(0, sizeof(glenablevertexattribarray_t));
 };
