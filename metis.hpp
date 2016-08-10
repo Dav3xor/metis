@@ -320,9 +320,21 @@ class MetisVM {
             break;
             
           case INS_GLBUFFERDATA:
+            glBufferData(instruction->commands.glbufferdata.target, 
+                         instruction->commands.glbufferdata.size,
+                         instruction->commands.glbufferdata.data,
+                         instruction->commands.glbufferdata.usage);
+            registers[REGIP] += ADVANCE(0,sizeof(glbufferdata_t));
+            break;
           case INS_GLENABLEVERTEXAA:
+            glEnableVertexAttribArray(instruction->commands.glenablevertexattribarray.index);
+            registers[REGIP] += ADVANCE(0,sizeof(glenablevertexattribarray_t));
+            break;
           case INS_GLVERTATTRIBPOINTER:
           case INS_GLDISABLEVERTEXAA:
+            glDisableVertexAttribArray(instruction->commands.gldisablevertexattribarray.index);
+            registers[REGIP] += ADVANCE(0,sizeof(gldisablevertexattribarray_t));
+            break;
             break; 
           case INS_DATA:
             advance = instruction->commands.data.length;
