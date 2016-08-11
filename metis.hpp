@@ -49,6 +49,7 @@ using namespace std;
       registers[REGIP] += ADVANCE(1, 0); \
     };
 
+#define METIS_NUM_BUFFERS 16
 
 // addressing modes
 enum address_mode: uint8_t {REGA                    =    0,
@@ -119,14 +120,15 @@ class MetisVM {
                                INS_XOR                           =   18,   // *   A = A^...  (integer) 
                                INS_NOT                           =   19,   // *   A = A&...  (integer) 
 
-                               INS_GLDRAWELEMENTS                =   32,   //     GLDrawElements, using stack args
-                               INS_GLDRAWARRAYS                  =   34,   //     GLDrawArrays, using stack args
-                               INS_GLGENBUFFERS                  =   35,   //     GLDrawArrays, using stack args
-                               INS_GLBINDBUFFER                  =   36,   //     GLDrawArrays, using stack args
-                               INS_GLBUFFERDATA                  =   37,   //     GLDrawArrays, using stack args
-                               INS_GLENABLEVERTEXATTRIBARRAY     =   38,   //     GLDrawArrays, using stack args
-                               INS_GLVERTEXATTRIBPOINTER         =   39,   //     GLDrawArrays, using stack args
-                               INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   //     GLDrawArrays, using stack args
+                               // GL Instructions
+                               INS_GLDRAWELEMENTS                =   32,   
+                               INS_GLDRAWARRAYS                  =   34,   
+                               INS_GLGENBUFFERS                  =   35,   
+                               INS_GLBINDBUFFER                  =   36,   
+                               INS_GLBUFFERDATA                  =   37,   
+                               INS_GLENABLEVERTEXATTRIBARRAY     =   38,   
+                               INS_GLVERTEXATTRIBPOINTER         =   39,   
+                               INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   
  
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -388,6 +390,7 @@ class MetisVM {
     uint64_t    *stack;
     uint64_t    stack_size;
 
+    GLuint      buffers[METIS_NUM_BUFFERS];
     unordered_map<string, uint64_t> labels;
 
     uint64_t    numcommands;
