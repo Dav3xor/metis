@@ -189,7 +189,7 @@ class MetisVM {
     void add_gldrawelements(GLenum mode, GLsizei count, 
                             GLenum type, GLvoid *indices);
     void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
-    void add_glgenbuffers(GLsizei n, GLuint *buffers);
+    void add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
     void add_glbindbuffer(GLenum target, GLuint buffer);
     void add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
     void add_glenablevertexattribarray(GLuint index);
@@ -311,8 +311,8 @@ class MetisVM {
             registers[REGIP] += ADVANCE(0,sizeof(gldrawarrays_t));
             break;
           case INS_GLGENBUFFERS:
-            glGenBuffers(instruction->commands.glgenbuffers.n, 
-                         instruction->commands.glgenbuffers.buffers);
+            glGenBuffers(instruction->commands.glgenbuffers.num_buffers, 
+                         &(buffers[instruction->commands.glgenbuffers.start_index]));
             registers[REGIP] += ADVANCE(0,sizeof(glgenbuffers_t));
             break;
           case INS_GLBINDBUFFER:
@@ -439,8 +439,8 @@ class MetisVM {
         }gldrawarrays;
 
         struct glgenbuffers_t {
-          GLsizei n;
-          GLuint  *buffers;
+          GLsizei num_buffers;
+          GLuint  start_index;
         }glgenbuffers;
 
         struct glbindbuffer_t {

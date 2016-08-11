@@ -113,11 +113,11 @@ void MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   registers[REGIP] += ADVANCE(0, sizeof(gldrawarrays_t));
 };
 
-void MetisVM::add_glgenbuffers(GLsizei n, GLuint *buffers) {
-  MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
-  instruction->type                          = INS_GLGENBUFFERS;      
-  instruction->commands.glgenbuffers.n       = n;
-  instruction->commands.glgenbuffers.buffers = buffers;
+void MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
+  MetisInstruction *instruction                  = (MetisInstruction *)registers[REGIP];
+  instruction->type                              = INS_GLGENBUFFERS;      
+  instruction->commands.glgenbuffers.num_buffers = n;
+  instruction->commands.glgenbuffers.start_index = start_index;
   registers[REGIP] += ADVANCE(0, sizeof(glgenbuffers_t));
 };
 
