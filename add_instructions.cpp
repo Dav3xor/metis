@@ -121,11 +121,11 @@ void MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
   registers[REGIP] += ADVANCE(0, sizeof(glgenbuffers_t));
 };
 
-void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer) {
+void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLBINDBUFFER;      
   instruction->commands.glbindbuffer.target = target;
-  instruction->commands.glbindbuffer.buffer = buffer;
+  instruction->commands.glbindbuffer.buffer_index = buffer_index;
   registers[REGIP] += ADVANCE(0, sizeof(glbindbuffer_t));
 };
 

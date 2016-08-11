@@ -38,8 +38,9 @@ using namespace std;
                                           get_val(ADDR_MODES)); \
                                   registers[REGIP] += ADVANCE(1, 0);
 
-#define ADVANCE(extended, data) (32)
-//#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
+#define INSTRUCTION_SIZE(type) (sizeof(MetisVM::MetisInstruction))
+//#define ADVANCE(extended, data) (32)
+#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 //#define ADVANCE(extended, data)   (1+extended+data)
 
 #define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
@@ -190,7 +191,7 @@ class MetisVM {
                             GLenum type, GLvoid *indices);
     void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
     void add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
-    void add_glbindbuffer(GLenum target, GLuint buffer);
+    void add_glbindbuffer(GLenum target, GLuint buffer_index);
     void add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
     void add_glenablevertexattribarray(GLuint index);
     void add_glvertexattribpointer(GLuint index, GLint size, 
@@ -317,7 +318,7 @@ class MetisVM {
             break;
           case INS_GLBINDBUFFER:
             glBindBuffer(instruction->commands.glbindbuffer.target, 
-                         instruction->commands.glbindbuffer.buffer);
+                         buffers[instruction->commands.glbindbuffer.buffer_index]);
             registers[REGIP] += ADVANCE(0,sizeof(glbindbuffer_t));
             break;
             
@@ -445,7 +446,7 @@ class MetisVM {
 
         struct glbindbuffer_t {
           GLenum target;
-          GLuint buffer;
+          GLuint buffer_index;
         }glbindbuffer;
 
         struct glbufferdata_t {

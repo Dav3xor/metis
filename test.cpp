@@ -30,7 +30,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
 
   m.eval();
   REQUIRE( m.get_label("start") == 0);
-  REQUIRE( m.get_label("end") == 64);
+  REQUIRE( m.get_label("end") == 80);
   REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
 }
 
@@ -151,8 +151,7 @@ TEST_CASE( "jumpi", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5);
   m.hard_reset();
   m.add_storei(REGA,1);
-  // TODO: I don't think 64 is right?
-  m.add_jumpi(96);
+  m.add_jumpi(120);
   m.add_storei(REGA,2);
   m.add_storei(REGB,3);
   m.add_end();
@@ -171,7 +170,7 @@ TEST_CASE( "jump", "[MetisVM]" ) {
 
   m.hard_reset();
   m.add_label("1");         // 0
-  m.add_storei(REGA,96);
+  m.add_storei(REGA,120);
 
   m.add_label("2");         // 32
   m.add_jump(REGA);         // 64
@@ -189,14 +188,14 @@ TEST_CASE( "jump", "[MetisVM]" ) {
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 96 );
+  REQUIRE( m.get_registers()[REGA] == 120 );
   REQUIRE( m.get_registers()[REGB] == 3 );
   REQUIRE( m.get_label("1") == 0 );
-  REQUIRE( m.get_label("2") == 32 );
-  REQUIRE( m.get_label("3") == 64 );
-  REQUIRE( m.get_label("4") == 96 );
-  REQUIRE( m.get_label("5") == 128 );
-  REQUIRE( m.get_label("6") == 160 );
+  REQUIRE( m.get_label("2") == 40 );
+  REQUIRE( m.get_label("3") == 80 );
+  REQUIRE( m.get_label("4") == 120 );
+  REQUIRE( m.get_label("5") == 160 );
+  REQUIRE( m.get_label("6") == 200 );
 }
 
 TEST_CASE( "jump if zero", "[MetisVM]" ) {
@@ -233,7 +232,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
 
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_storei(REGC, 96);
+  m.add_storei(REGC, 120);
 
   m.add_inc(REGB, REGB);
   m.add_dec(REGA, REGA);
@@ -244,7 +243,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
 
   REQUIRE( m.get_registers()[REGA] == 0 );
   REQUIRE( m.get_registers()[REGB] == 5 );
-  REQUIRE( m.get_registers()[REGC] == 96 );
+  REQUIRE( m.get_registers()[REGC] == 120 );
 
   
 }
@@ -258,8 +257,8 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
 
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_jne(REGA, REGB, 128);
-  m.add_storei(REGC, 256);
+  m.add_jne(REGA, REGB, 160);
+  m.add_storei(REGC, 320);
   m.add_storei(REGA, 6);
   m.add_end();
 
@@ -273,8 +272,8 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
   
   m.add_storei(REGA,5);
   m.add_storei(REGB,5);
-  m.add_jne(REGA, REGB, 128);
-  m.add_storei(REGC, 256);
+  m.add_jne(REGA, REGB, 160);
+  m.add_storei(REGC, 320);
   m.add_storei(REGA, 6);
   m.add_end();
 
@@ -282,7 +281,7 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
   
   REQUIRE( m.get_registers()[REGA] == 6 );
   REQUIRE( m.get_registers()[REGB] == 5 );
-  REQUIRE( m.get_registers()[REGC] == 256 );
+  REQUIRE( m.get_registers()[REGC] == 320 );
 }
 
 
@@ -295,8 +294,8 @@ TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
 
   m.add_storei(REGA,0);
   m.add_storei(REGB,0);
-  m.add_jmpe(REGA, REGB, 128);
-  m.add_storei(REGC, 256);
+  m.add_jmpe(REGA, REGB, 160);
+  m.add_storei(REGC, 320);
   m.add_storei(REGA, 6);
   m.add_end();
 
@@ -310,8 +309,8 @@ TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
   
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_jmpe(REGA, REGB, 128);
-  m.add_storei(REGC, 256);
+  m.add_jmpe(REGA, REGB, 160);
+  m.add_storei(REGC, 320);
   m.add_storei(REGA, 6);
   m.add_end();
 
@@ -319,7 +318,7 @@ TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
   
   REQUIRE( m.get_registers()[REGA] == 6 );
   REQUIRE( m.get_registers()[REGB] == 0 );
-  REQUIRE( m.get_registers()[REGC] == 256 );
+  REQUIRE( m.get_registers()[REGC] == 320 );
 }
 
 
