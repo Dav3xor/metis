@@ -75,7 +75,7 @@ uint64_t MetisVM::add_label(const char *label) {
 void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
   MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
   instruction->type                 = INS_DATA;      
-  instruction->commands.data.length = length; 
+  instruction->commands.data.length = length;
   if (registers[REGIP] + length > (uint64_t)end) {
     throw MetisException("data blob doesn't fit (add_data)");
   }

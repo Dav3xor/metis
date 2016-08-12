@@ -447,18 +447,18 @@ TEST_CASE( "data", "[MetisVM]" ) {
   
   
 TEST_CASE( "basic performance test", "[MetisVM]" ) {
-  uint8_t buf[20000];
+  uint8_t buf[30000];
   uint64_t stack[50];
   float data[5] = {1.1,2.2,3.3,4.4,5.5};
   uint64_t start_loop;
  
   char loop_label[2] = {'\0','\0'};
 
-  MetisVM m(buf,20000, stack, 50);
+  MetisVM m(buf,30000, stack, 50);
   m.hard_reset();
   
   m.add_storei(REGA,1000000);
-  m.add_storei(REGD,64);
+  m.add_storei(REGD,80);
 
   for(int i=0; i<50; i++) {
     loop_label[0] = 'a' + i;
@@ -510,7 +510,7 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   m.load("test.metis"); 
  
   REQUIRE(m.get_label("hi!") == 0);
-  REQUIRE(m.get_label("hi again!") == 32);
+  REQUIRE(m.get_label("hi again!") == 40);
  
   m.eval();
   
