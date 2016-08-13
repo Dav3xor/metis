@@ -512,7 +512,6 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(m.get_label("hi!") == 0);
   REQUIRE(m.get_label("hi again!") == 10);
  
-  REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
   m.eval();
   
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);

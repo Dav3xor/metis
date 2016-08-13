@@ -36,7 +36,35 @@ using namespace std;
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
                                           get_dest_val(ADDR_MODES) op \
                                           get_val(ADDR_MODES)); \
-                                  registers[REGIP] += ADVANCE(1, 0);
+                                  registers[REGIP] += INS_MATH_SIZE;
+
+#define INS_ERROR_SIZE    1
+#define INS_JUMP_SIZE     2 
+#define INS_JUMPI_SIZE    9 
+#define INS_JIZZ_SIZE     2 
+#define INS_JNZ_SIZE      2
+#define INS_JNE_SIZE      10 
+#define INS_JMPE_SIZE     10
+#define INS_STORE_SIZE    2
+#define INS_STOREI_SIZE   10
+
+#define INS_MATH_SIZE     2
+
+#define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(GLvoid *)
+#define INS_GLDRAWARRAYS_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLsizei)
+#define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(GLuint)
+#define INS_GLBINDBUFFER_SIZE                1+sizeof(GLenum)+sizeof(GLuint)
+#define INS_GLBUFFERDATA_SIZE                1+sizeof(GLuint)
+#define INS_GLENABLEVERTEXATTRIBARRAY_SIZE   1+sizeof(GLuint)
+#define INS_GLVERTEXATTRIBPOINTER_SIZE       1+sizeof(GLuint)+sizeof(GLint)+sizeof(GLenum)+\
+                                               sizeof(GLboolean)+sizeof(GLsizei)+sizeof(GLvoid *)
+#define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
+
+#define INS_LOG_SIZE                         1 
+#define INS_DATA_SIZE                        1 
+
+#define INS_END_SIZE                         1
+
 
 //#define ADVANCE(extended, data) (32)
 //#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
@@ -220,51 +248,53 @@ class MetisVM {
             if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
               registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jne.value;
             } else {
-              registers[REGIP] += ADVANCE(1, sizeof(instruction->commands.extended.ext.jne));
+              registers[REGIP] += INS_JNE_SIZE;
             }
             break; 
           case INS_JMPE:
             if(get_val(ADDR_MODES) == get_dest_val(ADDR_MODES)) {
               registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jmpe.value;
             } else {
-              registers[REGIP] += ADVANCE(1, sizeof(instruction->commands.extended.ext.jmpe));
+              registers[REGIP] += INS_JMPE_SIZE;
             }
             break; 
           case INS_JIZZ:
             if (get_val(ADDR_MODES)==0) {
               registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
             } else {
-              registers[REGIP] += ADVANCE(1, 0);
+              registers[REGIP] += INS_JIZZ_SIZE;
             }
             break;
           case INS_JNZ:
             if (get_val(ADDR_MODES)!=0) {
               registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
             } else {
-              registers[REGIP] += ADVANCE(1, 0);
+              registers[REGIP] += INS_JNZ_SIZE;
             }
             break;
           case INS_STORE:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES));
-            registers[REGIP] += ADVANCE(1, 0);
+            registers[REGIP] += INS_STORE_SIZE;
             break;
           case INS_STOREI:
+            printf("addr_modes = %.2X\n",ADDR_MODES);
+            printf("val        = %ld\n",instruction->commands.extended.ext.storei.value);
             set_val(ADDR_MODES,
                     instruction->commands.extended.ext.storei.value);
-            registers[REGIP] += ADVANCE(1, sizeof(instruction->commands.extended.ext.storei));
+            registers[REGIP] += INS_STOREI_SIZE;
             break;
           
           // math instructions
           case INS_INC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)+1);
-            registers[REGIP] += ADVANCE(1, 0);
+            registers[REGIP] += INS_MATH_SIZE;
             break;
           case INS_DEC:
             set_val(ADDR_MODES,
                     get_val(ADDR_MODES)-1);
-            registers[REGIP] += ADVANCE(1, 0);
+            registers[REGIP] += INS_MATH_SIZE;
             break;
           case INS_ADD:
             MATH_OPERATION(+);
@@ -294,7 +324,7 @@ class MetisVM {
             break;
           case INS_NOT:
             set_val(ADDR_MODES, ~get_val(ADDR_MODES));
-            registers[REGIP] += ADVANCE(1, 0);
+            registers[REGIP] += INS_MATH_SIZE;
             break;
 
           case INS_GLDRAWELEMENTS:
@@ -302,23 +332,23 @@ class MetisVM {
                            instruction->commands.gldrawelements.count, 
                            instruction->commands.gldrawelements.type, 
                            instruction->commands.gldrawelements.indices);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.gldrawelements));
+            registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
             break;
           case INS_GLDRAWARRAYS:
             glDrawArrays(instruction->commands.gldrawarrays.mode, 
                          instruction->commands.gldrawarrays.first, 
                          instruction->commands.gldrawarrays.count);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.gldrawarrays));
+            registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
             break;
           case INS_GLGENBUFFERS:
             glGenBuffers(instruction->commands.glgenbuffers.num_buffers, 
                          &(buffers[instruction->commands.glgenbuffers.start_index]));
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.glgenbuffers));
+            registers[REGIP] += INS_GLGENBUFFERS_SIZE;
             break;
           case INS_GLBINDBUFFER:
             glBindBuffer(instruction->commands.glbindbuffer.target, 
                          buffers[instruction->commands.glbindbuffer.buffer_index]);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.glbindbuffer));
+            registers[REGIP] += INS_GLBINDBUFFER_SIZE;
             break;
             
           case INS_GLBUFFERDATA:
@@ -326,11 +356,11 @@ class MetisVM {
                          instruction->commands.glbufferdata.size,
                          instruction->commands.glbufferdata.data,
                          instruction->commands.glbufferdata.usage);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.glbufferdata));
+            registers[REGIP] += INS_GLBUFFERDATA_SIZE;
             break;
           case INS_GLENABLEVERTEXATTRIBARRAY:
             glEnableVertexAttribArray(instruction->commands.glenablevertexattribarray.index);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.glenablevertexattribarray));
+            registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
             break;
           case INS_GLVERTEXATTRIBPOINTER:
             glVertexAttribPointer(instruction->commands.glvertexattribpointer.index, 
@@ -339,16 +369,16 @@ class MetisVM {
                                   instruction->commands.glvertexattribpointer.normalized,
                                   instruction->commands.glvertexattribpointer.stride,
                                   instruction->commands.glvertexattribpointer.pointer);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.glvertexattribpointer));
+            registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
             break;
           case INS_GLDISABLEVERTEXATTRIBARRAY:
             glDisableVertexAttribArray(instruction->commands.gldisablevertexattribarray.index);
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.gldisablevertexattribarray));
+            registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
             break;
             break; 
           case INS_DATA:
             advance = instruction->commands.data.length;
-            registers[REGIP] += ADVANCE(0,sizeof(instruction->commands.data));
+            registers[REGIP] += INS_DATA_SIZE;
             registers[REGIP] += advance;
             break;
           case INS_END:
@@ -387,6 +417,7 @@ class MetisVM {
   
   private:
     uint64_t    registers[8];
+    uint8_t     isizes[256];
     uint64_t    *stack;
     uint64_t    stack_size;
 
@@ -408,57 +439,57 @@ class MetisVM {
           union ext_t {
             struct ext_jumpi_t {
               uint64_t value;
-            }jumpi;
+            }__attribute__((packed))jumpi;
 
             struct ext_storei_t {
               uint64_t value;
-            }storei;
+            }__attribute__((packed))storei;
 
             struct ext_jne_t {
               uint64_t value;
-            } jne;
+            }__attribute__((packed)) jne;
 
             struct ext_jmpe_t {
               uint64_t value;
-            } jmpe;
+            }__attribute__((packed)) jmpe;
 
-          }ext; 
-        } extended;
+          }__attribute__((packed))ext; 
+        }__attribute__((packed)) extended;
 
         struct gldrawelements_t {
           GLenum mode;
           GLsizei count;
           GLenum type;
           GLvoid * indices;
-        } gldrawelements;
+        }__attribute__((packed)) gldrawelements;
 
         struct gldrawarrays_t {
           GLenum mode;
           GLint first;
           GLsizei count;
-        }gldrawarrays;
+        }__attribute__((packed))gldrawarrays;
 
         struct glgenbuffers_t {
           GLsizei num_buffers;
           GLuint  start_index;
-        }glgenbuffers;
+        }__attribute__((packed))glgenbuffers;
 
         struct glbindbuffer_t {
           GLenum target;
           GLuint buffer_index;
-        }glbindbuffer;
+        }__attribute__((packed))glbindbuffer;
 
         struct glbufferdata_t {
           GLenum target;
           GLsizeiptr size;
           GLvoid *data; 
           GLenum usage;
-        }glbufferdata;
+        }__attribute__((packed))glbufferdata;
 
 
         struct glenablevertexattribarray_t {
           GLuint index;
-        }glenablevertexattribarray;
+        }__attribute__((packed))glenablevertexattribarray;
 
         struct glvertexattribpointer_t {
           GLuint index;
@@ -467,29 +498,29 @@ class MetisVM {
           GLboolean normalized;
           GLsizei stride;
           GLvoid *pointer;
-        }glvertexattribpointer;
+        }__attribute__((packed))glvertexattribpointer;
 
         struct gldisablevertexattribarray_t {
           GLuint index;
-        }gldisablevertexattribarray;
+        }__attribute__((packed))gldisablevertexattribarray;
 
         struct jumpi_t {
           uint64_t value;
-        } jumpi;
+        }__attribute__((packed)) jumpi;
 
         struct push_t {
           uint64_t value;
-        } push;
+        }__attribute__((packed)) push;
 
         struct log_t {
           uint8_t length;
-        } log;
+        }__attribute__((packed)) log;
 
         struct data_t {
           uint64_t length;
-        } data;
+        }__attribute__((packed)) data;
 
-      } commands;
+      }__attribute__((packed)) commands;
     }__attribute__((packed));
     void push(uint64_t val) {
       if( registers[REGSP] >= stack_size) {
