@@ -30,7 +30,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
 
   m.eval();
   REQUIRE( m.get_label("start") == 0);
-  REQUIRE( m.get_label("end") == 66);
+  REQUIRE( m.get_label("end") == 20);
   REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
 }
 
@@ -510,8 +510,9 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   m.load("test.metis"); 
  
   REQUIRE(m.get_label("hi!") == 0);
-  REQUIRE(m.get_label("hi again!") == 33);
+  REQUIRE(m.get_label("hi again!") == 10);
  
+  REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
   m.eval();
   
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
