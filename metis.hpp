@@ -491,7 +491,7 @@ class MetisVM {
         } data;
 
       } commands;
-    };
+    }__attribute__((packed));
     void push(uint64_t val) {
       if( registers[REGSP] >= stack_size) {
         throw MetisException("stack full (push)");
