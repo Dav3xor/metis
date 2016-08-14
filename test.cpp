@@ -30,7 +30,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
 
   m.eval();
   REQUIRE( m.get_label("start") == 0);
-  REQUIRE( m.get_label("end") == 20);
+  REQUIRE( m.get_label("end") == INS_STOREI_SIZE*2);
   REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
 }
 
@@ -151,7 +151,7 @@ TEST_CASE( "jumpi", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5);
   m.hard_reset();
   m.add_storei(REGA,1);
-  m.add_jumpi(99);
+  m.add_jumpi(INS_STOREI_SIZE*2+INS_JUMPI_SIZE);
   m.add_storei(REGA,2);
   m.add_storei(REGB,3);
   m.add_end();
@@ -170,7 +170,7 @@ TEST_CASE( "jump", "[MetisVM]" ) {
 
   m.hard_reset();
   m.add_label("1");         // 0
-  m.add_storei(REGA,99);
+  m.add_storei(REGA,INS_STOREI_SIZE+INS_JUMP_SIZE+INS_STOREI_SIZE);
 
   m.add_label("2");         // 32
   m.add_jump(REGA);         // 64
@@ -188,14 +188,14 @@ TEST_CASE( "jump", "[MetisVM]" ) {
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 99 );
+  REQUIRE( m.get_registers()[REGA] == 22 );
   REQUIRE( m.get_registers()[REGB] == 3 );
   REQUIRE( m.get_label("1") == 0 );
-  REQUIRE( m.get_label("2") == 33 );
-  REQUIRE( m.get_label("3") == 66 );
-  REQUIRE( m.get_label("4") == 99 );
-  REQUIRE( m.get_label("5") == 132 );
-  REQUIRE( m.get_label("6") == 165 );
+  REQUIRE( m.get_label("2") == INS_STOREI_SIZE );
+  REQUIRE( m.get_label("3") == INS_STOREI_SIZE + INS_JUMP_SIZE );
+  REQUIRE( m.get_label("4") == INS_STOREI_SIZE + INS_JUMP_SIZE + INS_STOREI_SIZE );
+  REQUIRE( m.get_label("5") == INS_STOREI_SIZE + INS_JUMP_SIZE + INS_STOREI_SIZE*2 );
+  REQUIRE( m.get_label("6") == INS_STOREI_SIZE + INS_JUMP_SIZE + INS_STOREI_SIZE*2 + INS_END_SIZE );
 }
 
 TEST_CASE( "jump if zero", "[MetisVM]" ) {
@@ -232,7 +232,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
 
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_storei(REGC, 99);
+  m.add_storei(REGC, INS_STOREI_SIZE*3);
 
   m.add_inc(REGB, REGB);
   m.add_dec(REGA, REGA);
@@ -243,7 +243,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
 
   REQUIRE( m.get_registers()[REGA] == 0 );
   REQUIRE( m.get_registers()[REGB] == 5 );
-  REQUIRE( m.get_registers()[REGC] == 99 );
+  REQUIRE( m.get_registers()[REGC] == 30 );
 
   
 }
@@ -257,7 +257,7 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
 
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_jne(REGA, REGB, 132);
+  m.add_jne(REGA, REGB, INS_STOREI_SIZE*3+INS_JNE_SIZE);
   m.add_storei(REGC, 264);
   m.add_storei(REGA, 6);
   m.add_end();
@@ -294,7 +294,7 @@ TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
 
   m.add_storei(REGA,0);
   m.add_storei(REGB,0);
-  m.add_jmpe(REGA, REGB, 132);
+  m.add_jmpe(REGA, REGB, INS_STOREI_SIZE*3+INS_JMPE_SIZE);
   m.add_storei(REGC, 264);
   m.add_storei(REGA, 6);
   m.add_end();
@@ -458,7 +458,7 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   m.hard_reset();
   
   m.add_storei(REGA,1000000);
-  m.add_storei(REGD,66);
+  m.add_storei(REGD,INS_STOREI_SIZE*2);
 
   for(int i=0; i<50; i++) {
     loop_label[0] = 'a' + i;

@@ -61,7 +61,7 @@ using namespace std;
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
 
 #define INS_LOG_SIZE                         1 
-#define INS_DATA_SIZE                        1 
+#define INS_DATA_SIZE                        9 
 
 #define INS_END_SIZE                         1
 
@@ -278,8 +278,6 @@ class MetisVM {
             registers[REGIP] += INS_STORE_SIZE;
             break;
           case INS_STOREI:
-            printf("addr_modes = %.2X\n",ADDR_MODES);
-            printf("val        = %ld\n",instruction->commands.extended.ext.storei.value);
             set_val(ADDR_MODES,
                     instruction->commands.extended.ext.storei.value);
             registers[REGIP] += INS_STOREI_SIZE;
