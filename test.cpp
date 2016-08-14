@@ -517,4 +517,16 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
 };
 
+TEST_CASE( "window stuff", "[MetisContext]") {
+  MetisContext c;
+  
+  // make sure error conditions for creating windows work.
+  REQUIRE_THROWS_AS(c.create_window(-1,500,500,"title",NULL,NULL), MetisException);
+  REQUIRE_THROWS_AS(c.create_window(8,500,500,"title",NULL,NULL), MetisException);
+
+  REQUIRE(c.create_window(0,500,500,"title",NULL,NULL) != NULL);
+
+}
+
+
 

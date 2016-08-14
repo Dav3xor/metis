@@ -115,9 +115,9 @@ class MetisContext {
       printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
     }
-    void create_window(uint32_t window_id, 
+    GLFWwindow *create_window(uint32_t window_id, 
                   uint32_t width, uint32_t height, 
-                  char *title, GLFWmonitor *monitor, GLFWwindow *share) {
+                  const char *title, GLFWmonitor *monitor, GLFWwindow *share) {
       if ((window_id<0)||(window_id>7)) {
         throw MetisException("invalid window id");
       }
@@ -128,13 +128,17 @@ class MetisContext {
         glfwTerminate();
         throw MetisException("unable to open window");
       }
+      return windows[window_id];
     }
 
-    void current_window(uint32_t window_id) {
+    GLFWwindow *current_window(uint32_t window_id) {
       if (!(windows[window_id])) {
         glfwTerminate();
         throw MetisException("current window not valid");
       }
+      glfwMakeContextCurrent(windows[window_id]);
+      cur_window = window_id;
+      return windows[window_id];
     }
         
     ~MetisContext() {
