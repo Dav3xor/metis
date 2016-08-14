@@ -142,6 +142,7 @@ class MetisContext {
     }
         
     ~MetisContext() {
+      printf("glfwTerminate()\n");
       glfwTerminate();
     }
   private:
@@ -456,7 +457,6 @@ class MetisVM {
     uint8_t    *start;
     uint8_t    *end;
 
-    static MetisContext context;
 
     struct MetisInstruction {
       instruction type;
