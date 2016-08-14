@@ -525,7 +525,9 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   REQUIRE_THROWS_AS(c.create_window(8,500,500,"title",NULL,NULL), MetisException);
 
   REQUIRE(c.create_window(0,500,500,"title",NULL,NULL) != NULL);
+  REQUIRE(c.current_window(0) != NULL);
 
+  REQUIRE_THROWS_AS(c.current_window(1), MetisException);
 }
 
 
