@@ -11,7 +11,7 @@
 TEST_CASE( "addressing modes", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   
   REQUIRE( BUILD_ADDR(REGB, REGC) == 0x21);
   REQUIRE( GET_SRC(0x21) == 1);
@@ -22,7 +22,7 @@ TEST_CASE( "addressing modes", "[MetisVM]" ) {
 TEST_CASE( "labels", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.add_label("start");
   m.add_storei(REGA,100);
   m.add_storei(REGB,100);
@@ -37,7 +37,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset(); 
 
   // test that a simple store works 
@@ -122,7 +122,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 TEST_CASE( "inc/dec", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   m.add_storei(REGA, 0);
   m.add_inc(REGA,REGA);
@@ -148,7 +148,7 @@ TEST_CASE( "inc/dec", "[MetisVM]" ) {
 TEST_CASE( "jumpi", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   m.add_storei(REGA,1);
   m.add_jumpi(INS_STOREI_SIZE*2+INS_JUMPI_SIZE);
@@ -166,7 +166,7 @@ TEST_CASE( "jumpi", "[MetisVM]" ) {
 TEST_CASE( "jump", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
 
   m.hard_reset();
   m.add_label("1");         // 0
@@ -201,7 +201,7 @@ TEST_CASE( "jump", "[MetisVM]" ) {
 TEST_CASE( "jump if zero", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
 
@@ -226,7 +226,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   uint64_t start_loc;
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
 
@@ -251,7 +251,7 @@ TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
 TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
 
@@ -288,7 +288,7 @@ TEST_CASE( "jump if not equal (jne)", "[MetisVM]" ) {
 TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
 
@@ -325,7 +325,7 @@ TEST_CASE( "jump if equal (jmpe)", "[MetisVM]" ) {
 TEST_CASE( "store", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   
   m.add_storei(STACK_PUSH,1);
@@ -357,7 +357,7 @@ TEST_CASE( "store", "[MetisVM]" ) {
 TEST_CASE( "storei", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   
   m.add_storei(REGA, 1);
@@ -380,7 +380,7 @@ TEST_CASE( "storei", "[MetisVM]" ) {
 TEST_CASE( "math", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   m.add_storei(REGA,5);
   m.add_storei(REGB,2);
@@ -402,7 +402,7 @@ TEST_CASE( "math", "[MetisVM]" ) {
 TEST_CASE( "logic ops", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   m.add_storei(REGA,10);
   m.add_storei(REGB,2);
@@ -424,7 +424,7 @@ TEST_CASE( "data", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   float data[5] = {1.1,2.2,3.3,4.4,5.5};
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
   m.add_storei(REGA,10);
@@ -454,7 +454,7 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
  
   char loop_label[2] = {'\0','\0'};
 
-  MetisVM m(buf,30000, stack, 50);
+  MetisVM m(buf,30000, stack, 50, NULL, 0);
   m.hard_reset();
   
   m.add_storei(REGA,1000000);
@@ -495,7 +495,7 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5);
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   
   m.add_label("hi!");

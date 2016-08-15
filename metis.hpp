@@ -211,11 +211,16 @@ class MetisVM {
       reset();
     }
 
-    MetisVM(uint8_t *buf_loc, uint64_t buf_len, uint64_t *stack_loc, uint64_t stack_len) { 
-      start                 = buf_loc;
-      end                   = buf_loc+buf_len;
+    MetisVM(uint8_t *instruction_loc, uint64_t instruction_len, 
+            uint64_t *stack_loc, uint64_t stack_len,
+            uint8_t *glbuffer_loc, uint64_t glbuffer_len) { 
+      start                 = instruction_loc;
+      end                   = instruction_loc+instruction_len;
       stack                 = stack_loc;
       stack_size            = stack_len;
+      buffer                = glbuffer_loc;
+      buffer_size           = glbuffer_len;
+      buffer_end            = glbuffer_loc+glbuffer_len;
       numcommands           = 0;
       reset();
     }
@@ -230,8 +235,10 @@ class MetisVM {
     void     add_store     (address_mode src, address_mode dest);
     void     add_storei    (address_mode dest, uint64_t value);
     uint64_t add_label     (const char *label);
+    // data gets mixed in with the instructions
     void     add_data      (const uint8_t *data, const uint64_t length, const char *label);
-
+    // buffer gets made into a gl buffer, stored separately.
+    void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
     MATH_METHOD(add_add, INS_ADD); 
@@ -457,6 +464,9 @@ class MetisVM {
     uint8_t    *start;
     uint8_t    *end;
 
+    uint8_t    *buffer;      
+    uint8_t     buffer_size;
+    uint8_t    *buffer_end;
 
     struct MetisInstruction {
       instruction type;
