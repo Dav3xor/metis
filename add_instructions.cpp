@@ -86,6 +86,17 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
   registers[REGIP] += length;
 }
 
+void MetisVM::add_buffer(const uint8_t *buffer, const uint64_t length, const char *label) {
+  if (buffer + length > buffer_end) {
+    throw MetisException("buffer blob doesn't fit (add_buffer)");
+  }
+  memcpy((void *)buffer_end, buffer, length);
+  buffer_end+=length;
+  //add_label(label);
+}
+
+
+
 void MetisVM::add_not(address_mode src, address_mode dest) {
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_NOT;      
