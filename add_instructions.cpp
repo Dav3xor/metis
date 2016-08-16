@@ -67,10 +67,17 @@ void MetisVM::add_storei(address_mode dest, uint64_t value) {
 };
 
 uint64_t MetisVM::add_label_ip(const char *label) {
+  // add a label pointing at the current IP Register value
   // not really an instruction, but it basically acts like one...
   uint64_t new_loc = (registers[REGIP]-(uint64_t)start);
   labels[label] = new_loc;
   return new_loc;
+}
+uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
+  // add a label pointing at the current IP Register value
+  // not really an instruction, but it basically acts like one...
+  labels[label] = val;
+  return val;
 }
 void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
   MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];

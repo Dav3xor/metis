@@ -235,6 +235,7 @@ class MetisVM {
     void     add_store     (address_mode src, address_mode dest);
     void     add_storei    (address_mode dest, uint64_t value);
     uint64_t add_label_ip  (const char *label);
+    uint64_t add_label_val (const char *label, uint64_t val);
 
     // data gets mixed in with the instructions
     void     add_data      (const uint8_t *data, const uint64_t length, const char *label);

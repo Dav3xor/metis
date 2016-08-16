@@ -28,9 +28,13 @@ TEST_CASE( "labels", "[MetisVM]" ) {
   m.add_storei(REGB,100);
   m.add_label_ip("end");
 
+  m.add_label_val("arbitrary", 555);
+
   m.eval();
+
   REQUIRE( m.get_label("start") == 0);
   REQUIRE( m.get_label("end") == INS_STOREI_SIZE*2);
+  REQUIRE( m.get_label("arbitrary") == 555);
   REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
 }
 
