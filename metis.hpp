@@ -220,7 +220,7 @@ class MetisVM {
       stack_size            = stack_len;
       buffer                = glbuffer_loc;
       buffer_size           = glbuffer_len;
-      buffer_end            = glbuffer_loc+glbuffer_len;
+      buffer_end            = glbuffer_loc;
       numcommands           = 0;
       reset();
     }
@@ -234,11 +234,14 @@ class MetisVM {
     void     add_jmpe      (address_mode src, address_mode dest, uint64_t location);
     void     add_store     (address_mode src, address_mode dest);
     void     add_storei    (address_mode dest, uint64_t value);
-    uint64_t add_label     (const char *label);
+    uint64_t add_label_ip  (const char *label);
+
     // data gets mixed in with the instructions
     void     add_data      (const uint8_t *data, const uint64_t length, const char *label);
+
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
+
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
     MATH_METHOD(add_add, INS_ADD); 

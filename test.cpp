@@ -23,10 +23,10 @@ TEST_CASE( "labels", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
   MetisVM m(buf,10000, stack, 5, NULL, 0);
-  m.add_label("start");
+  m.add_label_ip("start");
   m.add_storei(REGA,100);
   m.add_storei(REGB,100);
-  m.add_label("end");
+  m.add_label_ip("end");
 
   m.eval();
   REQUIRE( m.get_label("start") == 0);
@@ -169,22 +169,22 @@ TEST_CASE( "jump", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5, NULL, 0);
 
   m.hard_reset();
-  m.add_label("1");         // 0
+  m.add_label_ip("1");         // 0
   m.add_storei(REGA,INS_STOREI_SIZE+INS_JUMP_SIZE+INS_STOREI_SIZE);
 
-  m.add_label("2");         // 32
+  m.add_label_ip("2");         // 32
   m.add_jump(REGA);         // 64
 
-  m.add_label("3");
+  m.add_label_ip("3");
    m.add_storei(REGA,2);
 
-  m.add_label("4");
+  m.add_label_ip("4");
   m.add_storei(REGB,3);
 
-  m.add_label("5");
+  m.add_label_ip("5");
   m.add_end();
 
-  m.add_label("6");
+  m.add_label_ip("6");
   
   m.eval();
 
@@ -208,7 +208,7 @@ TEST_CASE( "jump if zero", "[MetisVM]" ) {
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
   m.add_storei(REGC, 256);
-  m.add_label("loop start");        
+  m.add_label_ip("loop start");        
   m.add_inc(REGB, REGB);
   m.add_dec(REGA, REGA);
   m.add_jizz(REGA,REGC);
@@ -498,9 +498,9 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
   
-  m.add_label("hi!");
+  m.add_label_ip("hi!");
   m.add_storei(REGA, 0xDEADBEEF);
-  m.add_label("hi again!");
+  m.add_label_ip("hi again!");
   m.add_end();
 
   m.save("test.metis");

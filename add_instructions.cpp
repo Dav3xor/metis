@@ -66,7 +66,7 @@ void MetisVM::add_storei(address_mode dest, uint64_t value) {
   registers[REGIP] += INS_STOREI_SIZE;
 };
 
-uint64_t MetisVM::add_label(const char *label) {
+uint64_t MetisVM::add_label_ip(const char *label) {
   // not really an instruction, but it basically acts like one...
   uint64_t new_loc = (registers[REGIP]-(uint64_t)start);
   labels[label] = new_loc;
@@ -80,19 +80,19 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
     throw MetisException("data blob doesn't fit (add_data)");
   }
   registers[REGIP] += INS_DATA_SIZE;
-  add_label(label);
+  add_label_ip(label);
 
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;
 }
 
 void MetisVM::add_buffer(const uint8_t *buffer, const uint64_t length, const char *label) {
-  if (buffer + length > buffer_end) {
+  if ((buffer_end + length) - buffer > buffer_size) {
     throw MetisException("buffer blob doesn't fit (add_buffer)");
   }
   memcpy((void *)buffer_end, buffer, length);
   buffer_end+=length;
-  //add_label(label);
+  //add_label_ip(label);
 }
 
 
