@@ -18,7 +18,7 @@ void MetisVM::save(const string &filename) {
   }
   if(buffer_end != buffer) {
     outfile.write("B",1);
-    outfile.write(buffer, buffer_end-buffer);
+    outfile.write((char *)buffer, (uint64_t)(buffer_end-buffer));
   }
   uint64_t code_len = registers[REGIP]-(uint64_t)start;
   outfile.write("C",1);
@@ -68,7 +68,7 @@ void MetisVM::load(const string &filename) {
         if (buffer_end + buffer_len > buffer + buffer_size) {
           throw MetisException("buffer too big?!? (load)");
         }
-        infile.read(&buffer, buffer_len);
+        infile.read((char *)buffer, buffer_len);
         break;
 
       case 'C':     // code
