@@ -93,11 +93,11 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
   registers[REGIP] += length;
 }
 
-void MetisVM::add_buffer(const uint8_t *buffer, const uint64_t length, const char *label) {
-  if ((buffer_end + length) - buffer > buffer_size) {
+void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
+  if ((uint64_t)((buffer_end + length) - buffer) > buffer_size) {
     throw MetisException("buffer blob doesn't fit (add_buffer)");
   }
-  memcpy((void *)buffer_end, buffer, length);
+  memcpy((void *)buffer_end, new_buffer, length);
   buffer_end+=length;
   //add_label_ip(label);
 }

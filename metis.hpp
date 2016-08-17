@@ -470,7 +470,7 @@ class MetisVM {
     uint8_t    *end;
 
     uint8_t    *buffer;      
-    uint8_t     buffer_size;
+    uint64_t    buffer_size;
     uint8_t    *buffer_end;
 
     struct MetisInstruction {

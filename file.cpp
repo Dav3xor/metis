@@ -7,6 +7,7 @@ void MetisVM::save(const string &filename) {
   ofstream outfile(filename, ios::out|ios::binary);
   outfile.write("METIS  1  ",10);
   uint16_t header_len = 0;
+  uint64_t buffer_len;
   outfile.write("H",1);
   outfile.write((char *) &header_len, 2);
   for (auto kv : labels) {
@@ -16,8 +17,10 @@ void MetisVM::save(const string &filename) {
     outfile.write(kv.first.c_str(), kv.first.length());
     outfile.write((char *) &kv.second, sizeof(uint64_t));
   }
-  if(buffer_end != buffer) {
+  buffer_len = buffer_end-buffer;
+  if(buffer_len > 0) {
     outfile.write("B",1);
+    outfile.write((char *)&buffer_len,8);
     outfile.write((char *)buffer, (uint64_t)(buffer_end-buffer));
   }
   uint64_t code_len = registers[REGIP]-(uint64_t)start;
@@ -35,8 +38,8 @@ void MetisVM::load(const string &filename) {
   uint16_t label_len;
   uint16_t header_len;
   uint64_t code_len;
-  uint64_t value;
   uint64_t buffer_len;
+  uint64_t value;
   reset();
   labels.clear();
 
@@ -65,10 +68,13 @@ void MetisVM::load(const string &filename) {
         break;
       case 'B':     // buffer
         infile.read((char *)&buffer_len,8);
-        if (buffer_end + buffer_len > buffer + buffer_size) {
+        printf("%ld\n",buffer_len);
+        printf("%ld %ld\n",buffer_end+buffer_len-buffer, buffer_size);
+        if ((uint64_t)(buffer_end + buffer_len - buffer) > buffer_size) {
           throw MetisException("buffer too big?!? (load)");
         }
         infile.read((char *)buffer, buffer_len);
+        buffer_end += buffer_len;
         break;
 
       case 'C':     // code

@@ -498,10 +498,16 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
 
 TEST_CASE( "load/save", "[MetisVM]" ) {
   uint8_t buf[10000];
+  uint8_t glbuf[10000];
   uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5, NULL, 0);
-  m.hard_reset();
+  float buffer[3] = {1.0,1.1,1.2};
+  float data[3]   = {2.0,2.1,2.2};
   
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  m.hard_reset();
+ 
+  m.add_buffer((uint8_t*)buffer,sizeof(float)*3,"buffer");
+  m.add_data((uint8_t*)data,sizeof(float)*3,"data");
   m.add_label_ip("hi!");
   m.add_storei(REGA, 0xDEADBEEF);
   m.add_label_ip("hi again!");
@@ -513,12 +519,15 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
 
   m.load("test.metis"); 
  
-  REQUIRE(m.get_label("hi!") == 0);
-  REQUIRE(m.get_label("hi again!") == 10);
+  REQUIRE(m.get_label("hi!") == 21);
+  REQUIRE(m.get_label("hi again!") == 31);
  
   m.eval();
   
   REQUIRE(m.get_registers()[REGA] == 0xDEADBEEF);
+
+  float *ins_data = (float *)m.get_ptr_from_label("data");
+  REQUIRE(ins_data[0] == 2.0);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
