@@ -34,11 +34,6 @@ using namespace std;
 #define GET_SRC(location)         (location & 0x0F)
 #define GET_LABEL(instruction)    ((char *)(&instruction->type)+1)
 
-#define MATH_OPERATION(op)        set_val(ADDR_MODES, \
-                                          get_dest_val(ADDR_MODES) op \
-                                          get_val(ADDR_MODES)); \
-                                  registers[REGIP] += INS_MATH_SIZE;
-
 #define INS_ERROR_SIZE    1
 #define INS_JUMP_SIZE     2 
 #define INS_JUMPI_SIZE    9 
@@ -70,6 +65,11 @@ using namespace std;
 //#define ADVANCE(extended, data) (32)
 //#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 #define ADVANCE(extended, data)   (1+extended+data)
+
+#define MATH_OPERATION(op)        set_val(ADDR_MODES, \
+                                          get_dest_val(ADDR_MODES) op \
+                                          get_val(ADDR_MODES)); \
+                                  registers[REGIP] += INS_MATH_SIZE;
 
 #define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
       MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \

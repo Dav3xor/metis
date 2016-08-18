@@ -16,6 +16,12 @@ void MetisVM::add_jump(address_mode src) {
 };
 
 void MetisVM::add_jumpi(uint64_t location) {
+  if (location > (uint64_t)(end-start)) {
+    throw MetisException("attempt to jump past address space");
+  }
+  if ((uint8_t *)(registers[REGIP] + INS_JUMPI_SIZE) > end) {
+    throw MetisException("attempt to add jump instruction past address space");
+  } 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_JUMPI;      
   instruction->commands.jumpi.value = location;
