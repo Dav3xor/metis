@@ -66,6 +66,12 @@ using namespace std;
 //#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 #define ADVANCE(extended, data)   (1+extended+data)
 
+
+#define CHECK_INSTRUCTION(instruction_length) \
+  if ((uint8_t *)(registers[REGIP] + instruction_length) > end) { \
+    throw MetisException("attempt to add instruction past address space"); \
+  } 
+
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
                                           get_dest_val(ADDR_MODES) op \
                                           get_val(ADDR_MODES)); \
@@ -143,7 +149,6 @@ class MetisContext {
     }
         
     ~MetisContext() {
-      printf("glfwTerminate()\n");
       glfwTerminate();
     }
   private:

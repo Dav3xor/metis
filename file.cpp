@@ -68,8 +68,6 @@ void MetisVM::load(const string &filename) {
         break;
       case 'B':     // buffer
         infile.read((char *)&buffer_len,8);
-        printf("%ld\n",buffer_len);
-        printf("%ld %ld\n",buffer_end+buffer_len-buffer, buffer_size);
         if ((uint64_t)(buffer_end + buffer_len - buffer) > buffer_size) {
           throw MetisException("buffer too big?!? (load)");
         }
