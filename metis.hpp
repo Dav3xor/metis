@@ -444,6 +444,9 @@ class MetisVM {
       return (uint8_t *)(start + get_label(label));
     }
 
+    uint8_t  *get_bufloc_from_label (const char *label) {
+      return (uint8_t *)(buffer + get_label(label));
+    }
     uint64_t *get_registers  (void)  { return registers; };
 
     uint64_t  cur_stack_val  (void)  {

@@ -98,8 +98,8 @@ void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const
     throw MetisException("buffer blob doesn't fit (add_buffer)");
   }
   memcpy((void *)buffer_end, new_buffer, length);
+  add_label_val(label, buffer_end-buffer);
   buffer_end+=length;
-  //add_label_ip(label);
 }
 
 

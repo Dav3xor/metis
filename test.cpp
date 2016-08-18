@@ -528,6 +528,13 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
 
   float *ins_data = (float *)m.get_ptr_from_label("data");
   REQUIRE(ins_data[0] == 2.0);
+  REQUIRE(ins_data[1] == Approx(2.1));
+  REQUIRE(ins_data[2] == Approx(2.2));
+  
+  float *ins_buffer = (float *)m.get_bufloc_from_label("buffer");
+  REQUIRE(ins_buffer[0] == Approx(1.0));
+  REQUIRE(ins_buffer[1] == Approx(1.1));
+  REQUIRE(ins_buffer[2] == Approx(1.2));
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
