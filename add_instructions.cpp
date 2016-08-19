@@ -113,7 +113,7 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
   instruction->type                 = INS_DATA;      
   instruction->commands.data.length = length;
   if (registers[REGIP] + length > (uint64_t)end) {
-    throw MetisException("data blob doesn't fit (add_data)");
+    throw MetisException("data blob doesn't fit (add_data)",__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
   add_label_ip(label);
@@ -127,7 +127,7 @@ void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const
   CHECK_POINTER(label);
 
   if ((uint64_t)((buffer_end + length) - buffer) > buffer_size) {
-    throw MetisException("buffer blob doesn't fit (add_buffer)");
+    throw MetisException("buffer blob doesn't fit (add_buffer)",__LINE__,__FILE__);
   }
   memcpy((void *)buffer_end, new_buffer, length);
   add_label_val(label, buffer_end-buffer);

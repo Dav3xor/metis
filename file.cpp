@@ -57,7 +57,7 @@ void MetisVM::load(const string &filename) {
       case 'L':     // label
         infile.read((char *)&label_len,2);
         if (label_len > MAX_LABEL_LEN) {
-          throw MetisException("label too big?!? (load)");
+          throw MetisException("label too big?!? (load)",__LINE__,__FILE__);
         }
         infile.read(label, label_len);
         label[label_len]='\0';
@@ -69,7 +69,7 @@ void MetisVM::load(const string &filename) {
       case 'B':     // buffer
         infile.read((char *)&buffer_len,8);
         if ((uint64_t)(buffer_end + buffer_len - buffer) > buffer_size) {
-          throw MetisException("buffer too big?!? (load)");
+          throw MetisException("buffer too big?!? (load)",__LINE__,__FILE__);
         }
         infile.read((char *)buffer, buffer_len);
         buffer_end += buffer_len;
@@ -80,7 +80,7 @@ void MetisVM::load(const string &filename) {
         //       them one after another...
         infile.read((char *)&code_len,8);
         if (code_len > (uint64_t)(end-start)) {
-          throw MetisException("code too big?!? (load)");
+          throw MetisException("code too big?!? (load)",__LINE__,__FILE__);
         }
         infile.read((char *) start, code_len);
         break;

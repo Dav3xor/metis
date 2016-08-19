@@ -69,17 +69,17 @@ using namespace std;
 
 #define CHECK_INSTRUCTION(instruction_length) \
   if ((uint8_t *)(registers[REGIP] + instruction_length) > end) { \
-    throw MetisException("attempt to add instruction past address space"); \
+    throw MetisException("attempt to add instruction past address space",__LINE__,__FILE__); \
   } 
 
 #define CHECK_LOCATION(location) \
   if (location > (uint64_t)(end-start-1)) { \
-    throw MetisException("attempt to use location outside address space"); \
+    throw MetisException("attempt to use location outside address space",__LINE__,__FILE__); \
   }
 
 #define CHECK_POINTER(pointer) \
   if (pointer == NULL) { \
-    throw MetisException("null pointer"); \
+    throw MetisException("null pointer",__LINE__,__FILE__); \
   }
 
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \
@@ -109,13 +109,16 @@ enum address_mode: uint8_t {REGA                    =    0,
 
 class MetisException: public runtime_error {
   public:
-    MetisException(const char *error): runtime_error("Metis VM"), error_str(error) {};
+    MetisException(const char *error, int line, const char *file): runtime_error("Metis VM"), error_str(error) {};
   private:  
     const char *error_str;
+    const char *file;
+    int         line;
+
     virtual const char* what() const throw()
     {
       cnvt.str("");
-      cnvt << runtime_error::what() << ": " << error_str;
+      cnvt << runtime_error::what() << ": " << error_str << " -- " << file << ":" << line;
       return cnvt.str().c_str();
     }
     static ostringstream cnvt;
@@ -136,14 +139,14 @@ class MetisContext {
                   uint32_t width, uint32_t height, 
                   const char *title, GLFWmonitor *monitor, GLFWwindow *share) {
       if ((window_id<0)||(window_id>7)) {
-        throw MetisException("invalid window id");
+        throw MetisException("invalid window id",__LINE__,__FILE__);
       }
 
       windows[window_id] = glfwCreateWindow(width, height, title, monitor, share);
 
       if(!windows[window_id]) {
         glfwTerminate();
-        throw MetisException("unable to open window");
+        throw MetisException("unable to open window",__LINE__,__FILE__);
       }
       return windows[window_id];
     }
@@ -151,7 +154,7 @@ class MetisContext {
     GLFWwindow *current_window(uint32_t window_id) {
       if (!(windows[window_id])) {
         glfwTerminate();
-        throw MetisException("current window not valid");
+        throw MetisException("current window not valid",__LINE__,__FILE__);
       }
       glfwMakeContextCurrent(windows[window_id]);
       cur_window = window_id;
@@ -468,7 +471,7 @@ class MetisVM {
       if ( registers[REGSP] > 0) {
         return stack[registers[REGSP]-1]; 
       } else {
-        throw MetisException("stack empty (cur_stack_val)");
+        throw MetisException("stack empty (cur_stack_val)",__LINE__,__FILE__);
       }
     }
     uint64_t  cur_stack_size (void)  { return registers[REGSP]; };
@@ -584,7 +587,7 @@ class MetisVM {
     }__attribute__((packed));
     void push(uint64_t val) {
       if( registers[REGSP] >= stack_size) {
-        throw MetisException("stack full (push)");
+        throw MetisException("stack full (push)",__LINE__,__FILE__);
       }
       stack[registers[REGSP]] = val;
       registers[REGSP] += 1;
@@ -592,7 +595,7 @@ class MetisVM {
 
     uint64_t pop() {
       if(registers[REGSP] == 0) {
-        throw MetisException("stack empty (pop)");
+        throw MetisException("stack empty (pop)",__LINE__,__FILE__);
       }
       registers[REGSP] -= 1;
       return stack[registers[REGSP]];
@@ -615,7 +618,7 @@ class MetisVM {
           push(value);
           break;
         default:
-          throw MetisException("unknown addressing mode (set_val)");
+          throw MetisException("unknown addressing mode (set_val)",__LINE__,__FILE__);
       } 
     }
     uint64_t get_val(uint8_t location) {
@@ -635,7 +638,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw MetisException("unknown addressing mode (get_val)");
+          throw MetisException("unknown addressing mode (get_val)",__LINE__,__FILE__);
           break;
       }
     }     
@@ -656,7 +659,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw MetisException("unknown addressing mode (get_dest_val)");
+          throw MetisException("unknown addressing mode (get_dest_val)",__LINE__,__FILE__);
       }
     }     
       
