@@ -72,9 +72,14 @@ using namespace std;
     throw MetisException("attempt to add instruction past address space"); \
   } 
 
-#define CHECK_LOCATION(location,size) \
-  if (location+size > (uint64_t)(end-start)) { \
+#define CHECK_LOCATION(location) \
+  if (location > (uint64_t)(end-start-1)) { \
     throw MetisException("attempt to use location outside address space"); \
+  }
+
+#define CHECK_POINTER(pointer) \
+  if (pointer == NULL) { \
+    throw MetisException("null pointer"); \
   }
 
 #define MATH_OPERATION(op)        set_val(ADDR_MODES, \

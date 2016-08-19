@@ -54,10 +54,19 @@ TEST_CASE( "invalid location", "[MetisVM]" ) {
   MetisVM m(buf, 50, stack, 5, NULL, 0);
   m.hard_reset();
 
-  m.add_jumpi(0);
-  REQUIRE_THROWS_AS( m.add_jumpi(42), MetisException);
+  m.add_jumpi(49);
+  REQUIRE_THROWS_AS( m.add_jumpi(50), MetisException);
 }
 
+TEST_CASE( "null pointer", "[MetisVM]" ) {
+  uint8_t buf[50];
+  uint64_t stack[5];
+  MetisVM m(buf, 50, stack, 5, NULL, 0);
+  m.hard_reset();
+  
+  m.add_label_ip("x");
+  REQUIRE_THROWS_AS( m.add_label_ip(NULL), MetisException);
+}
 
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];

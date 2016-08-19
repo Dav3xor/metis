@@ -21,7 +21,7 @@ void MetisVM::add_jump(address_mode src) {
 
 void MetisVM::add_jumpi(uint64_t location) {
   CHECK_INSTRUCTION(INS_JUMPI_SIZE);
-  CHECK_LOCATION(location, INS_JUMPI_SIZE); 
+  CHECK_LOCATION(location); 
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_JUMPI;      
@@ -49,7 +49,7 @@ void MetisVM::add_jnz(address_mode src, address_mode dest) {
 
 void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JNE_SIZE);
-  CHECK_LOCATION(location, INS_JNE_SIZE); 
+  CHECK_LOCATION(location); 
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_JNE;      
@@ -60,7 +60,7 @@ void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
 
 void MetisVM::add_jmpe(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JMPE_SIZE);
-  CHECK_LOCATION(location, INS_JMPE_SIZE); 
+  CHECK_LOCATION(location); 
 
   MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
   instruction->type                          = INS_JMPE;      
@@ -88,6 +88,8 @@ void MetisVM::add_storei(address_mode dest, uint64_t value) {
 };
 
 uint64_t MetisVM::add_label_ip(const char *label) {
+  CHECK_POINTER(label);
+ 
   // add a label pointing at the current IP Register value
   // not really an instruction, but it basically acts like one...
   uint64_t new_loc = (registers[REGIP]-(uint64_t)start);
@@ -95,6 +97,8 @@ uint64_t MetisVM::add_label_ip(const char *label) {
   return new_loc;
 }
 uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
+  CHECK_POINTER(label);
+ 
   // add a label pointing at the current IP Register value
   // not really an instruction, but it basically acts like one...
   labels[label] = val;
@@ -102,6 +106,8 @@ uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
 }
 void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
   CHECK_INSTRUCTION(INS_DATA_SIZE);
+  CHECK_POINTER(data);
+  CHECK_POINTER(label);
 
   MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
   instruction->type                 = INS_DATA;      
@@ -117,6 +123,9 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
 }
 
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
+  CHECK_POINTER(new_buffer);
+  CHECK_POINTER(label);
+
   if ((uint64_t)((buffer_end + length) - buffer) > buffer_size) {
     throw MetisException("buffer blob doesn't fit (add_buffer)");
   }
@@ -139,6 +148,7 @@ void MetisVM::add_not(address_mode src, address_mode dest) {
 void MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
                                  GLenum type, GLvoid *indices) {
   CHECK_INSTRUCTION(INS_GLDRAWELEMENTS_SIZE);
+  CHECK_POINTER(indices);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_GLDRAWELEMENTS;      
@@ -182,6 +192,7 @@ void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
 
 void MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage) {
   CHECK_INSTRUCTION(INS_GLBUFFERDATA_SIZE);
+  CHECK_POINTER(data);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLBUFFERDATA;      
@@ -206,6 +217,7 @@ void MetisVM::add_glvertexattribpointer(GLuint index, GLint size,
                              GLenum type, GLboolean normalized, 
                              GLsizei stride, GLvoid *pointer) {
   CHECK_INSTRUCTION(INS_GLVERTEXATTRIBPOINTER_SIZE);
+  CHECK_POINTER(pointer);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLVERTEXATTRIBPOINTER;      
