@@ -72,8 +72,8 @@ using namespace std;
     throw MetisException("attempt to add instruction past address space"); \
   } 
 
-#define CHECK_LOCATION(location) \
-  if (location > (uint64_t)(end-start)) { \
+#define CHECK_LOCATION(location,size) \
+  if (location+size > (uint64_t)(end-start)) { \
     throw MetisException("attempt to use location outside address space"); \
   }
 

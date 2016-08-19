@@ -48,6 +48,15 @@ TEST_CASE( "instruction doesn't fit", "[MetisVM]" ) {
   REQUIRE_THROWS_AS( m.add_jumpi(0), MetisException);
 }
   
+TEST_CASE( "invalid location", "[MetisVM]" ) {
+  uint8_t buf[50];
+  uint64_t stack[5];
+  MetisVM m(buf, 50, stack, 5, NULL, 0);
+  m.hard_reset();
+
+  m.add_jumpi(0);
+  REQUIRE_THROWS_AS( m.add_jumpi(42), MetisException);
+}
 
 
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {

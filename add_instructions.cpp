@@ -21,7 +21,7 @@ void MetisVM::add_jump(address_mode src) {
 
 void MetisVM::add_jumpi(uint64_t location) {
   CHECK_INSTRUCTION(INS_JUMPI_SIZE);
-  CHECK_LOCATION(location); 
+  CHECK_LOCATION(location, INS_JUMPI_SIZE); 
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_JUMPI;      
@@ -49,7 +49,7 @@ void MetisVM::add_jnz(address_mode src, address_mode dest) {
 
 void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JNE_SIZE);
-  CHECK_LOCATION(location); 
+  CHECK_LOCATION(location, INS_JNE_SIZE); 
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_JNE;      
@@ -60,7 +60,7 @@ void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
 
 void MetisVM::add_jmpe(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JMPE_SIZE);
-  CHECK_LOCATION(location); 
+  CHECK_LOCATION(location, INS_JMPE_SIZE); 
 
   MetisInstruction *instruction              = (MetisInstruction *)registers[REGIP];
   instruction->type                          = INS_JMPE;      
