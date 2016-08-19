@@ -38,6 +38,18 @@ TEST_CASE( "labels", "[MetisVM]" ) {
   REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
 }
 
+TEST_CASE( "instruction doesn't fit", "[MetisVM]" ) {
+  uint8_t buf[15];
+  uint64_t stack[5];
+  MetisVM m(buf, 15, stack, 5, NULL, 0);
+  m.hard_reset();
+
+  m.add_jumpi(0);
+  REQUIRE_THROWS_AS( m.add_jumpi(0), MetisException);
+}
+  
+
+
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
