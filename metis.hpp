@@ -211,7 +211,15 @@ class MetisVM {
                                INS_DATA                          =  193,   //     global data
 
                                INS_END                           =  255,   //     End Program 
-                               };
+                              };
+
+    // then the list of file block types
+    enum fileblock: uint8_t {BLOCK_HEADER     =    'H',   //     should never happen
+                             BLOCK_LABEL      =    'L',   // *   jump to index ...
+                             BLOCK_BUFFER     =    'B',   // *   jump to index ...
+                             BLOCK_CODE       =    'C',   // *   jump to index ...
+                            };
+
   public:
     // simple reset, do not remove existing code
     void reset(void) {
@@ -493,7 +501,27 @@ class MetisVM {
     uint8_t    *buffer;      
     uint64_t    buffer_size;
     uint8_t    *buffer_end;
+    struct MetisFileBlock {
+      fileblock type;
+      union blocks_t {
+        struct header_t {
+          uint16_t length;
+        }__attribute__((packed)) header;
 
+        struct label_t {
+          uint16_t length;
+        }__attribute__((packed)) label;
+        
+        struct buffer_t {
+          uint64_t length;
+        }__attribute__((packed)) buffer;
+
+        struct code_t {
+          uint64_t length;
+        }__attribute__((packed)) code;
+      }__attribute__((packed)) blocks;
+    }__attribute__((packed));
+     
     struct MetisInstruction {
       instruction type;
       union commands_t {
