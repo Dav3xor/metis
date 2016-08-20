@@ -46,6 +46,11 @@ using namespace std;
 
 #define INS_MATH_SIZE     2
 
+#define BLOCK_HEADER_SIZE     3 
+#define BLOCK_LABEL_SIZE      3 
+#define BLOCK_BUFFER_SIZE     9 
+#define BLOCK_CODE_SIZE       9 
+
 #define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(GLvoid *)
 #define INS_GLDRAWARRAYS_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLsizei)
 #define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(GLuint)
