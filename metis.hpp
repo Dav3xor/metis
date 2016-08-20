@@ -196,6 +196,13 @@ class MetisVM {
                                INS_OR                            =   17,   // *   A = A|...  (integer) 
                                INS_XOR                           =   18,   // *   A = A^...  (integer) 
                                INS_NOT                           =   19,   // *   A = A&...  (integer) 
+                               
+                               // Matrix Ops
+                               INS_MAT_MUL                       =   20,   // *   Matrix Multiplication
+
+                               // Vector Ops                    
+                               INS_VEC_DOT                       =   25,   // *   Dot Product
+                               INS_VEC_CROSS                     =   26,   // *   Cross Product
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   32,   
