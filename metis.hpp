@@ -169,6 +169,11 @@ class MetisContext {
     uint32_t cur_window; 
 };
 
+struct MetisMatrixHeader{
+  uint8_t   width;
+  uint8_t   height;
+}__attribute__((packed));
+
 class MetisVM {
   private:
     // first, the list of instructions...
@@ -264,7 +269,12 @@ class MetisVM {
     uint64_t add_label_val (const char *label, uint64_t val);
 
     // data gets mixed in with the instructions
-    void     add_data      (const uint8_t *data, const uint64_t length, const char *label);
+    void     add_data      (const uint8_t *data, 
+                            const uint64_t length, 
+                            const char *label);
+    void     add_matrix    (uint8_t width, uint8_t height,
+                            const uint8_t *data, 
+                            const char *label);
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);

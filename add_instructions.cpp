@@ -121,6 +121,32 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;
 }
+void MetisVM::add_matrix(const uint8_t width, const uint8_t height, 
+                       const uint8_t *data, 
+                       const char *label) {
+  CHECK_INSTRUCTION(INS_DATA_SIZE);
+  CHECK_POINTER(data);
+  CHECK_POINTER(label);
+
+  uint64_t length = width*height*4;
+  MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
+  instruction->type                 = INS_DATA;      
+  instruction->commands.data.length = length;
+  if (registers[REGIP] + length > (uint64_t)end) {
+    throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
+  }
+  registers[REGIP] += INS_DATA_SIZE;
+  add_label_ip(label);
+
+  // set width/height
+  *(uint8_t *)registers[REGIP] = width; 
+  ++registers[REGIP];
+  *(uint8_t *)registers[REGIP] = height; 
+  ++registers[REGIP];
+
+  memcpy((void *)registers[REGIP],data,length);
+  registers[REGIP] += length;
+}
 
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
