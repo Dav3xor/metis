@@ -207,7 +207,7 @@ class MetisVM {
                                
                                // Matrix Ops
                                INS_MAT_MUL                       =   20,   // *   Matrix Multiplication
-
+                               INS_PUSH_MAT                      =   21,   //     Push Matrix onto stack
                                // Vector Ops                    
                                INS_VEC_DOT                       =   25,   // *   Dot Product
                                INS_VEC_CROSS                     =   26,   // *   Cross Product
@@ -259,25 +259,26 @@ class MetisVM {
       reset();
     }
 
-    uint64_t add_end       (void);   
-    uint64_t add_jump      (address_mode src);
-    uint64_t add_jumpi     (uint64_t location);
-    uint64_t add_jizz      (address_mode src, address_mode dest);
-    uint64_t add_jnz       (address_mode src, address_mode dest);
-    uint64_t add_jne       (address_mode src, address_mode dest, uint64_t location);
-    uint64_t add_jmpe      (address_mode src, address_mode dest, uint64_t location);
-    uint64_t add_store     (address_mode src, address_mode dest);
-    uint64_t add_storei    (address_mode dest, uint64_t value);
-    uint64_t add_label_ip  (const char *label);
-    uint64_t add_label_val (const char *label, uint64_t val);
+    uint64_t add_end         (void);   
+    uint64_t add_jump        (address_mode src);
+    uint64_t add_jumpi       (uint64_t location);
+    uint64_t add_jizz        (address_mode src, address_mode dest);
+    uint64_t add_jnz         (address_mode src, address_mode dest);
+    uint64_t add_jne         (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_jmpe        (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_store       (address_mode src, address_mode dest);
+    uint64_t add_storei      (address_mode dest, uint64_t value);
+    uint64_t add_label_ip    (const char *label);
+    uint64_t add_label_val   (const char *label, uint64_t val);
 
     // data gets mixed in with the instructions
-    uint64_t add_data      (const uint8_t *data, 
-                            const uint64_t length, 
-                            const char *label);
-    uint64_t add_matrix    (uint8_t width, uint8_t height,
-                            const uint8_t *data, 
-                            const char *label);
+    uint64_t add_data        (const uint8_t *data, 
+                              const uint64_t length, 
+                              const char *label);
+    uint64_t add_matrix      (uint8_t width, uint8_t height,
+                              const uint8_t *data, 
+                              const char *label);
+    uint64_t add_push_matrix (uint64_t location)
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
@@ -405,6 +406,9 @@ class MetisVM {
             registers[REGIP] += INS_MATH_SIZE;
             break;
 
+          case INS_PUSH_MAT:
+            //TODO: finish....
+            uint8_t width = instruction->commands.pushmatrix
           case INS_GLDRAWELEMENTS:
             glDrawElements(instruction->commands.gldrawelements.mode, 
                            instruction->commands.gldrawelements.count, 
