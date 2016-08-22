@@ -2,24 +2,26 @@
 
 ostringstream MetisException::cnvt;
 
-void MetisVM::add_end(void) {
+uint64_t MetisVM::add_end(void) {
   CHECK_INSTRUCTION(INS_END_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_END;      
-  registers[REGIP] += INS_END_SIZE;   
+  registers[REGIP] += INS_END_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_jump(address_mode src) {
+uint64_t MetisVM::add_jump(address_mode src) {
   CHECK_INSTRUCTION(INS_JUMP_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_JUMP;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
   registers[REGIP] += INS_JUMP_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_jumpi(uint64_t location) {
+uint64_t MetisVM::add_jumpi(uint64_t location) {
   CHECK_INSTRUCTION(INS_JUMPI_SIZE);
   CHECK_LOCATION(location); 
 
@@ -27,27 +29,30 @@ void MetisVM::add_jumpi(uint64_t location) {
   instruction->type                             = INS_JUMPI;      
   instruction->commands.jumpi.value = location;
   registers[REGIP] += INS_JUMPI_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_jizz(address_mode src, address_mode dest) {
+uint64_t MetisVM::add_jizz(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_JIZZ_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_JIZZ;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_JIZZ_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }; 
 
-void MetisVM::add_jnz(address_mode src, address_mode dest) {
+uint64_t MetisVM::add_jnz(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_JNZ_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_JNZ;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_JNZ_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }; 
 
-void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
+uint64_t MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JNE_SIZE);
   CHECK_LOCATION(location); 
 
@@ -56,9 +61,10 @@ void MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   instruction->commands.extended.ext.jne.value = location;
   registers[REGIP] += INS_JNE_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }
 
-void MetisVM::add_jmpe(address_mode src, address_mode dest, uint64_t location) {
+uint64_t MetisVM::add_jmpe(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JMPE_SIZE);
   CHECK_LOCATION(location); 
 
@@ -67,17 +73,19 @@ void MetisVM::add_jmpe(address_mode src, address_mode dest, uint64_t location) {
   instruction->commands.extended.addr_mode   = BUILD_ADDR(src, dest);
   instruction->commands.extended.ext.jmpe.value  = location;
   registers[REGIP] += INS_JMPE_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }
 
-void MetisVM::add_store(address_mode src, address_mode dest) {
+uint64_t MetisVM::add_store(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_STORE_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_STORE;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_STORE_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }; 
-void MetisVM::add_storei(address_mode dest, uint64_t value) {
+uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   CHECK_INSTRUCTION(INS_STOREI_SIZE);
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
@@ -85,6 +93,7 @@ void MetisVM::add_storei(address_mode dest, uint64_t value) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
   instruction->commands.extended.ext.storei.value = value;
   registers[REGIP] += INS_STOREI_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
 uint64_t MetisVM::add_label_ip(const char *label) {
@@ -104,7 +113,7 @@ uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
   labels[label] = val;
   return val;
 }
-void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
+uint64_t MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
   CHECK_INSTRUCTION(INS_DATA_SIZE);
   CHECK_POINTER(data);
   CHECK_POINTER(label);
@@ -120,8 +129,9 @@ void MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *l
 
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;
+  return (uint64_t)start-(uint64_t)instruction;
 }
-void MetisVM::add_matrix(const uint8_t width, const uint8_t height, 
+uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height, 
                        const uint8_t *data, 
                        const char *label) {
   CHECK_INSTRUCTION(INS_DATA_SIZE);
@@ -146,6 +156,7 @@ void MetisVM::add_matrix(const uint8_t width, const uint8_t height,
 
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;
+  return (uint64_t)start-(uint64_t)instruction;
 }
 
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
@@ -162,16 +173,17 @@ void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const
 
 
 
-void MetisVM::add_not(address_mode src, address_mode dest) {
+uint64_t MetisVM::add_not(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_MATH_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_NOT;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_MATH_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
+uint64_t MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
                                  GLenum type, GLvoid *indices) {
   CHECK_INSTRUCTION(INS_GLDRAWELEMENTS_SIZE);
   CHECK_POINTER(indices);
@@ -183,9 +195,10 @@ void MetisVM::add_gldrawelements(GLenum mode, GLsizei count,
   instruction->commands.gldrawelements.type = type;
   instruction->commands.gldrawelements.indices = indices;
   registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 }; 
 
-void MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
+uint64_t MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   CHECK_INSTRUCTION(INS_GLDRAWARRAYS_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -194,9 +207,10 @@ void MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   instruction->commands.gldrawarrays.first = first;
   instruction->commands.gldrawarrays.count = count;
   registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
+uint64_t MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
   CHECK_INSTRUCTION(INS_GLGENBUFFERS_SIZE);
 
   MetisInstruction *instruction                  = (MetisInstruction *)registers[REGIP];
@@ -204,9 +218,10 @@ void MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
   instruction->commands.glgenbuffers.num_buffers = n;
   instruction->commands.glgenbuffers.start_index = start_index;
   registers[REGIP] += INS_GLGENBUFFERS_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
+uint64_t MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
   CHECK_INSTRUCTION(INS_GLBINDBUFFER_SIZE);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
@@ -214,9 +229,10 @@ void MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
   instruction->commands.glbindbuffer.target = target;
   instruction->commands.glbindbuffer.buffer_index = buffer_index;
   registers[REGIP] += INS_GLBINDBUFFER_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage) {
+uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage) {
   CHECK_INSTRUCTION(INS_GLBUFFERDATA_SIZE);
   CHECK_POINTER(data);
 
@@ -227,19 +243,21 @@ void MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLe
   instruction->commands.glbufferdata.data   = data;
   instruction->commands.glbufferdata.usage  = usage;
   registers[REGIP] +=  INS_GLBUFFERDATA_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
 
-void MetisVM::add_glenablevertexattribarray(GLuint index) {
+uint64_t MetisVM::add_glenablevertexattribarray(GLuint index) {
   CHECK_INSTRUCTION(INS_GLENABLEVERTEXATTRIBARRAY_SIZE);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLENABLEVERTEXATTRIBARRAY;      
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_glvertexattribpointer(GLuint index, GLint size, 
+uint64_t MetisVM::add_glvertexattribpointer(GLuint index, GLint size, 
                              GLenum type, GLboolean normalized, 
                              GLsizei stride, GLvoid *pointer) {
   CHECK_INSTRUCTION(INS_GLVERTEXATTRIBPOINTER_SIZE);
@@ -254,15 +272,17 @@ void MetisVM::add_glvertexattribpointer(GLuint index, GLint size,
   instruction->commands.glvertexattribpointer.stride = stride;
   instruction->commands.glvertexattribpointer.pointer = pointer;
   registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
-void MetisVM::add_gldisablevertexattribarray(GLuint index) {
+uint64_t MetisVM::add_gldisablevertexattribarray(GLuint index) {
   CHECK_INSTRUCTION(INS_GLDISABLEVERTEXATTRIBARRAY_SIZE);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLDISABLEVERTEXATTRIBARRAY;      
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
+  return (uint64_t)start-(uint64_t)instruction;
 };
 
 

@@ -82,17 +82,20 @@ using namespace std;
     throw MetisException("null pointer",__LINE__,__FILE__); \
   }
 
-#define MATH_OPERATION(op)        set_val(ADDR_MODES, \
-                                          get_dest_val(ADDR_MODES) op \
-                                          get_val(ADDR_MODES)); \
-                                  registers[REGIP] += INS_MATH_SIZE;
+#define MATH_OPERATION(op) \
+  set_val(ADDR_MODES, \
+          get_dest_val(ADDR_MODES) op \
+          get_val(ADDR_MODES)); \
+  registers[REGIP] += INS_MATH_SIZE;
 
-#define MATH_METHOD(method_name,byte_code) void method_name(address_mode src, address_mode dest) { \
-      MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \
-      instruction->type                               = byte_code; \
-      instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
-      registers[REGIP] += ADVANCE(1, 0); \
-    };
+#define MATH_METHOD(method_name,byte_code) \
+      uint64_t method_name(address_mode src, address_mode dest) { \
+        MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \
+        instruction->type                               = byte_code; \
+        instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
+        registers[REGIP] += ADVANCE(1, 0); \
+        return (uint64_t)start-(uint64_t)instruction; \
+      };
 
 #define METIS_NUM_BUFFERS 16
 
@@ -256,23 +259,23 @@ class MetisVM {
       reset();
     }
 
-    void     add_end       (void);   
-    void     add_jump      (address_mode src);
-    void     add_jumpi     (uint64_t location);
-    void     add_jizz      (address_mode src, address_mode dest);
-    void     add_jnz       (address_mode src, address_mode dest);
-    void     add_jne       (address_mode src, address_mode dest, uint64_t location);
-    void     add_jmpe      (address_mode src, address_mode dest, uint64_t location);
-    void     add_store     (address_mode src, address_mode dest);
-    void     add_storei    (address_mode dest, uint64_t value);
+    uint64_t add_end       (void);   
+    uint64_t add_jump      (address_mode src);
+    uint64_t add_jumpi     (uint64_t location);
+    uint64_t add_jizz      (address_mode src, address_mode dest);
+    uint64_t add_jnz       (address_mode src, address_mode dest);
+    uint64_t add_jne       (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_jmpe      (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_store     (address_mode src, address_mode dest);
+    uint64_t add_storei    (address_mode dest, uint64_t value);
     uint64_t add_label_ip  (const char *label);
     uint64_t add_label_val (const char *label, uint64_t val);
 
     // data gets mixed in with the instructions
-    void     add_data      (const uint8_t *data, 
+    uint64_t add_data      (const uint8_t *data, 
                             const uint64_t length, 
                             const char *label);
-    void     add_matrix    (uint8_t width, uint8_t height,
+    uint64_t add_matrix    (uint8_t width, uint8_t height,
                             const uint8_t *data, 
                             const char *label);
 
@@ -290,18 +293,18 @@ class MetisVM {
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
 
-    void add_not(address_mode src, address_mode dest);
-    void add_gldrawelements(GLenum mode, GLsizei count, 
-                            GLenum type, GLvoid *indices);
-    void add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
-    void add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
-    void add_glbindbuffer(GLenum target, GLuint buffer_index);
-    void add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
-    void add_glenablevertexattribarray(GLuint index);
-    void add_glvertexattribpointer(GLuint index, GLint size, 
-                                 GLenum type, GLboolean normalized, 
-                                 GLsizei stride, GLvoid *pointer);
-    void add_gldisablevertexattribarray(GLuint index);
+    uint64_t add_not(address_mode src, address_mode dest);
+    uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
+                                GLenum type, GLvoid *indices);
+    uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
+    uint64_t add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
+    uint64_t add_glbindbuffer(GLenum target, GLuint buffer_index);
+    uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
+    uint64_t add_glenablevertexattribarray(GLuint index);
+    uint64_t add_glvertexattribpointer(GLuint index, GLint size, 
+                                       GLenum type, GLboolean normalized, 
+                                       GLsizei stride, GLvoid *pointer);
+    uint64_t add_gldisablevertexattribarray(GLuint index);
 
     void save(const string &filename);
     void load(const string &filename);           
