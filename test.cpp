@@ -68,6 +68,23 @@ TEST_CASE( "null pointer", "[MetisVM]" ) {
   REQUIRE_THROWS_AS( m.add_label_ip(NULL), MetisException);
 }
 
+TEST_CASE( "add_*() return values", "[MetisVM]") {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset(); 
+
+  uint64_t start = m.get_registers()[REGIP];
+  m.add_noop();
+  REQUIRE( m.get_registers()[REGIP] == start+1);
+
+  m.add_end();
+  REQUIRE( m.get_registers()[REGIP] == start+2);
+
+  m.add_jumpi(5);
+  REQUIRE( m.get_registers()[REGIP] == start+11);
+}
+
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
