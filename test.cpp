@@ -427,7 +427,29 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGD] == 4);
   REQUIRE( m.cur_stack_val() == 5);
 }
+
+TEST_CASE( "noop", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
   
+  m.add_storei(REGA,5);
+  m.add_noop();
+  m.add_noop();
+  m.add_noop();
+  m.add_noop();
+  m.add_storei(REGA,6);
+  m.add_noop();
+  m.add_noop();
+  m.add_noop();
+  m.add_storei(REGB,7);
+
+  m.eval();
+  REQUIRE( m.get_registers()[REGA] == 6);
+  REQUIRE( m.get_registers()[REGB] == 7);
+}
+
 TEST_CASE( "math", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
