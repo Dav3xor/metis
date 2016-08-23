@@ -59,6 +59,7 @@ using namespace std;
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 
+#define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
 
@@ -224,7 +225,7 @@ class MetisVM {
  
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
-
+                               INS_NOOP                          =  254,
                                INS_END                           =  255,   //     End Program 
                                };
   public:
@@ -260,6 +261,7 @@ class MetisVM {
     }
 
     uint64_t add_end         (void);   
+    uint64_t add_noop        (void);   
     uint64_t add_jump        (address_mode src);
     uint64_t add_jumpi       (uint64_t location);
     uint64_t add_jizz        (address_mode src, address_mode dest);
@@ -278,7 +280,7 @@ class MetisVM {
     uint64_t add_matrix      (uint8_t width, uint8_t height,
                               const uint8_t *data, 
                               const char *label);
-    uint64_t add_push_matrix (uint64_t location)
+    uint64_t add_push_matrix (uint64_t location);
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
@@ -314,6 +316,9 @@ class MetisVM {
     bool eval() {
       reset();
       uint64_t advance;
+      MetisMatrixHeader *original;
+      MetisMatrixHeader *copy;
+      uint32_t           num_bytes;
       while(registers[REGIP] <= (uint64_t)end) {
         MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
         //printf("--> %u\n", instruction->type);
@@ -408,7 +413,12 @@ class MetisVM {
 
           case INS_PUSH_MAT:
             //TODO: finish....
-            uint8_t width = instruction->commands.pushmatrix
+            original   = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
+            copy       = (MetisMatrixHeader *)&stack[registers[REGSP]];
+            num_bytes  = original->width * original->height * 4;
+            *copy      = *original;
+            memcpy((char *)copy + 2, (char *)original+2, num_bytes);
+            break;
           case INS_GLDRAWELEMENTS:
             glDrawElements(instruction->commands.gldrawelements.mode, 
                            instruction->commands.gldrawelements.count, 
@@ -462,6 +472,9 @@ class MetisVM {
             advance = instruction->commands.data.length;
             registers[REGIP] += INS_DATA_SIZE;
             registers[REGIP] += advance;
+            break;
+          case INS_NOOP:
+            registers[REGIP] += INS_NOOP_SIZE;
             break;
           case INS_END:
             // don't advance, then we can add instructions over
@@ -606,7 +619,9 @@ class MetisVM {
         struct data_t {
           uint64_t length;
         }__attribute__((packed)) data;
-
+        struct pushmatrix_t {
+          uint64_t location;
+        }__attribute__((packed)) pushmatrix;
       }__attribute__((packed)) commands;
     }__attribute__((packed));
     void push(uint64_t val) {

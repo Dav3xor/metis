@@ -2,6 +2,15 @@
 
 ostringstream MetisException::cnvt;
 
+uint64_t MetisVM::add_noop(void) {
+  CHECK_INSTRUCTION(INS_NOOP_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_NOOP;      
+  registers[REGIP] += INS_NOOP_SIZE;
+  return (uint64_t)instruction-(uint64_t)start;
+};
+
 uint64_t MetisVM::add_end(void) {
   CHECK_INSTRUCTION(INS_END_SIZE);
 
