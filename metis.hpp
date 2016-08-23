@@ -67,6 +67,7 @@ using namespace std;
 //#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 #define ADVANCE(extended, data)   (1+extended+data)
 
+#define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)start;
 
 #define CHECK_INSTRUCTION(instruction_length) \
   if ((uint8_t *)(registers[REGIP] + instruction_length) > end) { \
