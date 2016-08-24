@@ -174,9 +174,24 @@ class MetisContext {
     uint32_t cur_window; 
 };
 
-struct MetisMatrixHeader{
+struct MetisMatrixHeader {
   uint8_t   width;
   uint8_t   height;
+}__attribute__((packed));
+
+union MetisStackLine {
+  uint8_t    ubytes[8];
+  uint16_t   ushorts[4];
+  uint32_t   uints[2];
+  uint64_t   ulong;
+  
+  int8_t     bytes[8];
+  int16_t    shorts[4];
+  int32_t    ints[2];
+  int64_t    whole;
+  
+  float      floats[2];
+  double     whole_double;
 }__attribute__((packed));
 
 class MetisVM {
@@ -252,7 +267,7 @@ class MetisVM {
             uint8_t *glbuffer_loc, uint64_t glbuffer_len) { 
       start                 = instruction_loc;
       end                   = instruction_loc+instruction_len;
-      stack                 = stack_loc;
+      stack                 = (MetisStackLine *)stack_loc;
       stack_size            = stack_len;
       buffer                = glbuffer_loc;
       buffer_size           = glbuffer_len;
@@ -507,7 +522,7 @@ class MetisVM {
 
     uint64_t  cur_stack_val  (void)  {
       if ( registers[REGSP] > 0) {
-        return stack[registers[REGSP]-1]; 
+        return stack[registers[REGSP]-1].whole; 
       } else {
         throw MetisException("stack empty (cur_stack_val)",__LINE__,__FILE__);
       }
@@ -515,10 +530,10 @@ class MetisVM {
     uint64_t  cur_stack_size (void)  { return registers[REGSP]; };
   
   private:
-    uint64_t    registers[8];
-    uint8_t     isizes[256];
-    uint64_t    *stack;
-    uint64_t    stack_size;
+    uint64_t           registers[8];
+    uint8_t            isizes[256];
+    MetisStackLine    *stack;
+    uint64_t           stack_size;
 
     GLuint      buffers[METIS_NUM_BUFFERS];
     unordered_map<string, uint64_t> labels;
@@ -629,7 +644,7 @@ class MetisVM {
       if( registers[REGSP] >= stack_size) {
         throw MetisException("stack full (push)",__LINE__,__FILE__);
       }
-      stack[registers[REGSP]] = val;
+      stack[registers[REGSP]].whole = val;
       registers[REGSP] += 1;
     }
 
@@ -638,7 +653,7 @@ class MetisVM {
         throw MetisException("stack empty (pop)",__LINE__,__FILE__);
       }
       registers[REGSP] -= 1;
-      return stack[registers[REGSP]];
+      return stack[registers[REGSP]].whole;
     }
 
     void set_val(uint8_t location, uint64_t value) {
