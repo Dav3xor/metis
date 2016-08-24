@@ -2,7 +2,7 @@ CC     = g++
 CFLAGS = -Wall -std=c++11 -ggdb
 CLIBS  = -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread
 DEPS   = metis.hpp
-SRCS   = add_instructions.cpp file.cpp util.cpp test.cpp
+SRCS   = add_instructions.cpp file.cpp util.cpp eval.cpp test.cpp 
 OBJS   = $(SRCS:.cpp=.o)
 MAIN   = test
 
