@@ -537,7 +537,7 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   m.add_storei(STACK_PUSH, 102);
   m.add_storei(REGB, 12);
 
-  m.eval();
+  REQUIRE(m.eval() == true);
   //REQUIRE( m.cur_stack_size() == 11);
   REQUIRE( m.get_registers()[REGIP] - start == 10+10+10+10+64+2);
   REQUIRE( m.get_registers()[REGA] == 10);

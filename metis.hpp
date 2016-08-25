@@ -114,11 +114,15 @@ enum address_mode: uint8_t {REGA                    =    0,
 
 class MetisException: public runtime_error {
   public:
-    MetisException(const char *error, int line, const char *file): runtime_error("Metis VM"), error_str(error) {};
+    MetisException(const char *error, 
+                   const int line, 
+                   const char *file): runtime_error("Metis VM"), 
+                                      error_str(error), 
+                                      file(file), line(line) {};
   private:  
     const char *error_str;
     const char *file;
-    int         line;
+    const int   line;
 
     virtual const char* what() const throw()
     {
