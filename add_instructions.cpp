@@ -166,8 +166,9 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
     throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
-  add_label_ip(label);
-
+  if(label) {
+    add_label_ip(label);
+  }
   // set width/height
   *(uint8_t *)registers[REGIP] = width; 
   ++registers[REGIP];

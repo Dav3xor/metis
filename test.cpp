@@ -518,7 +518,33 @@ TEST_CASE( "data", "[MetisVM]" ) {
   REQUIRE( ins_data[4] == 5.5f);
 }
   
-  
+TEST_CASE( "matrix add/push", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[20];
+  float matrix[16] = {1.1,1.2,1.3,1.4,
+                      2.1,2.2,2.3,2.4,
+                      3.1,3.2,3.3,3.4,
+                      4.1,4.2,4.3,4.4};
+
+  MetisVM m(buf,10000, stack, 20, NULL, 0);
+  m.hard_reset();
+ 
+  uint64_t start = m.get_registers()[REGIP];
+
+  m.add_storei(REGA, 10);
+  m.add_storei(STACK_PUSH, 101);
+  m.add_matrix(4,4, (uint8_t *)matrix, "hi");
+  m.add_storei(STACK_PUSH, 102);
+  m.add_storei(REGB, 12);
+
+  m.eval();
+  //REQUIRE( m.cur_stack_size() == 11);
+  REQUIRE( m.get_registers()[REGIP] - start == 10+10+10+10+64+2);
+  REQUIRE( m.get_registers()[REGA] == 10);
+  REQUIRE( m.get_registers()[REGB] == 12);
+  REQUIRE( m.cur_stack_val() == 102);
+}
+
 TEST_CASE( "basic performance test", "[MetisVM]" ) {
   uint8_t buf[30000];
   uint64_t stack[50];
