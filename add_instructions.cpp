@@ -161,7 +161,7 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
   uint64_t length = width*height*4;
   MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
   instruction->type                 = INS_DATA;      
-  instruction->commands.data.length = length;
+  instruction->commands.data.length = length + sizeof(MetisMatrixHeader);
   if (registers[REGIP] + length > (uint64_t)end) {
     throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
   }
@@ -170,10 +170,10 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
     add_label_ip(label);
   }
   // set width/height
-  *(uint8_t *)registers[REGIP] = width; 
-  ++registers[REGIP];
-  *(uint8_t *)registers[REGIP] = height; 
-  ++registers[REGIP];
+  MetisMatrixHeader *matrix_header = (MetisMatrixHeader *)registers[REGIP];
+  matrix_header->width = width; 
+  matrix_header->height = height; 
+  registers[REGIP] += sizeof(MetisMatrixHeader);
 
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;

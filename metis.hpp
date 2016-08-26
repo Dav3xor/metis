@@ -231,6 +231,7 @@ class MetisVM {
                                // Matrix Ops
                                INS_MAT_MUL                       =   20,   // *   Matrix Multiplication
                                INS_PUSH_MATRIX                   =   21,   //     Push Matrix onto stack
+                               
                                // Vector Ops                    
                                INS_VEC_DOT                       =   25,   // *   Dot Product
                                INS_VEC_CROSS                     =   26,   // *   Cross Product

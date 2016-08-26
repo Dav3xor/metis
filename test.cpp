@@ -29,6 +29,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
   m.add_label_ip("end");
 
   m.add_label_val("arbitrary", 555);
+  m.add_end();
 
   m.eval();
 
@@ -93,6 +94,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 
   // test that a simple store works 
   m.add_storei(STACK_PUSH,100);
+  m.add_end();
 
   m.eval();
 
@@ -101,6 +103,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 
   // test that we can have more than one item on the stack...
   m.add_storei(STACK_PUSH,101);
+  m.add_end();
  
   m.eval();
  
@@ -111,6 +114,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   // onto the stack.
   m.add_storei(REGA, 102);
   m.add_store(REGA,STACK_PUSH);
+  m.add_end();
   
   m.eval();
 
@@ -119,6 +123,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
 
   m.add_storei(REGA, 103);
   m.add_store(REGA,STACK_PUSH);
+  m.add_end();
   
   m.eval();
  
@@ -127,6 +132,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val() == 103 );
 
   m.add_store(STACK_POP,REGB);
+  m.add_end();
   
   m.eval();
   
@@ -136,6 +142,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val() == 102 );
   
   m.add_store(STACK_POP,REGA);
+  m.add_end();
   
   m.eval();
   
@@ -148,6 +155,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   m.add_store(REGA,STACK_PUSH);
   m.add_store(REGA,STACK_PUSH);
   m.add_store(REGA,STACK_PUSH);
+  m.add_end();
   
   m.eval();
 
@@ -162,6 +170,7 @@ TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   
   m.reset(); 
   m.add_store(STACK_POP, REGA);
+  m.add_end();
   
   // should throw an empty stack exception
   REQUIRE_THROWS_AS(m.eval(), MetisException);
@@ -177,12 +186,14 @@ TEST_CASE( "inc/dec", "[MetisVM]" ) {
   m.hard_reset();
   m.add_storei(REGA, 0);
   m.add_inc(REGA,REGA);
+  m.add_end();
 
   m.eval();
 
   REQUIRE(m.get_registers()[REGA] == 1);
 
   m.add_inc(REGA,REGA);
+  m.add_end();
 
   m.eval();
   REQUIRE(m.get_registers()[REGA] == 2);
@@ -255,10 +266,11 @@ TEST_CASE( "jump if zero", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
+  uint64_t start = m.get_registers()[REGIP];
 
   m.add_storei(REGA,5);
   m.add_storei(REGB,0);
-  m.add_storei(REGC, 256);
+  m.add_storei(REGC, 45);
   m.add_label_ip("loop start");        
   m.add_inc(REGB, REGB);
   m.add_dec(REGA, REGA);
@@ -270,7 +282,7 @@ TEST_CASE( "jump if zero", "[MetisVM]" ) {
 
   REQUIRE( m.get_registers()[REGA] == 0 );
   REQUIRE( m.get_registers()[REGB] == 5 );
-  REQUIRE( m.get_registers()[REGC] == 256 );
+  REQUIRE( m.get_registers()[REGC] == 45 );
 }
 
 TEST_CASE( "jump if not zero (jnz)", "[MetisVM]" ) {
@@ -444,6 +456,7 @@ TEST_CASE( "noop", "[MetisVM]" ) {
   m.add_noop();
   m.add_noop();
   m.add_storei(REGB,7);
+  m.add_end();
 
   m.eval();
   REQUIRE( m.get_registers()[REGA] == 6);
@@ -536,10 +549,11 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   m.add_matrix(4,4, (uint8_t *)matrix, "hi");
   m.add_storei(STACK_PUSH, 102);
   m.add_storei(REGB, 12);
+  m.add_end();
 
   REQUIRE(m.eval() == true);
   //REQUIRE( m.cur_stack_size() == 11);
-  REQUIRE( m.get_registers()[REGIP] - start == 10+10+10+10+64+2);
+  REQUIRE( m.get_registers()[REGIP] - start == INS_STOREI_SIZE*4+INS_DATA_SIZE+64+sizeof(MetisMatrixHeader));
   REQUIRE( m.get_registers()[REGA] == 10);
   REQUIRE( m.get_registers()[REGB] == 12);
   REQUIRE( m.cur_stack_val() == 102);
