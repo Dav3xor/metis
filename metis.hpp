@@ -465,6 +465,10 @@ class MetisVM {
 
         struct data_t {
           uint64_t length;
+          union contents_t {
+            MetisMatrixHeader matrix;
+            int x;
+          }__attribute__((packed)) contents;
         }__attribute__((packed)) data;
         struct pushmatrix_t {
           uint64_t location;

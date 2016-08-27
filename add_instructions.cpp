@@ -170,9 +170,8 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
     add_label_ip(label);
   }
   // set width/height
-  MetisMatrixHeader *matrix_header = (MetisMatrixHeader *)registers[REGIP];
-  matrix_header->width = width; 
-  matrix_header->height = height; 
+  instruction->commands.data.contents.matrix.width = width;
+  instruction->commands.data.contents.matrix.height = height;
   registers[REGIP] += sizeof(MetisMatrixHeader);
 
   memcpy((void *)registers[REGIP],data,length);
