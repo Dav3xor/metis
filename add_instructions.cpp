@@ -166,13 +166,13 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
     throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
-  if(label) {
-    add_label_ip(label);
-  }
   // set width/height
   instruction->commands.data.contents.matrix.width = width;
   instruction->commands.data.contents.matrix.height = height;
   registers[REGIP] += sizeof(MetisMatrixHeader);
+  if(label) {
+    add_label_val(label, (uint64_t)((uint64_t)(&instruction->commands.data.contents.matrix))-(uint64_t)start);
+  }
 
   memcpy((void *)registers[REGIP],data,length);
   registers[REGIP] += length;

@@ -557,6 +557,10 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 10);
   REQUIRE( m.get_registers()[REGB] == 12);
   REQUIRE( m.cur_stack_val() == 102);
+  
+  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("hi");
+  REQUIRE( header->width == 4);
+  REQUIRE( header->height == 4);
 }
 
 TEST_CASE( "basic performance test", "[MetisVM]" ) {
