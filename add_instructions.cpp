@@ -179,6 +179,17 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
   RETURN_NEXT();
 }
 
+uint64_t MetisVM::add_push_matrix(uint64_t location) {
+  CHECK_INSTRUCTION(INS_PUSH_MATRIX);
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_PUSH_MATRIX;      
+  instruction->commands.pushmatrix.location = location;
+  registers[REGIP] += INS_PUSH_MATRIX_SIZE;
+  RETURN_NEXT();
+}
+
+uint64_t MetisVM::add_matrix_multiply( address_mode src, address_mode dest) {
+
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
