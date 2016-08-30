@@ -58,7 +58,7 @@ using namespace std;
 
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
-
+#define INS_PUSH_MATRIX_SIZE                 9
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
@@ -181,6 +181,7 @@ class MetisContext {
 struct MetisMatrixHeader {
   uint8_t   width;
   uint8_t   height;
+  uint16_t  filler;       // remove me when this grows...
 }__attribute__((packed));
 
 union MetisMemoryCell {
@@ -229,7 +230,7 @@ class MetisVM {
                                INS_NOT                           =   19,   // *   A = A&...  (integer) 
                                
                                // Matrix Ops
-                               INS_MAT_MUL                       =   20,   // *   Matrix Multiplication
+                               INS_MATRIX_MULTIPLY               =   20,   // *   Matrix Multiplication
                                INS_PUSH_MATRIX                   =   21,   //     Push Matrix onto stack
                                
                                // Vector Ops                    
@@ -304,6 +305,7 @@ class MetisVM {
                               const uint8_t *data, 
                               const char *label);
     uint64_t add_push_matrix (uint64_t location);
+    uint64_t add_matrix_multiply (address_mode src, address_mode dest);
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
