@@ -353,9 +353,9 @@ class MetisVM {
     }
     uint64_t *get_registers  (void)  { return registers; };
 
-    uint64_t  cur_stack_val  (void)  {
+    uint64_t  cur_stack_val  (uint64_t offset=0)  {
       if ( registers[REGSP] > 0) {
-        return stack[registers[REGSP]-1].whole; 
+        return stack[registers[REGSP]-1-offset].whole; 
       } else {
         throw MetisException("stack empty (cur_stack_val)",__LINE__,__FILE__);
       }

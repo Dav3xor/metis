@@ -549,14 +549,19 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   m.add_matrix(4,4, (uint8_t *)matrix, "hi");
   m.add_storei(STACK_PUSH, 102);
   m.add_storei(REGB, 12);
+  m.add_push_matrix(m.get_label("hi"));
   m.add_end();
 
   REQUIRE(m.eval() == true);
   //REQUIRE( m.cur_stack_size() == 11);
-  REQUIRE( m.get_registers()[REGIP] - start == INS_STOREI_SIZE*4+INS_DATA_SIZE+64+sizeof(MetisMatrixHeader));
+  REQUIRE( m.get_registers()[REGIP] - start == INS_STOREI_SIZE*4 + 
+                                               INS_DATA_SIZE +
+                                               64 +
+                                               sizeof(MetisMatrixHeader) +
+                                               INS_PUSH_MATRIX_SIZE);
   REQUIRE( m.get_registers()[REGA] == 10);
   REQUIRE( m.get_registers()[REGB] == 12);
-  REQUIRE( m.cur_stack_val() == 102);
+  REQUIRE( m.cur_stack_val(9) == 102);
   
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("hi");
   REQUIRE( header->width == 4);
@@ -565,6 +570,13 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
   REQUIRE(matrix2[0] == Approx(1.1));
   REQUIRE(matrix2[15] == Approx(4.4));
+  header = (MetisMatrixHeader *)m.get_ptr_from_label("hi");
+  REQUIRE( header->width == 4);
+  REQUIRE( header->height == 4);
+  matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  REQUIRE(matrix2[0] == Approx(1.1));
+  REQUIRE(matrix2[15] == Approx(4.4));
+
 }
 
 TEST_CASE( "basic performance test", "[MetisVM]" ) {
