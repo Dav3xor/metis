@@ -1,9 +1,12 @@
+#include "metis.hpp"
 
-MetisVM::bool eval() {
+bool MetisVM::eval() {
   reset();
   uint64_t advance;
-  MetisMatrixHeader *original;
-  MetisMatrixHeader *copy;
+  MetisMatrixHeader *source_matrix;
+  MetisMatrixHeader *destination_matrix;
+  float             *a;
+  float             *b;
   uint32_t           num_bytes;
   while(registers[REGIP] <= (uint64_t)end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -97,14 +100,22 @@ MetisVM::bool eval() {
         registers[REGIP] += INS_MATH_SIZE;
         break;
 
-      case INS_PUSH_MAT:
-        //TODO: finish....
-        original   = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
-        copy       = (MetisMatrixHeader *)&stack[registers[REGSP]];
-        num_bytes  = original->width * original->height * 4;
-        *copy      = *original;
-        memcpy((char *)copy + 2, (char *)original+2, num_bytes);
+      case INS_PUSH_MATRIX:
+        source_matrix = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
+        num_bytes     = source_matrix->width * source_matrix->height * 4;
+        memcpy((char *)&stack[registers[REGSP]], (char *)source_matrix, num_bytes+sizeof(MetisMatrixHeader));
+        registers[REGSP] += num_bytes/8 + 1;
+        registers[REGIP] += INS_PUSH_MATRIX_SIZE;
         break;
+
+      case INS_MATRIX_MULTIPLY:
+        source_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
+        destination_matrix = (MetisMatrixHeader *)((uint64_t)stack + get_dest_val(ADDR_MODES));
+        a = (float *)((uint64_t)start + get_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
+        b = (float *)((uint64_t)stack + get_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
+        for(int i = 0; i < source_matrix->width; i++) {
+          for (int j = 0; j < source_matrix->height; j++) {
+        break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 
                        instruction->commands.gldrawelements.count, 
@@ -168,7 +179,10 @@ MetisVM::bool eval() {
         return true;
         break;
       case INS_ERROR:
+        throw MetisException("error opcode found", __LINE__, __FILE__);
+        break;
       default:
+        throw MetisException("unknown opcode found", __LINE__, __FILE__);
         return false;
         break;
     };
