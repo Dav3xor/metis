@@ -179,7 +179,15 @@ uint64_t MetisVM::add_push_matrix(uint64_t location) {
   RETURN_NEXT();
 }
 
-//uint64_t MetisVM::add_matrix_multiply( address_mode src, address_mode dest) {
+uint64_t MetisVM::add_matrix_multiply( address_mode src, address_mode dest) {
+  CHECK_INSTRUCTION(INS_MATRIX_MULTIPLY);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_MATRIX_MULTIPLY;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+  registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+  RETURN_NEXT();
+}; 
 
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);

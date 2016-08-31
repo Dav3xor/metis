@@ -59,6 +59,7 @@ using namespace std;
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
+#define INS_MATRIX_MULTIPLY_SIZE             2
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
