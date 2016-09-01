@@ -20,8 +20,14 @@
 #include <cstring>
 
 #define GL_GLEXT_PROTOTYPES
-#include <GL/gl.h>
-#include <GL/glext.h>
+#ifdef __APPLE__
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glext.h>
+#else
+  #include <GL/gl.h>
+  #include <GL/glext.h>
+#endif
+
 #include <GLFW/glfw3.h>
 
 using namespace std;
@@ -148,7 +154,7 @@ class MetisContext {
     GLFWwindow *create_window(uint32_t window_id, 
                   uint32_t width, uint32_t height, 
                   const char *title, GLFWmonitor *monitor, GLFWwindow *share) {
-      if ((window_id<0)||(window_id>7)) {
+      if (window_id>7) {
         throw MetisException("invalid window id",__LINE__,__FILE__);
       }
 
