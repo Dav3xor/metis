@@ -3,10 +3,13 @@
 bool MetisVM::eval() {
   reset();
   uint64_t advance;
-  MetisMatrixHeader *source_matrix;
-  MetisMatrixHeader *destination_matrix;
+  MetisMatrixHeader *source1_matrix;
+  //MetisMatrixHeader *source2_matrix;
+  //MetisMatrixHeader *destination_matrix;
   float             *a;
   float             *b;
+  float             *d;
+  uint8_t            i,j,k;
   uint32_t           num_bytes;
   while(registers[REGIP] <= (uint64_t)end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -101,20 +104,27 @@ bool MetisVM::eval() {
         break;
 
       case INS_PUSH_MATRIX:
-        source_matrix = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
-        num_bytes     = source_matrix->width * source_matrix->height * 4;
-        memcpy((char *)&stack[registers[REGSP]], (char *)source_matrix, num_bytes+sizeof(MetisMatrixHeader));
+        source1_matrix = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
+        num_bytes     = source1_matrix->width * source1_matrix->height * 4;
+        memcpy((char *)&stack[registers[REGSP]], (char *)source1_matrix, num_bytes+sizeof(MetisMatrixHeader));
         registers[REGSP] += num_bytes/8 + 1;
         registers[REGIP] += INS_PUSH_MATRIX_SIZE;
         break;
 
       case INS_MATRIX_MULTIPLY:
-        source_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
-        destination_matrix = (MetisMatrixHeader *)((uint64_t)stack + get_dest_val(ADDR_MODES));
-        a = (float *)((uint64_t)start + get_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
-        b = (float *)((uint64_t)stack + get_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
-        for(int i = 0; i < source_matrix->width; i++) {
-          for (int j = 0; j < source_matrix->height; j++) {
+        source1_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
+        //source2_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
+        //destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination);
+        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
+        b = (float *)((uint64_t)stack + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
+        d = (float *)((uint64_t)stack + instruction->commands.extended.ext.matrix_multiply.destination + sizeof(MetisMatrixHeader));
+        for(i = 0; i < source1_matrix->height; i++) {
+          for (j = 0; j < source1_matrix->width; j++) {
+            for (k = 0; j < source1_matrix->width; j++) {
+              d[source1_matrix->height*i + j] += a[source1_matrix->height*i + k] * b[source1_matrix->height*k+j];
+            }
+          }
+        }
         break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 

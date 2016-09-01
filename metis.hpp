@@ -59,7 +59,7 @@ using namespace std;
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
-#define INS_MATRIX_MULTIPLY_SIZE             2
+#define INS_MATRIX_MULTIPLY_SIZE             10
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
@@ -306,7 +306,7 @@ class MetisVM {
                               const uint8_t *data, 
                               const char *label);
     uint64_t add_push_matrix (uint64_t location);
-    uint64_t add_matrix_multiply (address_mode src, address_mode dest);
+    uint64_t add_matrix_multiply (address_mode src1, address_mode src2, uint64_t destination);
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
@@ -402,6 +402,10 @@ class MetisVM {
             struct ext_jmpe_t {
               uint64_t value;
             }__attribute__((packed)) jmpe;
+            
+            struct ext_matrix_multiply_t {
+              uint64_t destination;
+            }__attribute__((packed)) matrix_multiply;
 
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
