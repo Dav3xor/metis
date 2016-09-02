@@ -530,7 +530,34 @@ TEST_CASE( "data", "[MetisVM]" ) {
   REQUIRE( ins_data[3] == 4.4f);
   REQUIRE( ins_data[4] == 5.5f);
 }
-  
+
+TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[20];
+  float matrix[16] = {1.1,1.2,1.3,1.4,
+                      2.1,2.2,2.3,2.4,
+                      3.1,3.2,3.3,3.4,
+                      4.1,4.2,4.3,4.4};
+  float identity[16] = {1.0,0.0,0.0,0.0,
+                        0.0,1.0,0.0,0.0,
+                        0.0,0.0,1.0,0.0,
+                        0.0,0.0,0.0,1.0};
+  MetisVM m(buf,10000, stack, 20, NULL, 0);
+  m.hard_reset();
+ 
+  uint64_t start = m.get_registers()[REGIP];
+
+  m.add_matrix(4,4, (uint8_t *)matrix, "matrix");
+  m.add_matrix(4,4, (uint8_t *)identity, "identity");
+  m.add_matrix(4,4, (uint8_t *)identity, "result");
+  m.add_storei(REGA, m.get_label("matrix"));
+  m.add_storei(REGB, m.get_label("identity"));
+  m.add_matrix_multiply(REGA,REGB, m.get_label("result"));
+  m.add_end();
+
+  m.eval();
+}
+   
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];
@@ -538,7 +565,10 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
                       2.1,2.2,2.3,2.4,
                       3.1,3.2,3.3,3.4,
                       4.1,4.2,4.3,4.4};
-
+  float identity[16] = {1.0,0.0,0.0,0.0,
+                        0.0,1.0,0.0,0.0,
+                        0.0,0.0,1.0,0.0,
+                        0.0,0.0,0.0,1.0};
   MetisVM m(buf,10000, stack, 20, NULL, 0);
   m.hard_reset();
  

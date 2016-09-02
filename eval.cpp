@@ -118,13 +118,17 @@ bool MetisVM::eval() {
         a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
         b = (float *)((uint64_t)stack + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
         d = (float *)((uint64_t)stack + instruction->commands.extended.ext.matrix_multiply.destination + sizeof(MetisMatrixHeader));
+        printf("%u\n",source1_matrix->height);
+        printf("%u\n",source1_matrix->width);
+        /*
         for(i = 0; i < source1_matrix->height; i++) {
           for (j = 0; j < source1_matrix->width; j++) {
             for (k = 0; j < source1_matrix->width; j++) {
               d[source1_matrix->height*i + j] += a[source1_matrix->height*i + k] * b[source1_matrix->height*k+j];
             }
           }
-        }
+        }*/
+        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
         break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 
