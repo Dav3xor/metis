@@ -123,8 +123,8 @@ bool MetisVM::eval() {
         
         for(i = 0; i < source1_matrix->height; i++) {
           for (j = 0; j < source1_matrix->width; j++) {
-            for (k = 0; j < source1_matrix->width; j++) {
-              d[source1_matrix->height*i + j] += a[source1_matrix->height*i + k] * b[source1_matrix->height*k+j];
+            for (k = 0; k < source1_matrix->width; k++) {
+              d[source1_matrix->width*i + j] += a[source1_matrix->width*i + k] * b[source1_matrix->width*k+j];
             }
           }
         }

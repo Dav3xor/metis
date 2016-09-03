@@ -538,10 +538,10 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
                       2.1,2.2,2.3,2.4,
                       3.1,3.2,3.3,3.4,
                       4.1,4.2,4.3,4.4};
-  float identity[16] = {1.0,0.0,0.0,0.0,
-                        0.0,1.0,0.0,0.0,
+  float identity[16] = {0.0,0.0,0.0,1.0,
                         0.0,0.0,1.0,0.0,
-                        0.0,0.0,0.0,1.0};
+                        0.0,1.0,0.0,0.0,
+                        1.0,0.0,0.0,0.0};
   MetisVM m(buf,10000, stack, 20, NULL, 0);
   m.hard_reset();
  
@@ -556,6 +556,11 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   m.add_end();
 
   m.eval();
+  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
+  float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  print_matrix(matrix2, 4, 4);
+  REQUIRE(matrix2[0] == Approx(1.1));
+  REQUIRE(matrix2[15] == Approx(4.4));
 }
    
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
