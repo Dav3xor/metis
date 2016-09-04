@@ -534,33 +534,55 @@ TEST_CASE( "data", "[MetisVM]" ) {
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];
-  float matrix[16] = {1.1,1.2,1.3,1.4,
-                      2.1,2.2,2.3,2.4,
-                      3.1,3.2,3.3,3.4,
-                      4.1,4.2,4.3,4.4};
-  float identity[16] = {0.0,0.0,0.0,1.0,
-                        0.0,0.0,1.0,0.0,
-                        0.0,1.0,0.0,0.0,
-                        1.0,0.0,0.0,0.0};
+  float matrix1[16]   = {1.1,1.2,1.3,1.4,
+                         2.1,2.2,2.3,2.4,
+                         3.1,3.2,3.3,3.4,
+                         4.1,4.2,4.3,4.4};
+  float identity1[16] = {1.0,0.0,0.0,0.0,
+                         0.0,1.0,0.0,0.0,
+                         0.0,0.0,1.0,0.0,
+                         0.0,0.0,0.0,1.0};
+  float matrix2[4]   = {2.0,3.0,
+                        4.0,5.0};
+  float identity2[4] = {6.0,7.0,
+                        8.0,9.0};
   MetisVM m(buf,10000, stack, 20, NULL, 0);
   m.hard_reset();
  
   uint64_t start = m.get_registers()[REGIP];
 
-  m.add_matrix(4,4, (uint8_t *)matrix, "matrix");
-  m.add_matrix(4,4, (uint8_t *)identity, "identity");
-  m.add_matrix(4,4, (uint8_t *)identity, "result");
-  m.add_storei(REGA, m.get_label("matrix"));
-  m.add_storei(REGB, m.get_label("identity"));
-  m.add_matrix_multiply(REGA,REGB, m.get_label("result"));
+  m.add_matrix(4,4, (uint8_t *)matrix1, "matrix1");
+  m.add_matrix(4,4, (uint8_t *)identity1, "identity1");
+  m.add_matrix(4,4, (uint8_t *)identity1, "result1");
+
+  m.add_matrix(2,2, (uint8_t *)matrix2, "matrix2");
+  m.add_matrix(2,2, (uint8_t *)identity2, "identity2");
+  m.add_matrix(2,2, (uint8_t *)identity2, "result2");
+
+  m.add_storei(REGA, m.get_label("matrix1"));
+  m.add_storei(REGB, m.get_label("identity1"));
+  m.add_matrix_multiply(REGA,REGB, m.get_label("result1"));
+
+  m.add_storei(REGA, m.get_label("matrix2"));
+  m.add_storei(REGB, m.get_label("identity2"));
+  m.add_matrix_multiply(REGA,REGB, m.get_label("result2"));
   m.add_end();
 
   m.eval();
-  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
-  float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix2, 4, 4);
-  REQUIRE(matrix2[0] == Approx(1.1));
-  REQUIRE(matrix2[15] == Approx(4.4));
+
+  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result2");
+  float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  print_matrix(matrix3, 2, 2);
+  REQUIRE(matrix3[0] == Approx(36));
+  REQUIRE(matrix3[1] == Approx(41));
+  REQUIRE(matrix3[2] == Approx(64));
+  REQUIRE(matrix3[3] == Approx(73));
+
+  header = (MetisMatrixHeader *)m.get_ptr_from_label("result1");
+  matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  print_matrix(matrix3, 4, 4);
+  REQUIRE(matrix3[0] == Approx(1.1));
+  REQUIRE(matrix3[15] == Approx(4.4));
 }
    
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
