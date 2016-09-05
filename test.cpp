@@ -598,6 +598,14 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   print_matrix(matrix3, 4, 4);
   REQUIRE(matrix3[0] == Approx(1.1));
   REQUIRE(matrix3[15] == Approx(4.4));
+
+
+  header = (MetisMatrixHeader *)m.get_ptr_from_label("result3");
+  matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  print_matrix(matrix3, 2, 4);
+  REQUIRE(matrix3[0] == Approx(26));
+  REQUIRE(matrix3[7] == Approx(103));
+
 }
    
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
