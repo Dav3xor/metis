@@ -4,7 +4,7 @@ bool MetisVM::eval() {
   reset();
   uint64_t advance;
   MetisMatrixHeader *source1_matrix;
-  //MetisMatrixHeader *source2_matrix;
+  MetisMatrixHeader *source2_matrix;
   //MetisMatrixHeader *destination_matrix;
   float             *a;
   float             *b;
@@ -113,7 +113,7 @@ bool MetisVM::eval() {
 
       case INS_MATRIX_MULTIPLY:
         source1_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
-        //source2_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
+        source2_matrix      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
         //destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination);
         a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
         b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
@@ -122,7 +122,7 @@ bool MetisVM::eval() {
         printf("%u\n",source1_matrix->width);
         
         for(i = 0; i < source1_matrix->height; i++) {
-          for (j = 0; j < source1_matrix->width; j++) {
+          for (j = 0; j < source2_matrix->width; j++) {
             for (k = 0; k < source1_matrix->width; k++) {
               d[source1_matrix->width*i + j] += a[source1_matrix->width*i + k] * b[source1_matrix->width*k+j];
             }
