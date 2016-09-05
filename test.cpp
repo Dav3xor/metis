@@ -546,6 +546,10 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
                         4.0,5.0};
   float identity2[4] = {6.0,7.0,
                         8.0,9.0};
+  float result[16]   = {0.0,0.0,0.0,0.0,
+                        0.0,0.0,0.0,0.0,
+                        0.0,0.0,0.0,0.0,
+                        0.0,0.0,0.0,0.0};
   MetisVM m(buf,10000, stack, 20, NULL, 0);
   m.hard_reset();
  
@@ -553,11 +557,11 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
 
   m.add_matrix(4,4, (uint8_t *)matrix1, "matrix1");
   m.add_matrix(4,4, (uint8_t *)identity1, "identity1");
-  m.add_matrix(4,4, (uint8_t *)identity1, "result1");
+  m.add_matrix(4,4, (uint8_t *)result, "result1");
 
   m.add_matrix(2,2, (uint8_t *)matrix2, "matrix2");
   m.add_matrix(2,2, (uint8_t *)identity2, "identity2");
-  m.add_matrix(2,2, (uint8_t *)identity2, "result2");
+  m.add_matrix(2,2, (uint8_t *)result, "result2");
 
   m.add_storei(REGA, m.get_label("matrix1"));
   m.add_storei(REGB, m.get_label("identity1"));
@@ -588,10 +592,10 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];
-  float matrix[16] = {1.1,1.2,1.3,1.4,
-                      2.1,2.2,2.3,2.4,
-                      3.1,3.2,3.3,3.4,
-                      4.1,4.2,4.3,4.4};
+  float matrix[16]   = {1.1,1.2,1.3,1.4,
+                        2.1,2.2,2.3,2.4,
+                        3.1,3.2,3.3,3.4,
+                        4.1,4.2,4.3,4.4};
   float identity[16] = {1.0,0.0,0.0,0.0,
                         0.0,1.0,0.0,0.0,
                         0.0,0.0,1.0,0.0,
@@ -675,7 +679,7 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   auto elapsed   = duration.count();
   double ipers   = 505000000.0/(elapsed/1000.0);
   printf("---------------------------------\n");
-  printf("perf test duration:      %llums\n", duration.count());
+  //printf("perf test duration:      %llums\n", (unsigned long long)duration.count());
   printf("instructions per second: %f\n", ipers);
   printf("---------------------------------\n");
 }
@@ -722,7 +726,7 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(ins_buffer[1] == Approx(1.1));
   REQUIRE(ins_buffer[2] == Approx(1.2));
 };
-/*
+
 TEST_CASE( "window stuff", "[MetisContext]") {
   MetisContext c; 
   // make sure error conditions for creating windows work.
@@ -740,6 +744,6 @@ TEST_CASE( "window stuff", "[MetisContext]") {
     glfwPollEvents();
   }
 }
-*/
+
 
 
