@@ -538,10 +538,6 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
                          2.1,2.2,2.3,2.4,
                          3.1,3.2,3.3,3.4,
                          4.1,4.2,4.3,4.4};
-  float identity1[16] = {1.0,0.0,0.0,0.0,
-                         0.0,1.0,0.0,0.0,
-                         0.0,0.0,1.0,0.0,
-                         0.0,0.0,0.0,1.0};
   float matrix2[8]   = {2.0,3.0,
                         4.0,5.0,
                         6.0,7.0,
@@ -555,9 +551,9 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
  
   uint64_t start = m.get_registers()[REGIP];
 
-  m.add_matrix(4,4, (uint8_t *)matrix1, "matrix1");
-  m.add_matrix(4,4, (uint8_t *)identity1, "identity1");
-  m.add_matrix(4,4, (uint8_t *)result, "result1");
+  m.add_matrix          (4,4, (uint8_t *)matrix1, "matrix1");
+  m.add_identity_matrix (4,4, "identity1");
+  m.add_matrix          (4,4, (uint8_t *)result, "result1");
 
   // split matrix2 into 2 2x2 matrices for this test...
   m.add_matrix(2,2, (uint8_t *)matrix2, "matrix2");

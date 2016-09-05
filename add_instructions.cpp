@@ -142,6 +142,42 @@ uint64_t MetisVM::add_data(const uint8_t *data, const uint64_t length, const cha
 }
 
 
+uint64_t MetisVM::add_identity_matrix(const uint8_t width, const uint8_t height, 
+                       const char *label) {
+  CHECK_INSTRUCTION(INS_DATA_SIZE);
+  CHECK_POINTER(label);
+
+  uint64_t length = width*height*4;
+  MetisInstruction *instruction     = (MetisInstruction *)registers[REGIP];
+  instruction->type                 = INS_DATA;      
+  instruction->commands.data.length = length + sizeof(MetisMatrixHeader);
+  if (registers[REGIP] + length > (uint64_t)end) {
+    throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
+  }
+  registers[REGIP] += INS_DATA_SIZE;
+  // set width/height
+  instruction->commands.data.contents.matrix.width = width;
+  instruction->commands.data.contents.matrix.height = height;
+  registers[REGIP] += sizeof(MetisMatrixHeader);
+  if(label) {
+    add_label_val(label, (uint64_t)((uint64_t)(&instruction->commands.data.contents.matrix))-(uint64_t)start);
+  }
+
+  float *matrix = (float *)registers[REGIP];
+  
+  for(int i=0; i<height; i++) {
+    for(int j=0; j<width; j++) {
+      if(i==j) {
+        matrix[i*height+j] = 1.0;
+      } else {
+        matrix[i*height+j] = 0.0;
+      }
+    }
+  }
+        
+  registers[REGIP] += length;
+  RETURN_NEXT();
+}
 uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height, 
                        const uint8_t *data, 
                        const char *label) {

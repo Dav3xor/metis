@@ -306,13 +306,15 @@ class MetisVM {
     uint64_t add_label_val   (const char *label, uint64_t val);
 
     // data gets mixed in with the instructions
-    uint64_t add_data        (const uint8_t *data, 
-                              const uint64_t length, 
-                              const char *label);
-    uint64_t add_matrix      (uint8_t width, uint8_t height,
-                              const uint8_t *data, 
-                              const char *label);
-    uint64_t add_push_matrix (uint64_t location);
+    uint64_t add_data             (const uint8_t *data, 
+                                   const uint64_t length, 
+                                   const char *label);
+    uint64_t add_matrix           (uint8_t width, uint8_t height,
+                                   const uint8_t *data, 
+                                   const char *label);
+    uint64_t add_identity_matrix  (uint8_t width, uint8_t height,
+                                   const char *label);
+    uint64_t add_push_matrix      (uint64_t location);
     uint64_t add_matrix_multiply (address_mode src1, address_mode src2, uint64_t destination);
 
     // buffer gets made into a gl buffer, stored separately.
