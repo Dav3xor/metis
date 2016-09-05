@@ -542,9 +542,9 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
                          0.0,1.0,0.0,0.0,
                          0.0,0.0,1.0,0.0,
                          0.0,0.0,0.0,1.0};
-  float matrix2[4]   = {2.0,3.0,
-                        4.0,5.0};
-  float identity2[4] = {6.0,7.0,
+  float matrix2[8]   = {2.0,3.0,
+                        4.0,5.0,
+                        6.0,7.0,
                         8.0,9.0};
   float result[16]   = {0.0,0.0,0.0,0.0,
                         0.0,0.0,0.0,0.0,
@@ -559,9 +559,15 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   m.add_matrix(4,4, (uint8_t *)identity1, "identity1");
   m.add_matrix(4,4, (uint8_t *)result, "result1");
 
+  // split matrix2 into 2 2x2 matrices for this test...
   m.add_matrix(2,2, (uint8_t *)matrix2, "matrix2");
-  m.add_matrix(2,2, (uint8_t *)identity2, "identity2");
+  m.add_matrix(2,2, (uint8_t *)&matrix2[4], "identity2");
   m.add_matrix(2,2, (uint8_t *)result, "result2");
+
+  // then use all of matrix2 to test differently sized
+  // matrices
+  m.add_matrix(2,4, (uint8_t *)matrix2, "matrix3");
+  m.add_matrix(2,4, (uint8_t *)result, "result3");
 
   m.add_storei(REGA, m.get_label("matrix1"));
   m.add_storei(REGB, m.get_label("identity1"));
@@ -570,6 +576,11 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   m.add_storei(REGA, m.get_label("matrix2"));
   m.add_storei(REGB, m.get_label("identity2"));
   m.add_matrix_multiply(REGA,REGB, m.get_label("result2"));
+
+  m.add_storei(REGA, m.get_label("matrix1"));
+  m.add_storei(REGB, m.get_label("matrix3"));
+  m.add_matrix_multiply(REGA,REGB, m.get_label("result3"));
+
   m.add_end();
 
   m.eval();
