@@ -130,6 +130,21 @@ bool MetisVM::eval() {
         }
         registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
         break;    
+      case INS_VECTOR_ADD:
+        // lists of vectors are stored as matrices.
+        matrix_a      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
+        matrix_b      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
+        destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination);
+        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
+        b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
+        d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+        for(i = 0; i < matrix_a->height; i++) {
+          for (j = 0; j < matrix_a->width; j++) {
+            d[i*matrix_a->height+j] = a[i*matrix_a->height+j] + b[i*matrix_a->height+j];
+          }
+        }
+        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 
                        instruction->commands.gldrawelements.count, 
