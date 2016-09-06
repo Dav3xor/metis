@@ -693,6 +693,9 @@ TEST_CASE( "basic performance test", "[MetisVM]" ) {
   auto duration  = std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::steady_clock::now() - start);
   auto elapsed   = duration.count();
   double ipers   = 505000000.0/(elapsed/1000.0);
+
+  // using cout here because of printf specifier differences between
+  // operating systems...
   cout << "---------------------------------" << endl;
   cout << "perf test duration:      " << duration.count() << "ms" << endl;
   cout << "instructions per second: " << ipers << endl;
