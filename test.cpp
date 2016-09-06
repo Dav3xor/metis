@@ -604,6 +604,51 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
 
 }
    
+TEST_CASE ( "vector add", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[20];
+  float matrix1[15]   = {1.1,1.2,1.3,
+                         2.1,2.2,2.3,
+                         3.1,3.2,3.3,
+                         4.1,4.2,4.3,
+                         5.1,5.2,5.3};
+  float matrix2[15]   = {0.11,0.21,0.31,
+                         0.12,0.22,0.32,
+                         0.13,0.23,0.33,
+                         0.14,0.24,0.34,
+                         0.15,0.25,0.35};
+  float result[15]   = {0.0,0.0,0.0,
+                        0.0,0.0,0.0,
+                        0.0,0.0,0.0,
+                        0.0,0.0,0.0,
+                        0.0,0.0,0.0};
+  MetisVM m(buf,10000, stack, 20, NULL, 0);
+  m.hard_reset();
+ 
+  uint64_t start = m.get_registers()[REGIP];
+
+  m.add_matrix          (3,5, (uint8_t *)matrix1, "matrix1");
+  m.add_matrix          (3,5, (uint8_t *)matrix2, "matrix2");
+  m.add_matrix          (3,5, (uint8_t *)result, "result");
+
+  m.add_storei(REGA, m.get_label("matrix1"));
+  m.add_storei(REGB, m.get_label("matrix2"));
+  m.add_vector_add(REGA,REGB, m.get_label("result"));
+
+  m.add_end();
+
+  m.eval();
+
+  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
+  float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  print_matrix(matrix3, 3, 5);
+  REQUIRE(matrix3[0]  == Approx(1.21));
+  REQUIRE(matrix3[1]  == Approx(1.41));
+  REQUIRE(matrix3[2]  == Approx(1.61));
+  REQUIRE(matrix3[3]  == Approx(2.22));
+  REQUIRE(matrix3[14] == Approx(5.65));
+}
+
 TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];

@@ -140,7 +140,7 @@ bool MetisVM::eval() {
         d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
         for(i = 0; i < matrix_a->height; i++) {
           for (j = 0; j < matrix_a->width; j++) {
-            d[i*matrix_a->height+j] = a[i*matrix_a->height+j] + b[i*matrix_a->height+j];
+            d[i*matrix_a->width+j] = a[i*matrix_a->width+j] + b[i*matrix_a->width+j];
           }
         }
         registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
