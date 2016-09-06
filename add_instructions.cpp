@@ -215,7 +215,7 @@ uint64_t MetisVM::add_push_matrix(uint64_t location) {
   RETURN_NEXT();
 }
 
-uint64_t MetisVM::add_matrix_multiply( address_mode src1, address_mode src2, uint64_t dest) {
+uint64_t MetisVM::add_matrix_multiply(address_mode src1, address_mode src2, uint64_t dest) {
   CHECK_INSTRUCTION(INS_MATRIX_MULTIPLY);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -224,8 +224,19 @@ uint64_t MetisVM::add_matrix_multiply( address_mode src1, address_mode src2, uin
   instruction->commands.extended.ext.matrix_multiply.destination = dest;
   registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
   RETURN_NEXT();
-}; 
+} 
 
+uint64_t MetisVM::add_vector_add(address_mode src1, address_mode src2, uint64_t dest) {
+  CHECK_INSTRUCTION(INS_VECTOR_ADD);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_VECTOR_ADD;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src1, src2);
+  instruction->commands.extended.ext.vector_add.destination = dest;
+  registers[REGIP] += INS_VECTOR_ADD_SIZE;
+  RETURN_NEXT();
+}
+  
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);

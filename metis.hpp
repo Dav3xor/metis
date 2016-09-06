@@ -66,6 +66,7 @@ using namespace std;
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
 #define INS_MATRIX_MULTIPLY_SIZE             10
+#define INS_VECTOR_ADD_SIZE                  10 
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
@@ -242,8 +243,9 @@ class MetisVM {
                                INS_PUSH_MATRIX                   =   21,   //     Push Matrix onto stack
                                
                                // Vector Ops                    
-                               INS_VEC_DOT                       =   25,   // *   Dot Product
-                               INS_VEC_CROSS                     =   26,   // *   Cross Product
+                               INS_VECTOR_DOT                    =   25,   // *   Dot Product
+                               INS_VECTOR_CROSS                  =   26,   // *   Cross Product
+                               INS_VECTOR_ADD                    =   27,   // *   Cross Product
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   32,   
@@ -315,10 +317,12 @@ class MetisVM {
     uint64_t add_identity_matrix  (uint8_t width, uint8_t height,
                                    const char *label);
     uint64_t add_push_matrix      (uint64_t location);
-    uint64_t add_matrix_multiply (address_mode src1, address_mode src2, uint64_t destination);
+    uint64_t add_matrix_multiply  (address_mode src1, address_mode src2, uint64_t destination);
+    uint64_t add_vector_add       (address_mode src1, address_mode src2, uint64_t destination);
 
     // buffer gets made into a gl buffer, stored separately.
-    void     add_buffer    (const uint8_t *buffer, const uint64_t length, const char *label);
+    void     add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
+    uint64_t add_not              (address_mode src, address_mode dest);
 
     MATH_METHOD(add_inc, INS_INC); 
     MATH_METHOD(add_dec, INS_DEC);
@@ -331,7 +335,6 @@ class MetisVM {
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
 
-    uint64_t add_not(address_mode src, address_mode dest);
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
                                 GLenum type, GLvoid *indices);
     uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
@@ -415,6 +418,10 @@ class MetisVM {
             struct ext_matrix_multiply_t {
               uint64_t destination;
             }__attribute__((packed)) matrix_multiply;
+            
+            struct ext_vector_add_t {
+              uint64_t destination;
+            }__attribute__((packed)) vector_add;
 
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
