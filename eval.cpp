@@ -1,5 +1,14 @@
 #include "metis.hpp"
 
+
+#define LOAD_MATRIX(type)\
+        matrix_a      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));\
+        matrix_b      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));\
+        destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.type.destination);\
+        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
+        b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
+        d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+
 bool MetisVM::eval() {
   reset();
   uint64_t advance;
@@ -112,12 +121,7 @@ bool MetisVM::eval() {
         break;
 
       case INS_MATRIX_MULTIPLY:
-        matrix_a      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
-        matrix_b      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
-        destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination);
-        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
-        b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
-        d = (float *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination + sizeof(MetisMatrixHeader));
+        LOAD_MATRIX(matrix_multiply);
         printf("%u\n",matrix_a->height);
         printf("%u\n",matrix_a->width);
         
@@ -132,12 +136,7 @@ bool MetisVM::eval() {
         break;    
       case INS_VECTOR_ADD:
         // lists of vectors are stored as matrices.
-        matrix_a      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));
-        matrix_b      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));
-        destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.matrix_multiply.destination);
-        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));
-        b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));
-        d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+        LOAD_MATRIX(vector_add);
         for(i = 0; i < matrix_a->height; i++) {
           for (j = 0; j < matrix_a->width; j++) {
             d[i*matrix_a->width+j] = a[i*matrix_a->width+j] + b[i*matrix_a->width+j];

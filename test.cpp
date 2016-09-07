@@ -789,7 +789,7 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(ins_buffer[1] == Approx(1.1));
   REQUIRE(ins_buffer[2] == Approx(1.2));
 };
-/*
+
 TEST_CASE( "window stuff", "[MetisContext]") {
   MetisContext c; 
   // make sure error conditions for creating windows work.
@@ -807,6 +807,6 @@ TEST_CASE( "window stuff", "[MetisContext]") {
     glfwPollEvents();
   }
 }
-*/
+
 
 
