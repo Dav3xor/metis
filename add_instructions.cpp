@@ -237,6 +237,28 @@ uint64_t MetisVM::add_vector_add(address_mode src1, address_mode src2, uint64_t 
   RETURN_NEXT();
 }
   
+uint64_t MetisVM::add_vector_dot(address_mode src1, address_mode src2, uint64_t dest) {
+  CHECK_INSTRUCTION(INS_VECTOR_DOT);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_VECTOR_DOT;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src1, src2);
+  instruction->commands.extended.ext.vector_dot.destination = dest;
+  registers[REGIP] += INS_VECTOR_DOT_SIZE;
+  RETURN_NEXT();
+}
+
+uint64_t MetisVM::add_vector_cross(address_mode src1, address_mode src2, uint64_t dest) {
+  CHECK_INSTRUCTION(INS_VECTOR_CROSS);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_VECTOR_CROSS;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src1, src2);
+  instruction->commands.extended.ext.vector_cross.destination = dest;
+  registers[REGIP] += INS_VECTOR_CROSS_SIZE;
+  RETURN_NEXT();
+}
+
 void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);

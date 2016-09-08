@@ -67,6 +67,8 @@ using namespace std;
 #define INS_PUSH_MATRIX_SIZE                 9
 #define INS_MATRIX_MULTIPLY_SIZE             10
 #define INS_VECTOR_ADD_SIZE                  10 
+#define INS_VECTOR_DOT_SIZE                  10
+#define INS_VECTOR_CROSS_SIZE                10
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 
@@ -319,6 +321,8 @@ class MetisVM {
     uint64_t add_push_matrix      (uint64_t location);
     uint64_t add_matrix_multiply  (address_mode src1, address_mode src2, uint64_t destination);
     uint64_t add_vector_add       (address_mode src1, address_mode src2, uint64_t destination);
+    uint64_t add_vector_dot       (address_mode src1, address_mode src2, uint64_t destination);
+    uint64_t add_vector_cross     (address_mode src1, address_mode src2, uint64_t destination);
 
     // buffer gets made into a gl buffer, stored separately.
     void     add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
@@ -422,6 +426,14 @@ class MetisVM {
             struct ext_vector_add_t {
               uint64_t destination;
             }__attribute__((packed)) vector_add;
+
+            struct ext_vector_dot_t {
+              uint64_t destination;
+            }__attribute__((packed)) vector_dot;
+
+            struct ext_vector_cross_t {
+              uint64_t destination;
+            }__attribute__((packed)) vector_cross;
 
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
