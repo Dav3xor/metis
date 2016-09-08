@@ -144,6 +144,26 @@ bool MetisVM::eval() {
         }
         registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
         break;    
+      case INS_VECTOR_DOT:
+        // lists of vectors are stored as matrices.
+        LOAD_MATRIX(vector_add);
+        for(i = 0; i < matrix_a->height; i++) {
+          for (j = 0; j < matrix_a->width; j++) {
+            d[i*matrix_a->width] += a[i*matrix_a->width+j] * b[i*matrix_a->width+j];
+          }
+        }
+        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        break;    
+      case INS_VECTOR_CROSS:
+        // lists of vectors are stored as matrices.
+        LOAD_MATRIX(vector_add);
+        for(i = 0; i < matrix_a->height; i++) {
+          d[i*matrix_a->width+0] = (a[i*matrix_a->width+1] * b[i*matrix_a->width+2]) - (a[i*matrix_a->width+2] * b[i*matrix_a->width+1]); // i
+          d[i*matrix_a->width+1] = (a[i*matrix_a->width+2] * b[i*matrix_a->width+0]) - (a[i*matrix_a->width+0] * b[i*matrix_a->width+2]); // j
+          d[i*matrix_a->width+2] = (a[i*matrix_a->width+0] * b[i*matrix_a->width+1]) - (a[i*matrix_a->width+1] * b[i*matrix_a->width+0]); // k
+        }
+        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 
                        instruction->commands.gldrawelements.count, 
