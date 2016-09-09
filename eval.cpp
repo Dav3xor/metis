@@ -122,9 +122,6 @@ bool MetisVM::eval() {
 
       case INS_MATRIX_MULTIPLY:
         LOAD_MATRIX(matrix_multiply);
-        printf("%u\n",matrix_a->height);
-        printf("%u\n",matrix_a->width);
-        
         for(i = 0; i < matrix_a->height; i++) {
           for (j = 0; j < matrix_b->width; j++) {
             for (k = 0; k < matrix_a->width; k++) {
@@ -142,27 +139,27 @@ bool MetisVM::eval() {
             d[i*matrix_a->width+j] = a[i*matrix_a->width+j] + b[i*matrix_a->width+j];
           }
         }
-        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        registers[REGIP] += INS_VECTOR_ADD_SIZE;
         break;    
       case INS_VECTOR_DOT:
         // lists of vectors are stored as matrices.
-        LOAD_MATRIX(vector_add);
+        LOAD_MATRIX(vector_dot);
         for(i = 0; i < matrix_a->height; i++) {
           for (j = 0; j < matrix_a->width; j++) {
-            d[i*matrix_a->width] += a[i*matrix_a->width+j] * b[i*matrix_a->width+j];
+            d[i*destination_matrix->width] += a[i*matrix_a->width+j] * b[i*matrix_a->width+j];
           }
         }
-        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        registers[REGIP] += INS_VECTOR_DOT_SIZE;
         break;    
       case INS_VECTOR_CROSS:
         // lists of vectors are stored as matrices.
-        LOAD_MATRIX(vector_add);
+        LOAD_MATRIX(vector_cross);
         for(i = 0; i < matrix_a->height; i++) {
           d[i*matrix_a->width+0] = (a[i*matrix_a->width+1] * b[i*matrix_a->width+2]) - (a[i*matrix_a->width+2] * b[i*matrix_a->width+1]); // i
           d[i*matrix_a->width+1] = (a[i*matrix_a->width+2] * b[i*matrix_a->width+0]) - (a[i*matrix_a->width+0] * b[i*matrix_a->width+2]); // j
           d[i*matrix_a->width+2] = (a[i*matrix_a->width+0] * b[i*matrix_a->width+1]) - (a[i*matrix_a->width+1] * b[i*matrix_a->width+0]); // k
         }
-        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        registers[REGIP] += INS_VECTOR_CROSS_SIZE;
         break;    
       case INS_GLDRAWELEMENTS:
         glDrawElements(instruction->commands.gldrawelements.mode, 
