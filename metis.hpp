@@ -361,7 +361,8 @@ class MetisVM {
     void load(const string &filename);           
             
     bool eval();        
-
+    bool eval(char *label);
+    bool do_eval();
 
     uint64_t get_label(const char *label) {
       return labels.at(label);

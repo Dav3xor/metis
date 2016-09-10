@@ -8,9 +8,19 @@
         a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
         b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
         d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+bool MetisVM::eval(char *label) {
+  reset();
+  registers[REGIP] = get_label(label);
+  return do_eval();
+};
+
 
 bool MetisVM::eval() {
   reset();
+  return do_eval();
+};
+
+bool MetisVM::do_eval() {
   uint64_t advance;
   MetisMatrixHeader *matrix_a;
   MetisMatrixHeader *matrix_b;
