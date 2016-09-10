@@ -55,6 +55,8 @@ using namespace std;
 #define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(GLvoid *)
 #define INS_GLDRAWARRAYS_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLsizei)
 #define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(GLuint)
+#define INS_GLGENVERTEXARRAYS_SIZE           1+sizeof(GLsizei)+sizeof(GLuint *)
+#define INS_GLBINDVERTEXARRAY_SIZE           1+sizeof(GLuint)
 #define INS_GLBINDBUFFER_SIZE                1+sizeof(GLenum)+sizeof(GLuint)
 #define INS_GLBUFFERDATA_SIZE                1+sizeof(GLuint)
 #define INS_GLENABLEVERTEXATTRIBARRAY_SIZE   1+sizeof(GLuint)
@@ -258,6 +260,8 @@ class MetisVM {
                                INS_GLENABLEVERTEXATTRIBARRAY     =   38,   
                                INS_GLVERTEXATTRIBPOINTER         =   39,   
                                INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   
+                               INS_GLGENVERTEXARRAYS             =   41,   
+                               INS_GLBINDVERTEXARRAY             =   42,   
  
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -343,6 +347,8 @@ class MetisVM {
                                 GLenum type, GLvoid *indices);
     uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
     uint64_t add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
+    uint64_t add_glgenvertexarrays(GLsizei num_buffers, GLuint start_index);
+    uint64_t add_glbindvertexarray(GLuint array);
     uint64_t add_glbindbuffer(GLenum target, GLuint buffer_index);
     uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
     uint64_t add_glenablevertexattribarray(GLuint index);
@@ -468,6 +474,14 @@ class MetisVM {
           GLenum usage;
         }__attribute__((packed))glbufferdata;
 
+        struct glgenvertexarrays_t {
+          GLsizei num_buffers;
+          GLuint start_index;
+        }__attribute__((packed))glgenvertexarrays;
+        
+        struct glbindvertexarray_t {
+          GLuint array_index;
+        }__attribute__((packed))glbindvertexarray;
 
         struct glenablevertexattribarray_t {
           GLuint index;

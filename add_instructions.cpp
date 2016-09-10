@@ -321,6 +321,28 @@ uint64_t MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
   RETURN_NEXT();
 };
 
+uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_buffers, GLuint start_index) {
+  CHECK_INSTRUCTION(INS_GLGENVERTEXARRAYS_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLGENVERTEXARRAYS;      
+  instruction->commands.glgenvertexarrays.num_buffers = num_buffers;
+  instruction->commands.glgenvertexarrays.start_index = start_index;
+  registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_glbindvertexarray(GLuint array_index) {
+  CHECK_INSTRUCTION(INS_GLBINDVERTEXARRAY_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLBINDVERTEXARRAY;      
+  instruction->commands.glbindvertexarray.array_index = array_index;
+  registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
+  RETURN_NEXT();
+};
+
+
 uint64_t MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
   CHECK_INSTRUCTION(INS_GLBINDBUFFER_SIZE);
 
