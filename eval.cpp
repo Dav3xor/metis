@@ -8,9 +8,9 @@
         a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
         b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
         d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
-bool MetisVM::eval(char *label) {
+bool MetisVM::eval(const char *label) {
   reset();
-  registers[REGIP] = get_label(label);
+  registers[REGIP] = (uint64_t)get_ptr_from_label(label);
   return do_eval();
 };
 

@@ -86,6 +86,35 @@ TEST_CASE( "add_*() return values", "[MetisVM]") {
   REQUIRE( m.get_registers()[REGIP] == start+11);
 }
 
+TEST_CASE( "eval starting at label", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset(); 
+
+  // test that a simple store works
+  m.add_end();
+  m.add_storei(REGA,100);
+  m.add_label_ip("start1");
+  m.add_storei(REGB,101);
+  m.add_label_ip("start2");
+  m.add_end();
+
+  REQUIRE( m.eval() == true);
+  REQUIRE( m.get_registers()[REGA] == 0);
+  REQUIRE( m.get_registers()[REGB] == 0);
+
+  m.reset();
+  REQUIRE( m.eval("start1") == true);
+  REQUIRE( m.get_registers()[REGA] == 0);
+  REQUIRE( m.get_registers()[REGB] == 101);
+  
+  m.reset();
+  REQUIRE( m.eval("start2") == true);
+  REQUIRE( m.get_registers()[REGA] == 0);
+  REQUIRE( m.get_registers()[REGB] == 0);
+}
+  
 TEST_CASE( "stack push/pop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
