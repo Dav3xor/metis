@@ -120,7 +120,8 @@ enum address_mode: uint8_t {REGA                    =    0,
                             REGD                    =    3,
                             REGSP                   =    4,  // stack pointer
                             REGIP                   =    5,  // instruction pointer
-                            REGERR                  =    6,
+                            REGBP                   =    6,  // buffer pointer
+                            REGERR                  =    7,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
@@ -277,6 +278,7 @@ class MetisVM {
       registers[REGD]   = 0;
       registers[REGSP]  = 0;
       registers[REGIP]  = (uint64_t)start;
+      registers[REGBP]  = (uint64_t)buffer;
       registers[REGERR] = 0;
     };
 
@@ -552,6 +554,7 @@ class MetisVM {
         case REGSP:
         case REGERR:
         case REGIP:
+        case REGBP:
           registers[location] = value;
           break;
         case STACK_PUSH:
@@ -572,6 +575,7 @@ class MetisVM {
         case REGSP:
         case REGERR:
         case REGIP:
+        case REGBP:
           return registers[location];
           break;
         case STACK_POP:
@@ -593,6 +597,7 @@ class MetisVM {
         case REGSP:
         case REGERR:
         case REGIP:
+        case REGBP:
           return registers[location];
           break;
         case STACK_POP:
