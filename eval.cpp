@@ -185,22 +185,22 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
         break;
       case INS_GLGENBUFFERS:
-        glGenBuffers(instruction->commands.glgenbuffers.num_buffers, 
-                     &(buffers[instruction->commands.glgenbuffers.start_index]));
+        glGenBuffers(instruction->commands.glgenbuffers.num_identifiers, 
+                     &(glidentifiers[instruction->commands.glgenbuffers.start_index]));
         registers[REGIP] += INS_GLGENBUFFERS_SIZE;
         break;
       case INS_GLGENVERTEXARRAYS:
-        glGenBuffers(instruction->commands.glgenvertexarrays.num_buffers,
-                     &(buffers[instruction->commands.glgenvertexarrays.start_index]));
+        glGenBuffers(instruction->commands.glgenvertexarrays.num_identifiers,
+                     &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
 
       case INS_GLBINDBUFFER:
         glBindBuffer(instruction->commands.glbindbuffer.target, 
-                     buffers[instruction->commands.glbindbuffer.buffer_index]);
+                     glidentifiers[instruction->commands.glbindbuffer.buffer_index]);
         registers[REGIP] += INS_GLBINDBUFFER_SIZE;
         break;
 
       case INS_GLBINDVERTEXARRAY:
-        glBindVertexArray(buffers[instruction->commands.glbindvertexarray.array_index]);
+        glBindVertexArray(glidentifiers[instruction->commands.glbindvertexarray.array_index]);
         registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
         break;
 

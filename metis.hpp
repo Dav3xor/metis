@@ -348,8 +348,8 @@ class MetisVM {
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
                                 GLenum type, GLvoid *indices);
     uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
-    uint64_t add_glgenbuffers(GLsizei num_buffers, GLuint start_index);
-    uint64_t add_glgenvertexarrays(GLsizei num_buffers, GLuint start_index);
+    uint64_t add_glgenbuffers(GLsizei num_identifiers, GLuint start_index);
+    uint64_t add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_index);
     uint64_t add_glbindvertexarray(GLuint array);
     uint64_t add_glbindbuffer(GLenum target, GLuint buffer_index);
     uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
@@ -394,7 +394,7 @@ class MetisVM {
     MetisMemoryCell   *stack;
     uint64_t           stack_size;
 
-    GLuint      buffers[METIS_NUM_BUFFERS];
+    GLuint      glidentifiers[METIS_NUM_BUFFERS];
     unordered_map<string, uint64_t> labels;
 
     uint64_t    numcommands;
@@ -461,7 +461,7 @@ class MetisVM {
         }__attribute__((packed))gldrawarrays;
 
         struct glgenbuffers_t {
-          GLsizei num_buffers;
+          GLsizei num_identifiers;
           GLuint  start_index;
         }__attribute__((packed))glgenbuffers;
 
@@ -478,7 +478,7 @@ class MetisVM {
         }__attribute__((packed))glbufferdata;
 
         struct glgenvertexarrays_t {
-          GLsizei num_buffers;
+          GLsizei num_identifiers;
           GLuint start_index;
         }__attribute__((packed))glgenvertexarrays;
         

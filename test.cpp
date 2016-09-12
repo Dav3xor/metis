@@ -910,11 +910,24 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
 
 TEST_CASE( "window stuff", "[MetisContext]") {
   MetisContext c; 
+  
+  uint8_t buf[10000];
+  uint8_t glbuf[10000];
+  uint64_t stack[5];
+  float buffer[9] = {-0.8,-0.8,0.0,
+                      0.8,-0.8,0.0,
+                      0.2, 0.8,0.0};
+  float data[3]   = {2.0,2.1,2.2};
+  
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  m.hard_reset();
   // make sure error conditions for creating windows work.
   //REQUIRE_THROWS_AS(c.create_window(-1,500,500,"title",NULL,NULL), MetisException);
   //REQUIRE_THROWS_AS(c.create_window(8,500,500,"title",NULL,NULL), MetisException);
 
   GLFWwindow *win = c.create_window(0,500,500,"title",NULL,NULL);
+  c.current_window(0);
+
   //REQUIRE(win != NULL);
   //REQUIRE(c.current_window(0) != NULL);
 

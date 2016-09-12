@@ -315,18 +315,18 @@ uint64_t MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
 
   MetisInstruction *instruction                  = (MetisInstruction *)registers[REGIP];
   instruction->type                              = INS_GLGENBUFFERS;      
-  instruction->commands.glgenbuffers.num_buffers = n;
+  instruction->commands.glgenbuffers.num_identifiers = n;
   instruction->commands.glgenbuffers.start_index = start_index;
   registers[REGIP] += INS_GLGENBUFFERS_SIZE;
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_buffers, GLuint start_index) {
+uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_index) {
   CHECK_INSTRUCTION(INS_GLGENVERTEXARRAYS_SIZE);
 
   MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
   instruction->type                                   = INS_GLGENVERTEXARRAYS;      
-  instruction->commands.glgenvertexarrays.num_buffers = num_buffers;
+  instruction->commands.glgenvertexarrays.num_identifiers = num_identifiers;
   instruction->commands.glgenvertexarrays.start_index = start_index;
   registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
   RETURN_NEXT();
