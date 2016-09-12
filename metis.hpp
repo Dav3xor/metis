@@ -331,7 +331,7 @@ class MetisVM {
     uint64_t add_vector_cross     (address_mode src1, address_mode src2, uint64_t destination);
 
     // buffer gets made into a gl buffer, stored separately.
-    void     add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
+    uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
     uint64_t add_not              (address_mode src, address_mode dest);
 
     MATH_METHOD(add_inc, INS_INC); 
@@ -352,7 +352,7 @@ class MetisVM {
     uint64_t add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_index);
     uint64_t add_glbindvertexarray(GLuint array);
     uint64_t add_glbindbuffer(GLenum target, GLuint buffer_index);
-    uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage);
+    uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage);
     uint64_t add_glenablevertexattribarray(GLuint index);
     uint64_t add_glvertexattribpointer(GLuint index, GLint size, 
                                        GLenum type, GLboolean normalized, 

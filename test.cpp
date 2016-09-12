@@ -914,13 +914,31 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   uint8_t buf[10000];
   uint8_t glbuf[10000];
   uint64_t stack[5];
+  uint64_t triangle_location;
   float buffer[9] = {-0.8,-0.8,0.0,
                       0.8,-0.8,0.0,
                       0.2, 0.8,0.0};
-  float data[3]   = {2.0,2.1,2.2};
   
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
+  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
+
+  m.add_label_ip("init");
+  m.add_glgenvertexarrays(1,0);
+  m.add_glbindvertexarray(0);
+
+  m.add_glgenbuffers(1,1);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
+  m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
+  m.add_end();
+
+  m.add_label_ip("mainloop");
+  m.add_glenablevertexattribarray(0);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
+  m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
+  m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
+  m.add_gldisablevertexattribarray(0);
+  m.add_end();
   // make sure error conditions for creating windows work.
   //REQUIRE_THROWS_AS(c.create_window(-1,500,500,"title",NULL,NULL), MetisException);
   //REQUIRE_THROWS_AS(c.create_window(8,500,500,"title",NULL,NULL), MetisException);
@@ -932,8 +950,12 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   //REQUIRE(c.current_window(0) != NULL);
 
   //REQUIRE_THROWS_AS(c.current_window(1), MetisException);
+  printf("1\n");
+  m.eval("init");
+  printf("2\n");
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT);
+    m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
   }

@@ -259,7 +259,7 @@ uint64_t MetisVM::add_vector_cross(address_mode src1, address_mode src2, uint64_
   RETURN_NEXT();
 }
 
-void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
+uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
 
@@ -269,6 +269,7 @@ void MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const
   memcpy((void *)buffer_end, new_buffer, length);
   add_label_val(label, buffer_end-buffer);
   buffer_end+=length;
+  return buffer_end-length-buffer;
 }
 
 
@@ -354,15 +355,14 @@ uint64_t MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, GLvoid *data, GLenum usage) {
+uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage) {
   CHECK_INSTRUCTION(INS_GLBUFFERDATA_SIZE);
-  CHECK_POINTER(data);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLBUFFERDATA;      
   instruction->commands.glbufferdata.target = target;
   instruction->commands.glbufferdata.size   = size;
-  instruction->commands.glbufferdata.data   = data;
+  instruction->commands.glbufferdata.data   = (GLvoid *)(buffer+data_index);
   instruction->commands.glbufferdata.usage  = usage;
   registers[REGIP] +=  INS_GLBUFFERDATA_SIZE;
   RETURN_NEXT();
@@ -383,7 +383,7 @@ uint64_t MetisVM::add_glvertexattribpointer(GLuint index, GLint size,
                              GLenum type, GLboolean normalized, 
                              GLsizei stride, GLvoid *pointer) {
   CHECK_INSTRUCTION(INS_GLVERTEXATTRIBPOINTER_SIZE);
-  CHECK_POINTER(pointer);
+  //CHECK_POINTER(pointer);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
   instruction->type                         = INS_GLVERTEXATTRIBPOINTER;      
