@@ -1,12 +1,13 @@
 #ifndef METIS_VM
 #define METIS_VM
 
+#define TESTING_ENVIRONMENT 1
+
 //    TODO: 
 // *  1. add build system
 // *  2. add minimal gl subset...
 //    3. open window, draw something
-//    4. matrix ops
-//    5. improve load/save
+// *  4. matrix ops
 
 #include <exception>
 #include <stdexcept>
