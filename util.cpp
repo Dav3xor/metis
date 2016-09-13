@@ -5,12 +5,12 @@ void error_callback(int error, const char* description) {
   fprintf(stderr, "Error: %s\n", description);
 }
 
-void print_glerrors(unsigned int line, char *file) {
+void print_glerrors(unsigned int line, const char *file) {
   bool got_one = false;
   GLenum err = GL_NO_ERROR;
   while((err = glGetError()) != GL_NO_ERROR) {
     got_one = true; 
-    printf("MetisVM GL Error: %d -- line: %d, file: %s\n", err, line, file);
+    printf("MetisVM GL Error: %u (0x%x) -- line: %d, file: %s\n", err, err, line, file);
   } 
   if(got_one) {
     exit(0);

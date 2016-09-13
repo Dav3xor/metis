@@ -97,6 +97,7 @@ using namespace std;
     throw MetisException("null pointer",__LINE__,__FILE__); \
   }
 
+
 #define MATH_OPERATION(op) \
   set_val(ADDR_MODES, \
           get_dest_val(ADDR_MODES) op \
@@ -148,6 +149,7 @@ class MetisException: public runtime_error {
 };
 
 void error_callback(int error, const char* description);
+void print_glerrors(unsigned int line, const char *file);
 void print_matrix(float *matrix, uint8_t width, uint8_t height);
 
 class MetisContext {

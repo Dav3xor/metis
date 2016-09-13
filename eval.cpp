@@ -176,32 +176,50 @@ bool MetisVM::do_eval() {
                        instruction->commands.gldrawelements.count, 
                        instruction->commands.gldrawelements.type, 
                        instruction->commands.gldrawelements.indices);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
         break;
       case INS_GLDRAWARRAYS:
         glDrawArrays(instruction->commands.gldrawarrays.mode, 
                      instruction->commands.gldrawarrays.first, 
                      instruction->commands.gldrawarrays.count);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
         break;
       case INS_GLGENBUFFERS:
         glGenBuffers(instruction->commands.glgenbuffers.num_identifiers, 
                      &(glidentifiers[instruction->commands.glgenbuffers.start_index]));
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLGENBUFFERS_SIZE;
         break;
       case INS_GLGENVERTEXARRAYS:
         glGenBuffers(instruction->commands.glgenvertexarrays.num_identifiers,
                      &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
         break;
       case INS_GLBINDBUFFER:
         glBindBuffer(instruction->commands.glbindbuffer.target, 
                      glidentifiers[instruction->commands.glbindbuffer.buffer_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLBINDBUFFER_SIZE;
         break;
 
       case INS_GLBINDVERTEXARRAY:
         glBindVertexArray(glidentifiers[instruction->commands.glbindvertexarray.array_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
         break;
 
@@ -210,10 +228,16 @@ bool MetisVM::do_eval() {
                      instruction->commands.glbufferdata.size,
                      instruction->commands.glbufferdata.data,
                      instruction->commands.glbufferdata.usage);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLBUFFERDATA_SIZE;
         break;
       case INS_GLENABLEVERTEXATTRIBARRAY:
         glEnableVertexAttribArray(instruction->commands.glenablevertexattribarray.index);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
         break;
       case INS_GLVERTEXATTRIBPOINTER:
@@ -223,13 +247,18 @@ bool MetisVM::do_eval() {
                               instruction->commands.glvertexattribpointer.normalized,
                               instruction->commands.glvertexattribpointer.stride,
                               instruction->commands.glvertexattribpointer.pointer);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
         break;
       case INS_GLDISABLEVERTEXATTRIBARRAY:
         glDisableVertexAttribArray(instruction->commands.gldisablevertexattribarray.index);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
         registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
         break;
-        break; 
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
