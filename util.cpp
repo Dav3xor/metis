@@ -13,7 +13,8 @@ void print_glerrors(unsigned int line, const char *file) {
     printf("MetisVM GL Error: %u (0x%x) -- line: %d, file: %s\n", err, err, line, file);
   } 
   if(got_one) {
-    exit(0);
+    printf("x\n");
+    //exit(0);
   }
 }
 

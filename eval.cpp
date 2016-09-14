@@ -199,6 +199,8 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLGENBUFFERS_SIZE;
         break;
       case INS_GLGENVERTEXARRAYS:
+        printf("num_ids = %d\n",instruction->commands.glgenvertexarrays.num_identifiers);
+        printf("start   = %d\n",instruction->commands.glgenvertexarrays.start_index);
         glGenBuffers(instruction->commands.glgenvertexarrays.num_identifiers,
                      &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
         #ifdef TESTING_ENVIRONMENT
@@ -216,6 +218,8 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_GLBINDVERTEXARRAY:
+        printf("index = %u\n",instruction->commands.glbindvertexarray.array_index);
+        printf("id    = %d\n", glidentifiers[instruction->commands.glbindvertexarray.array_index]);
         glBindVertexArray(glidentifiers[instruction->commands.glbindvertexarray.array_index]);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);

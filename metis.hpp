@@ -76,8 +76,6 @@ using namespace std;
 #define INS_END_SIZE                         1
 
 
-//#define ADVANCE(extended, data) (32)
-//#define ADVANCE(extended, data)   sizeof(MetisInstruction)                 
 #define ADVANCE(extended, data)   (1+extended+data)
 
 #define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)start;
