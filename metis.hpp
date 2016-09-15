@@ -367,6 +367,11 @@ class MetisVM {
     bool eval(const char *label);
     bool do_eval();
 
+
+    GLuint get_glidentifier(uint16_t index) {
+      return glidentifiers[index];
+    }
+
     uint64_t get_label(const char *label) {
       return labels.at(label);
     }
