@@ -159,15 +159,17 @@ class MetisContext {
       }
       printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
+      monitor = glfwGetPrimaryMonitor();
     }
-    GLFWwindow *create_window(uint32_t window_id, 
-                  uint32_t width, uint32_t height, 
-                  const char *title, GLFWmonitor *monitor, GLFWwindow *share) {
+
+
+    GLFWwindow *create_window(uint32_t window_id, const char *title) {
       if (window_id>7) {
         throw MetisException("invalid window id",__LINE__,__FILE__);
       }
 
-      windows[window_id] = glfwCreateWindow(width, height, title, monitor, share);
+      const GLFWvidmode *vidmode = glfwGetVideoMode(monitor);
+      windows[window_id] = glfwCreateWindow(vidmode->width, vidmode->height, title, monitor, NULL);
 
       if(!windows[window_id]) {
         glfwTerminate();
@@ -190,7 +192,8 @@ class MetisContext {
       glfwTerminate();
     }
   private:
-    GLFWwindow *windows[8];
+    GLFWwindow  *windows[8];
+    GLFWmonitor *monitor;
     uint32_t cur_window; 
 };
 
