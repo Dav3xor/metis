@@ -203,6 +203,7 @@ bool MetisVM::do_eval() {
         printf("start   = %d\n",instruction->commands.glgenvertexarrays.start_index);
         glGenBuffers(instruction->commands.glgenvertexarrays.num_identifiers,
                      &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
+        printf("vertexarray id = %d\n",glidentifiers[instruction->commands.glgenvertexarrays.start_index]);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -262,6 +263,20 @@ bool MetisVM::do_eval() {
         print_glerrors(__LINE__,__FILE__);
         #endif
         registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
+        break;
+      case INS_GLENABLE:
+        glEnable(instruction->commands.glenable.capability);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLENABLE_SIZE;
+        break;
+      case INS_GLDEPTHFUNC:
+        glEnable(instruction->commands.gldepthfunc.function);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
         break;
       case INS_DATA:
         advance = instruction->commands.data.length;

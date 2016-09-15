@@ -64,7 +64,8 @@ using namespace std;
 #define INS_GLVERTEXATTRIBPOINTER_SIZE       1+sizeof(GLuint)+sizeof(GLint)+sizeof(GLenum)+\
                                                sizeof(GLboolean)+sizeof(GLsizei)+sizeof(GLvoid *)
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
-
+#define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
+#define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -264,6 +265,8 @@ class MetisVM {
                                INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   
                                INS_GLGENVERTEXARRAYS             =   41,   
                                INS_GLBINDVERTEXARRAY             =   42,   
+                               INS_GLENABLE                      =   43,
+                               INS_GLDEPTHFUNC                   =   44,
  
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -359,6 +362,10 @@ class MetisVM {
                                        GLenum type, GLboolean normalized, 
                                        GLsizei stride, GLvoid *pointer);
     uint64_t add_gldisablevertexattribarray(GLuint index);
+    uint64_t add_glenable(GLenum capability);
+    uint64_t add_gldepthfunc(GLenum function);
+    
+
 
     void save(const string &filename);
     void load(const string &filename);           
@@ -508,6 +515,14 @@ class MetisVM {
         struct gldisablevertexattribarray_t {
           GLuint index;
         }__attribute__((packed))gldisablevertexattribarray;
+
+        struct glenable_t {
+          GLenum capability;
+        }__attribute__((packed))glenable;
+
+        struct gldepthfunc_t {
+          GLenum function;
+        }__attribute__((packed))gldepthfunc;
 
         struct jumpi_t {
           uint64_t value;

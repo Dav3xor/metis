@@ -408,3 +408,25 @@ uint64_t MetisVM::add_gldisablevertexattribarray(GLuint index) {
 };
 
 
+uint64_t MetisVM::add_glenable(GLenum capability) {
+  CHECK_INSTRUCTION(INS_GLENABLE_SIZE);
+
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLENABLE;
+  instruction->commands.glenable.capability = capability;
+  registers[REGIP] += INS_GLENABLE_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gldepthfunc(GLenum function) {
+  CHECK_INSTRUCTION(INS_GLDEPTHFUNC_SIZE);
+
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLDEPTHFUNC;
+  instruction->commands.gldepthfunc.function   = function;
+  registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
+  RETURN_NEXT();
+};
+
+
+

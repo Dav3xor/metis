@@ -950,9 +950,9 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   //REQUIRE(c.current_window(0) != NULL);
 
   //REQUIRE_THROWS_AS(c.current_window(1), MetisException);
-  printf("1\n");
   m.eval("init");
-  printf("2\n");
+  printf("id0 = %d",m.get_glidentifier(0));
+  printf("id1 = %d",m.get_glidentifier(1));
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT);
     m.eval("mainloop");
