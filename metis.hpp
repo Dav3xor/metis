@@ -157,6 +157,12 @@ class MetisContext {
       if(!glfwInit()) {
         printf("glfwInit failed\n");
       }
+      glfwWindowHint (GLFW_SAMPLES, 4);
+      glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
+      glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
+      glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+      glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
       printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
       monitor = glfwGetPrimaryMonitor();

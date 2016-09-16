@@ -941,6 +941,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   m.add_gldisablevertexattribarray(0);
+
   m.add_end();
   // make sure error conditions for creating windows work.
   //REQUIRE_THROWS_AS(c.create_window(-1,500,500,"title",NULL,NULL), MetisException);
@@ -955,7 +956,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   printf("id1 = %d",m.get_glidentifier(1));
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT);
-    m.eval("mainloop");
+    //m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
