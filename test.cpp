@@ -957,7 +957,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   printf("id1 = %d",m.get_glidentifier(1));
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT);
-    //m.eval("mainloop");
+    m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
