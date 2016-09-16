@@ -201,8 +201,8 @@ bool MetisVM::do_eval() {
       case INS_GLGENVERTEXARRAYS:
         printf("num_ids = %d\n",instruction->commands.glgenvertexarrays.num_identifiers);
         printf("start   = %d\n",instruction->commands.glgenvertexarrays.start_index);
-        glGenBuffers(instruction->commands.glgenvertexarrays.num_identifiers,
-                     &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
+        glGenVertexArrays(instruction->commands.glgenvertexarrays.num_identifiers,
+                          &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
         printf("vertexarray id = %d\n",glidentifiers[instruction->commands.glgenvertexarrays.start_index]);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
