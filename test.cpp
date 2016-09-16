@@ -927,12 +927,13 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
 
   m.add_label_ip("init");
-  m.add_glgenvertexarrays(1,0);
-  m.add_glbindvertexarray(0);
-
   m.add_glgenbuffers(1,1);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
+  
+  m.add_glgenvertexarrays(1,0);
+  m.add_glbindvertexarray(0);
+
   m.add_end();
 
   m.add_label_ip("mainloop");

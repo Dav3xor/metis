@@ -59,7 +59,7 @@ using namespace std;
 #define INS_GLGENVERTEXARRAYS_SIZE           1+sizeof(GLsizei)+sizeof(GLuint *)
 #define INS_GLBINDVERTEXARRAY_SIZE           1+sizeof(GLuint)
 #define INS_GLBINDBUFFER_SIZE                1+sizeof(GLenum)+sizeof(GLuint)
-#define INS_GLBUFFERDATA_SIZE                1+sizeof(GLuint)
+#define INS_GLBUFFERDATA_SIZE                1+sizeof(GLenum)+sizeof(GLsizeiptr)+sizeof(uint64_t)+sizeof(GLenum)
 #define INS_GLENABLEVERTEXATTRIBARRAY_SIZE   1+sizeof(GLuint)
 #define INS_GLVERTEXATTRIBPOINTER_SIZE       1+sizeof(GLuint)+sizeof(GLint)+sizeof(GLenum)+\
                                                sizeof(GLboolean)+sizeof(GLsizei)+sizeof(GLvoid *)
@@ -164,7 +164,7 @@ class MetisContext {
       glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
       printf("MetisVM: startup\n");
-      glfwSetErrorCallback(error_callback); 
+      //glfwSetErrorCallback(error_callback); 
       monitor = glfwGetPrimaryMonitor();
     }
 
@@ -495,7 +495,7 @@ class MetisVM {
         struct glbufferdata_t {
           GLenum target;
           GLsizeiptr size;
-          GLvoid *data; 
+          uint64_t data_index; 
           GLenum usage;
         }__attribute__((packed))glbufferdata;
 

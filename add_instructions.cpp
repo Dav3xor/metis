@@ -358,13 +358,13 @@ uint64_t MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
 uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage) {
   CHECK_INSTRUCTION(INS_GLBUFFERDATA_SIZE);
 
-  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
-  instruction->type                         = INS_GLBUFFERDATA;      
-  instruction->commands.glbufferdata.target = target;
-  instruction->commands.glbufferdata.size   = size;
-  instruction->commands.glbufferdata.data   = (GLvoid *)(buffer+data_index);
-  instruction->commands.glbufferdata.usage  = usage;
-  registers[REGIP] +=  INS_GLBUFFERDATA_SIZE;
+  MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP];
+  instruction->type                               = INS_GLBUFFERDATA;      
+  instruction->commands.glbufferdata.target       = target;
+  instruction->commands.glbufferdata.size         = size;
+  instruction->commands.glbufferdata.data_index   = data_index;
+  instruction->commands.glbufferdata.usage        = usage;
+  registers[REGIP] +=  INS_GLBUFFERDATA_SIZE;  
   RETURN_NEXT();
 };
 

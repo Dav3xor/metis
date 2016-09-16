@@ -231,7 +231,7 @@ bool MetisVM::do_eval() {
       case INS_GLBUFFERDATA:
         glBufferData(instruction->commands.glbufferdata.target, 
                      instruction->commands.glbufferdata.size,
-                     instruction->commands.glbufferdata.data,
+                     buffer+instruction->commands.glbufferdata.data_index,
                      instruction->commands.glbufferdata.usage);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
