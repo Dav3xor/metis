@@ -612,7 +612,7 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
 
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result2");
   float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 2, 2);
+  //print_matrix(matrix3, 2, 2);
   REQUIRE(matrix3[0] == Approx(36));
   REQUIRE(matrix3[1] == Approx(41));
   REQUIRE(matrix3[2] == Approx(64));
@@ -620,14 +620,14 @@ TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
 
   header = (MetisMatrixHeader *)m.get_ptr_from_label("result1");
   matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 4, 4);
+  //print_matrix(matrix3, 4, 4);
   REQUIRE(matrix3[0] == Approx(1.1));
   REQUIRE(matrix3[15] == Approx(4.4));
 
 
   header = (MetisMatrixHeader *)m.get_ptr_from_label("result3");
   matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 2, 4);
+  //print_matrix(matrix3, 2, 4);
   REQUIRE(matrix3[0] == Approx(26));
   REQUIRE(matrix3[7] == Approx(103));
 
@@ -670,7 +670,7 @@ TEST_CASE ( "vector add", "[MetisVM]" ) {
 
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
   float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 3, 5);
+  //print_matrix(matrix3, 3, 5);
   REQUIRE(matrix3[0]  == Approx(1.21));
   REQUIRE(matrix3[1]  == Approx(1.41));
   REQUIRE(matrix3[2]  == Approx(1.61));
@@ -715,7 +715,7 @@ TEST_CASE ( "vector dot", "[MetisVM]" ) {
 
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
   float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 1, 5);
+  //print_matrix(matrix3, 1, 5);
   REQUIRE(matrix3[0]  == Approx(44));
   REQUIRE(matrix3[1]  == Approx(1.472));
   REQUIRE(matrix3[2]  == Approx(2.228));
@@ -760,7 +760,7 @@ TEST_CASE ( "vector cross", "[MetisVM]" ) {
 
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("result");
   float *matrix3 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
-  print_matrix(matrix3, 3, 5);
+  //print_matrix(matrix3, 3, 5);
   REQUIRE(matrix3[0]  == Approx(-5.0));
   REQUIRE(matrix3[1]  == Approx(10.0));
   REQUIRE(matrix3[2]  == Approx(-5.0));
@@ -920,7 +920,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
                       0.2, 0.8,0.0};
   
   GLFWwindow *win = c.create_window(0,"title");
-  c.current_window(0);
+  win=c.current_window(0);
 
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
@@ -939,7 +939,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_label_ip("mainloop");
   m.add_glenablevertexattribarray(0);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
-  m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,0,(void *)0);
+  m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,12,(void *)0);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   m.add_gldisablevertexattribarray(0);
 
@@ -953,8 +953,6 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
   //REQUIRE_THROWS_AS(c.current_window(1), MetisException);
   m.eval("init");
-  printf("id0 = %d",m.get_glidentifier(0));
-  printf("id1 = %d",m.get_glidentifier(1));
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT);
     m.eval("mainloop");

@@ -174,8 +174,9 @@ class MetisContext {
         throw MetisException("invalid window id",__LINE__,__FILE__);
       }
 
-      const GLFWvidmode *vidmode = glfwGetVideoMode(monitor);
-      windows[window_id] = glfwCreateWindow(vidmode->width, vidmode->height, title, monitor, NULL);
+      //const GLFWvidmode *vidmode = glfwGetVideoMode(monitor);
+      //windows[window_id] = glfwCreateWindow(vidmode->width, vidmode->height, title, monitor, NULL);
+      windows[window_id] = glfwCreateWindow(500,500, title, NULL, NULL);
 
       if(!windows[window_id]) {
         glfwTerminate();
