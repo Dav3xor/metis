@@ -308,7 +308,6 @@ class MetisVM {
             uint8_t *glbuffer_loc, uint64_t glbuffer_len) { 
       code_start            = instruction_loc;
       code_end              = instruction_loc+instruction_len;
-      code_size             = 0;
       stack                 = (MetisMemoryCell *)stack_loc;
       stack_size            = stack_len;
       buffer                = glbuffer_loc;
@@ -425,7 +424,6 @@ class MetisVM {
     uint64_t    numcommands;
     
     uint8_t    *code_start;
-    uint64_t    code_size;
     uint8_t    *code_end;
 
     uint8_t    *buffer;      
