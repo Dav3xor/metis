@@ -917,7 +917,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   uint64_t triangle_location;
   float buffer[9] = {-0.8,-0.8,0.0,
                       0.8,-0.8,0.0,
-                      0.2, 0.8,0.0};
+                      0.0, 0.8,0.0};
   
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
@@ -925,15 +925,15 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
-
+  printf("tl = %ld\n", triangle_location);
   m.add_label_ip("init");
+  m.add_glgenvertexarrays(1,0);
+  m.add_glbindvertexarray(0);
+
   m.add_glgenbuffers(1,1);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
   
-  m.add_glgenvertexarrays(1,0);
-  m.add_glbindvertexarray(0);
-
   m.add_end();
 
   m.add_label_ip("mainloop");
@@ -953,8 +953,9 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
   //REQUIRE_THROWS_AS(c.current_window(1), MetisException);
   m.eval("init");
+  glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();

@@ -79,15 +79,15 @@ using namespace std;
 
 #define ADVANCE(extended, data)   (1+extended+data)
 
-#define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)start;
+#define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)code_start;
 
 #define CHECK_INSTRUCTION(instruction_length) \
-  if ((uint8_t *)(registers[REGIP] + instruction_length) > end) { \
+  if ((uint8_t *)(registers[REGIP] + instruction_length) > code_end) { \
     throw MetisException("attempt to add instruction past address space",__LINE__,__FILE__); \
   } 
 
 #define CHECK_LOCATION(location) \
-  if (location > (uint64_t)(end-start-1)) { \
+  if (location > (uint64_t)(code_end-code_start-1)) { \
     throw MetisException("attempt to use location outside address space",__LINE__,__FILE__); \
   }
 
@@ -109,7 +109,7 @@ using namespace std;
         instruction->type                               = byte_code; \
         instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
         registers[REGIP] += ADVANCE(1, 0); \
-        return (uint64_t)start-(uint64_t)instruction; \
+        return (uint64_t)code_start-(uint64_t)instruction; \
       };
 
 #define METIS_NUM_BUFFERS 16
@@ -163,6 +163,7 @@ class MetisContext {
       glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
       glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+  
       printf("MetisVM: startup\n");
       //glfwSetErrorCallback(error_callback); 
       monitor = glfwGetPrimaryMonitor();
@@ -291,22 +292,23 @@ class MetisVM {
       registers[REGC]   = 0;
       registers[REGD]   = 0;
       registers[REGSP]  = 0;
-      registers[REGIP]  = (uint64_t)start;
+      registers[REGIP]  = (uint64_t)code_start;
       registers[REGBP]  = (uint64_t)buffer;
       registers[REGERR] = 0;
     };
 
     void hard_reset(void) {
       labels.empty();
-      memset(start,0,end-start);
+      memset(code_start,0,code_end-code_start);
       reset();
     }
 
     MetisVM(uint8_t *instruction_loc, uint64_t instruction_len, 
             uint64_t *stack_loc, uint64_t stack_len,
             uint8_t *glbuffer_loc, uint64_t glbuffer_len) { 
-      start                 = instruction_loc;
-      end                   = instruction_loc+instruction_len;
+      code_start            = instruction_loc;
+      code_end              = instruction_loc+instruction_len;
+      code_size             = 0;
       stack                 = (MetisMemoryCell *)stack_loc;
       stack_size            = stack_len;
       buffer                = glbuffer_loc;
@@ -394,7 +396,7 @@ class MetisVM {
     }
 
     uint8_t  *get_ptr_from_label (const char *label) {
-      return (uint8_t *)(start + get_label(label));
+      return (uint8_t *)(code_start + get_label(label));
     }
 
     uint8_t  *get_bufloc_from_label (const char *label) {
@@ -422,8 +424,9 @@ class MetisVM {
 
     uint64_t    numcommands;
     
-    uint8_t    *start;
-    uint8_t    *end;
+    uint8_t    *code_start;
+    uint64_t    code_size;
+    uint8_t    *code_end;
 
     uint8_t    *buffer;      
     uint64_t    buffer_size;

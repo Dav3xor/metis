@@ -2,12 +2,12 @@
 
 
 #define LOAD_MATRIX(type)\
-        matrix_a      = (MetisMatrixHeader *)((uint64_t)start + get_val(ADDR_MODES));\
-        matrix_b      = (MetisMatrixHeader *)((uint64_t)start + get_dest_val(ADDR_MODES));\
-        destination_matrix  = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.extended.ext.type.destination);\
-        a = (float *)((uint64_t)start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
-        b = (float *)((uint64_t)start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
-        d = (float *)((uint64_t)start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+        matrix_a      = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
+        matrix_b      = (MetisMatrixHeader *)((uint64_t)code_start + get_dest_val(ADDR_MODES));\
+        destination_matrix  = (MetisMatrixHeader *)((uint64_t)code_start + instruction->commands.extended.ext.type.destination);\
+        a = (float *)((uint64_t)code_start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
+        b = (float *)((uint64_t)code_start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
+        d = (float *)((uint64_t)code_start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
 bool MetisVM::eval(const char *label) {
   reset();
   registers[REGIP] = (uint64_t)get_ptr_from_label(label);
@@ -30,41 +30,41 @@ bool MetisVM::do_eval() {
   float             *d;
   uint8_t            i,j,k;
   uint32_t           num_bytes;
-  while(registers[REGIP] <= (uint64_t)end) {
+  while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
     //printf("--> %u\n", instruction->type);
     switch (instruction->type) {
       // instruction index and stack instructions
       case INS_JUMP:
-        registers[REGIP] = (uint64_t)start + get_val(ADDR_MODES);
+        registers[REGIP] = (uint64_t)code_start + get_val(ADDR_MODES);
         break;
       case INS_JUMPI:
-        registers[REGIP] = (uint64_t)start + instruction->commands.jumpi.value;
+        registers[REGIP] = (uint64_t)code_start + instruction->commands.jumpi.value;
         break;
       case INS_JNE:
         if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
-          registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jne.value;
+          registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jne.value;
         } else {
           registers[REGIP] += INS_JNE_SIZE;
         }
         break; 
       case INS_JMPE:
         if(get_val(ADDR_MODES) == get_dest_val(ADDR_MODES)) {
-          registers[REGIP] = (uint64_t)start + instruction->commands.extended.ext.jmpe.value;
+          registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jmpe.value;
         } else {
           registers[REGIP] += INS_JMPE_SIZE;
         }
         break; 
       case INS_JIZZ:
         if (get_val(ADDR_MODES)==0) {
-          registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
+          registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
         } else {
           registers[REGIP] += INS_JIZZ_SIZE;
         }
         break;
       case INS_JNZ:
         if (get_val(ADDR_MODES)!=0) {
-          registers[REGIP] = (uint64_t)start + get_dest_val(ADDR_MODES);
+          registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
         } else {
           registers[REGIP] += INS_JNZ_SIZE;
         }
@@ -123,7 +123,7 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_PUSH_MATRIX:
-        matrix_a = (MetisMatrixHeader *)((uint64_t)start + instruction->commands.pushmatrix.location);
+        matrix_a = (MetisMatrixHeader *)((uint64_t)code_start + instruction->commands.pushmatrix.location);
         num_bytes     = matrix_a->width * matrix_a->height * 4;
         memcpy((char *)&stack[registers[REGSP]], (char *)matrix_a, num_bytes+sizeof(MetisMatrixHeader));
         registers[REGSP] += num_bytes/8 + 1;
