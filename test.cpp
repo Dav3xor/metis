@@ -925,7 +925,6 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
-  printf("tl = %ld\n", triangle_location);
   m.add_label_ip("init");
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);

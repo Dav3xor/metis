@@ -38,9 +38,6 @@ void MetisVM::load(const string &filename) {
   uint16_t label_len;
   uint16_t header_len;
   uint64_t code_len;
-  uint64_t shader_len;
-  uint8_t  shader_type;
-  uint16_t shader_id;
   uint64_t buffer_len;
   uint64_t value;
   reset();
@@ -87,13 +84,6 @@ void MetisVM::load(const string &filename) {
         }
         infile.read((char *) registers[REGIP], code_len);
         registers[REGIP] += code_len; 
-        break;
-      case 'S':     // shader
-        infile.read((char *)&shader_len,8);
-        infile.read((char *)&shader_type,1);
-        infile.read((char *)&shader_id,2);
-        infile.read((char *) registers[REGIP], shader_len);
-        // compile shader...
         break;
     }
   }
