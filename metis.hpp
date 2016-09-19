@@ -66,6 +66,9 @@ using namespace std;
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
 #define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
 #define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
+#define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(uint16_t)
+#define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(GLsizei)+sizeof(uint64_t)+sizeof(GLint)
+#define INS_GLCOMPILESHADER_SIZE             1+sizeof(uint16_t)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -278,6 +281,9 @@ class MetisVM {
                                INS_GLBINDVERTEXARRAY             =   42,   
                                INS_GLENABLE                      =   43,
                                INS_GLDEPTHFUNC                   =   44,
+                               INS_GLCREATESHADER                =   45,
+                               INS_GLSHADERSOURCE                =   46,
+                               INS_GLCOMPILESHADER               =   47,
  
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -375,7 +381,10 @@ class MetisVM {
     uint64_t add_gldisablevertexattribarray(GLuint index);
     uint64_t add_glenable(GLenum capability);
     uint64_t add_gldepthfunc(GLenum function);
-    
+    uint64_t add_glcreateshader(GLenum type, uint16_t start_index);
+    uint64_t add_glshadersource(GLuint shader, uint64_t source_index);
+    uint64_t add_glcompileshader(uint16_t index);
+
 
 
     void save(const string &filename);
@@ -534,6 +543,21 @@ class MetisVM {
         struct gldepthfunc_t {
           GLenum function;
         }__attribute__((packed))gldepthfunc;
+        
+        struct glcreateshader_t {
+          GLenum type; 
+          uint16_t start_index;
+        }__attribute__((packed)) glcreateshader;
+
+
+        struct glshadersource_t {
+          GLuint shader; 
+          uint64_t source_index;
+        }__attribute__((packed)) glshadersource;
+
+        struct glcompileshader_t {
+          uint16_t index;
+        }__attribute__((packed)) glcompileshader;
 
         struct jumpi_t {
           uint64_t value;
