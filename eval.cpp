@@ -273,6 +273,15 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
         break;
+      case INS_GLCREATESHADER:
+        glidentifiers[instruction->commands.glcreateshader.start_index] = glCreateShader(instruction->commands.glcreateshader.type);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLCREATESHADER_SIZE;
+        break;
+      case INS_GLSHADERSOURCE:
+      case INS_GLCOMPILESHADER:
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
