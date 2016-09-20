@@ -281,7 +281,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLCREATESHADER_SIZE;
         break;
       case INS_GLSHADERSOURCE:
-        glShaderSource(instruction->commands.glshadersource.source_index,
+        glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
                        1, (const GLchar * const *)(code_start + instruction->commands.glshadersource.source_index),
                        NULL);
         #ifdef TESTING_ENVIRONMENT
@@ -289,7 +289,14 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
-      //case INS_GLCOMPILESHADER:
+      case INS_GLCOMPILESHADER:
+        glCompileShader(glidentifiers[instruction->commands.glcompileshader.index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
+        break;
+
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
