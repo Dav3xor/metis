@@ -429,4 +429,34 @@ uint64_t MetisVM::add_gldepthfunc(GLenum function) {
 };
 
 
+uint64_t MetisVM::add_glcreateshader(GLenum type, uint16_t start_index) {
+  CHECK_INSTRUCTION(INS_GLCREATESHADER_SIZE);
+
+  MetisInstruction *instruction                    = (MetisInstruction *)registers[REGIP];
+  instruction->type                                = INS_GLDEPTHFUNC;
+  instruction->commands.glcreateshader.type        = type;
+  instruction->commands.glcreateshader.start_index = start_index;
+  registers[REGIP] += INS_GLCREATESHADER_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_glshadersource(GLuint shader, uint64_t source_index) {
+  CHECK_INSTRUCTION(INS_GLSHADERSOURCE_SIZE);
+
+  MetisInstruction *instruction                     = (MetisInstruction *)registers[REGIP];
+  instruction->type                                 = INS_GLSHADERSOURCE;
+  instruction->commands.glshadersource.shader       = shader;
+  instruction->commands.glshadersource.source_index = source_index;
+  registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
+  RETURN_NEXT();
+};
+uint64_t MetisVM::add_glcompileshader(uint16_t index) {
+  CHECK_INSTRUCTION(INS_GLCOMPILESHADER_SIZE);
+
+  MetisInstruction *instruction                     = (MetisInstruction *)registers[REGIP];
+  instruction->type                                 = INS_GLCOMPILESHADER;
+  instruction->commands.glcompileshader.index       = index;
+  registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
+  RETURN_NEXT();
+};
 

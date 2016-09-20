@@ -6,8 +6,9 @@
 //    TODO: 
 // *  1. add build system
 // *  2. add minimal gl subset...
-//    3. open window, draw something
+// *  3. open window, draw something
 // *  4. matrix ops
+//    5. organize gl instructions (remove not needed arguments, make indexes 16 bit, etc...)
 
 #include <exception>
 #include <stdexcept>
