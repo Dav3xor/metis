@@ -267,7 +267,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLENABLE_SIZE;
         break;
       case INS_GLDEPTHFUNC:
-        glEnable(instruction->commands.gldepthfunc.function);
+        glDepthFunc(instruction->commands.gldepthfunc.function);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -290,7 +290,9 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
       case INS_GLCOMPILESHADER:
-        doCompileShader(glidentifiers[instruction->commands.glcompileshader.index]);
+        if(!(doCompileShader(glidentifiers[instruction->commands.glcompileshader.index]))) {
+          return false;
+        }
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif

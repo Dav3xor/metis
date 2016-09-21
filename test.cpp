@@ -918,7 +918,14 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   float buffer[9] = {-0.8,-0.8,0.0,
                       0.8,-0.8,0.0,
                       0.0, 0.8,0.0};
-  
+ 
+  const char* vertex_shader =
+  "#version 400\n"
+  "in vec3 vp;"
+  "void main () {"
+  "  gl_Position = vec4 (vp, 1.0);"
+  "}";
+
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
 
@@ -926,12 +933,18 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.hard_reset();
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
   m.add_label_ip("init");
+
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
 
   m.add_glgenbuffers(1,1);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
+
+  m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
+  m.add_glcreateshader(GL_VERTEX_SHADER, 2);
+  m.add_glshadersource(2, m.get_label("vertex_shader"));
+  m.add_glcompileshader(2);
   
   m.add_end();
 

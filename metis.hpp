@@ -68,7 +68,7 @@ using namespace std;
 #define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
 #define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
 #define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(uint16_t)
-#define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(GLsizei)+sizeof(uint64_t)+sizeof(GLint)
+#define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(uint64_t)
 #define INS_GLCOMPILESHADER_SIZE             1+sizeof(uint16_t)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
