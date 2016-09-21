@@ -387,6 +387,7 @@ class MetisVM {
     uint64_t add_glcompileshader(uint16_t index);
 
 
+    bool doCompileShader(uint16_t index);
 
     void save(const string &filename);
     void load(const string &filename);           

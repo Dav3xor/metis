@@ -290,7 +290,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
       case INS_GLCOMPILESHADER:
-        glCompileShader(glidentifiers[instruction->commands.glcompileshader.index]);
+        doCompileShader(glidentifiers[instruction->commands.glcompileshader.index]);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -321,3 +321,30 @@ bool MetisVM::do_eval() {
   };
   return false;
 };
+
+
+
+bool MetisVM::doCompileShader(uint16_t index) {
+  GLuint shader = glidentifiers[index];
+
+  glCompileShader(shader);
+
+  GLint isCompiled = 0;
+  glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+  if(isCompiled == GL_FALSE) {
+    char log[1000];
+    GLint len = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
+
+    // The maxLength includes the NULL character
+    glGetShaderInfoLog(shader, 1000, &len, log);
+
+    printf("%s\n",log);
+
+    throw MetisException("Shader Compilation Failed.",__LINE__,__FILE__);
+    // Exit with failure.
+    glDeleteShader(shader); // Don't leak the shader.
+    return false;
+  }
+  return true;
+}
