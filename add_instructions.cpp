@@ -433,7 +433,7 @@ uint64_t MetisVM::add_glcreateshader(GLenum type, uint16_t start_index) {
   CHECK_INSTRUCTION(INS_GLCREATESHADER_SIZE);
 
   MetisInstruction *instruction                    = (MetisInstruction *)registers[REGIP];
-  instruction->type                                = INS_GLDEPTHFUNC;
+  instruction->type                                = INS_GLCREATESHADER;
   instruction->commands.glcreateshader.type        = type;
   instruction->commands.glcreateshader.start_index = start_index;
   registers[REGIP] += INS_GLCREATESHADER_SIZE;
