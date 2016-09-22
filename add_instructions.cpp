@@ -311,7 +311,7 @@ uint64_t MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
+uint64_t MetisVM::add_glgenbuffers(GLsizei n, metisgl_identifier start_index) {
   CHECK_INSTRUCTION(INS_GLGENBUFFERS_SIZE);
 
   MetisInstruction *instruction                  = (MetisInstruction *)registers[REGIP];
@@ -322,7 +322,7 @@ uint64_t MetisVM::add_glgenbuffers(GLsizei n, GLuint start_index) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_index) {
+uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, metisgl_identifier start_index) {
   CHECK_INSTRUCTION(INS_GLGENVERTEXARRAYS_SIZE);
 
   MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
@@ -333,7 +333,7 @@ uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_in
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glbindvertexarray(GLuint array_index) {
+uint64_t MetisVM::add_glbindvertexarray(metisgl_identifier array_index) {
   CHECK_INSTRUCTION(INS_GLBINDVERTEXARRAY_SIZE);
 
   MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
@@ -344,7 +344,7 @@ uint64_t MetisVM::add_glbindvertexarray(GLuint array_index) {
 };
 
 
-uint64_t MetisVM::add_glbindbuffer(GLenum target, GLuint buffer_index) {
+uint64_t MetisVM::add_glbindbuffer(GLenum target, metisgl_identifier buffer_index) {
   CHECK_INSTRUCTION(INS_GLBINDBUFFER_SIZE);
 
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
@@ -429,7 +429,7 @@ uint64_t MetisVM::add_gldepthfunc(GLenum function) {
 };
 
 
-uint64_t MetisVM::add_glcreateshader(GLenum type, uint16_t start_index) {
+uint64_t MetisVM::add_glcreateshader(GLenum type, metisgl_identifier start_index) {
   CHECK_INSTRUCTION(INS_GLCREATESHADER_SIZE);
 
   MetisInstruction *instruction                    = (MetisInstruction *)registers[REGIP];
@@ -440,7 +440,7 @@ uint64_t MetisVM::add_glcreateshader(GLenum type, uint16_t start_index) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_glshadersource(GLuint shader, uint64_t source_index) {
+uint64_t MetisVM::add_glshadersource(GLuint shader, metisgl_identifier source_index) {
   CHECK_INSTRUCTION(INS_GLSHADERSOURCE_SIZE);
 
   MetisInstruction *instruction                     = (MetisInstruction *)registers[REGIP];
@@ -450,7 +450,7 @@ uint64_t MetisVM::add_glshadersource(GLuint shader, uint64_t source_index) {
   registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
   RETURN_NEXT();
 };
-uint64_t MetisVM::add_glcompileshader(uint16_t index) {
+uint64_t MetisVM::add_glcompileshader(metisgl_identifier index) {
   CHECK_INSTRUCTION(INS_GLCOMPILESHADER_SIZE);
 
   MetisInstruction *instruction                     = (MetisInstruction *)registers[REGIP];

@@ -56,10 +56,10 @@ using namespace std;
 
 #define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(GLvoid *)
 #define INS_GLDRAWARRAYS_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLsizei)
-#define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(GLuint)
-#define INS_GLGENVERTEXARRAYS_SIZE           1+sizeof(GLsizei)+sizeof(GLuint *)
-#define INS_GLBINDVERTEXARRAY_SIZE           1+sizeof(GLuint)
-#define INS_GLBINDBUFFER_SIZE                1+sizeof(GLenum)+sizeof(GLuint)
+#define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(metisgl_identifier)
+#define INS_GLGENVERTEXARRAYS_SIZE           1+sizeof(GLsizei)+sizeof(metisgl_identifier)
+#define INS_GLBINDVERTEXARRAY_SIZE           1+sizeof(metisgl_identifier)
+#define INS_GLBINDBUFFER_SIZE                1+sizeof(GLenum)+sizeof(metisgl_identifier)
 #define INS_GLBUFFERDATA_SIZE                1+sizeof(GLenum)+sizeof(GLsizeiptr)+sizeof(uint64_t)+sizeof(GLenum)
 #define INS_GLENABLEVERTEXATTRIBARRAY_SIZE   1+sizeof(GLuint)
 #define INS_GLVERTEXATTRIBPOINTER_SIZE       1+sizeof(GLuint)+sizeof(GLint)+sizeof(GLenum)+\
@@ -67,9 +67,9 @@ using namespace std;
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
 #define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
 #define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
-#define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(uint16_t)
-#define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(uint64_t)
-#define INS_GLCOMPILESHADER_SIZE             1+sizeof(uint16_t)
+#define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(metisgl_identifier)
+#define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(metisgl_identifier)
+#define INS_GLCOMPILESHADER_SIZE             1+sizeof(metisgl_identifier)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -235,6 +235,7 @@ union MetisMemoryCell {
 class MetisVM {
   private:
     // first, the list of instructions...
+    typedef uint16_t metisgl_identifier;
     enum instruction: uint8_t {INS_ERROR                         =    0,   //     should never happen
                                INS_JUMP                          =    1,   // *   jump to index ...
                                INS_JUMPI                         =    2,   //     jump to immediate index
@@ -370,21 +371,21 @@ class MetisVM {
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
                                 GLenum type, GLvoid *indices);
     uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
-    uint64_t add_glgenbuffers(GLsizei num_identifiers, GLuint start_index);
-    uint64_t add_glgenvertexarrays(GLsizei num_identifiers, GLuint start_index);
-    uint64_t add_glbindvertexarray(GLuint array);
-    uint64_t add_glbindbuffer(GLenum target, GLuint buffer_index);
+    uint64_t add_glgenbuffers(GLsizei num_identifiers, metisgl_identifier start_index);
+    uint64_t add_glgenvertexarrays(GLsizei num_identifiers, metisgl_identifier start_index);
+    uint64_t add_glbindvertexarray(metisgl_identifier array);
+    uint64_t add_glbindbuffer(GLenum target, metisgl_identifier buffer_index);
     uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage);
-    uint64_t add_glenablevertexattribarray(GLuint index);
+    uint64_t add_glenablevertexattribarray(GLuint index);     // not a metisgl_identifier...
     uint64_t add_glvertexattribpointer(GLuint index, GLint size, 
                                        GLenum type, GLboolean normalized, 
                                        GLsizei stride, GLvoid *pointer);
     uint64_t add_gldisablevertexattribarray(GLuint index);
     uint64_t add_glenable(GLenum capability);
     uint64_t add_gldepthfunc(GLenum function);
-    uint64_t add_glcreateshader(GLenum type, uint16_t start_index);
-    uint64_t add_glshadersource(GLuint shader, uint64_t source_index);
-    uint64_t add_glcompileshader(uint16_t index);
+    uint64_t add_glcreateshader(GLenum type, metisgl_identifier start_index);
+    uint64_t add_glshadersource(GLuint shader, metisgl_identifier source_index);
+    uint64_t add_glcompileshader(metisgl_identifier index);
 
 
     bool doCompileShader(uint16_t index);
@@ -497,12 +498,12 @@ class MetisVM {
 
         struct glgenbuffers_t {
           GLsizei num_identifiers;
-          GLuint  start_index;
+          metisgl_identifier  start_index;
         }__attribute__((packed))glgenbuffers;
 
         struct glbindbuffer_t {
           GLenum target;
-          GLuint buffer_index;
+          metisgl_identifier buffer_index;
         }__attribute__((packed))glbindbuffer;
 
         struct glbufferdata_t {
@@ -514,11 +515,11 @@ class MetisVM {
 
         struct glgenvertexarrays_t {
           GLsizei num_identifiers;
-          GLuint start_index;
+          metisgl_identifier start_index;
         }__attribute__((packed))glgenvertexarrays;
         
         struct glbindvertexarray_t {
-          GLuint array_index;
+          metisgl_identifier array_index;
         }__attribute__((packed))glbindvertexarray;
 
         struct glenablevertexattribarray_t {
@@ -548,17 +549,17 @@ class MetisVM {
         
         struct glcreateshader_t {
           GLenum type; 
-          uint16_t start_index;
+          metisgl_identifier start_index;
         }__attribute__((packed)) glcreateshader;
 
 
         struct glshadersource_t {
           GLuint shader; 
-          uint64_t source_index;
+          metisgl_identifier source_index;
         }__attribute__((packed)) glshadersource;
 
         struct glcompileshader_t {
-          uint16_t index;
+          metisgl_identifier index;
         }__attribute__((packed)) glcompileshader;
 
         struct jumpi_t {

@@ -282,7 +282,7 @@ bool MetisVM::do_eval() {
         break;
       case INS_GLSHADERSOURCE:
         glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
-                       1, (const GLchar * const *)(code_start + instruction->commands.glshadersource.source_index),
+                       1, (const GLchar * const *)(code_start + instruction->commands.glshadersource.shader),
                        NULL);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
