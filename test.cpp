@@ -943,7 +943,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
   m.add_glcreateshader(GL_VERTEX_SHADER, 2);
-  m.add_glshadersource(2, m.get_label("vertex_shader"));
+  m.add_glshadersource(m.get_label("vertex_shader"), 2);
   m.add_glcompileshader(2);
   
   m.add_end();

@@ -30,6 +30,8 @@ bool MetisVM::do_eval() {
   float             *d;
   uint8_t            i,j,k;
   uint32_t           num_bytes;
+  GLchar *shader_ptr;
+
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
     //printf("--> %u\n", instruction->type);
@@ -281,9 +283,10 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLCREATESHADER_SIZE;
         break;
       case INS_GLSHADERSOURCE:
+        printf("%d\n",instruction->commands.glshadersource.shader);
+        shader_ptr = (GLchar *)(code_start + instruction->commands.glshadersource.shader);
         glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
-                       1, (const GLchar * const *)(code_start + instruction->commands.glshadersource.shader),
-                       NULL);
+                       1, &shader_ptr, NULL);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
