@@ -919,11 +919,18 @@ TEST_CASE( "window stuff", "[MetisContext]") {
                       0.8,-0.8,0.0,
                       0.0, 0.8,0.0};
  
-  const char* vertex_shader =
+  const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;"
   "void main () {"
   "  gl_Position = vec4 (vp, 1.0);"
+  "}";
+
+  const char *fragment_shader =
+  "#version 330 core\n"
+  "out vec3 color;"
+  "void main(){"
+  "  color = vec3(1,0,0);"
   "}";
 
   GLFWwindow *win = c.create_window(0,"title");
@@ -942,9 +949,14 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
 
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
+  m.add_data((const uint8_t *)vertex_shader, strlen(fragment_shader)+1, "fragment_shader");
   m.add_glcreateshader(GL_VERTEX_SHADER, 2);
   m.add_glshadersource(m.get_label("vertex_shader"), 2);
   m.add_glcompileshader(2);
+
+  m.add_glcreateshader(GL_VERTEX_SHADER, 3);
+  m.add_glshadersource(m.get_label("fragment_shader"), 3);
+  m.add_glcompileshader(3);
   
   m.add_end();
 
