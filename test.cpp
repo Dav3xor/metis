@@ -957,7 +957,11 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glcreateshader(GL_VERTEX_SHADER, 3);
   m.add_glshadersource(m.get_label("fragment_shader"), 3);
   m.add_glcompileshader(3);
-  
+ 
+  m.add_glcreateprogram(4);
+  m.add_glattachshader(4,2);
+  m.add_glattachshader(4,3);
+  m.add_gllinkprogram(4);
   m.add_end();
 
   m.add_label_ip("mainloop");

@@ -302,6 +302,45 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
         break;
 
+      case INS_GLCREATEPROGRAM:
+        glidentifiers[instruction->commands.glcreateprogram.program_index] = glCreateProgram();
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLCREATEPROGRAM_SIZE;
+        break;
+
+      case INS_GLATTACHSHADER:
+        glAttachShader(glidentifiers[instruction->commands.glattachshader.program_index], 
+                       glidentifiers[instruction->commands.glattachshader.shader_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLATTACHSHADER_SIZE;
+        break;
+
+      case INS_GLLINKPROGRAM:
+        glLinkProgram(glidentifiers[instruction->commands.gllinkprogram.program_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLLINKPROGRAM_SIZE;
+        break;
+      case INS_GLDETACHSHADER:
+        glDetachShader(glidentifiers[instruction->commands.gldetachshader.program_index], 
+                       glidentifiers[instruction->commands.gldetachshader.shader_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLDETACHSHADER_SIZE;
+        break;
+      case INS_GLDELETESHADER:
+        glDeleteShader(glidentifiers[instruction->commands.gldeleteshader.shader_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLDELETESHADER_SIZE;
+        break;
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
