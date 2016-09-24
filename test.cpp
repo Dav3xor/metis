@@ -921,17 +921,17 @@ TEST_CASE( "window stuff", "[MetisContext]") {
  
   const char *vertex_shader =
   "#version 400\n"
-  "in vec3 vp;"
-  "void main () {"
-  "  gl_Position = vec4 (vp, 1.0);"
-  "}";
+  "in vec3 vp;\n"
+  "void main () {\n"
+  "  gl_Position = vec4 (vp, 1.0);\n"
+  "}\n";
 
   const char *fragment_shader =
   "#version 330 core\n"
-  "out vec3 color;"
-  "void main(){"
-  "  color = vec3(1,0,0);"
-  "}";
+  "out vec3 color;\n"
+  "void main(){\n"
+  "  color = vec3(1,0,0);\n"
+  "}\n";
 
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
@@ -949,7 +949,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
 
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
-  m.add_data((const uint8_t *)vertex_shader, strlen(fragment_shader)+1, "fragment_shader");
+  m.add_data((const uint8_t *)fragment_shader, strlen(fragment_shader)+1, "fragment_shader");
   m.add_glcreateshader(GL_VERTEX_SHADER, 2);
   m.add_glshadersource(m.get_label("vertex_shader"), 2);
   m.add_glcompileshader(2);
@@ -962,6 +962,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glattachshader(4,2);
   m.add_glattachshader(4,3);
   m.add_gllinkprogram(4);
+  m.add_gluseprogram(4);
   m.add_end();
 
   m.add_label_ip("mainloop");

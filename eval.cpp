@@ -293,7 +293,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
       case INS_GLCOMPILESHADER:
-        if(!(doCompileShader(glidentifiers[instruction->commands.glcompileshader.shader_index]))) {
+        if(!(doCompileShader(instruction->commands.glcompileshader.shader_index))) {
           return false;
         }
         #ifdef TESTING_ENVIRONMENT
@@ -320,7 +320,9 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_GLLINKPROGRAM:
-        glLinkProgram(glidentifiers[instruction->commands.gllinkprogram.program_index]);
+        if(!(doLinkProgram(instruction->commands.gllinkprogram.program_index))) {
+          return false;
+        }
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -389,7 +391,10 @@ bool MetisVM::doCompileShader(uint16_t index) {
 
     // The maxLength includes the NULL character
     glGetShaderInfoLog(shader, 1000, &len, log);
-
+    
+    printf("MetisVM: Shader Compilation Failed:\n");
+    printf("index = %u\n",index);
+    printf("-------------------------------------------\n");
     printf("%s\n",log);
 
     throw MetisException("Shader Compilation Failed.",__LINE__,__FILE__);
@@ -399,3 +404,29 @@ bool MetisVM::doCompileShader(uint16_t index) {
   }
   return true;
 }
+
+bool MetisVM::doLinkProgram(uint16_t index) {
+  GLuint program = glidentifiers[index];
+
+  glLinkProgram(program);
+
+  GLint len = 0;
+  GLint isLinked = 0;
+
+  glGetShaderiv(program, GL_LINK_STATUS, &isLinked);
+  glGetShaderiv(program, GL_INFO_LOG_LENGTH, &len);
+  if(len>0) {
+    char log[1000];
+
+    // The maxLength includes the NULL character
+    glGetProgramInfoLog(program, 1000, NULL, log);
+
+    printf("%s\n",log);
+
+    throw MetisException("Shader Compilation Failed.",__LINE__,__FILE__);
+    // Exit with failure.
+    glDeleteProgram(program); // Don't leak the shader.
+    return false;
+  }
+  return true;
+} 
