@@ -70,12 +70,11 @@ using namespace std;
 #define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(metisgl_identifier)
 #define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(metisgl_identifier)
 #define INS_GLCOMPILESHADER_SIZE             1+sizeof(metisgl_identifier)
-
-#define INS_GLCREATEPROGRAM                  1+sizeof(metisgl_identifier)
-#define INS_GLATTACHSHADER                   1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
-#define INS_GLLINKPROGRAM                    1+sizeof(metisgl_identifier)
-#define INS_GLDETACHSHADER                   1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
-#define INS_GLDELETESHADER                   1+sizeof(metisgl_identifier)
+#define INS_GLCREATEPROGRAM_SIZE             1+sizeof(metisgl_identifier)
+#define INS_GLATTACHSHADER_SIZE              1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
+#define INS_GLLINKPROGRAM_SIZE               1+sizeof(metisgl_identifier)
+#define INS_GLDETACHSHADER_SIZE              1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
+#define INS_GLDELETESHADER_SIZE              1+sizeof(metisgl_identifier)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -292,7 +291,12 @@ class MetisVM {
                                INS_GLCREATESHADER                =   45,
                                INS_GLSHADERSOURCE                =   46,
                                INS_GLCOMPILESHADER               =   47,
- 
+                               INS_GLCREATEPROGRAM               =   48,
+                               INS_GLATTACHSHADER                =   49,
+                               INS_GLLINKPROGRAM                 =   50,
+                               INS_GLDETACHSHADER                =   51,
+                               INS_GLDELETESHADER                =   52,
+
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
                                INS_NOOP                          =  254,
