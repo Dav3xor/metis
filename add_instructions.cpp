@@ -517,4 +517,12 @@ uint64_t MetisVM::add_gldeleteshader(metisgl_identifier shader_index) {
 };
 
 
+uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
+  CHECK_INSTRUCTION(INS_GLUSEPROGRAM_SIZE);
 
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLUSEPROGRAM;
+  instruction->commands.gluseprogram.program_index   = program_index;
+  registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
+  RETURN_NEXT();
+};

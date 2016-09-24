@@ -75,6 +75,7 @@ using namespace std;
 #define INS_GLLINKPROGRAM_SIZE               1+sizeof(metisgl_identifier)
 #define INS_GLDETACHSHADER_SIZE              1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
 #define INS_GLDELETESHADER_SIZE              1+sizeof(metisgl_identifier)
+#define INS_GLUSEPROGRAM_SIZE                1+sizeof(metisgl_identifier)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -296,6 +297,7 @@ class MetisVM {
                                INS_GLLINKPROGRAM                 =   50,
                                INS_GLDETACHSHADER                =   51,
                                INS_GLDELETESHADER                =   52,
+                               INS_GLUSEPROGRAM                  =   53,
 
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -413,6 +415,7 @@ class MetisVM {
     uint64_t add_gldetachshader(metisgl_identifier program_index,
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
+    uint64_t add_gluseprogram(metisgl_identifier shader_index);
 
     bool doCompileShader(uint16_t index);
 
@@ -609,6 +612,10 @@ class MetisVM {
         struct add_gldeleteshader_t {
           metisgl_identifier shader_index;
         }__attribute__((packed)) gldeleteshader;
+        
+        struct add_gluseprogram_t {
+          metisgl_identifier program_index;
+        }__attribute__((packed)) gluseprogram;
 
         struct jumpi_t {
           uint64_t value;

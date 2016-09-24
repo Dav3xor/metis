@@ -341,6 +341,13 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDELETESHADER_SIZE;
         break;
+      case INS_GLUSEPROGRAM:
+        glUseProgram(glidentifiers[instruction->commands.gluseprogram.program_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
+        break;
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
