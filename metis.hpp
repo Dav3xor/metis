@@ -370,12 +370,20 @@ class MetisVM {
 
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
                                 GLenum type, GLvoid *indices);
-    uint64_t add_gldrawarrays(GLenum mode, GLint first, GLsizei count);
-    uint64_t add_glgenbuffers(GLsizei num_identifiers, metisgl_identifier start_index);
-    uint64_t add_glgenvertexarrays(GLsizei num_identifiers, metisgl_identifier start_index);
+    uint64_t add_gldrawarrays(GLenum mode, 
+                              GLint first, 
+                              GLsizei count);
+    uint64_t add_glgenbuffers(GLsizei num_identifiers, 
+                              metisgl_identifier start_index);
+    uint64_t add_glgenvertexarrays(GLsizei num_identifiers, 
+                                   metisgl_identifier start_index);
     uint64_t add_glbindvertexarray(metisgl_identifier array);
-    uint64_t add_glbindbuffer(GLenum target, metisgl_identifier buffer_index);
-    uint64_t add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage);
+    uint64_t add_glbindbuffer(GLenum target, 
+                              metisgl_identifier buffer_index);
+    uint64_t add_glbufferdata(GLenum target, 
+                              GLsizeiptr size, 
+                              uint64_t data_index, 
+                              GLenum usage);
     uint64_t add_glenablevertexattribarray(GLuint index);     // not a metisgl_identifier...
     uint64_t add_glvertexattribpointer(GLuint index, GLint size, 
                                        GLenum type, GLboolean normalized, 
@@ -383,10 +391,18 @@ class MetisVM {
     uint64_t add_gldisablevertexattribarray(GLuint index);
     uint64_t add_glenable(GLenum capability);
     uint64_t add_gldepthfunc(GLenum function);
-    uint64_t add_glcreateshader(GLenum type, metisgl_identifier start_index);
-    uint64_t add_glshadersource(GLuint shader, metisgl_identifier source_index);
+    uint64_t add_glcreateshader(GLenum type, 
+                                metisgl_identifier start_index);
+    uint64_t add_glshadersource(GLuint shader, 
+                                metisgl_identifier source_index);
     uint64_t add_glcompileshader(metisgl_identifier index);
-
+    uint64_t add_glcreateprogram(metisgl_identifier program_index);
+    uint64_t add_glattachshader(metisgl_identifier program_index,
+                                metisgl_identifier shader_index);
+    uint64_t add_gllinkprogram(metisgl_identifier program_index);
+    uint64_t add_gldetachshader(metisgl_identifier program_index,
+                                metisgl_identifier shader_index);
+    uint64_t add_gldeleteshader(metisgl_identifier shader_index);
 
     bool doCompileShader(uint16_t index);
 
@@ -559,8 +575,30 @@ class MetisVM {
         }__attribute__((packed)) glshadersource;
 
         struct glcompileshader_t {
-          metisgl_identifier index;
+          metisgl_identifier shader_index;
         }__attribute__((packed)) glcompileshader;
+
+        struct add_glcreateprogram_t {
+          metisgl_identifier program_index;
+        }__attribute__((packed)) glcreateprogram;
+          
+        struct add_glattachshader_t {
+          metisgl_identifier program_index;
+          metisgl_identifier shader_index;
+        }__attribute__((packed)) glattachshader;
+
+        struct add_gllinkprogram_t {
+          metisgl_identifier program_index;
+        }__attribute__((packed)) gllinkprogram;
+
+        struct add_gldetachshader_t {
+          metisgl_identifier program_index;
+          metisgl_identifier shader_index;
+        }__attribute__((packed)) gldetachshader;
+
+        struct add_gldeleteshader_t {
+          metisgl_identifier shader_index;
+        }__attribute__((packed)) gldeleteshader;
 
         struct jumpi_t {
           uint64_t value;

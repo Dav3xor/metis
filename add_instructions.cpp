@@ -453,9 +453,9 @@ uint64_t MetisVM::add_glshadersource(GLuint shader, metisgl_identifier source_in
 uint64_t MetisVM::add_glcompileshader(metisgl_identifier index) {
   CHECK_INSTRUCTION(INS_GLCOMPILESHADER_SIZE);
 
-  MetisInstruction *instruction                     = (MetisInstruction *)registers[REGIP];
-  instruction->type                                 = INS_GLCOMPILESHADER;
-  instruction->commands.glcompileshader.index       = index;
+  MetisInstruction *instruction                      = (MetisInstruction *)registers[REGIP];
+  instruction->type                                  = INS_GLCOMPILESHADER;
+  instruction->commands.glcompileshader.shader_index = index;
   registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
   RETURN_NEXT();
 };

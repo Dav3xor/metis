@@ -293,7 +293,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
       case INS_GLCOMPILESHADER:
-        if(!(doCompileShader(glidentifiers[instruction->commands.glcompileshader.index]))) {
+        if(!(doCompileShader(glidentifiers[instruction->commands.glcompileshader.shader_index]))) {
           return false;
         }
         #ifdef TESTING_ENVIRONMENT
