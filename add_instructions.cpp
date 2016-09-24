@@ -460,3 +460,61 @@ uint64_t MetisVM::add_glcompileshader(metisgl_identifier index) {
   RETURN_NEXT();
 };
 
+uint64_t MetisVM::add_glcreateprogram(metisgl_identifier program_index) {
+  CHECK_INSTRUCTION(INS_GLCREATEPROGRAM_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLCREATEPROGRAM;
+  instruction->commands.glcreateprogram.program_index = program_index;
+  registers[REGIP] += INS_GLCREATEPROGRAM_SIZE;
+  RETURN_NEXT();
+};
+
+
+
+uint64_t MetisVM::add_glattachshader(metisgl_identifier program_index,
+                                     metisgl_identifier shader_index) {
+  CHECK_INSTRUCTION(INS_GLATTACHSHADER_SIZE);
+
+  MetisInstruction *instruction                      = (MetisInstruction *)registers[REGIP];
+  instruction->type                                  = INS_GLATTACHSHADER;
+  instruction->commands.glattachshader.program_index = program_index;
+  instruction->commands.glattachshader.shader_index  = shader_index;
+  registers[REGIP] += INS_GLATTACHSHADER_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gllinkprogram(metisgl_identifier program_index) {
+  CHECK_INSTRUCTION(INS_GLLINKPROGRAM_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLLINKPROGRAM;
+  instruction->commands.gllinkprogram.program_index   = program_index;
+  registers[REGIP] += INS_GLLINKPROGRAM_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gldetachshader(metisgl_identifier program_index,
+                                     metisgl_identifier shader_index) {
+  CHECK_INSTRUCTION(INS_GLDETACHSHADER_SIZE);
+
+  MetisInstruction *instruction                      = (MetisInstruction *)registers[REGIP];
+  instruction->type                                  = INS_GLDETACHSHADER;
+  instruction->commands.gldetachshader.program_index = program_index;
+  instruction->commands.gldetachshader.shader_index  = shader_index;
+  registers[REGIP] += INS_GLDETACHSHADER_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gldeleteshader(metisgl_identifier shader_index) {
+  CHECK_INSTRUCTION(INS_GLDELETESHADER_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLDELETESHADER;
+  instruction->commands.gldeleteshader.shader_index   = shader_index;
+  registers[REGIP] += INS_GLDELETESHADER_SIZE;
+  RETURN_NEXT();
+};
+
+
+
