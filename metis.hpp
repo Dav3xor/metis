@@ -70,6 +70,12 @@ using namespace std;
 #define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(metisgl_identifier)
 #define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(metisgl_identifier)
 #define INS_GLCOMPILESHADER_SIZE             1+sizeof(metisgl_identifier)
+
+#define INS_GLCREATEPROGRAM                  1+sizeof(metisgl_identifier)
+#define INS_GLATTACHSHADER                   1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
+#define INS_GLLINKPROGRAM                    1+sizeof(metisgl_identifier)
+#define INS_GLDETACHSHADER                   1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
+#define INS_GLDELETESHADER                   1+sizeof(metisgl_identifier)
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
