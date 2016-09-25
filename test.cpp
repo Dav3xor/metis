@@ -915,25 +915,30 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   uint8_t glbuf[10000];
   uint64_t stack[5];
   uint64_t triangle_location;
+  uint64_t color_location;
   float buffer[9] =  {-0.8,-0.8,0.0,
                        0.8,-0.8,0.0,
                        0.0, 0.8,0.0};
-  float colors[12] = {1.0,0.0,0.0,1.0,
-                      0.0,1.0,0.0,1.0,
-                      0.0,0.0,1.0,1.0};
+  float colors[9] =  {1.0,0.5,0.0,
+                      0.0,1.0,0.5,
+                      0.5,0.0,1.0};
  
   const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;\n"
+  "in vec3 color;\n"
+  "out vec3 vcolor;\n"
   "void main () {\n"
   "  gl_Position = vec4 (vp, 1.0);\n"
+  "  vcolor = color;\n"
   "}\n";
 
   const char *fragment_shader =
   "#version 330 core\n"
+  "in vec3 vcolor;\n"
   "out vec3 color;\n"
   "void main(){\n"
-  "  color = vec3(1,0,0);\n"
+  "  color = vcolor;\n"
   "}\n";
 
   GLFWwindow *win = c.create_window(0,"title");
@@ -942,14 +947,21 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
+  color_location    = m.add_buffer((uint8_t*)colors,sizeof(float)*9,"color");
+
   m.add_label_ip("init");
 
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
 
   m.add_glgenbuffers(2,1);
+
+  // set up the vertex position data
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
+  
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 2);
+  m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(colors), color_location, GL_STATIC_DRAW);
 
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
   m.add_data((const uint8_t *)fragment_shader, strlen(fragment_shader)+1, "fragment_shader");
@@ -973,6 +985,9 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glenablevertexattribarray(0);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,12,(void *)0);
+  m.add_glenablevertexattribarray(1);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 2);
+  m.add_glvertexattribpointer(1,3,GL_FLOAT,GL_FALSE,12,(void *)0);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   m.add_gldisablevertexattribarray(0);
 
