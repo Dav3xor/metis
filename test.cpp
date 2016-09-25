@@ -915,9 +915,12 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   uint8_t glbuf[10000];
   uint64_t stack[5];
   uint64_t triangle_location;
-  float buffer[9] = {-0.8,-0.8,0.0,
-                      0.8,-0.8,0.0,
-                      0.0, 0.8,0.0};
+  float buffer[9] =  {-0.8,-0.8,0.0,
+                       0.8,-0.8,0.0,
+                       0.0, 0.8,0.0};
+  float colors[12] = {1.0,0.0,0.0,1.0,
+                      0.0,1.0,0.0,1.0,
+                      0.0,0.0,1.0,1.0};
  
   const char *vertex_shader =
   "#version 400\n"
@@ -944,25 +947,26 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
 
-  m.add_glgenbuffers(1,1);
+  m.add_glgenbuffers(2,1);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
 
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
   m.add_data((const uint8_t *)fragment_shader, strlen(fragment_shader)+1, "fragment_shader");
-  m.add_glcreateshader(GL_VERTEX_SHADER, 2);
-  m.add_glshadersource(m.get_label("vertex_shader"), 2);
-  m.add_glcompileshader(2);
 
   m.add_glcreateshader(GL_VERTEX_SHADER, 3);
-  m.add_glshadersource(m.get_label("fragment_shader"), 3);
+  m.add_glshadersource(m.get_label("vertex_shader"), 3);
   m.add_glcompileshader(3);
+
+  m.add_glcreateshader(GL_FRAGMENT_SHADER, 4);
+  m.add_glshadersource(m.get_label("fragment_shader"), 4);
+  m.add_glcompileshader(4);
  
-  m.add_glcreateprogram(4);
-  m.add_glattachshader(4,2);
-  m.add_glattachshader(4,3);
-  m.add_gllinkprogram(4);
-  m.add_gluseprogram(4);
+  m.add_glcreateprogram(5);
+  m.add_glattachshader(5,3);
+  m.add_glattachshader(5,4);
+  m.add_gllinkprogram(5);
+  m.add_gluseprogram(5);
   m.add_end();
 
   m.add_label_ip("mainloop");
