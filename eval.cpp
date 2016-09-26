@@ -283,7 +283,6 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLCREATESHADER_SIZE;
         break;
       case INS_GLSHADERSOURCE:
-        printf("%d\n",instruction->commands.glshadersource.shader);
         shader_ptr = (GLchar *)(code_start + instruction->commands.glshadersource.shader);
         glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
                        1, &shader_ptr, NULL);
@@ -313,6 +312,7 @@ bool MetisVM::do_eval() {
       case INS_GLATTACHSHADER:
         glAttachShader(glidentifiers[instruction->commands.glattachshader.program_index], 
                        glidentifiers[instruction->commands.glattachshader.shader_index]);
+
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -407,21 +407,24 @@ bool MetisVM::doCompileShader(uint16_t index) {
 
 bool MetisVM::doLinkProgram(uint16_t index) {
   GLuint program = glidentifiers[index];
+  glLinkProgram(3);
 
-  glLinkProgram(program);
-
-  GLint len = 0;
+  GLint len = 10;
   GLint isLinked = 0;
+  GLint maxLength = 999;
 
-  glGetShaderiv(program, GL_LINK_STATUS, &isLinked);
-  glGetShaderiv(program, GL_INFO_LOG_LENGTH, &len);
-  if(len>0) {
+  glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+  if(isLinked == GL_FALSE) {
     char log[1000];
 
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
     // The maxLength includes the NULL character
-    glGetProgramInfoLog(program, 1000, NULL, log);
+    glGetProgramInfoLog(program, maxLength, &maxLength, log);
 
+    printf("Shader Program Link Failed:\n");
+    printf("-------------------------------\n");
     printf("%s\n",log);
+    printf("-------------------------------\n");
 
     throw MetisException("Shader Compilation Failed.",__LINE__,__FILE__);
     // Exit with failure.
