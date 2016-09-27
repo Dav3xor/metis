@@ -177,8 +177,6 @@ class MetisContext {
       printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
       monitor = glfwGetPrimaryMonitor();
-      glEnableClientState(GL_VERTEX_ARRAY);
-      glEnableClientState(GL_COLOR_ARRAY);
     }
 
 
