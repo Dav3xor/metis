@@ -5,11 +5,11 @@ CLIBS  = -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -ldl 
 DEPS   = metis.hpp
 SRCS   = add_instructions.cpp file.cpp util.cpp eval.cpp test.cpp 
 OBJS   = $(SRCS:.cpp=.o)
-MAIN   = test
+TEST   = test
 
 
-$(MAIN): $(OBJS)
-	$(CC) $(CFLAGS) -o $(MAIN) $(OBJS) $(CLIBS)
+$(TEST): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TEST) $(OBJS) $(CLIBS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
