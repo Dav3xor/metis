@@ -1,11 +1,20 @@
 #include <boost/program_options.hpp>
 
+using namespace boost::program_options;
+using namespace std;
+
 #include "metis.hpp"
 
-int main(void) 
+int main(int argc, char *argv[]) 
 {
   MetisContext c;
-  
+
+  string input_file;
+  options_description desc("Allowed options");
+  desc.add_options()
+       ("help,h", "print usage message")
+       ("run,r",  value(&input_file), "run <filename>");
+        
   uint8_t buf[10000];
   uint8_t glbuf[10000];
   uint64_t stack[500];
@@ -13,6 +22,14 @@ int main(void)
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
   win=c.current_window(0);
+
+  variables_map args;
+  store(parse_command_line(argc, argv, desc), args);
+
+  if (args.count("help")) {
+    cout << desc << endl;
+    return 0;
+  }
 
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.load("wintest.metis");
