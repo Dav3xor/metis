@@ -10,8 +10,16 @@ int main(void)
   
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
+  win=c.current_window(0);
 
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.load("wintest.metis");
-  m.eval();
+  m.eval("init");
+
+  while(!glfwWindowShouldClose(win)) {
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    m.eval("mainloop");
+    glfwSwapBuffers(win);
+    glfwPollEvents();
+  }
 }

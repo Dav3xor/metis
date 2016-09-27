@@ -1000,6 +1000,8 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   //REQUIRE(c.current_window(0) != NULL);
 
   //REQUIRE_THROWS_AS(c.current_window(1), MetisException);
+
+  m.save("wintest.metis");
   m.eval("init");
   glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
