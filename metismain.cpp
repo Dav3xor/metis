@@ -1,3 +1,5 @@
+#include <boost/program_options.hpp>
+
 #include "metis.hpp"
 
 int main(void) 
