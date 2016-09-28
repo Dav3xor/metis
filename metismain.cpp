@@ -31,8 +31,13 @@ int main(int argc, char *argv[])
       cout << desc << endl;
       return 0;
     }
-    cout << args["run"].as<string>() << endl;
+    if (args.count("run")) {
+      cout << args["run"].as<string>() << endl;
+    }
   } catch(required_option& e) {
+    cerr << "ERROR: " << e.what() << endl << endl;
+    return 1;
+  } catch(invalid_command_line_syntax &e) {
     cerr << "ERROR: " << e.what() << endl << endl;
     return 1;
   }
