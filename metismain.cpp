@@ -31,9 +31,6 @@ int main(int argc, char *argv[])
       cout << desc << endl;
       return 0;
     }
-    if (args.count("run")) {
-      cout << args["run"].as<string>() << endl;
-    }
   } catch(required_option& e) {
     cerr << "ERROR: " << e.what() << endl << endl;
     return 1;
@@ -42,14 +39,17 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
-  m.load("wintest.metis");
-  m.eval("init");
+  if (args.count("run")) {
+    //cout << args["run"].as<string>() << endl;
+    MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+    m.load(args["run"].as<string>());
+    m.eval("init");
 
-  while(!glfwWindowShouldClose(win)) {
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    m.eval("mainloop");
-    glfwSwapBuffers(win);
-    glfwPollEvents();
+    while(!glfwWindowShouldClose(win)) {
+      glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+      m.eval("mainloop");
+      glfwSwapBuffers(win);
+      glfwPollEvents();
+    }
   }
 }
