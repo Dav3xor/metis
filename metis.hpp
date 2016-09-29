@@ -426,6 +426,10 @@ class MetisVM {
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
     uint64_t add_gluseprogram(metisgl_identifier shader_index);
+    uint64_t add_gluniformfv(metisgl_identifier, uint64_t source);
+    uint64_t add_gluniformiv(metisgl_identifier, uint64_t source);
+    uint64_t add_gluniformuiv(metisgl_identifier, uint64_t source);
+    uint64_t add_gluniformmatrixfv(metisgl_identifier, uint64_t source);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
