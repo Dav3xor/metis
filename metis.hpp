@@ -76,6 +76,12 @@ using namespace std;
 #define INS_GLDETACHSHADER_SIZE              1+sizeof(metisgl_identifier) + sizeof(metisgl_identifier)
 #define INS_GLDELETESHADER_SIZE              1+sizeof(metisgl_identifier)
 #define INS_GLUSEPROGRAM_SIZE                1+sizeof(metisgl_identifier)
+
+#define INS_GLUNIFORMFV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
+#define INS_GLUNIFORMIV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
+#define INS_GLUNIFORMUIV_SIZE                1+sizeof(GLint)+sizeof(uint64_t)
+#define INS_GLUNIFORMMATRIXFV_SIZE           1+sizeof(GLint)+sizeof(uint64_5)
+
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
@@ -298,6 +304,10 @@ class MetisVM {
                                INS_GLDETACHSHADER                =   51,
                                INS_GLDELETESHADER                =   52,
                                INS_GLUSEPROGRAM                  =   53,
+                               INS_GLUNIFORMFV                   =   54,
+                               INS_GLUNIFORMIV                   =   55,
+                               INS_GLUNIFORMUIV                  =   56,
+                               INS_GLUNIFORMMATRIXFV             =   57,
 
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
