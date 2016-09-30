@@ -606,31 +606,51 @@ class MetisVM {
           metisgl_identifier shader_index;
         }__attribute__((packed)) glcompileshader;
 
-        struct add_glcreateprogram_t {
+        struct glcreateprogram_t {
           metisgl_identifier program_index;
         }__attribute__((packed)) glcreateprogram;
           
-        struct add_glattachshader_t {
+        struct glattachshader_t {
           metisgl_identifier program_index;
           metisgl_identifier shader_index;
         }__attribute__((packed)) glattachshader;
 
-        struct add_gllinkprogram_t {
+        struct gllinkprogram_t {
           metisgl_identifier program_index;
         }__attribute__((packed)) gllinkprogram;
 
-        struct add_gldetachshader_t {
+        struct gldetachshader_t {
           metisgl_identifier program_index;
           metisgl_identifier shader_index;
         }__attribute__((packed)) gldetachshader;
 
-        struct add_gldeleteshader_t {
+        struct gldeleteshader_t {
           metisgl_identifier shader_index;
         }__attribute__((packed)) gldeleteshader;
         
-        struct add_gluseprogram_t {
+        struct gluseprogram_t {
           metisgl_identifier program_index;
         }__attribute__((packed)) gluseprogram;
+
+        struct gluniformfv_t {
+          metisgl_identifier id;
+          uint64_t source;
+        }__attribute__((packed)) gluniformfv;
+
+        struct gluniformiv_t {
+          metisgl_identifier id;
+          uint64_t source;
+        }__attribute__((packed)) gluniformiv;
+
+        struct gluniformuiv_t {
+          metisgl_identifier id;
+          uint64_t source;
+        }__attribute__((packed)) gluniformuiv;
+
+        struct gluniformmatrixfv_t {
+          metisgl_identifier id;
+          uint64_t source;
+        }__attribute__((packed)) gluniformmatrixfv;
 
         struct jumpi_t {
           uint64_t value;
