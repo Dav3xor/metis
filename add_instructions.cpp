@@ -526,3 +526,49 @@ uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
   registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
   RETURN_NEXT();
 };
+
+
+uint64_t MetisVM::add_gluniformfv(metisgl_identifier id, uint64_t source) {
+  CHECK_INSTRUCTION(INS_GLUNIFORMFV_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLUNIFORMFV;
+  instruction->commands.gluniformfv.id                = id;
+  instruction->commands.gluniformfv.source            = source;
+  registers[REGIP] += INS_GLUNIFORMFV_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gluniformiv(metisgl_identifier id, uint64_t source) {
+  CHECK_INSTRUCTION(INS_GLUNIFORMIV_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLUNIFORMIV;
+  instruction->commands.gluniformiv.id                = id;
+  instruction->commands.gluniformiv.source            = source;
+  registers[REGIP] += INS_GLUNIFORMIV_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gluniformuiv(metisgl_identifier id, uint64_t source) {
+  CHECK_INSTRUCTION(INS_GLUNIFORMUIV_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLUNIFORMUIV;
+  instruction->commands.gluniformuiv.id               = id;
+  instruction->commands.gluniformuiv.source           = source;
+  registers[REGIP] += INS_GLUNIFORMUIV_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_gluniformmatrixfv(metisgl_identifier id, uint64_t source) {
+  CHECK_INSTRUCTION(INS_GLUNIFORMMATRIXFV_SIZE);
+
+  MetisInstruction *instruction                       = (MetisInstruction *)registers[REGIP];
+  instruction->type                                   = INS_GLUNIFORMMATRIXFV;
+  instruction->commands.gluniformmatrixfv.id          = id;
+  instruction->commands.gluniformmatrixfv.source      = source;
+  registers[REGIP] += INS_GLUNIFORMMATRIXFV_SIZE;
+  RETURN_NEXT();
+};
+

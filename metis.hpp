@@ -80,7 +80,7 @@ using namespace std;
 #define INS_GLUNIFORMFV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
 #define INS_GLUNIFORMIV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
 #define INS_GLUNIFORMUIV_SIZE                1+sizeof(GLint)+sizeof(uint64_t)
-#define INS_GLUNIFORMMATRIXFV_SIZE           1+sizeof(GLint)+sizeof(uint64_5)
+#define INS_GLUNIFORMMATRIXFV_SIZE           1+sizeof(GLint)+sizeof(uint64_t)
 
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
@@ -426,10 +426,10 @@ class MetisVM {
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
     uint64_t add_gluseprogram(metisgl_identifier shader_index);
-    uint64_t add_gluniformfv(metisgl_identifier, uint64_t source);
-    uint64_t add_gluniformiv(metisgl_identifier, uint64_t source);
-    uint64_t add_gluniformuiv(metisgl_identifier, uint64_t source);
-    uint64_t add_gluniformmatrixfv(metisgl_identifier, uint64_t source);
+    uint64_t add_gluniformfv(metisgl_identifier id, uint64_t source);
+    uint64_t add_gluniformiv(metisgl_identifier id, uint64_t source);
+    uint64_t add_gluniformuiv(metisgl_identifier id, uint64_t source);
+    uint64_t add_gluniformmatrixfv(metisgl_identifier id, uint64_t source);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
