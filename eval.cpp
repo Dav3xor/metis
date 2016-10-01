@@ -350,6 +350,29 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
         break;
+
+      case INS_GLUNIFORMFV:
+        // lists of vectors are stored as matrices.
+        matrix_a      = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
+        a = (float *)((uint64_t)matrix_a + sizeof(MetisMatrixHeader));
+        switch(matrix_a->width) {
+          case 1:
+            glUniform1fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            break;
+          case 2:
+            glUniform2fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            break;
+          case 3:
+            glUniform3fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            break;
+          case 4:
+            glUniform4fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            break;
+          default:
+            throw MetisException("illegal glUniform vector size", __LINE__, __FILE__);
+            break; 
+        }
+        break;
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
