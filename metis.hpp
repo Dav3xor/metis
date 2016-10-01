@@ -77,10 +77,10 @@ using namespace std;
 #define INS_GLDELETESHADER_SIZE              1+sizeof(metisgl_identifier)
 #define INS_GLUSEPROGRAM_SIZE                1+sizeof(metisgl_identifier)
 
-#define INS_GLUNIFORMFV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
-#define INS_GLUNIFORMIV_SIZE                 1+sizeof(GLint)+sizeof(uint64_t)
-#define INS_GLUNIFORMUIV_SIZE                1+sizeof(GLint)+sizeof(uint64_t)
-#define INS_GLUNIFORMMATRIXFV_SIZE           1+sizeof(GLint)+sizeof(uint64_t)
+#define INS_GLUNIFORMFV_SIZE                 2+sizeof(GLint)
+#define INS_GLUNIFORMIV_SIZE                 2+sizeof(GLint)
+#define INS_GLUNIFORMUIV_SIZE                2+sizeof(GLint)
+#define INS_GLUNIFORMMATRIXFV_SIZE           2+sizeof(GLint)
 
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
@@ -426,10 +426,10 @@ class MetisVM {
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
     uint64_t add_gluseprogram(metisgl_identifier shader_index);
-    uint64_t add_gluniformfv(metisgl_identifier id, uint64_t source);
-    uint64_t add_gluniformiv(metisgl_identifier id, uint64_t source);
-    uint64_t add_gluniformuiv(metisgl_identifier id, uint64_t source);
-    uint64_t add_gluniformmatrixfv(metisgl_identifier id, uint64_t source);
+    uint64_t add_gluniformfv(address_mode src, GLint location);
+    uint64_t add_gluniformiv(address_mode src, GLint location);
+    uint64_t add_gluniformuiv(address_mode src, GLint location);
+    uint64_t add_gluniformmatrixfv(address_mode src, GLint location);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
@@ -523,6 +523,22 @@ class MetisVM {
             struct ext_vector_cross_t {
               uint64_t destination;
             }__attribute__((packed)) vector_cross;
+
+            struct gluniformfv_t {
+              GLint location;
+            }__attribute__((packed)) gluniformfv;
+
+            struct gluniformiv_t {
+              GLint location;
+            }__attribute__((packed)) gluniformiv;
+
+            struct gluniformuiv_t {
+              GLint location;
+            }__attribute__((packed)) gluniformuiv;
+
+            struct gluniformmatrixfv_t {
+              GLint location;
+            }__attribute__((packed)) gluniformmatrixfv;
 
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
@@ -631,26 +647,6 @@ class MetisVM {
         struct gluseprogram_t {
           metisgl_identifier program_index;
         }__attribute__((packed)) gluseprogram;
-
-        struct gluniformfv_t {
-          metisgl_identifier id;
-          uint64_t source;
-        }__attribute__((packed)) gluniformfv;
-
-        struct gluniformiv_t {
-          metisgl_identifier id;
-          uint64_t source;
-        }__attribute__((packed)) gluniformiv;
-
-        struct gluniformuiv_t {
-          metisgl_identifier id;
-          uint64_t source;
-        }__attribute__((packed)) gluniformuiv;
-
-        struct gluniformmatrixfv_t {
-          metisgl_identifier id;
-          uint64_t source;
-        }__attribute__((packed)) gluniformmatrixfv;
 
         struct jumpi_t {
           uint64_t value;
