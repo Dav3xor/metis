@@ -922,12 +922,13 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   float colors[9] =  {1.0,0.5,0.0,
                       0.0,1.0,0.5,
                       0.5,0.0,1.0};
- 
+  float angle     = 0; 
   const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;\n"
   "in vec3 color;\n"
   "out vec3 vcolor;\n"
+  "uniform float angle;\n"
   "void main () {\n"
   "  gl_Position = vec4 (vp, 1.0);\n"
   "  vcolor = color;\n"
