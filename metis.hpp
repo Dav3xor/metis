@@ -67,6 +67,7 @@ using namespace std;
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
 #define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
 #define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
+
 #define INS_GLCREATESHADER_SIZE              1+sizeof(GLenum)+sizeof(metisgl_identifier)
 #define INS_GLSHADERSOURCE_SIZE              1+sizeof(GLuint)+sizeof(metisgl_identifier)
 #define INS_GLCOMPILESHADER_SIZE             1+sizeof(metisgl_identifier)
@@ -81,6 +82,7 @@ using namespace std;
 #define INS_GLUNIFORMIV_SIZE                 2+sizeof(GLint)
 #define INS_GLUNIFORMUIV_SIZE                2+sizeof(GLint)
 #define INS_GLUNIFORMMATRIXFV_SIZE           2+sizeof(GLint)
+#define INS_GLGETUNIFORMLOCATION_SIZE        2+sizeof(metisgl_identifier)+sizeof(metisgl_identifier)
 
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
@@ -308,7 +310,8 @@ class MetisVM {
                                INS_GLUNIFORMIV                   =   55,
                                INS_GLUNIFORMUIV                  =   56,
                                INS_GLUNIFORMMATRIXFV             =   57,
-
+                               INS_GLGETUNIFORMLOCATION          =   58,
+                    
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
                                INS_NOOP                          =  254,
@@ -430,6 +433,9 @@ class MetisVM {
     uint64_t add_gluniformiv(address_mode src, GLint location);
     uint64_t add_gluniformuiv(address_mode src, GLint location);
     uint64_t add_gluniformmatrixfv(address_mode src, GLint location);
+    uint64_t add_glgetuniformlocation(metisgl_identifier program_index,
+                                      metisgl_identifier uniform_index, 
+                                      const char *uniform_name);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
@@ -539,7 +545,7 @@ class MetisVM {
             struct gluniformmatrixfv_t {
               GLint location;
             }__attribute__((packed)) gluniformmatrixfv;
-
+            
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
 
@@ -647,6 +653,12 @@ class MetisVM {
         struct gluseprogram_t {
           metisgl_identifier program_index;
         }__attribute__((packed)) gluseprogram;
+
+        struct glgetuniformlocation_t {
+          metisgl_identifier program_index;
+          metisgl_identifier uniform_index;
+          uint8_t id_length;
+        }__attribute__((packed)) glgetuniformlocation;
 
         struct jumpi_t {
           uint64_t value;
