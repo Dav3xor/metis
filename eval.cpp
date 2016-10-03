@@ -32,6 +32,7 @@ bool MetisVM::do_eval() {
   uint8_t            i,j,k;
   uint32_t           num_bytes;
   GLchar *string_ptr;
+  GLint              location;
 
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -354,20 +355,21 @@ bool MetisVM::do_eval() {
 
       case INS_GLUNIFORMFV:
         // lists of vectors are stored as matrices.
-        matrix_a      = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
-        a = (float *)((uint64_t)matrix_a + sizeof(MetisMatrixHeader));
+        matrix_a  = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
+        a         = (float *)((uint64_t)matrix_a + sizeof(MetisMatrixHeader));
+        location  = glidentifiers[instruction->commands.extended.ext.gluniformfv.uniform_index];
         switch(matrix_a->width) {
           case 1:
-            glUniform1fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
+            glUniform1fv(location,matrix_a->height, a);
             break;
           case 2:
-            glUniform2fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
+            glUniform2fv(location,matrix_a->height, a);
             break;
           case 3:
-            glUniform3fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
+            glUniform3fv(location,matrix_a->height, a);
             break;
           case 4:
-            glUniform4fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
+            glUniform4fv(location,matrix_a->height, a);
             break;
           default:
             throw MetisException("illegal glUniform vector size", __LINE__, __FILE__);
