@@ -78,10 +78,10 @@ using namespace std;
 #define INS_GLDELETESHADER_SIZE              1+sizeof(metisgl_identifier)
 #define INS_GLUSEPROGRAM_SIZE                1+sizeof(metisgl_identifier)
 
-#define INS_GLUNIFORMFV_SIZE                 2+sizeof(GLint)
-#define INS_GLUNIFORMIV_SIZE                 2+sizeof(GLint)
-#define INS_GLUNIFORMUIV_SIZE                2+sizeof(GLint)
-#define INS_GLUNIFORMMATRIXFV_SIZE           2+sizeof(GLint)
+#define INS_GLUNIFORMFV_SIZE                 2+sizeof(metisgl_identifier)
+#define INS_GLUNIFORMIV_SIZE                 2+sizeof(metisgl_identifier)
+#define INS_GLUNIFORMUIV_SIZE                2+sizeof(metisgl_identifier)
+#define INS_GLUNIFORMMATRIXFV_SIZE           2+sizeof(metisgl_identifier)
 #define INS_GLGETUNIFORMLOCATION_SIZE        2+sizeof(metisgl_identifier)+sizeof(metisgl_identifier)
 
 #define INS_LOG_SIZE                         1 
@@ -97,22 +97,6 @@ using namespace std;
 
 #define ADVANCE(extended, data)   (1+extended+data)
 
-#define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)code_start;
-
-#define CHECK_INSTRUCTION(instruction_length) \
-  if ((uint8_t *)(registers[REGIP] + instruction_length) > code_end) { \
-    throw MetisException("attempt to add instruction past address space",__LINE__,__FILE__); \
-  } 
-
-#define CHECK_LOCATION(location) \
-  if (location > (uint64_t)(code_end-code_start-1)) { \
-    throw MetisException("attempt to use location outside address space",__LINE__,__FILE__); \
-  }
-
-#define CHECK_POINTER(pointer) \
-  if (pointer == NULL) { \
-    throw MetisException("null pointer",__LINE__,__FILE__); \
-  }
 
 
 #define MATH_OPERATION(op) \
@@ -429,10 +413,10 @@ class MetisVM {
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
     uint64_t add_gluseprogram(metisgl_identifier shader_index);
-    uint64_t add_gluniformfv(address_mode src, GLint location);
-    uint64_t add_gluniformiv(address_mode src, GLint location);
-    uint64_t add_gluniformuiv(address_mode src, GLint location);
-    uint64_t add_gluniformmatrixfv(address_mode src, GLint location);
+    uint64_t add_gluniformfv(address_mode src, metisgl_identifier location);
+    uint64_t add_gluniformiv(address_mode src, metisgl_identifier location);
+    uint64_t add_gluniformuiv(address_mode src, metisgl_identifier location);
+    uint64_t add_gluniformmatrixfv(address_mode src, metisgl_identifier location);
     uint64_t add_glgetuniformlocation(metisgl_identifier program_index,
                                       metisgl_identifier uniform_index, 
                                       const char *uniform_name);
@@ -531,19 +515,19 @@ class MetisVM {
             }__attribute__((packed)) vector_cross;
 
             struct gluniformfv_t {
-              GLint location;
+              metisgl_identifier location;
             }__attribute__((packed)) gluniformfv;
 
             struct gluniformiv_t {
-              GLint location;
+              metisgl_identifier location;
             }__attribute__((packed)) gluniformiv;
 
             struct gluniformuiv_t {
-              GLint location;
+              metisgl_identifier location;
             }__attribute__((packed)) gluniformuiv;
 
             struct gluniformmatrixfv_t {
-              GLint location;
+              metisgl_identifier location;
             }__attribute__((packed)) gluniformmatrixfv;
             
           }__attribute__((packed))ext; 

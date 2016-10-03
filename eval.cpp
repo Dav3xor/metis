@@ -1,6 +1,7 @@
 #include "metis.hpp"
 
 
+
 #define LOAD_MATRIX(type)\
         matrix_a      = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
         matrix_b      = (MetisMatrixHeader *)((uint64_t)code_start + get_dest_val(ADDR_MODES));\
@@ -30,7 +31,7 @@ bool MetisVM::do_eval() {
   float             *d;
   uint8_t            i,j,k;
   uint32_t           num_bytes;
-  GLchar *shader_ptr;
+  GLchar *string_ptr;
 
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -283,9 +284,9 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLCREATESHADER_SIZE;
         break;
       case INS_GLSHADERSOURCE:
-        shader_ptr = (GLchar *)(code_start + instruction->commands.glshadersource.shader);
+        string_ptr = (GLchar *)(code_start + instruction->commands.glshadersource.shader);
         glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
-                       1, &shader_ptr, NULL);
+                       1, &string_ptr, NULL);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -372,7 +373,19 @@ bool MetisVM::do_eval() {
             throw MetisException("illegal glUniform vector size", __LINE__, __FILE__);
             break; 
         }
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLUNIFORMFV_SIZE;
         break;
+      case INS_GLGETUNIFORMLOCATION:
+        string_ptr = (GLchar *)(code_start + sizeof(instruction->commands.glgetuniformlocation));
+        printf("... %s\n",string_ptr);
+        glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(instruction->commands.glgetuniformlocation.program_index,
+                                                                                                       (const GLchar *)string_ptr);
+        registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
+        registers[REGIP] += advance;
+
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;

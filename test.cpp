@@ -982,6 +982,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glattachshader(5,4);
   m.add_gllinkprogram(5);
   m.add_gluseprogram(5);
+  m.add_glgetuniformlocation(5, 6, "angle");
   m.add_end();
 
   m.add_label_ip("mainloop");

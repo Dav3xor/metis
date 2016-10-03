@@ -1,5 +1,22 @@
 #include "metis.hpp"
 
+#define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)code_start;
+
+#define CHECK_INSTRUCTION(instruction_length) \
+  if ((uint8_t *)(registers[REGIP] + instruction_length) > code_end) { \
+    throw MetisException("attempt to add instruction past address space",__LINE__,__FILE__); \
+  } 
+
+#define CHECK_LOCATION(location) \
+  if (location > (uint64_t)(code_end-code_start-1)) { \
+    throw MetisException("attempt to use location outside address space",__LINE__,__FILE__); \
+  }
+
+#define CHECK_POINTER(pointer) \
+  if (pointer == NULL) { \
+    throw MetisException("null pointer",__LINE__,__FILE__); \
+  }
+
 ostringstream MetisException::cnvt;
 
 uint64_t MetisVM::add_noop(void) {
@@ -528,18 +545,18 @@ uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
 };
 
 
-uint64_t MetisVM::add_gluniformfv(address_mode src, GLint location) {
+uint64_t MetisVM::add_gluniformfv(address_mode src, metisgl_identifier location) {
   CHECK_INSTRUCTION(INS_GLUNIFORMFV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
   instruction->type                                            = INS_GLUNIFORMFV;
   instruction->commands.extended.addr_mode                     = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.gluniformfv.location          = location;
+  instruction->commands.extended.ext.gluniformfv.location      = location;
   registers[REGIP] += INS_GLUNIFORMFV_SIZE;
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformiv(address_mode src, GLint location) {
+uint64_t MetisVM::add_gluniformiv(address_mode src, metisgl_identifier location) {
   CHECK_INSTRUCTION(INS_GLUNIFORMIV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
@@ -550,7 +567,7 @@ uint64_t MetisVM::add_gluniformiv(address_mode src, GLint location) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformuiv(address_mode src, GLint location) {
+uint64_t MetisVM::add_gluniformuiv(address_mode src, metisgl_identifier location) {
   CHECK_INSTRUCTION(INS_GLUNIFORMUIV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
@@ -561,7 +578,7 @@ uint64_t MetisVM::add_gluniformuiv(address_mode src, GLint location) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, GLint location) {
+uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, metisgl_identifier location) {
   CHECK_INSTRUCTION(INS_GLUNIFORMMATRIXFV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
