@@ -413,10 +413,10 @@ class MetisVM {
                                 metisgl_identifier shader_index);
     uint64_t add_gldeleteshader(metisgl_identifier shader_index);
     uint64_t add_gluseprogram(metisgl_identifier shader_index);
-    uint64_t add_gluniformfv(address_mode src, metisgl_identifier location);
-    uint64_t add_gluniformiv(address_mode src, metisgl_identifier location);
-    uint64_t add_gluniformuiv(address_mode src, metisgl_identifier location);
-    uint64_t add_gluniformmatrixfv(address_mode src, metisgl_identifier location);
+    uint64_t add_gluniformfv(address_mode src, metisgl_identifier uniform_index);
+    uint64_t add_gluniformiv(address_mode src, metisgl_identifier uniform_index);
+    uint64_t add_gluniformuiv(address_mode src, metisgl_identifier uniform_index);
+    uint64_t add_gluniformmatrixfv(address_mode src, metisgl_identifier uniform_index);
     uint64_t add_glgetuniformlocation(metisgl_identifier program_index,
                                       metisgl_identifier uniform_index, 
                                       const char *uniform_name);
@@ -515,19 +515,19 @@ class MetisVM {
             }__attribute__((packed)) vector_cross;
 
             struct gluniformfv_t {
-              metisgl_identifier location;
+              metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformfv;
 
             struct gluniformiv_t {
-              metisgl_identifier location;
+              metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformiv;
 
             struct gluniformuiv_t {
-              metisgl_identifier location;
+              metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformuiv;
 
             struct gluniformmatrixfv_t {
-              metisgl_identifier location;
+              metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformmatrixfv;
             
           }__attribute__((packed))ext; 

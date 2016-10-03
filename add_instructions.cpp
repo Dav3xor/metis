@@ -545,46 +545,46 @@ uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
 };
 
 
-uint64_t MetisVM::add_gluniformfv(address_mode src, metisgl_identifier location) {
+uint64_t MetisVM::add_gluniformfv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMFV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
   instruction->type                                            = INS_GLUNIFORMFV;
   instruction->commands.extended.addr_mode                     = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.gluniformfv.location      = location;
+  instruction->commands.extended.ext.gluniformfv.uniform_index      = uniform_index;
   registers[REGIP] += INS_GLUNIFORMFV_SIZE;
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformiv(address_mode src, metisgl_identifier location) {
+uint64_t MetisVM::add_gluniformiv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMIV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
   instruction->type                                            = INS_GLUNIFORMIV;
   instruction->commands.extended.addr_mode                     = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.gluniformiv.location          = location;
+  instruction->commands.extended.ext.gluniformiv.uniform_index          = uniform_index;
   registers[REGIP] += INS_GLUNIFORMIV_SIZE;
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformuiv(address_mode src, metisgl_identifier location) {
+uint64_t MetisVM::add_gluniformuiv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMUIV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
   instruction->type                                            = INS_GLUNIFORMUIV;
   instruction->commands.extended.addr_mode                     = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.gluniformuiv.location         = location;
+  instruction->commands.extended.ext.gluniformuiv.uniform_index         = uniform_index;
   registers[REGIP] += INS_GLUNIFORMUIV_SIZE;
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, metisgl_identifier location) {
+uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMMATRIXFV_SIZE);
 
   MetisInstruction *instruction                                = (MetisInstruction *)registers[REGIP];
   instruction->type                                            = INS_GLUNIFORMMATRIXFV;
   instruction->commands.extended.addr_mode                     = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.gluniformmatrixfv.location    = location;
+  instruction->commands.extended.ext.gluniformmatrixfv.uniform_index    = uniform_index;
   registers[REGIP] += INS_GLUNIFORMMATRIXFV_SIZE;
   RETURN_NEXT();
 };

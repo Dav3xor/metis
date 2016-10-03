@@ -358,16 +358,16 @@ bool MetisVM::do_eval() {
         a = (float *)((uint64_t)matrix_a + sizeof(MetisMatrixHeader));
         switch(matrix_a->width) {
           case 1:
-            glUniform1fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            glUniform1fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
             break;
           case 2:
-            glUniform2fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            glUniform2fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
             break;
           case 3:
-            glUniform3fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            glUniform3fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
             break;
           case 4:
-            glUniform4fv(instruction->commands.extended.ext.gluniformfv.location,matrix_a->height, a);
+            glUniform4fv(instruction->commands.extended.ext.gluniformfv.uniform_index,matrix_a->height, a);
             break;
           default:
             throw MetisException("illegal glUniform vector size", __LINE__, __FILE__);
