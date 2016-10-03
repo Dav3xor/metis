@@ -595,7 +595,8 @@ uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
   CHECK_INSTRUCTION(INS_GLGETUNIFORMLOCATION_SIZE);
   CHECK_POINTER(uniform_name);
 
-  uint64_t length = strlen(uniform_name);
+  uint64_t length = strlen(uniform_name)+1;
+
   if(length>255) {
     throw MetisException("uniform location too big (255 byte string max)",__LINE__,__FILE__);
   }
@@ -608,7 +609,7 @@ uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
   if (registers[REGIP] + length > (uint64_t)code_end) {
     throw MetisException("out of memory -- (add_glgetuniform)",__LINE__,__FILE__);
   }
-  registers[REGIP] += INS_DATA_SIZE;
+  registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
 
   memcpy((void *)registers[REGIP],uniform_name,length);
   registers[REGIP] += length;

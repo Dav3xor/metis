@@ -381,13 +381,14 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLUNIFORMFV_SIZE;
         break;
       case INS_GLGETUNIFORMLOCATION:
-        string_ptr = (GLchar *)(code_start + sizeof(instruction->commands.glgetuniformlocation));
+        string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETUNIFORMLOCATION_SIZE);
         printf("... %s\n",string_ptr);
         glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(instruction->commands.glgetuniformlocation.program_index,
                                                                                                        (const GLchar *)string_ptr);
         registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
-        registers[REGIP] += advance;
+        registers[REGIP] += instruction->commands.glgetuniformlocation.id_length;
 
+        break;
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
