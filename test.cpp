@@ -930,9 +930,10 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   "out vec3 vcolor;\n"
   "uniform float angle;\n"
   "void main () {\n"
-  "  vp.x = vp.x*cos(angle) - vp.y*sin(angle);\n"
-  "  vp.y = vp.x*sin(angle) + vp.y*cos(angle);\n"
-  "  gl_Position = vec4 (vp, 1.0);\n"
+  "  gl_Position = vec4(vp.x*cos(angle) - vp.y*sin(angle),\n"
+  "                     vp.x*sin(angle) + vp.y*cos(angle),\n"
+  "                     0.0,\n"
+  "                     1.0);\n"
   "  vcolor = color;\n"
   "}\n";
 
