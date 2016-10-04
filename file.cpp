@@ -33,7 +33,6 @@ void MetisVM::save(const string &filename) {
 
 
 void MetisVM::load(const string &filename) {
-  char header[11];
   char label[MAX_LABEL_LEN+1];
   uint16_t label_len;
   uint16_t header_len;
@@ -45,7 +44,7 @@ void MetisVM::load(const string &filename) {
 
   ifstream infile(filename, ios::in|ios::binary);
 
-  infile.read(header,10);
+  infile.read((char *)header,10);
   header[10] = '\0';
   while(!(infile.eof())) {
     char type;

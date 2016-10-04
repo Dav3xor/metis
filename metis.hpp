@@ -477,7 +477,7 @@ class MetisVM {
     uint64_t           buffer_size;
     uint8_t           *buffer_end;
 
-    uint8_t            header[10];
+    uint8_t            header[11];
     unordered_map<string, uint64_t> labels;
 
 
