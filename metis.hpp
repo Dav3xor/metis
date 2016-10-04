@@ -2,6 +2,7 @@
 #define METIS_VM
 
 #define TESTING_ENVIRONMENT 1
+#define GLFW_INCLUDE_GLCOREARB
 
 //    TODO: 
 // *  1. add build system
