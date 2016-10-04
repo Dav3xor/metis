@@ -5,7 +5,7 @@
 // 2. abstract sections better
 void MetisVM::save(const string &filename) {
   ofstream outfile(filename, ios::out|ios::binary);
-  outfile.write("METIS  1  ",10);
+  outfile.write((const char *)header,10);
   uint16_t header_len = 0;
   uint64_t buffer_len;
   outfile.write("H",1);
@@ -33,7 +33,7 @@ void MetisVM::save(const string &filename) {
 
 
 void MetisVM::load(const string &filename) {
-  char header[9];
+  char header[11];
   char label[MAX_LABEL_LEN+1];
   uint16_t label_len;
   uint16_t header_len;
@@ -46,7 +46,7 @@ void MetisVM::load(const string &filename) {
   ifstream infile(filename, ios::in|ios::binary);
 
   infile.read(header,10);
-  header[8] = '\0';
+  header[10] = '\0';
   while(!(infile.eof())) {
     char type;
     infile.read(&type,1);

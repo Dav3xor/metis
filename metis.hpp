@@ -323,7 +323,7 @@ class MetisVM {
 
     MetisVM(uint8_t *instruction_loc, uint64_t instruction_len, 
             uint64_t *stack_loc, uint64_t stack_len,
-            uint8_t *glbuffer_loc, uint64_t glbuffer_len) { 
+            uint8_t *glbuffer_loc, uint64_t glbuffer_len) {
       code_start            = instruction_loc;
       code_end              = instruction_loc+instruction_len;
       stack                 = (MetisMemoryCell *)stack_loc;
@@ -332,6 +332,8 @@ class MetisVM {
       buffer_size           = glbuffer_len;
       buffer_end            = glbuffer_loc;
       numcommands           = 0;
+
+      strcpy((char *)header,"METIS  1 ");
       reset();
     }
 
@@ -465,17 +467,19 @@ class MetisVM {
     MetisMemoryCell   *stack;
     uint64_t           stack_size;
 
-    GLuint      glidentifiers[METIS_NUM_BUFFERS];
+    GLuint             glidentifiers[METIS_NUM_BUFFERS];
+    uint64_t           numcommands;
+    
+    uint8_t           *code_start;
+    uint8_t           *code_end;
+
+    uint8_t           *buffer;      
+    uint64_t           buffer_size;
+    uint8_t           *buffer_end;
+
+    uint8_t            header[10];
     unordered_map<string, uint64_t> labels;
 
-    uint64_t    numcommands;
-    
-    uint8_t    *code_start;
-    uint8_t    *code_end;
-
-    uint8_t    *buffer;      
-    uint64_t    buffer_size;
-    uint8_t    *buffer_end;
 
     struct MetisInstruction {
       instruction type;
