@@ -358,6 +358,7 @@ bool MetisVM::do_eval() {
         matrix_a  = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
         a         = (float *)((uint64_t)matrix_a + sizeof(MetisMatrixHeader));
         location  = glidentifiers[instruction->commands.extended.ext.gluniformfv.uniform_index];
+        
         switch(matrix_a->width) {
           case 1:
             glUniform1fv(location,matrix_a->height, a);
@@ -382,9 +383,11 @@ bool MetisVM::do_eval() {
         break;
       case INS_GLGETUNIFORMLOCATION:
         string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETUNIFORMLOCATION_SIZE);
-        printf("... %s\n",string_ptr);
-        glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(instruction->commands.glgetuniformlocation.program_index,
+        glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(glidentifiers[instruction->commands.glgetuniformlocation.program_index],
                                                                                                        (const GLchar *)string_ptr);
+
+
+
         registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
         registers[REGIP] += instruction->commands.glgetuniformlocation.id_length;
 
