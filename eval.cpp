@@ -8,7 +8,7 @@
         destination_matrix  = (MetisMatrixHeader *)((uint64_t)code_start + instruction->commands.extended.ext.type.destination);\
         a = (float *)((uint64_t)code_start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
         b = (float *)((uint64_t)code_start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
-        d = (float *)((uint64_t)code_start + instruction->commands.extended.ext.vector_add.destination + sizeof(MetisMatrixHeader));
+        d = (float *)((uint64_t)code_start + instruction->commands.extended.ext.type.destination + sizeof(MetisMatrixHeader));
 bool MetisVM::eval(const char *label) {
   reset();
   registers[REGIP] = (uint64_t)get_ptr_from_label(label);
@@ -145,15 +145,15 @@ bool MetisVM::do_eval() {
         }
         registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
         break;    
-      case INS_VECTOR_ADD:
+      case INS_MATRIX_ADD:
         // lists of vectors are stored as matrices.
-        LOAD_MATRIX(vector_add);
+        LOAD_MATRIX(matrix_add);
         for(i = 0; i < matrix_a->height; i++) {
           for (j = 0; j < matrix_a->width; j++) {
             d[i*matrix_a->width+j] = a[i*matrix_a->width+j] + b[i*matrix_a->width+j];
           }
         }
-        registers[REGIP] += INS_VECTOR_ADD_SIZE;
+        registers[REGIP] += INS_MATRIX_ADD_SIZE;
         break;    
       case INS_VECTOR_DOT:
         // lists of vectors are stored as matrices.

@@ -89,7 +89,7 @@ using namespace std;
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
 #define INS_MATRIX_MULTIPLY_SIZE             10
-#define INS_VECTOR_ADD_SIZE                  10 
+#define INS_MATRIX_ADD_SIZE                  10 
 #define INS_VECTOR_DOT_SIZE                  10
 #define INS_VECTOR_CROSS_SIZE                10
 #define INS_NOOP_SIZE                        1
@@ -267,7 +267,7 @@ class MetisVM {
                                // Vector Ops                    
                                INS_VECTOR_DOT                    =   25,   // *   Dot Product
                                INS_VECTOR_CROSS                  =   26,   // *   Cross Product
-                               INS_VECTOR_ADD                    =   27,   // *   Cross Product
+                               INS_MATRIX_ADD                    =   27,   // *   Cross Product
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   32,   
@@ -361,7 +361,7 @@ class MetisVM {
                                    const char *label);
     uint64_t add_push_matrix      (uint64_t location);
     uint64_t add_matrix_multiply  (address_mode src1, address_mode src2, uint64_t destination);
-    uint64_t add_vector_add       (address_mode src1, address_mode src2, uint64_t destination);
+    uint64_t add_matrix_add       (address_mode src1, address_mode src2, uint64_t destination);
     uint64_t add_vector_dot       (address_mode src1, address_mode src2, uint64_t destination);
     uint64_t add_vector_cross     (address_mode src1, address_mode src2, uint64_t destination);
 
@@ -507,9 +507,9 @@ class MetisVM {
               uint64_t destination;
             }__attribute__((packed)) matrix_multiply;
             
-            struct ext_vector_add_t {
+            struct ext_matrix_add_t {
               uint64_t destination;
-            }__attribute__((packed)) vector_add;
+            }__attribute__((packed)) matrix_add;
 
             struct ext_vector_dot_t {
               uint64_t destination;

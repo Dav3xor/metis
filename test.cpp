@@ -662,7 +662,7 @@ TEST_CASE ( "vector add", "[MetisVM]" ) {
 
   m.add_storei(REGA, m.get_label("matrix1"));
   m.add_storei(REGB, m.get_label("matrix2"));
-  m.add_vector_add(REGA,REGB, m.get_label("result"));
+  m.add_matrix_add(REGA,REGB, m.get_label("result"));
 
   m.add_end();
 

@@ -243,14 +243,14 @@ uint64_t MetisVM::add_matrix_multiply(address_mode src1, address_mode src2, uint
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_vector_add(address_mode src1, address_mode src2, uint64_t dest) {
-  CHECK_INSTRUCTION(INS_VECTOR_ADD);
+uint64_t MetisVM::add_matrix_add(address_mode src1, address_mode src2, uint64_t dest) {
+  CHECK_INSTRUCTION(INS_MATRIX_ADD);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
-  instruction->type                        = INS_VECTOR_ADD;      
+  instruction->type                        = INS_MATRIX_ADD;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src1, src2);
-  instruction->commands.extended.ext.vector_add.destination = dest;
-  registers[REGIP] += INS_VECTOR_ADD_SIZE;
+  instruction->commands.extended.ext.matrix_add.destination = dest;
+  registers[REGIP] += INS_MATRIX_ADD_SIZE;
   RETURN_NEXT();
 }
   
