@@ -663,7 +663,7 @@ TEST_CASE ( "vector add", "[MetisVM]" ) {
   m.add_storei(REGA, m.get_label("matrix1"));
   m.add_storei(REGB, m.get_label("matrix2"));
   m.add_matrix_add(REGA,REGB, m.get_label("result"));
-
+  m.add_storei(REGA, 1);
   m.add_end();
 
   m.eval();
@@ -922,7 +922,9 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   float colors[9] =  {1.0,0.5,0.0,
                       0.0,1.0,0.5,
                       0.5,0.0,1.0};
-  float angle     = 0.2; 
+  float angle     = 0.0; 
+  float delta     = 0.01;
+
   const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;\n"
@@ -970,6 +972,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
   m.add_data((const uint8_t *)fragment_shader, strlen(fragment_shader)+1, "fragment_shader");
   m.add_matrix          (1,1, (uint8_t *)&angle, "angle");
+  m.add_matrix          (1,1, (uint8_t *)&delta, "delta");
 
   m.add_glcreateshader(GL_VERTEX_SHADER, 3);
   m.add_glshadersource(m.get_label("vertex_shader"), 3);
@@ -985,11 +988,16 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_gllinkprogram(5);
   m.add_gluseprogram(5);
   m.add_glgetuniformlocation(5, 6, "angle");
-  m.add_storei(STACK_PUSH, m.get_label("angle"));
-  m.add_gluniformfv(STACK_POP, 6);
+  m.add_storei(REGA, m.get_label("angle"));
+  m.add_storei(REGB, m.get_label("delta"));
+  m.add_gluniformfv(REGA, 6);
   m.add_end();
 
   m.add_label_ip("mainloop");
+  m.add_storei(REGA, m.get_label("angle"));
+  m.add_storei(REGB, m.get_label("delta"));
+  m.add_matrix_add(REGA, REGB, m.get_label("angle"));
+  m.add_gluniformfv(REGA, 6);
   m.add_glenablevertexattribarray(0);
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,12,(void *)0);
