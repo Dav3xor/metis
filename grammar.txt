@@ -4,7 +4,7 @@ mat = | 1.0 2.5 7.0 |
 
 length = || vector ||
 
-
+unit_vecor = ^vector
 
 
 
