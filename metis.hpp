@@ -85,6 +85,15 @@ using namespace std;
 #define INS_GLUNIFORMMATRIXFV_SIZE           2+sizeof(metisgl_identifier)
 #define INS_GLGETUNIFORMLOCATION_SIZE        2+sizeof(metisgl_identifier)+sizeof(metisgl_identifier)
 
+#define INS_GLGENTEXTURES_SIZE               1+sizeof(GLsizei)+sizeof(metisgl_identifier)
+#define INS_GLBINDTEXTURE_SIZE               1+sizeof(GLenum)+sizeof(metisgl_identifier)
+#define INS_GLTEXPARAMETERI_SIZE             2+sizeof(GLenum)+sizeof(GLenum)
+#define INS_GLTEXPARAMETERFV_SIZE            2+sizeof(GLenum)+sizeof(GLenum)
+#define INS_GLGENERATEMIPMAP_SIZE            1+sizeof(GLenum)
+#define INS_GLTEXIMAGE2D_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLint)+sizeof(GLsizei)+sizeof(GLsizei)+sizeof(GLint)+sizeof(GLenum)+sizeof(GLenum)+sizeof(GLvoid *)
+#define INS_GLGETATTRIBLOCATION_SIZE         1+sizeof(metisgl_identifier)
+#define INS_GLACTIVETEXTURE_SIZE             1+sizeof(GLenum)
+
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
 #define INS_PUSH_MATRIX_SIZE                 9
