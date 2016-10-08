@@ -296,7 +296,16 @@ class MetisVM {
                                INS_GLUNIFORMUIV                  =   56,
                                INS_GLUNIFORMMATRIXFV             =   57,
                                INS_GLGETUNIFORMLOCATION          =   58,
-                    
+
+                               INS_GLGENTEXTURES                 =   59,
+                               INS_GLBINDTEXTURE                 =   60,
+                               INS_GLTEXPARAMETERI               =   61,
+                               INS_GLTEXPARAMETERFV              =   62,
+                               INS_GLGENERATEMIPMAP              =   63,
+                               INS_GLTEXIMAGE2D                  =   64,
+                               INS_GLGETATTRIBLOCATION           =   65,
+                               INS_GLACTIVETEXTURE               =   66,
+
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
                                INS_NOOP                          =  254,
