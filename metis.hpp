@@ -680,6 +680,55 @@ class MetisVM {
           uint8_t id_length;
         }__attribute__((packed)) glgetuniformlocation;
 
+
+
+        struct glgentextures_t {
+          GLsizei num_identifiers; 
+          metisgl_identifier start_index;
+        }__attribute__((packed)) glgentextures;
+
+        struct glbindtexture_t {
+          GLenum target; 
+          metisgl_identifier texture_index;
+        }__attribute__((packed)) glbindtexture;
+
+        struct gltexparameteri_t {
+          GLenum target; 
+          GLenum pname; 
+          GLint param;
+        }__attribute__((packed)) gltexparameteri;
+
+        struct gltexparameterfv_t {
+          address_mode src; 
+          GLenum target; 
+          GLenum pname;
+        }__attribute__((packed)) gltexparameterfv;
+
+        struct glgeneratemipmap_t {
+          GLenum target;
+        }__attribute__((packed)) glgeneratemipmap;
+
+        struct glteximage2d_t {
+          GLenum target; 
+          GLint level; 
+          GLint internal_format;
+          GLsizei width; 
+          GLsizei height; 
+          GLint border;
+          GLenum format; 
+          GLenum type; 
+          uint64_t data_index;
+        }__attribute__((packed)) glteximage2d;
+
+        struct glgetattriblocation_t {
+          metisgl_identifier attrib_index;
+        }__attribute__((packed)) glgetattriblocation;
+
+        struct glactivetexture_t {
+          GLenum texture;
+        }__attribute__((packed)) glactivetexture;
+
+
         struct jumpi_t {
           uint64_t value;
         }__attribute__((packed)) jumpi;
