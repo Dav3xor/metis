@@ -87,7 +87,7 @@ using namespace std;
 
 #define INS_GLGENTEXTURES_SIZE               1+sizeof(GLsizei)+sizeof(metisgl_identifier)
 #define INS_GLBINDTEXTURE_SIZE               1+sizeof(GLenum)+sizeof(metisgl_identifier)
-#define INS_GLTEXPARAMETERI_SIZE             2+sizeof(GLenum)+sizeof(GLenum)
+#define INS_GLTEXPARAMETERI_SIZE             1+sizeof(GLenum)+sizeof(GLenum)+sizeof(GLint)
 #define INS_GLTEXPARAMETERFV_SIZE            2+sizeof(GLenum)+sizeof(GLenum)
 #define INS_GLGENERATEMIPMAP_SIZE            1+sizeof(GLenum)
 #define INS_GLTEXIMAGE2D_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLint)+sizeof(GLsizei)+sizeof(GLsizei)+sizeof(GLint)+sizeof(GLenum)+sizeof(GLenum)+sizeof(GLvoid *)
@@ -441,6 +441,19 @@ class MetisVM {
     uint64_t add_glgetuniformlocation(metisgl_identifier program_index,
                                       metisgl_identifier uniform_index, 
                                       const char *uniform_name);
+
+    uint64_t add_glgentextures(GLsizei num_identifiers, 
+                               metisgl_identifier start_index);                   
+    uint64_t add_glbindtexture(GLenum target, 
+                               metisgl_identifier texture_index);
+    uint64_t add_gltexparameteri(GLenum target, GLenum pname, GLint param);
+    uint64_t add_gltexparameterfv(address_mode src, GLenum target, GLenum pname);
+    uint64_t add_glgeneratemipmap(GLenum target);
+    uint64_t add_glteximage2d(GLenum target, GLint level, GLint internal_format,
+                              GLsizei width, GLsizei height, GLint border,
+                              GLenum format, GLenum type, uint64_t data_index);
+    uint64_t add_glgetattriblocation(metisgl_identifier attrib_index);
+    uint64_t add_glactivetexture(GLenum texture);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
