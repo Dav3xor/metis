@@ -629,9 +629,20 @@ uint64_t MetisVM::add_glgentextures(GLsizei num_identifiers,
   registers[REGIP] += INS_GLGENTEXTURES_SIZE;
   RETURN_NEXT();
 };
-/*
+
 uint64_t  MetisVM::add_glbindtexture(GLenum target, 
-                           metisgl_identifier texture_index);
+                           metisgl_identifier texture_index) {
+  CHECK_INSTRUCTION(INS_GLBINDTEXTURE_SIZE);
+
+  MetisInstruction *instruction                          = (MetisInstruction *)registers[REGIP];
+  instruction->type                                      = INS_GLBINDTEXTURE;
+  instruction->commands.glbindtexture.target             = target;
+  instruction->commands.glbindtexture.texture_index      = texture_index;
+  registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
+  RETURN_NEXT();
+};
+
+/*
 uint64_t  MetisVM::add_gltexparameteri(GLenum target, GLenum pname, GLint param);
 uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum pname);
 uint64_t  MetisVM::add_glgeneratemipmap(GLenum target);
