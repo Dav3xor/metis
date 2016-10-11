@@ -653,8 +653,18 @@ uint64_t  MetisVM::add_gltexparameteri(GLenum target, GLenum pname, GLint param)
   registers[REGIP] += INS_GLTEXPARAMETERI_SIZE;
   RETURN_NEXT();
 };
+uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum pname) {
+  CHECK_INSTRUCTION(INS_GLTEXPARAMETERFV_SIZE);
+
+  MetisInstruction *instruction                              = (MetisInstruction *)registers[REGIP];
+  instruction->type                                          = INS_GLTEXPARAMETERFV;
+  instruction->commands.extended.addr_mode                   = BUILD_ADDR(src, 0);
+  instruction->commands.extended.ext.gltexparameterfv.target = target;
+  instruction->commands.extended.ext.gltexparameterfv.pname  = pname;
+  registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
+  RETURN_NEXT();
+};
 /*
-uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum pname);
 uint64_t  MetisVM::add_glgeneratemipmap(GLenum target);
 uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_format,
                           GLsizei width, GLsizei height, GLint border,

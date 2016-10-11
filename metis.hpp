@@ -565,6 +565,11 @@ class MetisVM {
             struct gluniformmatrixfv_t {
               metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformmatrixfv;
+
+            struct gltexparameterfv_t {
+              GLenum target; 
+              GLenum pname;
+            }__attribute__((packed)) gltexparameterfv;
             
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
@@ -698,11 +703,6 @@ class MetisVM {
           GLint param;
         }__attribute__((packed)) gltexparameteri;
 
-        struct gltexparameterfv_t {
-          address_mode src; 
-          GLenum target; 
-          GLenum pname;
-        }__attribute__((packed)) gltexparameterfv;
 
         struct glgeneratemipmap_t {
           GLenum target;
