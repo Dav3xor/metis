@@ -673,6 +673,7 @@ uint64_t  MetisVM::add_glgeneratemipmap(GLenum target) {
   registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
   RETURN_NEXT();
 };
+
 uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_format,
                           GLsizei width, GLsizei height, GLint border,
                           GLenum format, GLenum type, uint64_t data_index) {
@@ -692,7 +693,16 @@ uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_f
   registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
   RETURN_NEXT();
 };
+
+uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index) {
+  CHECK_INSTRUCTION(INS_GLGETATTRIBLOCATION_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_GLGETATTRIBLOCATION;
+  instruction->commands.glgetattriblocation.attrib_index = attrib_index;
+  registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
+  RETURN_NEXT();
+};
 /*
-uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index);
 uint64_t  MetisVM::add_glactivetexture(GLenum texture);
 */
