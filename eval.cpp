@@ -392,6 +392,24 @@ bool MetisVM::do_eval() {
         registers[REGIP] += instruction->commands.glgetuniformlocation.id_length;
 
         break;
+        
+      case INS_GLGENTEXTURES:
+        glGenTextures(instruction->commands.glgentextures.start_index,
+                      &glidentifiers[instruction->commands.glgentextures.start_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLGENTEXTURES_SIZE;
+        break;
+
+      case INS_GLBINDTEXTURE:
+      case INS_GLTEXPARAMETERI:
+      case INS_GLTEXPARAMETERFV:
+      case INS_GLGENERATEMIPMAP:
+      case INS_GLTEXIMAGE2D:
+      case INS_GLGETATTRIBLOCATION:
+      case INS_GLACTIVETEXTURE:
+
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
