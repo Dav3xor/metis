@@ -703,6 +703,13 @@ uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index) {
   registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
   RETURN_NEXT();
 };
-/*
-uint64_t  MetisVM::add_glactivetexture(GLenum texture);
-*/
+
+uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
+  CHECK_INSTRUCTION(INS_GLACTIVETEXTURE_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_GLACTIVETEXTURE;
+  instruction->commands.glactivetexture.texture = texture;
+  registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
+  RETURN_NEXT();
+};
