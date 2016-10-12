@@ -664,8 +664,16 @@ uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum 
   registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
   RETURN_NEXT();
 };
+uint64_t  MetisVM::add_glgeneratemipmap(GLenum target) {
+  CHECK_INSTRUCTION(INS_GLGENERATEMIPMAP_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_GLGENERATEMIPMAP;
+  instruction->commands.glgeneratemipmap.target = target;
+  registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
+  RETURN_NEXT();
+};
 /*
-uint64_t  MetisVM::add_glgeneratemipmap(GLenum target);
 uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_format,
                           GLsizei width, GLsizei height, GLint border,
                           GLenum format, GLenum type, uint64_t data_index);
