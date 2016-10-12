@@ -394,7 +394,7 @@ bool MetisVM::do_eval() {
         break;
         
       case INS_GLGENTEXTURES:
-        glGenTextures(instruction->commands.glgentextures.start_index,
+        glGenTextures(instruction->commands.glgentextures.num_identifiers,
                       &glidentifiers[instruction->commands.glgentextures.start_index]);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
@@ -403,6 +403,13 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_GLBINDTEXTURE:
+        glBindTexture(instruction->commands.glbindtexture.target,
+                      glidentifiers[instruction->commands.glbindtexture.texture_index]);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
+        break;
       case INS_GLTEXPARAMETERI:
       case INS_GLTEXPARAMETERFV:
       case INS_GLGENERATEMIPMAP:
