@@ -1028,5 +1028,60 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   }
 }
 
+TEST_CASE( "texture stuff", "[MetisContext]") {
+  MetisContext c; 
+  
+  uint8_t buf[10000];
+  uint8_t glbuf[10000];
+  uint64_t stack[5];
+  uint64_t triangle_location;
+  uint64_t color_location;
+  float buffer[9] =  {-0.8,-0.8,0.0,
+                       0.8,-0.8,0.0,
+                       0.0, 0.8,0.0};
+  float angle     = 0.0; 
+  float delta     = 0.01;
 
+  const char *vertex_shader =
+  "#version 400\n"
+  "in vec3 vp;\n"
+  "in vec3 color;\n"
+  "uniform float angle;\n"
+  "void main () {\n"
+  "  gl_Position = vec4(vp.x*cos(angle) - vp.y*sin(angle),\n"
+  "                     vp.x*sin(angle) + vp.y*cos(angle),\n"
+  "                     0.0,\n"
+  "                     1.0);\n"
+  "}\n";
+
+  const char *fragment_shader =
+  "#version 330 core\n"
+  "out vec3 color;\n"
+  "in vec2 texcoord;\n"
+  "uniform sampler2D tex;\n"
+  "void main(){\n"
+  "  color = texture(tex, Texcoord);\n"
+  "}\n";
+
+  GLFWwindow *win = c.create_window(0,"title");
+  win=c.current_window(0);
+
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  m.hard_reset();
+  
+  
+  
+  
+  
+  
+  
+  
+  glClearColor(0.0f,0.0f,0.4f,0.0f);
+  while(!glfwWindowShouldClose(win)) {
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    m.eval("mainloop");
+    glfwSwapBuffers(win);
+    glfwPollEvents();
+  }
+}
 
