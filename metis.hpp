@@ -198,6 +198,11 @@ class MetisContext {
       return windows[window_id];
     }
 
+    void close_window(uint32_t window_id) {
+      glfwDestroyWindow(windows[window_id]);
+      windows[window_id] = 0;
+    }
+
     GLFWwindow *current_window(uint32_t window_id) {
       if (!(windows[window_id])) {
         glfwTerminate();

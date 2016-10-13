@@ -1026,7 +1026,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
-  glfwDestroyWindow(win);
+  c.close_window(0); 
 }
 
 TEST_CASE( "texture stuff", "[MetisContext]") {
