@@ -7,6 +7,7 @@
 
 
 
+MetisContext c; 
 
 TEST_CASE( "addressing modes", "[MetisVM]" ) {
   uint8_t buf[10000];
@@ -909,7 +910,6 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
-  MetisContext c; 
   
   uint8_t buf[10000];
   uint8_t glbuf[10000];
@@ -1026,10 +1026,10 @@ TEST_CASE( "window stuff", "[MetisContext]") {
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
+  glfwDestroyWindow(win);
 }
 
 TEST_CASE( "texture stuff", "[MetisContext]") {
-  MetisContext c; 
   
   uint8_t buf[10000];
   uint8_t glbuf[10000];
@@ -1063,8 +1063,8 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "  color = texture(tex, Texcoord);\n"
   "}\n";
 
-  GLFWwindow *win = c.create_window(0,"title");
-  win=c.current_window(0);
+  GLFWwindow *win = c.create_window(1,"title");
+  win=c.current_window(1);
 
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
