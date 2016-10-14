@@ -1046,21 +1046,17 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "#version 400\n"
   "in vec3 vp;\n"
   "in vec3 color;\n"
-  "uniform float angle;\n"
   "void main () {\n"
-  "  gl_Position = vec4(vp.x*cos(angle) - vp.y*sin(angle),\n"
-  "                     vp.x*sin(angle) + vp.y*cos(angle),\n"
-  "                     0.0,\n"
-  "                     1.0);\n"
+  "  gl_Position = vp.xyzz;\n"
   "}\n";
 
   const char *fragment_shader =
   "#version 330 core\n"
-  "out vec3 color;\n"
+  "out vec4 color;\n"
   "in vec2 texcoord;\n"
   "uniform sampler2D tex;\n"
   "void main(){\n"
-  "  color = texture(tex, Texcoord);\n"
+  "  color = texture(tex, texcoord);\n"
   "}\n";
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
@@ -1068,12 +1064,44 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   MetisVM m(buf,1000, stack, 5, glbuf, 1000);
   m.hard_reset();
   
+  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
+  m.add_label_ip("init");
+
+  m.add_glgenvertexarrays(1,0);
+  m.add_glbindvertexarray(0);
+
+  m.add_glgenbuffers(2,1);
+
+  // set up the vertex position data
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
+  m.add_glbufferdata(GL_ARRAY_BUFFER, sizeof(buffer), triangle_location, GL_STATIC_DRAW);
+  
+
+  m.add_data((const uint8_t *)vertex_shader, strlen(vertex_shader)+1, "vertex_shader");
+  m.add_data((const uint8_t *)fragment_shader, strlen(fragment_shader)+1, "fragment_shader");
+
+  m.add_glcreateshader(GL_VERTEX_SHADER, 3);
+  m.add_glshadersource(m.get_label("vertex_shader"), 3);
+  m.add_glcompileshader(3);
+
+  m.add_glcreateshader(GL_FRAGMENT_SHADER, 4);
+  m.add_glshadersource(m.get_label("fragment_shader"), 4);
+  m.add_glcompileshader(4);
+ 
+  m.add_glcreateprogram(5);
+  m.add_glattachshader(5,3);
+  m.add_glattachshader(5,4);
+  m.add_gllinkprogram(5);
+  m.add_gluseprogram(5);
+
+  m.add_end();
   
   
   
   
   
-  
+  m.eval("init");
+
   glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
