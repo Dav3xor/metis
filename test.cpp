@@ -1031,8 +1031,8 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
 TEST_CASE( "texture stuff", "[MetisContext]") {
   
-  uint8_t buf[10000];
-  uint8_t glbuf[10000];
+  uint8_t buf[1000];
+  uint8_t glbuf[1000];
   uint64_t stack[5];
   uint64_t triangle_location;
   uint64_t color_location;
@@ -1062,13 +1062,11 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "void main(){\n"
   "  color = texture(tex, Texcoord);\n"
   "}\n";
-
-  GLFWwindow *win = c.create_window(1,"title");
-  win=c.current_window(1);
-
-  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
-  m.hard_reset();
+  GLFWwindow *win = c.create_window(0,"title");
+  win=c.current_window(0);
   
+  MetisVM m(buf,1000, stack, 5, glbuf, 1000);
+  m.hard_reset();
   
   
   
@@ -1079,9 +1077,9 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
+  c.close_window(0); 
 }
 
