@@ -16,6 +16,7 @@
 #include <fstream>
 #include <unordered_map>
 #include <memory>
+#include <functional>
 
 #include <cstdint>
 #include <cstdio>
@@ -244,6 +245,7 @@ union MetisMemoryCell {
 
   MetisMatrixHeader   matrix;
 }__attribute__((packed));
+
 
 class MetisVM {
   private:
@@ -841,5 +843,13 @@ class MetisVM {
       
 };
 
+typedef function<void (MetisVM &, string &)> instruction_handler;
+class MetisASM {
+  public:
+    MetisASM();
+    void assemble(const string &filename);
+  private:
+    unordered_map<string, instruction_handler> handlers;
+};
 
 #endif
