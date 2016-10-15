@@ -361,7 +361,7 @@ class MetisVM {
       strcpy((char *)header,"METIS  1 ");
       reset();
     }
-
+    uint64_t add_error       (void);
     uint64_t add_end         (void);   
     uint64_t add_noop        (void);   
     uint64_t add_jump        (address_mode src);
@@ -843,7 +843,7 @@ class MetisVM {
       
 };
 
-typedef function<void (MetisVM &, string &)> instruction_handler;
+typedef function<void (MetisVM &, char *)> instruction_handler;
 class MetisASM {
   public:
     MetisASM();

@@ -37,6 +37,15 @@ uint64_t MetisVM::add_end(void) {
   RETURN_NEXT();
 };
 
+uint64_t MetisVM::add_error(void) {
+  CHECK_INSTRUCTION(INS_ERROR_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_ERROR;      
+  registers[REGIP] += INS_ERROR_SIZE;
+  RETURN_NEXT();
+};
+
 uint64_t MetisVM::add_jump(address_mode src) {
   CHECK_INSTRUCTION(INS_JUMP_SIZE);
 
