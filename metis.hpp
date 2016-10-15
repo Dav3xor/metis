@@ -850,6 +850,7 @@ class MetisASM {
     void assemble(const string &filename);
   private:
     unordered_map<string, instruction_handler> handlers;
+    unordered_map<string, address_mode> addr_modes;
 };
 
 #endif
