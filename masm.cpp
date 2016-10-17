@@ -1,8 +1,11 @@
 #include "metis.hpp"
 
 #define HANDLED_BY [this](MetisVM &m, char *s) -> void
-void MetisASM::assemble(const string &filename) {
+void MetisASM::assemble(const string &filename, MetisVM &vm) {
   input.open(filename);
+  while(!(input.eof())) {
+     
+  }
 };
 
 address_mode MetisASM::get_addr_mode(void) {
