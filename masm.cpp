@@ -2,7 +2,7 @@
 
 #define HANDLED_BY [this](MetisVM &m, char *s) -> void
 void MetisASM::assemble(const string &filename) {
-
+  input.open(filename);
 };
 
 address_mode MetisASM::get_addr_mode(void) {
@@ -37,7 +37,13 @@ MetisASM::MetisASM() :
     {"STORE",               HANDLED_BY {  m.add_store      (this->get_addr_mode(),
                                                             this->get_addr_mode()); } },
     {"STOREI",              HANDLED_BY {  m.add_storei     (this->get_addr_mode(),
-                                                            this->get_uint64()); } } 
+                                                            this->get_uint64()); } },
+
+    {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string()); } },
+    {"LABEL",               HANDLED_BY {  m.add_label_val  (this->get_string(),
+                                                            this->get_uint64()); } },
+  
+    
   }),
   addr_modes({
     {"REGA",        REGA},
