@@ -140,6 +140,7 @@ uint64_t MetisVM::add_label_ip(const char *label) {
   labels[label] = new_loc;
   return new_loc;
 }
+
 uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
   CHECK_POINTER(label);
  

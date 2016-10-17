@@ -11,15 +11,21 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
 };
 
 address_mode MetisASM::get_addr_mode(void) {
-  return addr_modes.at(strtok(0," "));
+  string mode;
+  infile >> mode;
+  return addr_modes.at(mode);
 }
 
 uint64_t MetisASM::get_uint64(void) {
-  return strtoull(strtok(0," "),NULL,0);
+  uint64_t val;
+  infile >> val;
+  return val;
 }
 
-char *MetisASM::get_string(void) {
-  return strtok(0," ");
+string MetisASM::get_string(void) {
+  string val; 
+  infile >> val;
+  return val;
 }
 
 MetisASM::MetisASM() : 
@@ -44,8 +50,8 @@ MetisASM::MetisASM() :
     {"STOREI",              HANDLED_BY {  m.add_storei     (this->get_addr_mode(),
                                                             this->get_uint64()); } },
 
-    {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string()); } },
-    {"LABEL",               HANDLED_BY {  m.add_label_val  (this->get_string(),
+    {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
+    {"LABEL",               HANDLED_BY {  m.add_label_val  (this->get_string().c_str(),
                                                             this->get_uint64()); } },
   
     
