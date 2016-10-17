@@ -853,6 +853,7 @@ class MetisASM {
     unordered_map<string, address_mode> addr_modes;
     address_mode get_addr_mode(void);
     uint64_t get_uint64(void);
+    char *get_string(void);
 };
 
 #endif

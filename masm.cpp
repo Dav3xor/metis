@@ -1,5 +1,6 @@
 #include "metis.hpp"
 
+#define HANDLED_BY [this](MetisVM &m, char *s) -> void
 void MetisASM::assemble(const string &filename) {
 
 };
@@ -12,27 +13,31 @@ uint64_t MetisASM::get_uint64(void) {
   return strtoull(strtok(0," "),NULL,0);
 }
 
+char *MetisASM::get_string(void) {
+  return strtok(0," ");
+}
+
 MetisASM::MetisASM() : 
   handlers({
-    {"ERROR",               [this](MetisVM &m, char *s) -> void {  m.add_error      (); } },
-    {"END",                 [this](MetisVM &m, char *s) -> void {  m.add_end        (); } }, 
-    {"NOOP",                [this](MetisVM &m, char *s) -> void {  m.add_noop       (); } }, 
-    {"JUMP",                [this](MetisVM &m, char *s) -> void {  m.add_jump       (this->get_addr_mode()); } },
-    {"JUMPI",               [this](MetisVM &m, char *s) -> void {  m.add_jumpi      (this->get_uint64());   } },
-    {"JIZ",                 [this](MetisVM &m, char *s) -> void {  m.add_jizz       (this->get_addr_mode(),
-                                                                                     this->get_addr_mode()); } }, 
-    {"JNZ",                 [this](MetisVM &m, char *s) -> void {  m.add_jnz        (this->get_addr_mode(),
-                                                                                     this->get_addr_mode()); } },
-    {"JNE",                 [this](MetisVM &m, char *s) -> void {  m.add_jne        (this->get_addr_mode(),
-                                                                                     this->get_addr_mode(),
-                                                                                     this->get_uint64()); } }, 
-    {"JMPE",                [this](MetisVM &m, char *s) -> void {  m.add_jmpe       (this->get_addr_mode(),
-                                                                                     this->get_addr_mode(),
-                                                                                     this->get_uint64()); } },
-    {"STO",                 [this](MetisVM &m, char *s) -> void {  m.add_store      (this->get_addr_mode(),
-                                                                                     this->get_addr_mode()); } },
-    {"STI",                 [this](MetisVM &m, char *s) -> void {  m.add_storei     (this->get_addr_mode(),
-                                                                                     this->get_uint64()); } } 
+    {"ERROR",               HANDLED_BY {  m.add_error      (); } },
+    {"END",                 HANDLED_BY {  m.add_end        (); } }, 
+    {"NOOP",                HANDLED_BY {  m.add_noop       (); } }, 
+    {"JUMP",                HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
+    {"JUMPI",               HANDLED_BY {  m.add_jumpi      (this->get_uint64());   } },
+    {"JIZZ",                HANDLED_BY {  m.add_jizz       (this->get_addr_mode(),
+                                                            this->get_addr_mode()); } }, 
+    {"JNZ",                 HANDLED_BY {  m.add_jnz        (this->get_addr_mode(),
+                                                           this->get_addr_mode()); } },
+    {"JNE",                 HANDLED_BY {  m.add_jne        (this->get_addr_mode(),
+                                                            this->get_addr_mode(),
+                                                            this->get_uint64()); } }, 
+    {"JMPE",                HANDLED_BY {  m.add_jmpe       (this->get_addr_mode(),
+                                                            this->get_addr_mode(),
+                                                            this->get_uint64()); } },
+    {"STORE",               HANDLED_BY {  m.add_store      (this->get_addr_mode(),
+                                                            this->get_addr_mode()); } },
+    {"STOREI",              HANDLED_BY {  m.add_storei     (this->get_addr_mode(),
+                                                            this->get_uint64()); } } 
   }),
   addr_modes({
     {"REGA",        REGA},
