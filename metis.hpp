@@ -843,18 +843,18 @@ class MetisVM {
       
 };
 
-typedef function<void (MetisVM &, char *)> instruction_handler;
+typedef function<void (MetisVM &, ifstream &s)> instruction_handler;
 class MetisASM {
   public:
     MetisASM();
-    void assemble(const string &filename);
+    void assemble(const string &filename, MetisVM &vm);
   private:
     unordered_map<string, instruction_handler> handlers;
     unordered_map<string, address_mode> addr_modes;
     address_mode get_addr_mode(void);
     uint64_t get_uint64(void);
     char *get_string(void);
-    ifstream input;
+    ifstream infile;
 };
 
 #endif

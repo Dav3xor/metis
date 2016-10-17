@@ -1,10 +1,12 @@
 #include "metis.hpp"
 
-#define HANDLED_BY [this](MetisVM &m, char *s) -> void
+#define HANDLED_BY [this](MetisVM &m, ifstream &s) -> void
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
-  input.open(filename);
-  while(!(input.eof())) {
-     
+  infile.open(filename);
+  string opcode;
+  while(!(infile.eof())) {
+    infile >> opcode;
+    handlers.at(opcode)(vm, infile);
   }
 };
 
