@@ -6,6 +6,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   string opcode;
   while(!(infile.eof())) {
     infile >> opcode;
+    printf("%s\n",opcode.c_str());
     handlers.at(opcode)(vm, infile);
   }
 };
@@ -13,18 +14,21 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
 address_mode MetisASM::get_addr_mode(void) {
   string mode;
   infile >> mode;
+  printf(" - %s\n", mode.c_str());
   return addr_modes.at(mode);
 }
 
 uint64_t MetisASM::get_uint64(void) {
   uint64_t val;
   infile >> val;
+  printf(" - %ju\n", val);
   return val;
 }
 
 string MetisASM::get_string(void) {
   string val; 
   infile >> val;
+  printf(" - %s\n", val.c_str());
   return val;
 }
 
@@ -35,24 +39,31 @@ MetisASM::MetisASM() :
     {"NOOP",                HANDLED_BY {  m.add_noop       (); } }, 
     {"JUMP",                HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
     {"JUMPI",               HANDLED_BY {  m.add_jumpi      (this->get_uint64());   } },
-    {"JIZZ",                HANDLED_BY {  m.add_jizz       (this->get_addr_mode(),
-                                                            this->get_addr_mode()); } }, 
-    {"JNZ",                 HANDLED_BY {  m.add_jnz        (this->get_addr_mode(),
-                                                           this->get_addr_mode()); } },
-    {"JNE",                 HANDLED_BY {  m.add_jne        (this->get_addr_mode(),
-                                                            this->get_addr_mode(),
-                                                            this->get_uint64()); } }, 
-    {"JMPE",                HANDLED_BY {  m.add_jmpe       (this->get_addr_mode(),
-                                                            this->get_addr_mode(),
-                                                            this->get_uint64()); } },
-    {"STORE",               HANDLED_BY {  m.add_store      (this->get_addr_mode(),
-                                                            this->get_addr_mode()); } },
-    {"STOREI",              HANDLED_BY {  m.add_storei     (this->get_addr_mode(),
-                                                            this->get_uint64()); } },
+    {"JIZZ",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          m.add_jizz       (src,dest); } }, 
+    {"JNZ",                 HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          m.add_jnz        (src,dest); } },
+    {"JNE",                 HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          uint64_t val      = this->get_uint64();
+                                          m.add_jne        (src, dest, val); } }, 
+    {"JMPE",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          uint64_t val      = this->get_uint64();
+                                          m.add_jmpe       (src, dest, val); } },
+    {"STORE",               HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          m.add_store      (src, dest); } },
+    {"STOREI",              HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                          uint64_t     val  = this->get_uint64();
+                                          m.add_storei     (src, val); } },
 
     {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
-    {"LABEL",               HANDLED_BY {  m.add_label_val  (this->get_string().c_str(),
-                                                            this->get_uint64()); } },
+    {"LABEL",               HANDLED_BY {  string label = this->get_string();
+                                          uint64_t val = this->get_uint64();
+                                          m.add_label_val  (label.c_str(), val); } },
   
     
   }),

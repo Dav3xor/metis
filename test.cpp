@@ -909,6 +909,19 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(ins_buffer[2] == Approx(1.2));
 };
 
+TEST_CASE( "assembler", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint8_t glbuf[10000];
+  uint64_t stack[5];
+  float buffer[3] = {1.0,1.1,1.2};
+  float data[3]   = {2.0,2.1,2.2};
+  
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  MetisASM a;
+  a.assemble("asmtest.m", m);
+  m.eval();
+};
+
 TEST_CASE( "window stuff", "[MetisContext]") {
   
   uint8_t buf[10000];
