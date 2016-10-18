@@ -920,6 +920,8 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   MetisASM a;
   a.assemble("asmtest.m", m);
   m.eval();
+  REQUIRE( m.get_registers()[REGA] == 1);
+  REQUIRE( m.get_registers()[REGB] == 2);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
