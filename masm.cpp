@@ -6,7 +6,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   string opcode;
   while(!(infile.eof())) {
     infile >> opcode;
-    printf("%s\n",opcode.c_str());
+    //printf("%s\n",opcode.c_str());
     handlers.at(opcode)(vm, infile);
   }
 };
@@ -14,7 +14,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
 address_mode MetisASM::get_addr_mode(void) {
   string mode;
   infile >> mode;
-  printf(" - %s\n", mode.c_str());
+  //printf(" - %s\n", mode.c_str());
   return addr_modes.at(mode);
 }
 
@@ -28,7 +28,7 @@ uint64_t MetisASM::get_uint64(void) {
 string MetisASM::get_string(void) {
   string val; 
   infile >> val;
-  printf(" - %s\n", val.c_str());
+  //printf(" - %s\n", val.c_str());
   return val;
 }
 
