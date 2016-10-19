@@ -32,6 +32,13 @@ uint8_t MetisASM::get_uint8(void) {
   return val;
 }
 
+float MetisASM::get_float(void) {
+  float val;
+  infile >> val;
+  //printf(" - %f\n", val);
+  return val;
+}
+
 string MetisASM::get_string(void) {
   string val; 
   infile >> val;
@@ -79,7 +86,17 @@ MetisASM::MetisASM() :
                                           uint64_t val = this->get_uint64();
                                           m.add_label_val  (label.c_str(), val); } },
   
-    //{"MATRIX"               HANDLED_BY {  uint8_t width = this->get_uint8_t(); 
+    {"MATRIX",              HANDLED_BY {  uint8_t width  = this->get_uint8(); 
+                                          uint8_t height = this->get_uint8(); 
+                                          string  label  = this->get_string();
+                                          uint32_t size  = width*height;
+                                          float *mat     = new float[size];
+                                          for(uint32_t i=0; i<size; i++) {
+                                            mat[i] = this->get_float();
+                                          }
+                                          m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
+                                          delete[] mat; } }
+
   }),
   addr_modes({
     {"REGA",        REGA},
