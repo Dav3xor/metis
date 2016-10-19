@@ -21,7 +21,14 @@ address_mode MetisASM::get_addr_mode(void) {
 uint64_t MetisASM::get_uint64(void) {
   uint64_t val;
   infile >> val;
-  printf(" - %ju\n", val);
+  //printf(" - %ju\n", val);
+  return val;
+}
+
+uint8_t MetisASM::get_uint8(void) {
+  uint8_t val;
+  infile >> val;
+  //printf(" - %cu\n", val);
   return val;
 }
 
@@ -72,7 +79,7 @@ MetisASM::MetisASM() :
                                           uint64_t val = this->get_uint64();
                                           m.add_label_val  (label.c_str(), val); } },
   
-    
+    //{"MATRIX"               HANDLED_BY {  uint8_t width = this->get_uint8_t(); 
   }),
   addr_modes({
     {"REGA",        REGA},

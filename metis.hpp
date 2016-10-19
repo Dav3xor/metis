@@ -851,10 +851,13 @@ class MetisASM {
   private:
     unordered_map<string, instruction_handler> handlers;
     unordered_map<string, address_mode> addr_modes;
+
     address_mode get_addr_mode(void);
-    uint64_t get_uint64(void);
-    string get_string(void);
-    string get_comment(void);
+    uint64_t     get_uint64(void);
+    uint8_t      get_uint8(void);
+    string       get_string(void);
+    string       get_comment(void);
+
     ifstream infile;
 };
 
