@@ -32,8 +32,15 @@ string MetisASM::get_string(void) {
   return val;
 }
 
+string MetisASM::get_comment(void) {
+  string comment;
+  getline(infile, comment);
+  return comment;
+}
+
 MetisASM::MetisASM() : 
   handlers({
+    {"*",                   HANDLED_BY {  get_comment(); } }, 
     {"ERROR",               HANDLED_BY {  m.add_error      (); } },
     {"END",                 HANDLED_BY {  m.add_end        (); } }, 
     {"NOOP",                HANDLED_BY {  m.add_noop       (); } }, 

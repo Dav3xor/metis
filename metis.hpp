@@ -854,6 +854,7 @@ class MetisASM {
     address_mode get_addr_mode(void);
     uint64_t get_uint64(void);
     string get_string(void);
+    string get_comment(void);
     ifstream infile;
 };
 
