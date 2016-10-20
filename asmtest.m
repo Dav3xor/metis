@@ -11,6 +11,7 @@ STOREI REGA 1
 STOREI REGB 2
 
 * a matrix...
+LOC matrix
 MATRIX stuff 3 3
   1.1 2.1 3.1
   1.2 2.2 3.2
