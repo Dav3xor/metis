@@ -923,13 +923,13 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 1);
   REQUIRE( m.get_registers()[REGB] == 2);
   
-  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("matrix");
+  MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("stuff");
   REQUIRE( header->width == 3);
   REQUIRE( header->height == 3);
 
   float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
   REQUIRE(matrix2[0] == Approx(1.1));
-  REQUIRE(matrix2[11] == Approx(3.3));
+  REQUIRE(matrix2[8] == Approx(3.3));
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {

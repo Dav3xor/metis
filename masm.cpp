@@ -92,9 +92,7 @@ MetisASM::MetisASM() :
     {"MATRIX",              HANDLED_BY {  string  label   = this->get_string();
                                           uint32_t width  = this->get_uint8(); 
                                           uint32_t height = this->get_uint8(); 
-                                          uint32_t size   = 0;
-                                          size            = width*height;
-                                          printf("%d %d %d\n",width,height,size);
+                                          uint32_t size   = width*height;
                                           float *mat      = new float[size];
                                           for(uint32_t i=0; i<size; i++) {
                                             mat[i] = this->get_float();
