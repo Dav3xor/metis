@@ -26,8 +26,11 @@ uint64_t MetisASM::get_uint64(void) {
 }
 
 uint8_t MetisASM::get_uint8(void) {
-  uint8_t val;
+  uint32_t val;
   infile >> val;
+  if( val > 255) {
+    throw MetisException("1 byte assembler value out of bounds", __LINE__, __FILE__);
+  }
   //printf(" - %cu\n", val);
   return val;
 }
@@ -86,11 +89,13 @@ MetisASM::MetisASM() :
                                           uint64_t val = this->get_uint64();
                                           m.add_label_val  (label.c_str(), val); } },
   
-    {"MATRIX",              HANDLED_BY {  uint8_t width  = this->get_uint8(); 
-                                          uint8_t height = this->get_uint8(); 
-                                          string  label  = this->get_string();
-                                          uint32_t size  = width*height;
-                                          float *mat     = new float[size];
+    {"MATRIX",              HANDLED_BY {  string  label   = this->get_string();
+                                          uint32_t width  = this->get_uint8(); 
+                                          uint32_t height = this->get_uint8(); 
+                                          uint32_t size   = 0;
+                                          size            = width*height;
+                                          printf("%d %d %d\n",width,height,size);
+                                          float *mat      = new float[size];
                                           for(uint32_t i=0; i<size; i++) {
                                             mat[i] = this->get_float();
                                           }
