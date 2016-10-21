@@ -810,9 +810,11 @@ TEST_CASE( "matrix add/push", "[MetisVM]" ) {
   float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
   REQUIRE(matrix2[0] == Approx(1.1));
   REQUIRE(matrix2[15] == Approx(4.4));
-  header = (MetisMatrixHeader *)m.get_ptr_from_label("hi");
+
+  header = (MetisMatrixHeader *)(m.get_ptr_stack()+16);
   REQUIRE( header->width == 4);
   REQUIRE( header->height == 4);
+
   matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
   REQUIRE(matrix2[0] == Approx(1.1));
   REQUIRE(matrix2[15] == Approx(4.4));

@@ -484,6 +484,9 @@ class MetisVM {
     uint8_t  *get_ptr_from_label (const char *label) {
       return (uint8_t *)(code_start + get_label(label));
     }
+    uint8_t  *get_ptr_stack (void) {
+      return (uint8_t *)stack;
+    }
 
     uint8_t  *get_bufloc_from_label (const char *label) {
       return (uint8_t *)(buffer + get_label(label));
