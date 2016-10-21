@@ -98,8 +98,11 @@ MetisASM::MetisASM() :
                                             mat[i] = this->get_float();
                                           }
                                           m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
-                                          delete[] mat; } }
-
+                                          delete[] mat; } },
+    {"IMATRIX",             HANDLED_BY {  string  label   = this->get_string();
+                                          uint32_t width  = this->get_uint8(); 
+                                          uint32_t height = this->get_uint8(); 
+                                          m.add_identity_matrix(width,height,label.c_str()); } }
   }),
   addr_modes({
     {"REGA",        REGA},
