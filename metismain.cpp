@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
   options_description desc("Allowed options");
   desc.add_options()
        ("help,h", "print usage message")
+       ("assemble,a",  value<string>(&input_file), "assemble <filename>")
        ("run,r",  value<string>(&input_file), "run <filename>");
         
   uint8_t buf[10000];
@@ -38,7 +39,12 @@ int main(int argc, char *argv[])
     cerr << "ERROR: " << e.what() << endl << endl;
     return 1;
   }
-
+  if (args.count("assemble")) {
+    MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+    MetisASM a;
+    a.assemble(args["assemble"].as<string>(),m);
+    m.save(args["assemble"].as<string>() + ".metis");
+  }
   if (args.count("run")) {
     //cout << args["run"].as<string>() << endl;
     MetisVM m(buf,10000, stack, 5, glbuf, 10000);
