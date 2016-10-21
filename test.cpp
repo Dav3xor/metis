@@ -930,6 +930,15 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   float *matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
   REQUIRE(matrix2[0] == Approx(1.1));
   REQUIRE(matrix2[8] == Approx(3.3));
+  
+  header = (MetisMatrixHeader *)m.get_ptr_from_label("identity");
+  REQUIRE( header->width == 4);
+  REQUIRE( header->height == 4);
+
+  matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  REQUIRE(matrix2[0] == Approx(1.0));
+  REQUIRE(matrix2[1] == Approx(0.0));
+  REQUIRE(matrix2[15] == Approx(1.0));
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
