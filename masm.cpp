@@ -90,6 +90,8 @@ MetisASM::MetisASM() :
                                           m.add_label_val  (label.c_str(), val); } },
   
     {"MATRIX",              HANDLED_BY {  string  label   = this->get_string();
+                                          // have to use uint32_t to get iostream
+                                          // to store as integer, not ascii...
                                           uint32_t width  = this->get_uint8(); 
                                           uint32_t height = this->get_uint8(); 
                                           uint32_t size   = width*height;
@@ -102,7 +104,9 @@ MetisASM::MetisASM() :
     {"IMATRIX",             HANDLED_BY {  string  label   = this->get_string();
                                           uint32_t width  = this->get_uint8(); 
                                           uint32_t height = this->get_uint8(); 
-                                          m.add_identity_matrix(width,height,label.c_str()); } }
+                                          m.add_identity_matrix(width,height,label.c_str()); } },
+    {"MPUSH",               HANDLED_BY {  uint64_t loc    = this->get_uint64();
+                                          m.add_push_matrix(loc); } }     
   }),
   addr_modes({
     {"REGA",        REGA},
