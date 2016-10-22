@@ -501,7 +501,7 @@ class MetisVM {
       if ( registers[REGSP] > 0) {
         return stack[registers[REGSP]-1-offset].whole; 
       } else {
-        throw MetisException("stack empty (cur_stack_val)",__LINE__,__FILE__);
+        throw MetisException("attempted to read empty stack (cur_stack_val)",__LINE__,__FILE__);
       }
     }
     uint64_t  cur_stack_size (void)  { return registers[REGSP]; };
@@ -769,7 +769,7 @@ class MetisVM {
     }__attribute__((packed));
     void push(uint64_t val) {
       if( registers[REGSP] >= stack_size) {
-        throw MetisException("stack full (push)",__LINE__,__FILE__);
+        throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
       }
       stack[registers[REGSP]].whole = val;
       registers[REGSP] += 1;
@@ -801,7 +801,7 @@ class MetisVM {
           push(value);
           break;
         default:
-          throw MetisException("unknown addressing mode (set_val)",__LINE__,__FILE__);
+          throw MetisException("unknown addressing mode (set_val) - " + to_string(location),__LINE__,__FILE__);
       } 
     }
     uint64_t get_val(uint8_t location) {
@@ -844,7 +844,7 @@ class MetisVM {
           return pop();
           break;
         default:
-          throw MetisException("unknown addressing mode (get_dest_val)",__LINE__,__FILE__);
+          throw MetisException("unknown addressing mode (get_dest_val) mode = " + to_string(location),__LINE__,__FILE__);
       }
     }     
       
