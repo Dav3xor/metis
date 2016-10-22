@@ -158,7 +158,7 @@ uint64_t MetisVM::add_data(const uint8_t *data, const uint64_t length, const cha
   instruction->type                 = INS_DATA;      
   instruction->commands.data.length = length;
   if (registers[REGIP] + length > (uint64_t)code_end) {
-    throw MetisException("out of memory -- (add_data)",__LINE__,__FILE__);
+    throw MetisException(string("out of memory -- (add_data) label = ") + label,__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
   add_label_ip(label);
@@ -179,7 +179,7 @@ uint64_t MetisVM::add_identity_matrix(const uint8_t width, const uint8_t height,
   instruction->type                 = INS_DATA;      
   instruction->commands.data.length = length + sizeof(MetisMatrixHeader);
   if (registers[REGIP] + length > (uint64_t)code_end) {
-    throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
+    throw MetisException(string("matrix doesn't fit (add_matrix) label = ") + label,__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
   // set width/height
@@ -217,7 +217,7 @@ uint64_t MetisVM::add_matrix(const uint8_t width, const uint8_t height,
   instruction->type                 = INS_DATA;      
   instruction->commands.data.length = length + sizeof(MetisMatrixHeader);
   if (registers[REGIP] + length > (uint64_t)code_end) {
-    throw MetisException("matrix doesn't fit (add_matrix)",__LINE__,__FILE__);
+    throw MetisException(string("matrix doesn't fit (add_matrix) label = ") + label,__LINE__,__FILE__);
   }
   registers[REGIP] += INS_DATA_SIZE;
   // set width/height
@@ -291,7 +291,7 @@ uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, c
   CHECK_POINTER(label);
 
   if ((uint64_t)((buffer_end + length) - buffer) > buffer_size) {
-    throw MetisException("buffer blob doesn't fit (add_buffer)",__LINE__,__FILE__);
+    throw MetisException(string("buffer blob doesn't fit (add_buffer) label = ") + label,__LINE__,__FILE__);
   }
   memcpy((void *)buffer_end, new_buffer, length);
   add_label_val(label, buffer_end-buffer);
@@ -608,7 +608,7 @@ uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
   uint64_t length = strlen(uniform_name)+1;
 
   if(length>255) {
-    throw MetisException("uniform location too big (255 byte string max)",__LINE__,__FILE__);
+    throw MetisException(string("uniform location too big (255 byte string max) uniform = ")+uniform_name,__LINE__,__FILE__);
   }
     
   MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
@@ -617,7 +617,7 @@ uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
   instruction->commands.glgetuniformlocation.uniform_index = uniform_index;
   instruction->commands.glgetuniformlocation.id_length = length;
   if (registers[REGIP] + length > (uint64_t)code_end) {
-    throw MetisException("out of memory -- (add_glgetuniform)",__LINE__,__FILE__);
+    throw MetisException(string("out of memory -- (add_glgetuniform) uniform = ") + uniform_name,__LINE__,__FILE__);
   }
   registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
 
