@@ -106,7 +106,24 @@ MetisASM::MetisASM() :
                                           uint32_t height = this->get_uint8(); 
                                           m.add_identity_matrix(width,height,label.c_str()); } },
     {"MPUSH",               HANDLED_BY {  uint64_t loc    = this->get_uint64();
-                                          m.add_push_matrix(loc); } }     
+                                          m.add_push_matrix(loc); } },
+    {"MMUL",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                          address_mode src2 = this->get_addr_mode();
+                                          uint64_t     dest = this->get_uint64();
+                                          m.add_matrix_multiply(src1, src2, dest); } },
+    {"MADD",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                          address_mode src2 = this->get_addr_mode();
+                                          uint64_t     dest = this->get_uint64();
+                                          m.add_matrix_add(src1, src2, dest); } },
+    {"MDOT",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                          address_mode src2 = this->get_addr_mode();
+                                          uint64_t     dest = this->get_uint64();
+                                          m.add_vector_dot(src1, src2, dest); } },
+    {"MCROSS",              HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                          address_mode src2 = this->get_addr_mode();
+                                          uint64_t     dest = this->get_uint64();
+                                          m.add_vector_cross(src1, src2, dest); } },
+
   }),
   addr_modes({
     {"REGA",        REGA},
