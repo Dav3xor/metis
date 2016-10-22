@@ -9,6 +9,7 @@
         a = (float *)((uint64_t)code_start + get_val(ADDR_MODES)      + sizeof(MetisMatrixHeader));\
         b = (float *)((uint64_t)code_start + get_dest_val(ADDR_MODES) + sizeof(MetisMatrixHeader));\
         d = (float *)((uint64_t)code_start + instruction->commands.extended.ext.type.destination + sizeof(MetisMatrixHeader));
+
 bool MetisVM::eval(const char *label) {
   reset();
   registers[REGIP] = (uint64_t)get_ptr_from_label(label);
@@ -373,7 +374,9 @@ bool MetisVM::do_eval() {
             glUniform4fv(location,matrix_a->height, a);
             break;
           default:
-            throw MetisException("illegal glUniform vector size", __LINE__, __FILE__);
+            throw MetisException(string("illegal glUniform vector size -- width = ") + 
+                                 to_string(matrix_a->width) + string(" height = ") + to_string(matrix_a->height) , 
+                                 __LINE__, __FILE__);
             break; 
         }
         #ifdef TESTING_ENVIRONMENT
@@ -431,10 +434,16 @@ bool MetisVM::do_eval() {
         return true;
         break;
       case INS_ERROR:
-        throw MetisException("error opcode found", __LINE__, __FILE__);
+        throw MetisException(string("error opcode found -- instruction = ") + 
+                             to_string(instruction->type) + string(" IP = ") + 
+                             to_string(registers[REGIP]) , 
+                             __LINE__, __FILE__);
         break;
       default:
-        throw MetisException("unknown opcode found", __LINE__, __FILE__);
+        throw MetisException(string("unknown opcode found -- instruction = ") + 
+                             to_string(instruction->type) + string(" IP = ") + 
+                             to_string(registers[REGIP]) , 
+                             __LINE__, __FILE__);
         return false;
         break;
     };
@@ -493,7 +502,7 @@ bool MetisVM::doLinkProgram(uint16_t index) {
     printf("%s\n",log);
     printf("-------------------------------\n");
 
-    throw MetisException("Shader Compilation Failed.",__LINE__,__FILE__);
+    throw MetisException("Shader Link Failed.",__LINE__,__FILE__);
     // Exit with failure.
     glDeleteProgram(program); // Don't leak the shader.
     return false;
