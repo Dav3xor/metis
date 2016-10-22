@@ -141,13 +141,13 @@ enum address_mode: uint8_t {REGA                    =    0,
 
 class MetisException: public runtime_error {
   public:
-    MetisException(const char *error, 
+    MetisException(string error, 
                    const int line, 
                    const char *file): runtime_error("Metis VM"), 
                                       error_str(error), 
                                       file(file), line(line) {};
   private:  
-    const char *error_str;
+    string     error_str;
     const char *file;
     const int   line;
 
@@ -478,7 +478,11 @@ class MetisVM {
     }
 
     uint64_t get_label(const char *label) {
-      return labels.at(label);
+      try {
+        return labels.at(label);
+      } catch (...) {
+        throw MetisException(string("label does not exist - ") + label, __LINE__,__FILE__);
+      }
     }
 
     uint8_t  *get_ptr_from_label (const char *label) {

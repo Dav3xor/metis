@@ -37,7 +37,7 @@ TEST_CASE( "labels", "[MetisVM]" ) {
   REQUIRE( m.get_label("start") == 0);
   REQUIRE( m.get_label("end") == INS_STOREI_SIZE*2);
   REQUIRE( m.get_label("arbitrary") == 555);
-  REQUIRE_THROWS_AS( m.get_label("x"), out_of_range);
+  REQUIRE_THROWS_AS( m.get_label("x"), MetisException);
 }
 
 TEST_CASE( "instruction doesn't fit", "[MetisVM]" ) {
