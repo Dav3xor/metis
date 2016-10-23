@@ -48,7 +48,16 @@ string MetisASM::get_string(void) {
   //printf(" - %s\n", val.c_str());
   return val;
 }
-
+uint64_t MetisASM::get_addr(MetisVM &m) {
+  string val;
+  infile >> val;
+  if((val[0] >= '0')&&(val[0] <= '9')) {
+    return stoull(val, 0, 10);
+  } else {
+    return m.get_label(val.c_str());
+  }
+}
+    
 string MetisASM::get_comment(void) {
   string comment;
   getline(infile, comment);
@@ -105,23 +114,23 @@ MetisASM::MetisASM() :
                                           uint32_t width  = this->get_uint8(); 
                                           uint32_t height = this->get_uint8(); 
                                           m.add_identity_matrix(width,height,label.c_str()); } },
-    {"MPUSH",               HANDLED_BY {  uint64_t loc    = this->get_uint64();
+    {"MPUSH",               HANDLED_BY {  uint64_t loc    = this->get_addr(m);
                                           m.add_push_matrix(loc); } },
     {"MMUL",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_uint64();
+                                          uint64_t     dest = this->get_addr(m);
                                           m.add_matrix_multiply(src1, src2, dest); } },
     {"MADD",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_uint64();
+                                          uint64_t     dest = this->get_addr(m);
                                           m.add_matrix_add(src1, src2, dest); } },
     {"MDOT",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_uint64();
+                                          uint64_t     dest = this->get_addr(m);
                                           m.add_vector_dot(src1, src2, dest); } },
     {"MCROSS",              HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_uint64();
+                                          uint64_t     dest = this->get_addr(m);
                                           m.add_vector_cross(src1, src2, dest); } },
 
   }),

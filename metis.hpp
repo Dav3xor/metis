@@ -865,6 +865,7 @@ class MetisASM {
     float        get_float(void);
     string       get_string(void);
     string       get_comment(void);
+    uint64_t     get_addr(MetisVM &m);
 
     ifstream infile;
 };
