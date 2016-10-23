@@ -71,7 +71,7 @@ MetisASM::MetisASM() :
     {"END",                 HANDLED_BY {  m.add_end        (); } }, 
     {"NOOP",                HANDLED_BY {  m.add_noop       (); } }, 
     {"JUMP",                HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
-    {"JUMPI",               HANDLED_BY {  m.add_jumpi      (this->get_uint64());   } },
+    {"JUMPI",               HANDLED_BY {  m.add_jumpi      (this->get_addr(m));   } },
     {"JIZZ",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                           address_mode dest = this->get_addr_mode();
                                           m.add_jizz       (src,dest); } }, 
@@ -80,7 +80,7 @@ MetisASM::MetisASM() :
                                           m.add_jnz        (src,dest); } },
     {"JNE",                 HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                           address_mode dest = this->get_addr_mode();
-                                          uint64_t val      = this->get_uint64();
+                                          uint64_t val      = this->get_addr(m);
                                           m.add_jne        (src, dest, val); } }, 
     {"JMPE",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                           address_mode dest = this->get_addr_mode();
@@ -89,9 +89,9 @@ MetisASM::MetisASM() :
     {"STORE",               HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                           address_mode dest = this->get_addr_mode();
                                           m.add_store      (src, dest); } },
-    {"STOREI",              HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          uint64_t     val  = this->get_uint64();
-                                          m.add_storei     (src, val); } },
+    {"STOREI",              HANDLED_BY {  address_mode dest = this->get_addr_mode();
+                                          uint64_t     val  = this->get_addr(m);
+                                          m.add_storei     (dest, val); } },
 
     {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
     {"LABEL",               HANDLED_BY {  string label = this->get_string();
