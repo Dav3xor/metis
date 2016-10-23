@@ -922,8 +922,8 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   MetisASM a;
   a.assemble("asmtest.m", m);
   m.eval();
-  REQUIRE( m.get_registers()[REGA] == 1);
-  REQUIRE( m.get_registers()[REGB] == 2);
+  REQUIRE( m.get_registers()[REGA] == 155);
+  REQUIRE( m.get_registers()[REGB] == 204);
   
   MetisMatrixHeader *header = (MetisMatrixHeader *)m.get_ptr_from_label("stuff");
   REQUIRE( header->width == 3);
@@ -941,6 +941,15 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   REQUIRE(matrix2[0] == Approx(1.0));
   REQUIRE(matrix2[1] == Approx(0.0));
   REQUIRE(matrix2[15] == Approx(1.0));
+  
+  header = (MetisMatrixHeader *)m.get_ptr_from_label("matrixb");
+  REQUIRE( header->width == 3);
+  REQUIRE( header->height == 3);
+
+  matrix2 = (float *)((uint64_t)header+sizeof(MetisMatrixHeader));
+  REQUIRE(matrix2[0] == Approx(.83));
+  REQUIRE(matrix2[1] == Approx(-403.53778));
+  REQUIRE(matrix2[15] == Approx(0.0));
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
