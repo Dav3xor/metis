@@ -124,11 +124,11 @@ MetisASM::MetisASM() :
                                           address_mode src2 = this->get_addr_mode();
                                           uint64_t     dest = this->get_addr(m);
                                           m.add_matrix_add(src1, src2, dest); } },
-    {"MDOT",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+    {"VDOT",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
                                           uint64_t     dest = this->get_addr(m);
                                           m.add_vector_dot(src1, src2, dest); } },
-    {"MCROSS",              HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+    {"VCROSS",              HANDLED_BY {  address_mode src1 = this->get_addr_mode();
                                           address_mode src2 = this->get_addr_mode();
                                           uint64_t     dest = this->get_addr(m);
                                           m.add_vector_cross(src1, src2, dest); } },
