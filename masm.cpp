@@ -1,6 +1,13 @@
 #include "metis.hpp"
 
 #define HANDLED_BY [this](MetisVM &m, ifstream &s) -> void
+
+
+#define MATH_INSTRUCTION(instruction, add_method) \
+    {instruction,           HANDLED_BY {  address_mode src = this->get_addr_mode(); \
+                                          address_mode dest = this->get_addr_mode(); \
+                                          m.add_method(src, dest); } }
+
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   infile.open(filename);
   string opcode;
@@ -140,9 +147,17 @@ MetisASM::MetisASM() :
                                           }
                                           m.add_buffer((uint8_t *)buffer, size, label.c_str());
                                           delete[] buffer; } },
-    {"NOT",                 HANDLED_BY {  address_mode src = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          m.add_not(src, dest); } },
+    MATH_INSTRUCTION("NOT", add_not),
+    MATH_INSTRUCTION("INC", add_inc), 
+    MATH_INSTRUCTION("DEC", add_dec),
+    MATH_INSTRUCTION("ADD", add_add), 
+    MATH_INSTRUCTION("SUB", add_sub), 
+    MATH_INSTRUCTION("MUL", add_mul), 
+    MATH_INSTRUCTION("DIV", add_div), 
+    MATH_INSTRUCTION("MOD", add_mod), 
+    MATH_INSTRUCTION("AND", add_and), 
+    MATH_INSTRUCTION("OR",  add_or), 
+    MATH_INSTRUCTION("XOR", add_xor),
   }),
   addr_modes({
     {"REGA",        REGA},
