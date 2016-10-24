@@ -952,6 +952,21 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   REQUIRE(matrix2[15] == Approx(0.0));
 };
 
+TEST_CASE( "assembler math", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint8_t glbuf[10000];
+  uint64_t stack[5];
+  float buffer[3] = {1.0,1.1,1.2};
+  float data[3]   = {2.0,2.1,2.2};
+  
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  MetisASM a;
+  a.assemble("mathtest.m", m);
+  m.eval();
+  REQUIRE( m.get_registers()[REGA] == 1);
+  REQUIRE( m.get_registers()[REGB] == 0);
+};
+
 TEST_CASE( "window stuff", "[MetisContext]") {
   
   uint8_t buf[10000];

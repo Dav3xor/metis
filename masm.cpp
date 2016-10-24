@@ -159,6 +159,7 @@ MetisASM::MetisASM() :
     MATH_INSTRUCTION("OR",  add_or), 
     MATH_INSTRUCTION("XOR", add_xor),
   }),
+  
   addr_modes({
     {"REGA",        REGA},
     {"REGB",        REGB},
