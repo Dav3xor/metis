@@ -132,7 +132,17 @@ MetisASM::MetisASM() :
                                           address_mode src2 = this->get_addr_mode();
                                           uint64_t     dest = this->get_addr(m);
                                           m.add_vector_cross(src1, src2, dest); } },
-
+    {"BUFFER",              HANDLED_BY {  string  label   = this->get_string();
+                                          uint32_t size   = this->get_uint64(); 
+                                          float *buffer   = new float[size];
+                                          for(uint32_t i=0; i<size; i++) {
+                                            buffer[i] = this->get_float();
+                                          }
+                                          m.add_buffer((uint8_t *)buffer, size, label.c_str());
+                                          delete[] buffer; } },
+    {"NOT",                 HANDLED_BY {  address_mode src = this->get_addr_mode();
+                                          address_mode dest = this->get_addr_mode();
+                                          m.add_not(src, dest); } },
   }),
   addr_modes({
     {"REGA",        REGA},
