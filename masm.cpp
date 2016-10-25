@@ -82,6 +82,16 @@ GLsizei MetisASM::get_GLsizei(void) {
   return size;
 }
 
+GLint MetisASM::get_GLint(void) {
+  GLint i;
+  infile >> i;
+  return i;
+}
+metisgl_identifier MetisASM::get_metisid(void) {
+  metisgl_identifier id;
+  infile >> id;
+  return id;
+}
 MetisASM::MetisASM() : 
   handlers({
     {"*",                   HANDLED_BY {  get_comment(); } }, 

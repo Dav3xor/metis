@@ -246,11 +246,11 @@ union MetisMemoryCell {
   MetisMatrixHeader   matrix;
 }__attribute__((packed));
 
+typedef uint16_t metisgl_identifier;
 
 class MetisVM {
   private:
     // first, the list of instructions...
-    typedef uint16_t metisgl_identifier;
     enum instruction: uint8_t {INS_ERROR                         =    0,   //     should never happen
                                INS_JUMP                          =    1,   // *   jump to index ...
                                INS_JUMPI                         =    2,   //     jump to immediate index
@@ -859,15 +859,18 @@ class MetisASM {
     unordered_map<string, instruction_handler> handlers;
     unordered_map<string, address_mode> addr_modes;
 
-    address_mode get_addr_mode(void);
-    uint64_t     get_uint64(void);
-    uint8_t      get_uint8(void);
-    float        get_float(void);
-    string       get_string(void);
-    string       get_comment(void);
-    uint64_t     get_addr(MetisVM &m);
-    GLenum       get_GLenum(void);
-    GLsizei      get_GLsizei(void);
+    address_mode       get_addr_mode(void);
+    uint64_t           get_uint64(void);
+    uint8_t            get_uint8(void);
+    float              get_float(void);
+    string             get_string(void);
+    string             get_comment(void);
+    uint64_t           get_addr(MetisVM &m);
+    GLenum             get_GLenum(void);
+    GLsizei            get_GLsizei(void);
+    GLint              get_GLint(void);
+    metisgl_identifier get_metisid(void);
+
     ifstream infile;
 };
 
