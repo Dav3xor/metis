@@ -71,6 +71,17 @@ string MetisASM::get_comment(void) {
   return comment;
 }
 
+GLenum MetisASM::get_GLenum(void) {
+  GLenum e;
+  infile >> e;
+  return e;
+}
+GLsizei MetisASM::get_GLsizei(void) {
+  GLsizei size;
+  infile >> size;
+  return size;
+}
+
 MetisASM::MetisASM() : 
   handlers({
     {"*",                   HANDLED_BY {  get_comment(); } }, 
@@ -147,6 +158,7 @@ MetisASM::MetisASM() :
                                           }
                                           m.add_buffer((uint8_t *)buffer, size, label.c_str());
                                           delete[] buffer; } },
+    //{"GLDRAWELEMENTS"       HANDLED_BY { 
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),

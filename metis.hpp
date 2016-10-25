@@ -866,7 +866,8 @@ class MetisASM {
     string       get_string(void);
     string       get_comment(void);
     uint64_t     get_addr(MetisVM &m);
-
+    GLenum       get_GLenum(void);
+    GLsizei      get_GLsizei(void);
     ifstream infile;
 };
 
