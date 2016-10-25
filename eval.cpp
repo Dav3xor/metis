@@ -32,7 +32,8 @@ bool MetisVM::do_eval() {
   float             *d;
   uint8_t            i,j,k;
   uint32_t           num_bytes;
-  GLchar *string_ptr;
+  GLchar            *string_ptr;
+  GLvoid            *glvoid = 0;
   GLint              location;
 
   while(registers[REGIP] <= (uint64_t)code_end) {
@@ -177,10 +178,14 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_VECTOR_CROSS_SIZE;
         break;    
       case INS_GLDRAWELEMENTS:
+        glvoid = 0;
+        if(instruction->commands.gldrawelements.indices==0) {
+          glvoid = (GLvoid *)(buffer + instruction->commands.gldrawelements.indices);
+        }
         glDrawElements(instruction->commands.gldrawelements.mode, 
                        instruction->commands.gldrawelements.count, 
                        instruction->commands.gldrawelements.type, 
-                       instruction->commands.gldrawelements.indices);
+                       glvoid);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
@@ -246,12 +251,16 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
         break;
       case INS_GLVERTEXATTRIBPOINTER:
+        glvoid = 0;
+        if(instruction->commands.glvertexattribpointer.pointer) {
+          glvoid = (GLvoid *)(buffer + instruction->commands.glvertexattribpointer.pointer);
+        }
         glVertexAttribPointer(instruction->commands.glvertexattribpointer.index, 
                               instruction->commands.glvertexattribpointer.size,
                               instruction->commands.glvertexattribpointer.type,
                               instruction->commands.glvertexattribpointer.normalized,
                               instruction->commands.glvertexattribpointer.stride,
-                              instruction->commands.glvertexattribpointer.pointer);
+                              glvoid);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif

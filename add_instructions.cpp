@@ -312,9 +312,8 @@ uint64_t MetisVM::add_not(address_mode src, address_mode dest) {
 };
 
 uint64_t MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
-                                 GLenum type, GLvoid *indices) {
+                                 GLenum type, uint64_t indices) {
   CHECK_INSTRUCTION(INS_GLDRAWELEMENTS_SIZE);
-  CHECK_POINTER(indices);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_GLDRAWELEMENTS;      
@@ -408,7 +407,7 @@ uint64_t MetisVM::add_glenablevertexattribarray(GLuint index) {
 
 uint64_t MetisVM::add_glvertexattribpointer(GLuint index, GLint size, 
                              GLenum type, GLboolean normalized, 
-                             GLsizei stride, GLvoid *pointer) {
+                             GLsizei stride, uint64_t pointer) {
   CHECK_INSTRUCTION(INS_GLVERTEXATTRIBPOINTER_SIZE);
   //CHECK_POINTER(pointer);
 

@@ -56,7 +56,7 @@ using namespace std;
 
 #define INS_MATH_SIZE     2
 
-#define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(GLvoid *)
+#define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(uint64_t )
 #define INS_GLDRAWARRAYS_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLsizei)
 #define INS_GLGENBUFFERS_SIZE                1+sizeof(GLsizei)+sizeof(metisgl_identifier)
 #define INS_GLGENVERTEXARRAYS_SIZE           1+sizeof(GLsizei)+sizeof(metisgl_identifier)
@@ -65,7 +65,7 @@ using namespace std;
 #define INS_GLBUFFERDATA_SIZE                1+sizeof(GLenum)+sizeof(GLsizeiptr)+sizeof(uint64_t)+sizeof(GLenum)
 #define INS_GLENABLEVERTEXATTRIBARRAY_SIZE   1+sizeof(GLuint)
 #define INS_GLVERTEXATTRIBPOINTER_SIZE       1+sizeof(GLuint)+sizeof(GLint)+sizeof(GLenum)+\
-                                               sizeof(GLboolean)+sizeof(GLsizei)+sizeof(GLvoid *)
+                                               sizeof(GLboolean)+sizeof(GLsizei)+sizeof(uint64_t )
 #define INS_GLDISABLEVERTEXATTRIBARRAY_SIZE  1+sizeof(GLuint)
 #define INS_GLENABLE_SIZE                    1+sizeof(GLenum)
 #define INS_GLDEPTHFUNC_SIZE                 1+sizeof(GLenum)
@@ -91,7 +91,7 @@ using namespace std;
 #define INS_GLTEXPARAMETERI_SIZE             1+sizeof(GLenum)+sizeof(GLenum)+sizeof(GLint)
 #define INS_GLTEXPARAMETERFV_SIZE            2+sizeof(GLenum)+sizeof(GLenum)
 #define INS_GLGENERATEMIPMAP_SIZE            1+sizeof(GLenum)
-#define INS_GLTEXIMAGE2D_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLint)+sizeof(GLsizei)+sizeof(GLsizei)+sizeof(GLint)+sizeof(GLenum)+sizeof(GLenum)+sizeof(GLvoid *)
+#define INS_GLTEXIMAGE2D_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLint)+sizeof(GLsizei)+sizeof(GLsizei)+sizeof(GLint)+sizeof(GLenum)+sizeof(GLenum)+sizeof(uint64_t )
 #define INS_GLGETATTRIBLOCATION_SIZE         1+sizeof(metisgl_identifier)
 #define INS_GLACTIVETEXTURE_SIZE             1+sizeof(GLenum)
 
@@ -406,7 +406,7 @@ class MetisVM {
     MATH_METHOD(add_xor, INS_XOR); 
 
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
-                                GLenum type, GLvoid *indices);
+                                GLenum type, uint64_t indices);
     uint64_t add_gldrawarrays(GLenum mode, 
                               GLint first, 
                               GLsizei count);
@@ -424,7 +424,7 @@ class MetisVM {
     uint64_t add_glenablevertexattribarray(GLuint index);     // not a metisgl_identifier...
     uint64_t add_glvertexattribpointer(GLuint index, GLint size, 
                                        GLenum type, GLboolean normalized, 
-                                       GLsizei stride, GLvoid *pointer);
+                                       GLsizei stride, uint64_t pointer);
     uint64_t add_gldisablevertexattribarray(GLuint index);
     uint64_t add_glenable(GLenum capability);
     uint64_t add_gldepthfunc(GLenum function);
@@ -592,7 +592,7 @@ class MetisVM {
           GLenum mode;
           GLsizei count;
           GLenum type;
-          GLvoid * indices;
+          uint64_t  indices;
         }__attribute__((packed)) gldrawelements;
 
         struct gldrawarrays_t {
@@ -637,7 +637,7 @@ class MetisVM {
           GLenum type;
           GLboolean normalized;
           GLsizei stride;
-          GLvoid *pointer;
+          uint64_t pointer;
         }__attribute__((packed))glvertexattribpointer;
 
         struct gldisablevertexattribarray_t {
