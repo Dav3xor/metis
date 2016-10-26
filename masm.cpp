@@ -174,6 +174,10 @@ MetisASM::MetisASM() :
                                           uint64_t indices = this->get_uint64();
                                           m.add_gldrawelements(mode, count, type, indices); } },
 
+    {"GLDRAWARRAYS",        HANDLED_BY {  GLenum mode     = this->get_GLenum();
+                                          GLint first     = this->get_GLint();
+                                          GLsizei count   = this->get_GLsizei();
+                                          m.add_gldrawarrays(mode, first, count); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
