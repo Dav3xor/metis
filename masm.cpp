@@ -188,6 +188,9 @@ MetisASM::MetisASM() :
                                           m.add_glgenvertexarrays(numids, start); } },
     {"GLBINDVERTEXARRAY",   HANDLED_BY {  metisgl_identifier id    = this->get_metisid();
                                           m.add_glbindvertexarray(id); } },
+    {"GLBINDBUFFER",        HANDLED_BY {  GLenum target            = this->get_GLenum();
+                                          metisgl_identifier id    = this->get_metisid();
+                                          m.add_glbindbuffer(target, id); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
