@@ -168,16 +168,21 @@ MetisASM::MetisASM() :
                                           }
                                           m.add_buffer((uint8_t *)buffer, size, label.c_str());
                                           delete[] buffer; } },
-    {"GLDRAWELEMENTS",      HANDLED_BY {  GLenum mode     = this->get_GLenum();
-                                          GLsizei count   = this->get_GLsizei();
-                                          GLenum type     = this->get_GLenum();
+
+    {"GLDRAWELEMENTS",      HANDLED_BY {  GLenum mode      = this->get_GLenum();
+                                          GLsizei count    = this->get_GLsizei();
+                                          GLenum type      = this->get_GLenum();
                                           uint64_t indices = this->get_uint64();
                                           m.add_gldrawelements(mode, count, type, indices); } },
 
-    {"GLDRAWARRAYS",        HANDLED_BY {  GLenum mode     = this->get_GLenum();
-                                          GLint first     = this->get_GLint();
-                                          GLsizei count   = this->get_GLsizei();
+    {"GLDRAWARRAYS",        HANDLED_BY {  GLenum mode        = this->get_GLenum();
+                                          GLint first        = this->get_GLint();
+                                          GLsizei count      = this->get_GLsizei();
                                           m.add_gldrawarrays(mode, first, count); } },
+
+    {"GLGENBUFFERS",        HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
+                                          metisgl_identifier start = this->get_metisid();
+                                          m.add_glgenbuffers(numids, start); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
