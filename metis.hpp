@@ -869,6 +869,7 @@ class MetisASM {
     GLenum             get_GLenum(void);
     GLsizei            get_GLsizei(void);
     GLint              get_GLint(void);
+    GLsizeiptr         get_GLsizeiptr(void);
     metisgl_identifier get_metisid(void);
 
     ifstream infile;

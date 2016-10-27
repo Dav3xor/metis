@@ -87,6 +87,13 @@ GLint MetisASM::get_GLint(void) {
   infile >> i;
   return i;
 }
+
+GLsizeiptr MetisASM::get_GLsizeiptr(void) {
+  GLsizeiptr i;
+  infile >> i;
+  return i;
+}
+
 metisgl_identifier MetisASM::get_metisid(void) {
   metisgl_identifier id;
   infile >> id;
@@ -191,6 +198,11 @@ MetisASM::MetisASM() :
     {"GLBINDBUFFER",        HANDLED_BY {  GLenum target            = this->get_GLenum();
                                           metisgl_identifier id    = this->get_metisid();
                                           m.add_glbindbuffer(target, id); } },
+    {"GLBUFFERDATA",        HANDLED_BY {  GLenum target            = this->get_GLenum();
+                                          GLsizeiptr size          = this->get_GLsizeiptr();
+                                          uint64_t data_index      = this->get_metisid();
+                                          GLenum usage             = this->get_GLenum();
+                                          m.add_glbufferdata(target, size, data_index, usage); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
