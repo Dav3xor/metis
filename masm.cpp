@@ -88,6 +88,12 @@ GLint MetisASM::get_GLint(void) {
   return i;
 }
 
+GLuint MetisASM::get_GLuint(void) {
+  GLuint i;
+  infile >> i;
+  return i;
+}
+
 GLsizeiptr MetisASM::get_GLsizeiptr(void) {
   GLsizeiptr i;
   infile >> i;
@@ -101,108 +107,110 @@ metisgl_identifier MetisASM::get_metisid(void) {
 }
 MetisASM::MetisASM() : 
   handlers({
-    {"*",                   HANDLED_BY {  get_comment(); } }, 
-    {"ERROR",               HANDLED_BY {  m.add_error      (); } },
-    {"END",                 HANDLED_BY {  m.add_end        (); } }, 
-    {"NOOP",                HANDLED_BY {  m.add_noop       (); } }, 
-    {"JUMP",                HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
-    {"JUMPI",               HANDLED_BY {  m.add_jumpi      (this->get_addr(m));   } },
-    {"JIZZ",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          m.add_jizz       (src,dest); } }, 
-    {"JNZ",                 HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          m.add_jnz        (src,dest); } },
-    {"JNE",                 HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          uint64_t val      = this->get_addr(m);
-                                          m.add_jne        (src, dest, val); } }, 
-    {"JMPE",                HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          uint64_t val      = this->get_uint64();
-                                          m.add_jmpe       (src, dest, val); } },
-    {"STORE",               HANDLED_BY {  address_mode src  = this->get_addr_mode();
-                                          address_mode dest = this->get_addr_mode();
-                                          m.add_store      (src, dest); } },
-    {"STOREI",              HANDLED_BY {  address_mode dest = this->get_addr_mode();
-                                          uint64_t     val  = this->get_addr(m);
-                                          m.add_storei     (dest, val); } },
+    {"*",                          HANDLED_BY {  get_comment(); } }, 
+    {"ERROR",                      HANDLED_BY {  m.add_error      (); } },
+    {"END",                        HANDLED_BY {  m.add_end        (); } }, 
+    {"NOOP",                       HANDLED_BY {  m.add_noop       (); } }, 
+    {"JUMP",                       HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
+    {"JUMPI",                      HANDLED_BY {  m.add_jumpi      (this->get_addr(m));   } },
+    {"JIZZ",                       HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 m.add_jizz       (src,dest); } }, 
+    {"JNZ",                        HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 m.add_jnz        (src,dest); } },
+    {"JNE",                        HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 uint64_t val      = this->get_addr(m);
+                                                 m.add_jne        (src, dest, val); } }, 
+    {"JMPE",                       HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 uint64_t val      = this->get_uint64();
+                                                 m.add_jmpe       (src, dest, val); } },
+    {"STORE",                      HANDLED_BY {  address_mode src  = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 m.add_store      (src, dest); } },
+    {"STOREI",                     HANDLED_BY {  address_mode dest = this->get_addr_mode();
+                                                 uint64_t     val  = this->get_addr(m);
+                                                 m.add_storei     (dest, val); } },
 
-    {"LOC",                 HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
-    {"LABEL",               HANDLED_BY {  string label = this->get_string();
-                                          uint64_t val = this->get_uint64();
-                                          m.add_label_val  (label.c_str(), val); } },
+    {"LOC",                        HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
+    {"LABEL",                      HANDLED_BY {  string label = this->get_string();
+                                                 uint64_t val = this->get_uint64();
+                                                 m.add_label_val  (label.c_str(), val); } },
   
-    {"MATRIX",              HANDLED_BY {  string  label   = this->get_string();
-                                          // have to use uint32_t to get iostream
-                                          // to store as integer, not ascii...
-                                          uint32_t width  = this->get_uint8(); 
-                                          uint32_t height = this->get_uint8(); 
-                                          uint32_t size   = width*height;
-                                          float *mat      = new float[size];
-                                          for(uint32_t i=0; i<size; i++) {
-                                            mat[i] = this->get_float();
-                                          }
-                                          m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
-                                          delete[] mat; } },
-    {"IMATRIX",             HANDLED_BY {  string  label   = this->get_string();
-                                          uint32_t width  = this->get_uint8(); 
-                                          uint32_t height = this->get_uint8(); 
-                                          m.add_identity_matrix(width,height,label.c_str()); } },
-    {"MPUSH",               HANDLED_BY {  uint64_t loc    = this->get_addr(m);
-                                          m.add_push_matrix(loc); } },
-    {"MMUL",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
-                                          address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_addr(m);
-                                          m.add_matrix_multiply(src1, src2, dest); } },
-    {"MADD",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
-                                          address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_addr(m);
-                                          m.add_matrix_add(src1, src2, dest); } },
-    {"VDOT",                HANDLED_BY {  address_mode src1 = this->get_addr_mode();
-                                          address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_addr(m);
-                                          m.add_vector_dot(src1, src2, dest); } },
-    {"VCROSS",              HANDLED_BY {  address_mode src1 = this->get_addr_mode();
-                                          address_mode src2 = this->get_addr_mode();
-                                          uint64_t     dest = this->get_addr(m);
-                                          m.add_vector_cross(src1, src2, dest); } },
-    {"BUFFER",              HANDLED_BY {  string  label   = this->get_string();
-                                          uint32_t size   = this->get_uint64(); 
-                                          float *buffer   = new float[size];
-                                          for(uint32_t i=0; i<size; i++) {
-                                            buffer[i] = this->get_float();
-                                          }
-                                          m.add_buffer((uint8_t *)buffer, size, label.c_str());
-                                          delete[] buffer; } },
+    {"MATRIX",                     HANDLED_BY {  string  label   = this->get_string();
+                                                 // have to use uint32_t to get iostream
+                                                 // to store as integer, not ascii...
+                                                 uint32_t width  = this->get_uint8(); 
+                                                 uint32_t height = this->get_uint8(); 
+                                                 uint32_t size   = width*height;
+                                                 float *mat      = new float[size];
+                                                 for(uint32_t i=0; i<size; i++) {
+                                                   mat[i] = this->get_float();
+                                                 }
+                                                 m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
+                                                 delete[] mat; } },
+    {"IMATRIX",                    HANDLED_BY {  string  label   = this->get_string();
+                                                 uint32_t width  = this->get_uint8(); 
+                                                 uint32_t height = this->get_uint8(); 
+                                                 m.add_identity_matrix(width,height,label.c_str()); } },
+    {"MPUSH",                      HANDLED_BY {  uint64_t loc    = this->get_addr(m);
+                                                 m.add_push_matrix(loc); } },
+    {"MMUL",                       HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                                 address_mode src2 = this->get_addr_mode();
+                                                 uint64_t     dest = this->get_addr(m);
+                                                 m.add_matrix_multiply(src1, src2, dest); } },
+    {"MADD",                       HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                                 address_mode src2 = this->get_addr_mode();
+                                                 uint64_t     dest = this->get_addr(m);
+                                                 m.add_matrix_add(src1, src2, dest); } },
+    {"VDOT",                       HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                                 address_mode src2 = this->get_addr_mode();
+                                                 uint64_t     dest = this->get_addr(m);
+                                                 m.add_vector_dot(src1, src2, dest); } },
+    {"VCROSS",                     HANDLED_BY {  address_mode src1 = this->get_addr_mode();
+                                                 address_mode src2 = this->get_addr_mode();
+                                                 uint64_t     dest = this->get_addr(m);
+                                                 m.add_vector_cross(src1, src2, dest); } },
+    {"BUFFER",                     HANDLED_BY {  string  label   = this->get_string();
+                                                 uint32_t size   = this->get_uint64(); 
+                                                 float *buffer   = new float[size];
+                                                 for(uint32_t i=0; i<size; i++) {
+                                                   buffer[i] = this->get_float();
+                                                 }
+                                                 m.add_buffer((uint8_t *)buffer, size, label.c_str());
+                                                 delete[] buffer; } },
 
-    {"GLDRAWELEMENTS",      HANDLED_BY {  GLenum mode      = this->get_GLenum();
-                                          GLsizei count    = this->get_GLsizei();
-                                          GLenum type      = this->get_GLenum();
-                                          uint64_t indices = this->get_uint64();
-                                          m.add_gldrawelements(mode, count, type, indices); } },
+    {"GLDRAWELEMENTS",             HANDLED_BY {  GLenum mode      = this->get_GLenum();
+                                                 GLsizei count    = this->get_GLsizei();
+                                                 GLenum type      = this->get_GLenum();
+                                                 uint64_t indices = this->get_uint64();
+                                                 m.add_gldrawelements(mode, count, type, indices); } },
 
-    {"GLDRAWARRAYS",        HANDLED_BY {  GLenum mode        = this->get_GLenum();
-                                          GLint first        = this->get_GLint();
-                                          GLsizei count      = this->get_GLsizei();
-                                          m.add_gldrawarrays(mode, first, count); } },
+    {"GLDRAWARRAYS",               HANDLED_BY {  GLenum mode        = this->get_GLenum();
+                                                 GLint first        = this->get_GLint();
+                                                 GLsizei count      = this->get_GLsizei();
+                                                 m.add_gldrawarrays(mode, first, count); } },
 
-    {"GLGENBUFFERS",        HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
-                                          metisgl_identifier start = this->get_metisid();
-                                          m.add_glgenbuffers(numids, start); } },
-    {"GLGENVERTEXARRAYS",   HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
-                                          metisgl_identifier start = this->get_metisid();
-                                          m.add_glgenvertexarrays(numids, start); } },
-    {"GLBINDVERTEXARRAY",   HANDLED_BY {  metisgl_identifier id    = this->get_metisid();
-                                          m.add_glbindvertexarray(id); } },
-    {"GLBINDBUFFER",        HANDLED_BY {  GLenum target            = this->get_GLenum();
-                                          metisgl_identifier id    = this->get_metisid();
-                                          m.add_glbindbuffer(target, id); } },
-    {"GLBUFFERDATA",        HANDLED_BY {  GLenum target            = this->get_GLenum();
-                                          GLsizeiptr size          = this->get_GLsizeiptr();
-                                          uint64_t data_index      = this->get_metisid();
-                                          GLenum usage             = this->get_GLenum();
-                                          m.add_glbufferdata(target, size, data_index, usage); } },
+    {"GLGENBUFFERS",               HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
+                                                 metisgl_identifier start = this->get_metisid();
+                                                 m.add_glgenbuffers(numids, start); } },
+    {"GLGENVERTEXARRAYS",          HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
+                                                 metisgl_identifier start = this->get_metisid();
+                                                 m.add_glgenvertexarrays(numids, start); } },
+    {"GLBINDVERTEXARRAY",          HANDLED_BY {  metisgl_identifier id    = this->get_metisid();
+                                                 m.add_glbindvertexarray(id); } },
+    {"GLBINDBUFFER",               HANDLED_BY {  GLenum target            = this->get_GLenum();
+                                                 metisgl_identifier id    = this->get_metisid();
+                                                 m.add_glbindbuffer(target, id); } },
+    {"GLBUFFERDATA",               HANDLED_BY {  GLenum target            = this->get_GLenum();
+                                                 GLsizeiptr size          = this->get_GLsizeiptr();
+                                                 uint64_t data_index      = this->get_metisid();
+                                                 GLenum usage             = this->get_GLenum();
+                                                 m.add_glbufferdata(target, size, data_index, usage); } },
+    {"GLENABLEVERTEXATTRIBARRAY",  HANDLED_BY {  GLuint index             = this->get_GLuint();
+                                          m.add_glenablevertexattribarray(index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
