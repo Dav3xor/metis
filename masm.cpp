@@ -216,7 +216,7 @@ MetisASM::MetisASM() :
                                                  GLenum usage             = this->get_GLenum();
                                                  m.add_glbufferdata(target, size, data_index, usage); } },
     {"GLENABLEVERTEXATTRIBARRAY",  HANDLED_BY {  GLuint index             = this->get_GLuint();
-                                          m.add_glenablevertexattribarray(index); } },
+                                                 m.add_glenablevertexattribarray(index); } },
     {"GLVERTEXATTRIBPOINTER",      HANDLED_BY {  GLuint index             = this->get_GLuint();
                                                  GLint  size              = this->get_GLint();
                                                  
@@ -226,8 +226,10 @@ MetisASM::MetisASM() :
                                                  uint64_t pointer         = this->get_metisid();
                                                  m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
     {"GLDISABLEVERTEXATTRIBARRAY", HANDLED_BY {  GLuint index             = this->get_GLuint();
-                                          m.add_gldisablevertexattribarray(index); } },
+                                                 m.add_gldisablevertexattribarray(index); } },
     
+    {"GLENABLE",                   HANDLED_BY {  GLenum capability        = this->get_GLenum();
+                                                 m.add_glenable(capability); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
