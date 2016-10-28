@@ -230,6 +230,8 @@ MetisASM::MetisASM() :
     
     {"GLENABLE",                   HANDLED_BY {  GLenum capability        = this->get_GLenum();
                                                  m.add_glenable(capability); } },
+    {"GLDEPTHFUNC",                HANDLED_BY {  GLenum function          = this->get_GLenum();
+                                                 m.add_gldepthfunc(function); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
