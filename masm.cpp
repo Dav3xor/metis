@@ -100,6 +100,12 @@ GLsizeiptr MetisASM::get_GLsizeiptr(void) {
   return i;
 }
 
+GLboolean MetisASM::get_GLboolean(void) {
+  GLboolean i;
+  infile >> i;
+  return i;
+}
+
 metisgl_identifier MetisASM::get_metisid(void) {
   metisgl_identifier id;
   infile >> id;
@@ -211,6 +217,15 @@ MetisASM::MetisASM() :
                                                  m.add_glbufferdata(target, size, data_index, usage); } },
     {"GLENABLEVERTEXATTRIBARRAY",  HANDLED_BY {  GLuint index             = this->get_GLuint();
                                           m.add_glenablevertexattribarray(index); } },
+    {"GLVERTEXATTRIBPOINTER",      HANDLED_BY {  GLuint index             = this->get_GLuint();
+                                                 GLint  size              = this->get_GLint();
+                                                 
+                                                 GLenum type              = this->get_GLenum();
+                                                 GLboolean normalized     = this->get_GLboolean();
+                                                 GLsizei stride           = this->get_GLsizei();
+                                                 uint64_t pointer         = this->get_metisid();
+                                                 m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
+    
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
