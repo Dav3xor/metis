@@ -225,6 +225,8 @@ MetisASM::MetisASM() :
                                                  GLsizei stride           = this->get_GLsizei();
                                                  uint64_t pointer         = this->get_metisid();
                                                  m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
+    {"GLDISABLEVERTEXATTRIBARRAY", HANDLED_BY {  GLuint index             = this->get_GLuint();
+                                          m.add_gldisablevertexattribarray(index); } },
     
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
