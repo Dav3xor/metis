@@ -252,6 +252,18 @@ MetisASM::MetisASM() :
                                                  m.add_gldetachshader(program_index, shader_index); } },
     {"GLDELETESHADER",             HANDLED_BY {  metisgl_identifier shader_index = this->get_metisid();
                                                  m.add_gldeleteshader(shader_index); } },
+    {"GLUSEPROGRAM",               HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
+                                                 m.add_gluseprogram(program_index); } },
+    {"GLUNIFORMFV",                HANDLED_BY {  address_mode src                  = this->get_addr_mode();
+                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 m.add_gluniformfv(src, uniform_index); } },
+    {"GLUNIFORMIV",                HANDLED_BY {  address_mode src                  = this->get_addr_mode();
+                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 m.add_gluniformiv(src, uniform_index); } },
+    {"GLUNIFORMUIV",               HANDLED_BY {  address_mode src                  = this->get_addr_mode();
+                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 m.add_gluniformuiv(src, uniform_index); } },
+
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
