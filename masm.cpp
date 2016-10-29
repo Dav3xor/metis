@@ -235,6 +235,9 @@ MetisASM::MetisASM() :
     {"GLCREATESHADER",             HANDLED_BY {  GLenum type              = this->get_GLenum();
                                                  metisgl_identifier index = this->get_metisid();
                                                  m.add_glcreateshader(type, index); } },
+    {"GLSHADERSOURCE",             HANDLED_BY {  GLuint shader            = this->get_GLuint();
+                                                 metisgl_identifier index = this->get_metisid();
+                                                 m.add_glshadersource(shader, index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
