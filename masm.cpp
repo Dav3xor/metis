@@ -238,6 +238,8 @@ MetisASM::MetisASM() :
     {"GLSHADERSOURCE",             HANDLED_BY {  GLuint shader            = this->get_GLuint();
                                                  metisgl_identifier index = this->get_metisid();
                                                  m.add_glshadersource(shader, index); } },
+    {"GLCOMPILESHADER",            HANDLED_BY {  metisgl_identifier index = this->get_metisid();
+                                                 m.add_glcompileshader(index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
