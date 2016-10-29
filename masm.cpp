@@ -242,6 +242,9 @@ MetisASM::MetisASM() :
                                                  m.add_glcompileshader(index); } },
     {"GLCREATEPROGRAM",            HANDLED_BY {  metisgl_identifier index = this->get_metisid();
                                                  m.add_glcreateprogram(index); } },
+    {"GLATTACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
+                                                 metisgl_identifier shader_index  = this->get_metisid();
+                                                 m.add_glattachshader(program_index, shader_index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
