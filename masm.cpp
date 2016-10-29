@@ -232,6 +232,9 @@ MetisASM::MetisASM() :
                                                  m.add_glenable(capability); } },
     {"GLDEPTHFUNC",                HANDLED_BY {  GLenum function          = this->get_GLenum();
                                                  m.add_gldepthfunc(function); } },
+    {"GLCREATESHADER",             HANDLED_BY {  GLenum type              = this->get_GLenum();
+                                                 metisgl_identifier index = this->get_metisid();
+                                                 m.add_glcreateshader(type, index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
