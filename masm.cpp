@@ -263,6 +263,9 @@ MetisASM::MetisASM() :
     {"GLUNIFORMUIV",               HANDLED_BY {  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid();
                                                  m.add_gluniformuiv(src, uniform_index); } },
+    {"GLUNIFORMMATRIXFV",          HANDLED_BY {  address_mode src                  = this->get_addr_mode();
+                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 m.add_gluniformmatrixfv(src, uniform_index); } },
 
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
