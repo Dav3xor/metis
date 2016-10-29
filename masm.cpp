@@ -266,6 +266,13 @@ MetisASM::MetisASM() :
     {"GLUNIFORMMATRIXFV",          HANDLED_BY {  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid();
                                                  m.add_gluniformmatrixfv(src, uniform_index); } },
+    {"GLGETUNIFORMLOCATION",       HANDLED_BY {  metisgl_identifier program_index  = this->get_metisid();
+                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 string uniform_name               = this->get_string();
+                                                 m.add_glgetuniformlocation(program_index,uniform_index, uniform_name.c_str()); } },
+    {"GLGENTEXTURES",              HANDLED_BY {  GLsizei num_identifiers           = this->get_addr_mode();
+                                                 metisgl_identifier start_index    = this->get_metisid();
+                                                 m.add_glgentextures(num_identifiers, start_index); } },
 
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
