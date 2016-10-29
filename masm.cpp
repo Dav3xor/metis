@@ -250,6 +250,8 @@ MetisASM::MetisASM() :
     {"GLDETACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
                                                  metisgl_identifier shader_index  = this->get_metisid();
                                                  m.add_gldetachshader(program_index, shader_index); } },
+    {"GLDELETESHADER",             HANDLED_BY {  metisgl_identifier shader_index = this->get_metisid();
+                                                 m.add_gldeleteshader(shader_index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
