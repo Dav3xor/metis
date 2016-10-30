@@ -1,10 +1,15 @@
 #include "metis.hpp"
 
+
+
 // TODO: work on cleaning this up... 
 // 1. move into separate file
 // 2. abstract sections better
 void MetisVM::save(const string &filename) {
   ofstream outfile(filename, ios::out|ios::binary);
+  if(!(outfile.good())) {
+    throw MetisException("could not open file for save: " +filename,__LINE__,__FILE__);
+  }
   outfile.write((const char *)header,10);
   uint16_t header_len = 0;
   uint64_t buffer_len;
@@ -43,6 +48,9 @@ void MetisVM::load(const string &filename) {
   labels.clear();
 
   ifstream infile(filename, ios::in|ios::binary);
+  if(!(infile.good())) {
+    throw MetisException("could not open file for read: " +filename,__LINE__,__FILE__);
+  }
 
   infile.read((char *)header,10);
   header[10] = '\0';

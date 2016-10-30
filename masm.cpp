@@ -10,6 +10,9 @@
 
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   infile.open(filename);
+  if(!(infile.good())) {
+    throw MetisException("could not open file to assemble: " + filename, __LINE__, __FILE__);
+  }
   string opcode;
   while(!(infile.eof())) {
     infile >> opcode;
