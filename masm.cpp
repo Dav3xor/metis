@@ -284,6 +284,21 @@ MetisASM::MetisASM() :
                                                  GLenum target                     = this->get_GLenum();
                                                  GLenum pname                      = this->get_GLenum();
                                                  m.add_gltexparameterfv(src, target, pname); } },
+    {"GLGENERATEMIPMAP",           HANDLED_BY {  GLenum target                     = this->get_GLenum();
+                                                 m.add_glgeneratemipmap(target); } },
+    {"GLTEXIMAGE2D",               HANDLED_BY {  GLenum target                     = this->get_GLenum();
+                                                 GLint level                       = this->get_GLint();
+                                                 GLint internal_format             = this->get_GLint();
+                                                 GLsizei width                     = this->get_GLsizei();
+                                                 GLsizei height                    = this->get_GLsizei();
+                                                 GLint border                      = this->get_GLint();
+                                                 GLenum format                     = this->get_GLenum();
+                                                 GLenum type                       = this->get_GLenum();
+                                                 uint64_t data_index               = this->get_metisid();
+                                            
+                                                 m.add_glteximage2d(target, level, internal_format,
+                                                                    width, height, border, format,
+                                                                    type, data_index); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
