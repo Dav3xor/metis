@@ -920,7 +920,7 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   MetisASM a;
-  a.assemble("asmtest.m", m);
+  a.assemble("asmtests/asmtest.m", m);
   m.eval();
   REQUIRE( m.get_registers()[REGA] == 155);
   REQUIRE( m.get_registers()[REGB] == 204);
@@ -961,7 +961,7 @@ TEST_CASE( "assembler math", "[MetisVM]" ) {
   
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   MetisASM a;
-  a.assemble("mathtest.m", m);
+  a.assemble("asmtests/mathtest.m", m);
   m.eval();
   REQUIRE( m.get_registers()[REGA] == 1);
   REQUIRE( m.get_registers()[REGB] == 0);
