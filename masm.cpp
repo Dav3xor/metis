@@ -280,7 +280,10 @@ MetisASM::MetisASM() :
                                                  GLenum pname                      = this->get_GLenum();
                                                  GLint param                       = this->get_GLint();
                                                  m.add_gltexparameteri(target, pname, param); } },
-
+    {"GLTEXPARAMETERFV",           HANDLED_BY {  address_mode src                  = this->get_addr_mode();
+                                                 GLenum target                     = this->get_GLenum();
+                                                 GLenum pname                      = this->get_GLenum();
+                                                 m.add_gltexparameterfv(src, target, pname); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
