@@ -858,6 +858,7 @@ class MetisASM {
   private:
     unordered_map<string, instruction_handler> handlers;
     unordered_map<string, address_mode> addr_modes;
+    ifstream infile;
 
     address_mode       get_addr_mode(void);
     uint64_t           get_uint64(void);
@@ -874,7 +875,6 @@ class MetisASM {
     GLboolean          get_GLboolean(void);
     metisgl_identifier get_metisid(void);
 
-    ifstream infile;
 };
 
 #endif

@@ -17,7 +17,11 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   while(!(infile.eof())) {
     infile >> opcode;
     //printf("%s\n",opcode.c_str());
-    handlers.at(opcode)(vm, infile);
+    try {
+      handlers.at(opcode)(vm, infile);
+    } catch(...) {
+      throw MetisException("unknown opcode: " + opcode, __LINE__, __FILE__);
+    }
   }
 };
 
@@ -25,7 +29,11 @@ address_mode MetisASM::get_addr_mode(void) {
   string mode;
   infile >> mode;
   //printf(" - %s\n", mode.c_str());
-  return addr_modes.at(mode);
+    try {
+      return addr_modes.at(mode);
+    } catch(...) {
+      throw MetisException("unknown address mode: " + mode, __LINE__, __FILE__);
+    }
 }
 
 uint64_t MetisASM::get_uint64(void) {
