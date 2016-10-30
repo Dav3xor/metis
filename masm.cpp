@@ -276,6 +276,10 @@ MetisASM::MetisASM() :
     {"GLBINDTEXTURE",              HANDLED_BY {  GLenum target                     = this->get_GLenum();
                                                  metisgl_identifier texture_index  = this->get_metisid();
                                                  m.add_glbindtexture(target, texture_index); } },
+    {"GLTEXPARAMETERI",            HANDLED_BY {  GLenum target                     = this->get_GLenum();
+                                                 GLenum pname                      = this->get_GLenum();
+                                                 GLint param                       = this->get_GLint();
+                                                 m.add_gltexparameteri(target, pname, param); } },
 
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
