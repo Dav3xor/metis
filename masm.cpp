@@ -299,6 +299,10 @@ MetisASM::MetisASM() :
                                                  m.add_glteximage2d(target, level, internal_format,
                                                                     width, height, border, format,
                                                                     type, data_index); } },
+    {"GLGETATTRIBLOCATION",        HANDLED_BY {  metisgl_identifier attrib_index   = this->get_metisid();
+                                                 m.add_glgetattriblocation(attrib_index); } },
+    {"GLACTIVETEXTURE",            HANDLED_BY {  GLenum texture                    = this->get_GLenum();
+                                                 m.add_glactivetexture(texture); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
