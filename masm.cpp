@@ -273,6 +273,9 @@ MetisASM::MetisASM() :
     {"GLGENTEXTURES",              HANDLED_BY {  GLsizei num_identifiers           = this->get_addr_mode();
                                                  metisgl_identifier start_index    = this->get_metisid();
                                                  m.add_glgentextures(num_identifiers, start_index); } },
+    {"GLBINDTEXTURE",              HANDLED_BY {  GLenum target                     = this->get_GLenum();
+                                                 metisgl_identifier texture_index  = this->get_metisid();
+                                                 m.add_glbindtexture(target, texture_index); } },
 
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
