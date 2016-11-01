@@ -967,6 +967,19 @@ TEST_CASE( "assembler math", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 0);
 };
 
+TEST_CASE( "assembler bad opcode/address mode", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint8_t glbuf[10000];
+  uint64_t stack[5];
+  float buffer[3] = {1.0,1.1,1.2};
+  float data[3]   = {2.0,2.1,2.2};
+  
+  MetisVM m(buf,10000, stack, 5, glbuf, 10000);
+  MetisASM a;
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badinstruction.m", m), MetisException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badaddressmode.m", m), MetisException);
+};
+
 TEST_CASE( "window stuff", "[MetisContext]") {
   
   uint8_t buf[10000];
@@ -1151,6 +1164,11 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glattachshader(5,4);
   m.add_gllinkprogram(5);
   m.add_gluseprogram(5);
+
+  m.add_glgentextures(1,6);
+  m.add_glbindtexture(GL_TEXTURE_2D, 6);
+  m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   m.add_end();
   
