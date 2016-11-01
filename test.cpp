@@ -1113,6 +1113,12 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   float angle     = 0.0; 
   float delta     = 0.01;
 
+  float texture[] = {
+    0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
+  };
+
+
   const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;\n"
@@ -1137,6 +1143,8 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
   m.add_label_ip("init");
+
+  m.add_data((const uint8_t *)texture, sizeof(texture), "texture");
 
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
@@ -1169,10 +1177,11 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindtexture(GL_TEXTURE_2D, 6);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
+  m.add_glteximage2d(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, m.get_label("texture")); 
   m.add_end();
   
   
+  m.add_label_ip("mainloop");
   
   
   
