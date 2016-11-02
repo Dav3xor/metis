@@ -909,6 +909,9 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
   REQUIRE(ins_buffer[0] == Approx(1.0));
   REQUIRE(ins_buffer[1] == Approx(1.1));
   REQUIRE(ins_buffer[2] == Approx(1.2));
+
+  // test bad filename or file...
+  REQUIRE_THROWS_AS( m.load("zyyylxsdfsdfssadfsdf"), MetisException);
 };
 
 TEST_CASE( "assembler", "[MetisVM]" ) {
@@ -1122,8 +1125,10 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   const char *vertex_shader =
   "#version 400\n"
   "in vec3 vp;\n"
-  "in vec3 color;\n"
+  "in vec2 intex;\n"
+  "out vec2 texcoord;\n"
   "void main () {\n"
+  "  texcoord = intex;\n"
   "  gl_Position = vp.xyzz;\n"
   "}\n";
 
