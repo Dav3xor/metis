@@ -1026,8 +1026,8 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   m.hard_reset();
-  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
-  color_location    = m.add_buffer((uint8_t*)colors,sizeof(float)*9,"color");
+  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(buffer),"triangle");
+  color_location    = m.add_buffer((uint8_t*)colors,sizeof(colors),"color");
 
   m.add_label_ip("init");
 
@@ -1110,9 +1110,9 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   uint64_t stack[5];
   uint64_t triangle_location;
   uint64_t color_location;
-  float buffer[9] =  {-0.8,-0.8,0.0,
-                       0.8,-0.8,0.0,
-                       0.0, 0.8,0.0};
+  float buffer[15] =  {-0.8,-0.8,0.0,  0.0, 0.0,
+                       0.8,-0.8,0.0,  1.0, 0.0,
+                       0.0, 0.8,0.0,  0.5, 1.0};
   float angle     = 0.0; 
   float delta     = 0.01;
 
@@ -1146,7 +1146,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   MetisVM m(buf,1000, stack, 5, glbuf, 1000);
   m.hard_reset();
   
-  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(float)*9,"triangle");
+  triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(buffer),"triangle");
   m.add_label_ip("init");
 
   m.add_data((const uint8_t *)texture, sizeof(texture), "texture");
@@ -1154,7 +1154,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
 
-  m.add_glgenbuffers(2,1);
+  m.add_glgenbuffers(1,1);
 
   // set up the vertex position data
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
@@ -1187,7 +1187,14 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   
   
   m.add_label_ip("mainloop");
-  
+  m.add_glenablevertexattribarray(0);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
+  m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,20,0);
+  m.add_glenablevertexattribarray(1);
+  m.add_glvertexattribpointer(1,3,GL_FLOAT,GL_FALSE,20,12);
+  m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
+  m.add_gldisablevertexattribarray(0);
+  m.add_end(); 
   
   
   m.eval("init");
@@ -1195,6 +1202,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
   }
