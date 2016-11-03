@@ -1191,12 +1191,22 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,20,0);
   m.add_glenablevertexattribarray(1);
-  m.add_glvertexattribpointer(1,3,GL_FLOAT,GL_FALSE,20,12);
+  m.add_glvertexattribpointer(1,2,GL_FLOAT,GL_FALSE,20,12);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   m.add_gldisablevertexattribarray(0);
   m.add_end(); 
-  
-  
+
+  /*
+  m.add_label_ip("mainloop");
+  m.add_glenablevertexattribarray(0);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
+  m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,12,0);
+  m.add_glenablevertexattribarray(1);
+  m.add_glbindbuffer(GL_ARRAY_BUFFER, 2);
+  m.add_glvertexattribpointer(1,3,GL_FLOAT,GL_FALSE,12,0);
+  m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
+  m.add_gldisablevertexattribarray(0);
+  */ 
   m.eval("init");
 
   glClearColor(0.0f,0.0f,0.4f,0.0f);
