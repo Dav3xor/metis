@@ -423,6 +423,15 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
         break;
       case INS_GLTEXPARAMETERI:
+        glTexParameteri(instruction->commands.gltexparameteri.target,
+                        instruction->commands.gltexparameteri.pname,
+                        instruction->commands.gltexparameteri.param);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLTEXPARAMETERI_SIZE;
+        break;
+
       case INS_GLTEXPARAMETERFV:
       case INS_GLGENERATEMIPMAP:
       case INS_GLTEXIMAGE2D:
