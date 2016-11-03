@@ -433,7 +433,21 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_GLTEXPARAMETERFV:
+        glTexParameterfv(instruction->commands.gltexparameteri.target,
+                        instruction->commands.gltexparameteri.pname,
+                        (GLfloat *)get_val(ADDR_MODES));
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
+        break;
       case INS_GLGENERATEMIPMAP:
+        glGenerateMipmap(instruction->commands.glgeneratemipmap.target);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
+        break;
       case INS_GLTEXIMAGE2D:
       case INS_GLGETATTRIBLOCATION:
       case INS_GLACTIVETEXTURE:
