@@ -1182,6 +1182,8 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindtexture(GL_TEXTURE_2D, 6);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   m.add_glteximage2d(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, m.get_label("texture")); 
   m.add_end();
   
@@ -1191,6 +1193,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,20,0);
   m.add_glenablevertexattribarray(1);
+  m.add_glbindbuffer(GL_TEXTURE_BUFFER, 1);
   m.add_glvertexattribpointer(1,2,GL_FLOAT,GL_FALSE,20,12);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   m.add_gldisablevertexattribarray(0);

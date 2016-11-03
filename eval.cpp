@@ -179,9 +179,9 @@ bool MetisVM::do_eval() {
         break;    
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
-        if(instruction->commands.gldrawelements.indices==0) {
+        //if(instruction->commands.gldrawelements.indices==0) {
           glvoid = (GLvoid *)(buffer + instruction->commands.gldrawelements.indices);
-        }
+        //}
         glDrawElements(instruction->commands.gldrawelements.mode, 
                        instruction->commands.gldrawelements.count, 
                        instruction->commands.gldrawelements.type, 
