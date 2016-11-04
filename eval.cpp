@@ -449,6 +449,20 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
         break;
       case INS_GLTEXIMAGE2D:
+        glTexImage2D(instruction->commands.glteximage2d.target,
+                     instruction->commands.glteximage2d.level,
+                     instruction->commands.glteximage2d.internal_format,
+                     instruction->commands.glteximage2d.width,
+                     instruction->commands.glteximage2d.height,
+                     instruction->commands.glteximage2d.border,
+                     instruction->commands.glteximage2d.format,
+                     instruction->commands.glteximage2d.type,
+                     buffer+instruction->commands.glteximage2d.data_index);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
+        break;
       case INS_GLGETATTRIBLOCATION:
       case INS_GLACTIVETEXTURE:
 
