@@ -476,6 +476,12 @@ bool MetisVM::do_eval() {
         break;
         
       case INS_GLACTIVETEXTURE:
+        glActiveTexture(instruction->commands.glactivetexture.texture);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
+        break;
 
       case INS_DATA:
         advance = instruction->commands.data.length;
