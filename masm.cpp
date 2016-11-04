@@ -311,7 +311,8 @@ MetisASM::MetisASM() :
                                                                     width, height, border, format,
                                                                     type, data_index); } },
     {"GLGETATTRIBLOCATION",        HANDLED_BY {  metisgl_identifier attrib_index   = this->get_metisid();
-                                                 m.add_glgetattriblocation(attrib_index); } },
+                                                 string attrib                     = this->get_string();
+                                                 m.add_glgetattriblocation(attrib_index, attrib.c_str()); } },
     {"GLACTIVETEXTURE",            HANDLED_BY {  GLenum texture                    = this->get_GLenum();
                                                  m.add_glactivetexture(texture); } },
     MATH_INSTRUCTION("NOT", add_not),

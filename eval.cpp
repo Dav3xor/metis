@@ -464,6 +464,17 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
         break;
       case INS_GLGETATTRIBLOCATION:
+
+        string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETATTRIBLOCATION_SIZE);
+        glidentifiers[instruction->commands.glgetattriblocation.attrib_index] = glGetAttribLocation(glidentifiers[instruction->commands.glgetattriblocation.attrib_index],
+                                                                                                    (const GLchar *)string_ptr);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
+        registers[REGIP] += instruction->commands.glgetattriblocation.id_length;
+        break;
+        
       case INS_GLACTIVETEXTURE:
 
       case INS_DATA:

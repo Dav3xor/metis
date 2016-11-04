@@ -459,7 +459,7 @@ class MetisVM {
     uint64_t add_glteximage2d(GLenum target, GLint level, GLint internal_format,
                               GLsizei width, GLsizei height, GLint border,
                               GLenum format, GLenum type, uint64_t data_index);
-    uint64_t add_glgetattriblocation(metisgl_identifier attrib_index);
+    uint64_t add_glgetattriblocation(metisgl_identifier attrib_index, const char *attrib_name);
     uint64_t add_glactivetexture(GLenum texture);
 
     bool doCompileShader(uint16_t index);
@@ -736,6 +736,7 @@ class MetisVM {
 
         struct glgetattriblocation_t {
           metisgl_identifier attrib_index;
+          uint8_t id_length;
         }__attribute__((packed)) glgetattriblocation;
 
         struct glactivetexture_t {

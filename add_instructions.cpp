@@ -703,14 +703,30 @@ uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_f
   RETURN_NEXT();
 };
 
-uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index) {
+uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index, const char *attrib_name) {
   CHECK_INSTRUCTION(INS_GLGETATTRIBLOCATION_SIZE);
+  CHECK_POINTER(attrib_name);
 
-  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
-  instruction->type                             = INS_GLGETATTRIBLOCATION;
+  uint64_t length = strlen(attrib_name)+1;
+
+  if(length>255) {
+    throw MetisException(string("attribute location too big (255 byte string max) uniform = ")+attrib_name,__LINE__,__FILE__);
+  }
+    
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  instruction->type                         = INS_GLGETATTRIBLOCATION;      
   instruction->commands.glgetattriblocation.attrib_index = attrib_index;
+  instruction->commands.glgetattriblocation.id_length = length;
+  if (registers[REGIP] + length > (uint64_t)code_end) {
+    throw MetisException(string("out of memory -- (add_glgetattriblocation) uniform = ") + attrib_name,__LINE__,__FILE__);
+  }
   registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
+
+  memcpy((void *)registers[REGIP],attrib_name,length);
+  registers[REGIP] += length;
+
   RETURN_NEXT();
+
 };
 
 uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
