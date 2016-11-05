@@ -1079,7 +1079,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 2);
   m.add_glvertexattribpointer(1,3,GL_FLOAT,GL_FALSE,12,0);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
-  m.add_gldisablevertexattribarray(0);
+  //m.add_gldisablevertexattribarray(0);
 
   m.add_end();
   // make sure error conditions for creating windows work.
@@ -1196,7 +1196,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindbuffer(GL_TEXTURE_BUFFER, 1);
   m.add_glvertexattribpointer(1,2,GL_FLOAT,GL_FALSE,20,12);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
-  m.add_gldisablevertexattribarray(0);
+  //m.add_gldisablevertexattribarray(0);
   m.add_end(); 
 
   /*
