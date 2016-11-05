@@ -1179,6 +1179,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_gluseprogram(5);
 
   m.add_glgentextures(1,6);
+  m.add_glactivetexture(GL_TEXTURE0);
   m.add_glbindtexture(GL_TEXTURE_2D, 6);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
