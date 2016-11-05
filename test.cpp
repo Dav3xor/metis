@@ -1147,9 +1147,9 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.hard_reset();
   
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(buffer),"triangle");
+  m.add_buffer                    ((const uint8_t *)texture, sizeof(texture), "texture");
   m.add_label_ip("init");
 
-  m.add_data((const uint8_t *)texture, sizeof(texture), "texture");
 
   m.add_glgenvertexarrays(1,0);
   m.add_glbindvertexarray(0);
