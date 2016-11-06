@@ -1200,7 +1200,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_glbindbuffer(GL_ARRAY_BUFFER, 1);
   m.add_glvertexattribpointer(0,3,GL_FLOAT,GL_FALSE,20,0);
   m.add_glenablevertexattribarray(1);
-  m.add_glbindbuffer(GL_TEXTURE_BUFFER, 1);
+  //m.add_glbindbuffer(GL_TEXTURE_BUFFER, 1);
   m.add_glvertexattribpointer(1,2,GL_FLOAT,GL_FALSE,20,12);
   m.add_gldrawarrays(GL_TRIANGLES, 0, 3);
   //m.add_gldisablevertexattribarray(0);

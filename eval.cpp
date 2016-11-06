@@ -259,7 +259,7 @@ bool MetisVM::do_eval() {
       case INS_GLVERTEXATTRIBPOINTER:
         glvoid = 0;
         if(instruction->commands.glvertexattribpointer.pointer) {
-          glvoid = (GLvoid *)(buffer + instruction->commands.glvertexattribpointer.pointer);
+          glvoid = (GLvoid *)(instruction->commands.glvertexattribpointer.pointer);
         }
         glVertexAttribPointer(instruction->commands.glvertexattribpointer.index, 
                               instruction->commands.glvertexattribpointer.size,
