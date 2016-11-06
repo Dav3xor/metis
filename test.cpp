@@ -1111,14 +1111,14 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   uint64_t triangle_location;
   uint64_t texture_location;
   uint64_t color_location;
-  float buffer[15] =  {-0.8,-0.8,0.0,  0.0, 0.0,
-                       0.8,-0.8,0.0,  1.0, 0.0,
-                       0.0, 0.8,0.0,  0.5, 1.0};
+  float buffer[15] =  {-0.8,-0.8,0.0,  0.0, 10.0,
+                       0.8,-0.8,0.0,  10.0, 0.0,
+                       0.0, 0.8,0.0,  5.0, 10.0};
   float angle     = 0.0; 
   float delta     = 0.01;
 
   float texture[] = {
-    0.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+    0.5f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
     1.0f, 1.0f, 1.0f,   0.0f, 0.0f, 0.0f
   };
 
@@ -1142,8 +1142,8 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "in vec2 texcoord;\n"
   "uniform sampler2D tex;\n"
   "void main(){\n"
-  "  color = vec4(1.0,1.0,1.0,1.0);\n"
-  "  //color = texture(tex, texcoord);\n"
+  "  //color = vec4(1.0,1.0,1.0,1.0);\n"
+  "  color = texture(tex, texcoord);\n"
   "}\n";
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
