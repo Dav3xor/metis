@@ -1184,6 +1184,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  m.add_glgeneratemipmap(GL_TEXTURE_2D);
   m.add_glteximage2d(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, m.get_label("texture")); 
   m.add_end();
   
