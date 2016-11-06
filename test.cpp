@@ -1109,6 +1109,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   uint8_t glbuf[1000];
   uint64_t stack[5];
   uint64_t triangle_location;
+  uint64_t texture_location;
   uint64_t color_location;
   float buffer[15] =  {-0.8,-0.8,0.0,  0.0, 0.0,
                        0.8,-0.8,0.0,  1.0, 0.0,
@@ -1129,7 +1130,10 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "out vec2 texcoord;\n"
   "void main () {\n"
   "  texcoord = intex;\n"
-  "  gl_Position = vp.xyzz;\n"
+  "  gl_Position = vec4(vp.x,\n"
+  "                     vp.y,\n"
+  "                     0.0,\n"
+  "                     1.0);\n"
   "}\n";
 
   const char *fragment_shader =
@@ -1138,7 +1142,8 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   "in vec2 texcoord;\n"
   "uniform sampler2D tex;\n"
   "void main(){\n"
-  "  color = texture(tex, texcoord);\n"
+  "  color = vec4(1.0,1.0,1.0,1.0);\n"
+  "  //color = texture(tex, texcoord);\n"
   "}\n";
   GLFWwindow *win = c.create_window(0,"title");
   win=c.current_window(0);
@@ -1147,7 +1152,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.hard_reset();
   
   triangle_location = m.add_buffer((uint8_t*)buffer,sizeof(buffer),"triangle");
-  m.add_buffer                    ((const uint8_t *)texture, sizeof(texture), "texture");
+  texture_location  = m.add_buffer((const uint8_t *)texture, sizeof(texture), "texture");
   m.add_label_ip("init");
 
 
@@ -1185,7 +1190,7 @@ TEST_CASE( "texture stuff", "[MetisContext]") {
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   m.add_gltexparameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   m.add_glgeneratemipmap(GL_TEXTURE_2D);
-  m.add_glteximage2d(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, m.get_label("texture")); 
+  m.add_glteximage2d(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, texture_location); 
   m.add_end();
   
   
