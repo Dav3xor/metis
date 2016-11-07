@@ -234,11 +234,6 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_GLBUFFERDATA:
-        printf("bufferdata target=%d size=%d data_index=%d usage=%d\n",
-               instruction->commands.glbufferdata.target, 
-               instruction->commands.glbufferdata.size,
-               instruction->commands.glbufferdata.data_index,
-               instruction->commands.glbufferdata.usage);
 
         glBufferData(instruction->commands.glbufferdata.target, 
                      instruction->commands.glbufferdata.size,
@@ -455,18 +450,6 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
         break;
       case INS_GLTEXIMAGE2D:
-        printf("teximage target=%d level=%d if=%d, width=%d, height=%d border=%d format=%d type=%d data_index=%d\n",
-               instruction->commands.glteximage2d.target,
-               instruction->commands.glteximage2d.level,
-               instruction->commands.glteximage2d.internal_format,
-               instruction->commands.glteximage2d.width,
-               instruction->commands.glteximage2d.height,
-               instruction->commands.glteximage2d.border,
-               instruction->commands.glteximage2d.format,
-               instruction->commands.glteximage2d.type,
-               instruction->commands.glteximage2d.data_index);
-
-
         glTexImage2D(instruction->commands.glteximage2d.target,
                      instruction->commands.glteximage2d.level,
                      instruction->commands.glteximage2d.internal_format,
