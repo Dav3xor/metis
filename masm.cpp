@@ -1,4 +1,8 @@
+#include <boost/algorithm/string.hpp>
+
 #include "metis.hpp"
+
+using namespace boost::algorithm;
 
 #define HANDLED_BY [this](MetisVM &m, ifstream &s) -> void
 
@@ -76,7 +80,7 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
   }
 }
     
-string MetisASM::get_comment(void) {
+string MetisASM::get_line(void) {
   string comment;
   getline(infile, comment);
   return comment;
@@ -124,7 +128,7 @@ metisgl_identifier MetisASM::get_metisid(void) {
 }
 MetisASM::MetisASM() : 
   handlers({
-    {"*",                          HANDLED_BY {  get_comment(); } }, 
+    {"*",                          HANDLED_BY {  get_line(); } }, 
     {"ERROR",                      HANDLED_BY {  m.add_error      (); } },
     {"END",                        HANDLED_BY {  m.add_end        (); } }, 
     {"NOOP",                       HANDLED_BY {  m.add_noop       (); } }, 
@@ -168,6 +172,19 @@ MetisASM::MetisASM() :
                                                  }
                                                  m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
                                                  delete[] mat; } },
+    {"SHADER",                     HANDLED_BY {  string  label    = this->get_string();
+                                                 string  shader   = "";
+                                                 bool    proceed  = true;
+                                                 while(proceed) {
+                                                   string cur = this->get_line();
+                                                   if (trim_copy(cur) == "END-SHADER") {
+                                                     proceed=false;
+                                                   } else {
+                                                     shader += cur;
+                                                   }
+                                                 }
+                                                 m.add_data((const uint8_t *)shader.c_str(), shader.length()+1, label.c_str()); }},
+
     {"IMATRIX",                    HANDLED_BY {  string  label   = this->get_string();
                                                  uint32_t width  = this->get_uint8(); 
                                                  uint32_t height = this->get_uint8(); 
