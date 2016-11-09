@@ -1,4 +1,4 @@
-*simple test for gl functions
+* simple test for gl functions
 
 SHADER vertex_shader
 
