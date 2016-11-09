@@ -1,35 +1,87 @@
 * simple test for gl functions
 
-SHADER vertex_shader
+SHADER                vertex_shader
 
 #version 400
-in vec3 vp;
-in vec2 intex;
-out vec2 texcoord;
+in  vec3 vp;
+in  vec3 color;
+out vec3 vcolor;
+
 void main () {
-  texcoord = intex;
   gl_Position = vec4(vp.x, vp.y, 0.0, 1.0);
 }
 
 END-SHADER
 
-SHADER fragment_shader
+SHADER                fragment_shader
 #version 330 core
-out vec4 color;
-in vec2 texcoord;
+in  vec3 vcolor;
+out vec3 color;
 uniform sampler2D tex;
 void main(){
-  //color = vec4(1.0,1.0,1.0,1.0);
-  color = texture(tex, texcoord);
+  color = vcolor;
 }
 
 END-SHADER
 
+BUFFER                triangle 9
+
+-0.8 -0.8 0.0,
+ 0.8 -0.8 0.0,
+ 0.0  0.8 0.0
+
+BUFFER                colors 9
+
+1.0 0.5 0.0,
+0.0 1.0 0.5,
+0.5 0.0 1.0
+
+LABEL                 init
+
+GLGENVERTEXARRAYS     1 0
+GLBINDVERTEXARRAY     0
+
+GLGENBUFFERS          2 1
 
 
+GLBINDBUFFER          GL_ARRAY_BUFFER 1
+GLBUFFERDATA          GL_ARRAY_BUFFER 36 triangle GL_STATIC_DRAW
+
+GLBINDBUFFER          GL_ARRAY_BUFFER 2
+GLBUFFERDATA          GL_ARRAY_BUFFER 36 colors, GL_STATIC_DRAW
 
 
+GLCREATESHADER        GL_VERTEX_SHADER 3
+GLSHADERSOURCE        m.get_label("vertex_shader"), 3);
+GLCOMPILESHADER(3);
 
+GLCREATESHADER(GL_FRAGMENT_SHADER, 4);
+GLSHADERSOURCE(m.get_label("fragment_shader"), 4);
+GLCOMPILESHADER(4);
 
+GLCREATEPROGRAM(5);
+GLATTACHSHADER(5,3);
+GLATTACHSHADER(5,4);
+GLLINKPROGRAM(5);
+GLUSEPROGRAM(5);
+GLGETUNIFORMLOCATION(5, 6, "angle");
+STOREI(REGA, M.GET_LAbel("angle"));
+STOREI(REGB, M.GET_LAbel("delta"));
+GLUNIFORMFV(REGA, 6);
+END
 
+LABEL_IP("mainloop");
+STOREI(REGA, m.get_label("angle"));
+STOREI(REGB, m.get_label("delta"));
+MATRIX_ADD(REGA, REGB, m.get_label("angle"));
+GLUNIFORMFV(REGA, 6);
+GLENABLEVERTEXATTRIBARRAY(0);
+GLBINDBUFFER(GL_ARRAY_BUFFER, 1);
+GLVERTEXATTRIBPOINTER(0,3,GL_FLOAT,GL_FALSE,12,0);
+GLENABLEVERTEXATTRIBARRAY(1);
+GLBINDBUFFER(GL_ARRAY_BUFFER, 2);
+GLVERTEXATTRIBPOINTER(1,3,GL_FLOAT,GL_FALSE,12,0);
+GLDRAWARRAYS(GL_TRIANGLES, 0, 3);
+
+end
 
