@@ -26,17 +26,17 @@ END-SHADER
 
 BUFFER                      triangle 9
 
--0.8 -0.8 0.0,
- 0.8 -0.8 0.0,
+-0.8 -0.8 0.0
+ 0.8 -0.8 0.0
  0.0  0.8 0.0
 
 BUFFER                      colors 9
 
-1.0 0.5 0.0,
-0.0 1.0 0.5,
+1.0 0.5 0.0
+0.0 1.0 0.5
 0.5 0.0 1.0
 
-LABEL                       init
+LOC                         init
 
 GLGENVERTEXARRAYS           1 0
 GLBINDVERTEXARRAY           0
@@ -66,7 +66,7 @@ GLLINKPROGRAM               5
 GLUSEPROGRAM                5
 END
 
-LABEL                       mainloop
+LOC                         mainloop
 GLENABLEVERTEXATTRIBARRAY   0
 GLBINDBUFFER                GL_ARRAY_BUFFER 1
 GLVERTEXATTRIBPOINTER       0 3 GL_FLOAT GL_FALSE 12 0
