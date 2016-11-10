@@ -160,6 +160,18 @@ MetisASM::MetisASM() :
                                                  uint64_t val = this->get_uint64();
                                                  m.add_label_val  (label.c_str(), val); } },
   
+    {"BUFFER",                     HANDLED_BY {  string  label   = this->get_string();
+                                                 uint64_t size   = this->get_uint64(); 
+                                                 float *buffer   = new float[size];
+                                                 printf("%s %d\n", label.c_str(), size);
+                                                 
+                                                 for(uint32_t i=0; i<size; i++) {
+                                                   printf("%f\n",this->get_float());
+                                                   //buffer[i] = this->get_float();
+                                                 }
+
+                                                 m.add_buffer((uint8_t *)buffer, size, label.c_str());
+                                                 delete[] buffer; } },
     {"MATRIX",                     HANDLED_BY {  string  label   = this->get_string();
                                                  // have to use uint32_t to get iostream
                                                  // to store as integer, not ascii...
@@ -209,18 +221,6 @@ MetisASM::MetisASM() :
                                                  address_mode src2 = this->get_addr_mode();
                                                  uint64_t     dest = this->get_addr(m);
                                                  m.add_vector_cross(src1, src2, dest); } },
-    {"BUFFER",                     HANDLED_BY {  string  label   = this->get_string();
-                                                 uint64_t size   = this->get_uint64(); 
-                                                 float *buffer   = new float[size];
-                                                 printf("%s %d\n", label.c_str(), size);
-                                                 
-                                                 for(uint32_t i=0; i<size; i++) {
-                                                   printf("%f\n",this->get_float());
-                                                   //buffer[i] = this->get_float();
-                                                 }
-
-                                                 m.add_buffer((uint8_t *)buffer, size, label.c_str());
-                                                 delete[] buffer; } },
 
     {"GLDRAWELEMENTS",             HANDLED_BY {  GLenum mode      = this->get_GLenum();
                                                  GLsizei count    = this->get_GLsizei();
