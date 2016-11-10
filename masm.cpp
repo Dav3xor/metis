@@ -21,9 +21,9 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   while(!(infile.eof())) {
     infile >> opcode;
     //printf("%s\n",opcode.c_str());
-    try {
+    if(handlers.count(opcode)) {
       handlers.at(opcode)(vm, infile);
-    } catch(...) {
+    } else {
       throw MetisException("unknown opcode: " + opcode, __LINE__, __FILE__);
     }
   }
@@ -89,7 +89,12 @@ string MetisASM::get_line(void) {
 GLenum MetisASM::get_GLenum(void) {
   string glenum;
   infile >> glenum;
-  return gl_enums.at(glenum);
+  //printf("%s\n",glenum.c_str());
+  try {
+    return gl_enums.at(glenum);
+  } catch(...) {
+    throw MetisException("unknown glenum: " + glenum, __LINE__, __FILE__);
+  }
 }
 GLsizei MetisASM::get_GLsizei(void) {
   GLsizei size;
@@ -163,11 +168,9 @@ MetisASM::MetisASM() :
     {"BUFFER",                     HANDLED_BY {  string  label   = this->get_string();
                                                  uint64_t size   = this->get_uint64(); 
                                                  float *buffer   = new float[size];
-                                                 printf("%s %d\n", label.c_str(), size);
                                                  
                                                  for(uint32_t i=0; i<size; i++) {
-                                                   printf("%f\n",this->get_float());
-                                                   //buffer[i] = this->get_float();
+                                                   buffer[i] = this->get_float();
                                                  }
 
                                                  m.add_buffer((uint8_t *)buffer, size, label.c_str());
