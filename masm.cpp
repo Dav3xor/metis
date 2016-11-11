@@ -89,7 +89,7 @@ string MetisASM::get_line(void) {
 GLenum MetisASM::get_GLenum(void) {
   string glenum;
   infile >> glenum;
-  //printf("%s\n",glenum.c_str());
+  printf("%s\n",glenum.c_str());
   try {
     return gl_enums.at(glenum);
   } catch(...) {
@@ -247,11 +247,22 @@ MetisASM::MetisASM() :
     {"GLBINDBUFFER",               HANDLED_BY {  GLenum target            = this->get_GLenum();
                                                  metisgl_identifier id    = this->get_metisid();
                                                  m.add_glbindbuffer(target, id); } },
+
+
+
     {"GLBUFFERDATA",               HANDLED_BY {  GLenum target            = this->get_GLenum();
+                                                 printf("1\n");
                                                  GLsizeiptr size          = this->get_GLsizeiptr();
-                                                 uint64_t data_index      = this->get_metisid();
+                                                 printf("2\n");
+                                                 uint64_t data_index      = this->get_addr(m);
+                                                 printf("3\n");
                                                  GLenum usage             = this->get_GLenum();
+                                                 printf("4\n");
+                                                 printf("%d %d %d %d\n",target,size,data_index,usage);
                                                  m.add_glbufferdata(target, size, data_index, usage); } },
+
+
+
     {"GLENABLEVERTEXATTRIBARRAY",  HANDLED_BY {  GLuint index             = this->get_GLuint();
                                                  m.add_glenablevertexattribarray(index); } },
     {"GLVERTEXATTRIBPOINTER",      HANDLED_BY {  GLuint index             = this->get_GLuint();
