@@ -20,7 +20,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   string opcode;
   while(!(infile.eof())) {
     infile >> opcode;
-    //printf("%s\n",opcode.c_str());
+    printf("+ %s\n",opcode.c_str());
     if(handlers.count(opcode)) {
       handlers.at(opcode)(vm, infile);
     } else {
@@ -121,9 +121,13 @@ GLsizeiptr MetisASM::get_GLsizeiptr(void) {
 }
 
 GLboolean MetisASM::get_GLboolean(void) {
-  GLboolean i;
+  string i;
   infile >> i;
-  return i;
+  if(i=="GL_FALSE") {
+    return GL_FALSE;
+  } else {
+    return GL_TRUE;
+  }
 }
 
 metisgl_identifier MetisASM::get_metisid(void) {
