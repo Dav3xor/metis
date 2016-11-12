@@ -201,7 +201,7 @@ MetisASM::MetisASM() :
                                                    } else if (infile.eof()) {
                                                      proceed=false;
                                                    } else {
-                                                     shader += cur;
+                                                     shader += cur + "\n";
                                                    }
                                                  }
                                                  m.add_data((const uint8_t *)shader.c_str(), shader.length()+1, label.c_str()); }},
