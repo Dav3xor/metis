@@ -283,7 +283,7 @@ MetisASM::MetisASM() :
     {"GLCREATESHADER",             HANDLED_BY {  GLenum type              = this->get_GLenum();
                                                  metisgl_identifier index = this->get_metisid();
                                                  m.add_glcreateshader(type, index); } },
-    {"GLSHADERSOURCE",             HANDLED_BY {  GLuint shader            = this->get_GLuint();
+    {"GLSHADERSOURCE",             HANDLED_BY {  GLuint shader            = this->get_addr(m);
                                                  metisgl_identifier index = this->get_metisid();
                                                  m.add_glshadersource(shader, index); } },
     {"GLCOMPILESHADER",            HANDLED_BY {  metisgl_identifier index = this->get_metisid();
