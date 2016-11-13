@@ -4,7 +4,7 @@
 
 using namespace boost::algorithm;
 
-#define HANDLED_BY [this](MetisVM &m, ifstream &s) -> void
+#define HANDLED_BY [this](MetisVM &m, istream &s) -> void
 
 
 #define MATH_INSTRUCTION(instruction, add_method) \
@@ -17,13 +17,13 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   if(!(initialfile.good())) {
     throw MetisException("could not open file to assemble: " + filename, __LINE__, __FILE__);
   }
-  CountingStreamBuffer countbuf(infile->rdbuf());
+  CountingStreamBuffer countbuf(initialfile.rdbuf());
   infile = new istream(&countbuf);
 
   string opcode;
   while(!(infile->eof())) {
     *infile >> opcode;
-    printf("+ %s\n",opcode.c_str());
+    //printf("+ %s\n",opcode.c_str());
     if(handlers.count(opcode)) {
       handlers.at(opcode)(vm, *infile);
     } else {
@@ -94,7 +94,7 @@ string MetisASM::get_line(void) {
 GLenum MetisASM::get_GLenum(void) {
   string glenum;
   *infile >> glenum;
-  printf("%s\n",glenum.c_str());
+  //printf("%s\n",glenum.c_str());
   try {
     return gl_enums.at(glenum);
   } catch(...) {
@@ -140,6 +140,9 @@ metisgl_identifier MetisASM::get_metisid(void) {
   *infile >> id;
   return id;
 }
+
+
+
 MetisASM::MetisASM() : 
   handlers({
     {"*",                          HANDLED_BY {  get_line(); } }, 
@@ -260,14 +263,9 @@ MetisASM::MetisASM() :
 
 
     {"GLBUFFERDATA",               HANDLED_BY {  GLenum target            = this->get_GLenum();
-                                                 printf("1\n");
                                                  GLsizeiptr size          = this->get_GLsizeiptr();
-                                                 printf("2\n");
                                                  uint64_t data_index      = this->get_addr(m);
-                                                 printf("3\n");
                                                  GLenum usage             = this->get_GLenum();
-                                                 printf("4\n");
-                                                 printf("%d %d %d %d\n",target,size,data_index,usage);
                                                  m.add_glbufferdata(target, size, data_index, usage); } },
 
 
