@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
     m.load(args["run"].as<string>());
     m.eval("init");
 
+    glClearColor(0.0f,0.0f,0.4f,0.0f);
+
     while(!glfwWindowShouldClose(win)) {
       glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
       m.eval("mainloop");

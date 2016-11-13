@@ -9,6 +9,7 @@ out vec3 vcolor;
 
 void main () {
   gl_Position = vec4(vp.x, vp.y, 0.0, 1.0);
+  vcolor = vec3(1.0, 1.0, 1.0);
 }
 
 END-SHADER

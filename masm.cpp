@@ -13,25 +13,30 @@ using namespace boost::algorithm;
                                           m.add_method(src, dest); } }
 
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
-  infile.open(filename);
-  if(!(infile.good())) {
+  ifstream initialfile(filename);
+  if(!(initialfile.good())) {
     throw MetisException("could not open file to assemble: " + filename, __LINE__, __FILE__);
   }
+  CountingStreamBuffer countbuf(infile->rdbuf());
+  infile = new istream(&countbuf);
+
   string opcode;
-  while(!(infile.eof())) {
-    infile >> opcode;
+  while(!(infile->eof())) {
+    *infile >> opcode;
     printf("+ %s\n",opcode.c_str());
     if(handlers.count(opcode)) {
-      handlers.at(opcode)(vm, infile);
+      handlers.at(opcode)(vm, *infile);
     } else {
       throw MetisException("unknown opcode: " + opcode, __LINE__, __FILE__);
     }
   }
+  initialfile.close();
+  delete infile;
 };
 
 address_mode MetisASM::get_addr_mode(void) {
   string mode;
-  infile >> mode;
+  *infile >> mode;
   //printf(" - %s\n", mode.c_str());
     try {
       return addr_modes.at(mode);
@@ -42,14 +47,14 @@ address_mode MetisASM::get_addr_mode(void) {
 
 uint64_t MetisASM::get_uint64(void) {
   uint64_t val;
-  infile >> val;
+  *infile >> val;
   //printf(" - %ju\n", val);
   return val;
 }
 
 uint8_t MetisASM::get_uint8(void) {
   uint32_t val;
-  infile >> val;
+  *infile >> val;
   if( val > 255) {
     throw MetisException("1 byte assembler value out of bounds", __LINE__, __FILE__);
   }
@@ -59,20 +64,20 @@ uint8_t MetisASM::get_uint8(void) {
 
 float MetisASM::get_float(void) {
   float val;
-  infile >> val;
+  *infile >> val;
   //printf(" - %f\n", val);
   return val;
 }
 
 string MetisASM::get_string(void) {
   string val; 
-  infile >> val;
+  *infile >> val;
   //printf(" - %s\n", val.c_str());
   return val;
 }
 uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
-  infile >> val;
+  *infile >> val;
   if((val[0] >= '0')&&(val[0] <= '9')) {
     return stoull(val, 0, 10);
   } else {
@@ -82,13 +87,13 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
     
 string MetisASM::get_line(void) {
   string comment;
-  getline(infile, comment);
+  getline(*infile, comment);
   return comment;
 }
 
 GLenum MetisASM::get_GLenum(void) {
   string glenum;
-  infile >> glenum;
+  *infile >> glenum;
   printf("%s\n",glenum.c_str());
   try {
     return gl_enums.at(glenum);
@@ -98,31 +103,31 @@ GLenum MetisASM::get_GLenum(void) {
 }
 GLsizei MetisASM::get_GLsizei(void) {
   GLsizei size;
-  infile >> size;
+  *infile >> size;
   return size;
 }
 
 GLint MetisASM::get_GLint(void) {
   GLint i;
-  infile >> i;
+  *infile >> i;
   return i;
 }
 
 GLuint MetisASM::get_GLuint(void) {
   GLuint i;
-  infile >> i;
+  *infile >> i;
   return i;
 }
 
 GLsizeiptr MetisASM::get_GLsizeiptr(void) {
   GLsizeiptr i;
-  infile >> i;
+  *infile >> i;
   return i;
 }
 
 GLboolean MetisASM::get_GLboolean(void) {
   string i;
-  infile >> i;
+  *infile >> i;
   if(i=="GL_FALSE") {
     return GL_FALSE;
   } else {
@@ -132,7 +137,7 @@ GLboolean MetisASM::get_GLboolean(void) {
 
 metisgl_identifier MetisASM::get_metisid(void) {
   metisgl_identifier id;
-  infile >> id;
+  *infile >> id;
   return id;
 }
 MetisASM::MetisASM() : 
@@ -198,7 +203,7 @@ MetisASM::MetisASM() :
                                                    string cur = this->get_line();
                                                    if (trim_copy(cur) == "END-SHADER") {
                                                      proceed=false;
-                                                   } else if (infile.eof()) {
+                                                   } else if (infile->eof()) {
                                                      proceed=false;
                                                    } else {
                                                      shader += cur + "\n";
