@@ -27,7 +27,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
     if(handlers.count(opcode)) {
       handlers.at(opcode)(vm, *infile);
     } else {
-      throw MetisException("unknown opcode: " + opcode, __LINE__, __FILE__);
+      throw MasmException("unknown opcode: " + opcode, countbuf.lineNumber(), countbuf.column());
     }
   }
   initialfile.close();

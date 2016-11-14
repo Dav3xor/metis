@@ -18,6 +18,7 @@
   }
 
 ostringstream MetisException::cnvt;
+ostringstream MasmException::cnvt;
 
 uint64_t MetisVM::add_noop(void) {
   CHECK_INSTRUCTION(INS_NOOP_SIZE);

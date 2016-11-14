@@ -139,6 +139,27 @@ enum address_mode: uint8_t {REGA                    =    0,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
+class MasmException: public runtime_error {
+  public:
+    MasmException(string error, 
+                   const int line, 
+                   const int column): runtime_error("Metis VM"), 
+                                      error_str(error), 
+                                      column(column), line(line) {};
+  private:  
+    string     error_str;
+    const int  column;
+    const int   line;
+
+    virtual const char* what() const throw()
+    {
+      cnvt.str("");
+      cnvt << runtime_error::what() << ": " << error_str << " -- " << line << ":" << column;
+      return cnvt.str().c_str();
+    }
+    static ostringstream cnvt;
+};
+
 class MetisException: public runtime_error {
   public:
     MetisException(string error, 
