@@ -154,7 +154,7 @@ class MasmException: public runtime_error {
     virtual const char* what() const throw()
     {
       cnvt.str("");
-      cnvt << runtime_error::what() << ": " << error_str << " -- " << line << ":" << column;
+      cnvt << runtime_error::what() << ": " << error_str << " -- line: " << line << " column: " << column;
       return cnvt.str().c_str();
     }
     static ostringstream cnvt;
