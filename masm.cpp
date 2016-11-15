@@ -17,8 +17,8 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   if(!(initialfile.good())) {
     throw MetisException("could not open file to assemble: " + filename, __LINE__, __FILE__);
   }
-  CountingStreamBuffer countbuf(initialfile.rdbuf());
-  infile = new istream(&countbuf);
+  countbuf = new CountingStreamBuffer(initialfile.rdbuf());
+  infile = new istream(countbuf);
 
   string opcode;
   while(!(infile->eof())) {
@@ -27,10 +27,11 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
     if(handlers.count(opcode)) {
       handlers.at(opcode)(vm, *infile);
     } else {
-      throw MasmException("unknown opcode: " + opcode, countbuf.lineNumber(), countbuf.column());
+      throw MasmException("unknown opcode: " + opcode, countbuf->lineNumber(), countbuf->column());
     }
   }
   initialfile.close();
+  delete countbuf;
   delete infile;
 };
 

@@ -12,6 +12,7 @@
 
 #include <exception>
 #include <stdexcept>
+#include <streambuf>
 #include <sstream>
 #include <fstream>
 #include <unordered_map>
@@ -143,7 +144,7 @@ class MasmException: public runtime_error {
   public:
     MasmException(string error, 
                    const int line, 
-                   const int column): runtime_error("Metis VM"), 
+                   const int column): runtime_error("Metis Masm"), 
                                       error_str(error), 
                                       column(column), line(line) {};
   private:  
@@ -872,35 +873,6 @@ class MetisVM {
       
 };
 
-typedef function<void (MetisVM &, istream &s)> instruction_handler;
-class MetisASM {
-  public:
-    MetisASM();
-    void assemble(const string &filename, MetisVM &vm);
-  private:
-    unordered_map<string, instruction_handler> handlers;
-    unordered_map<string, address_mode> addr_modes;
-    unordered_map<string, GLenum> gl_enums;
-    istream *infile;
-
-    address_mode       get_addr_mode(void);
-    uint64_t           get_uint64(void);
-    uint8_t            get_uint8(void);
-    float              get_float(void);
-    string             get_string(void);
-    string             get_line(void);
-    uint64_t           get_addr(MetisVM &m);
-    GLenum             get_GLenum(void);
-    GLsizei            get_GLsizei(void);
-    GLint              get_GLint(void);
-    GLuint             get_GLuint(void);
-    GLsizeiptr         get_GLsizeiptr(void);
-    GLboolean          get_GLboolean(void);
-    metisgl_identifier get_metisid(void);
-
-};
-#include <streambuf>
-
 class CountingStreamBuffer : public std::streambuf
 {
 public:
@@ -1022,5 +994,34 @@ private:
     unsigned int        prevColumn_;    // previous column
     std::streamsize     filePos_;       // file position
 };
+typedef function<void (MetisVM &, istream &s)> instruction_handler;
+class MetisASM {
+  public:
+    MetisASM();
+    void assemble(const string &filename, MetisVM &vm);
+  private:
+    unordered_map<string, instruction_handler> handlers;
+    unordered_map<string, address_mode> addr_modes;
+    unordered_map<string, GLenum> gl_enums;
+    istream *infile;
+    CountingStreamBuffer *countbuf;
+
+    address_mode       get_addr_mode(void);
+    uint64_t           get_uint64(void);
+    uint8_t            get_uint8(void);
+    float              get_float(void);
+    string             get_string(void);
+    string             get_line(void);
+    uint64_t           get_addr(MetisVM &m);
+    GLenum             get_GLenum(void);
+    GLsizei            get_GLsizei(void);
+    GLint              get_GLint(void);
+    GLuint             get_GLuint(void);
+    GLsizeiptr         get_GLsizeiptr(void);
+    GLboolean          get_GLboolean(void);
+    metisgl_identifier get_metisid(void);
+
+};
+
 
 #endif
