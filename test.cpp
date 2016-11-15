@@ -983,6 +983,10 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/badaddressmode.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/baduint64.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/uint64outofrange.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/baduint8.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange2.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange3.m", m), MasmException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {

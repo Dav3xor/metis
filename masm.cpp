@@ -61,13 +61,22 @@ uint64_t MetisASM::get_uint64(void) {
 }
 
 uint8_t MetisASM::get_uint8(void) {
-  uint32_t val;
-  *infile >> val;
-  if( val > 255) {
-    throw MasmException("1 byte assembler value out of bounds", countbuf->lineNumber(), countbuf->column());
+  string val;
+  uint64_t val2;
+  try {
+    *infile >> val;
+    val2 = stoull(val, 0, 10);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid uint8: " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("uint8 out of range: " + val, countbuf->lineNumber(), countbuf->column());
   }
-  //printf(" - %cu\n", val);
-  return val;
+
+  if((val2 < 0)||(val2>255)) {
+    throw MasmException("uint8 not between 0 and 255: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+
+  return val2;
 }
 
 float MetisASM::get_float(void) {
