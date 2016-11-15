@@ -979,8 +979,8 @@ TEST_CASE( "assembler bad opcode/address mode", "[MetisVM]" ) {
   
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   MetisASM a;
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badinstruction.m", m), MetisException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badaddressmode.m", m), MetisException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badinstruction.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badaddressmode.m", m), MasmException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {

@@ -42,7 +42,7 @@ address_mode MetisASM::get_addr_mode(void) {
     try {
       return addr_modes.at(mode);
     } catch(...) {
-      throw MetisException("unknown address mode: " + mode, __LINE__, __FILE__);
+      throw MasmException("unknown address mode: " + mode, countbuf->lineNumber(), countbuf->column());
     }
 }
 
@@ -57,7 +57,7 @@ uint8_t MetisASM::get_uint8(void) {
   uint32_t val;
   *infile >> val;
   if( val > 255) {
-    throw MetisException("1 byte assembler value out of bounds", __LINE__, __FILE__);
+    throw MasmException("1 byte assembler value out of bounds", countbuf->lineNumber(), countbuf->column());
   }
   //printf(" - %cu\n", val);
   return val;
@@ -99,7 +99,7 @@ GLenum MetisASM::get_GLenum(void) {
   try {
     return gl_enums.at(glenum);
   } catch(...) {
-    throw MetisException("unknown glenum: " + glenum, __LINE__, __FILE__);
+    throw MasmException("unknown glenum: " + glenum, countbuf->lineNumber(), countbuf->column());
   }
 }
 GLsizei MetisASM::get_GLsizei(void) {
