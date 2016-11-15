@@ -970,7 +970,7 @@ TEST_CASE( "assembler math", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGB] == 0);
 };
 
-TEST_CASE( "assembler bad opcode/address mode", "[MetisVM]" ) {
+TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint8_t glbuf[10000];
   uint64_t stack[5];
@@ -981,6 +981,8 @@ TEST_CASE( "assembler bad opcode/address mode", "[MetisVM]" ) {
   MetisASM a;
   REQUIRE_THROWS_AS(a.assemble("asmtests/badinstruction.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badaddressmode.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/baduint64.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/uint64outofrange.m", m), MasmException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {

@@ -47,10 +47,17 @@ address_mode MetisASM::get_addr_mode(void) {
 }
 
 uint64_t MetisASM::get_uint64(void) {
-  uint64_t val;
-  *infile >> val;
-  //printf(" - %ju\n", val);
-  return val;
+  string val;
+  uint64_t val2;
+  try {
+    *infile >> val;
+    val2 = stoull(val, 0, 10);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+  return val2;
 }
 
 uint8_t MetisASM::get_uint8(void) {
