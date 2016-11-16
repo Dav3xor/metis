@@ -80,10 +80,17 @@ uint8_t MetisASM::get_uint8(void) {
 }
 
 float MetisASM::get_float(void) {
-  float val;
-  *infile >> val;
-  //printf(" - %f\n", val);
-  return val;
+  string val;
+  float val2;
+  try {
+    *infile >> val;
+    val2 = stof(val);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid float: " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("float out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+  return val2;
 }
 
 string MetisASM::get_string(void) {
