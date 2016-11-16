@@ -103,9 +103,20 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
   *infile >> val;
   if((val[0] >= '0')&&(val[0] <= '9')) {
-    return stoull(val, 0, 10);
+    try { 
+      return stoull(val, 0, 10);
+    } catch(invalid_argument) {
+      throw MasmException("not a valid address: " + val, countbuf->lineNumber(), countbuf->column());
+    } catch(out_of_range) {
+      throw MasmException("address out of range: " + val, countbuf->lineNumber(), countbuf->column());
+    }
+
   } else {
-    return m.get_label(val.c_str());
+    try {
+      return m.get_label(val.c_str());
+    } catch(...) {
+      throw MasmException("label not defined: " + val, countbuf->lineNumber(), countbuf->column());
+    }
   }
 }
     
