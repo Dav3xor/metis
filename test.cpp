@@ -989,8 +989,9 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange3.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badfloat.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/floatoutofrange.m", m), MasmException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badintegeraddress.m", m), MetisException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/integeraddressoutofrange.m", m), MetisException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badintegeraddress.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/integeraddressoutofrange.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/labeladdressnotdefined.m", m), MasmException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
