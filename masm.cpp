@@ -171,9 +171,22 @@ GLboolean MetisASM::get_GLboolean(void) {
 }
 
 metisgl_identifier MetisASM::get_metisid(void) {
-  metisgl_identifier id;
-  *infile >> id;
-  return id;
+  string val;
+  uint64_t val2;
+  try {
+    *infile >> val;
+    val2 = stoull(val, 0, 10);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid integer (metisid): " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("metisid out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+
+  if((val2 < 0)||(val2>METIS_NUM_BUFFERS)) {
+    throw MasmException("metisid not between 0 and METIS_NUM_BUFFERS: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+
+  return val2;
 }
 
 
