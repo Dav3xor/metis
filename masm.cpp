@@ -12,6 +12,15 @@ using namespace boost::algorithm;
                                           address_mode dest = this->get_addr_mode(); \
                                           m.add_method(src, dest); } }
 
+bool valid_uint(string &s) {
+  if((!(s.find_first_not_of("0123456789"))||
+     (s[0]='0' && (s[1]=='x'||s[1]=='X') && (!(s.substr(2).find_first_not_of("01234567890abcdefABCDEF")))))) {
+    return true;
+  } else {
+    return false; 
+  }
+}
+
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   ifstream initialfile(filename);
   if(!(initialfile.good())) {
@@ -101,8 +110,9 @@ string MetisASM::get_string(void) {
 }
 uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
-  *infile >> val;
-  if((val[0] >= '0')&&(val[0] <= '9')) {
+  *infile >> val >> ws;
+  cout << "--" << val << "--" << endl;
+  if(valid_uint(val)) {
     try { 
       return stoull(val, 0, 10);
     } catch(invalid_argument) {

@@ -1,2 +1,2 @@
-STOREI REGA 1.2
+STOREI REGA 1abscsfd
 END
