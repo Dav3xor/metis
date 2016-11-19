@@ -1,1 +1,2 @@
 STOREI REGA 1.2
+END

@@ -992,7 +992,7 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/badintegeraddress.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/integeraddressoutofrange.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/labeladdressnotdefined.m", m), MasmException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badmetisid.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badmetisid.m", m), MetisException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/metisidoutofrange.m", m), MasmException);
 };
 
