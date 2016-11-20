@@ -13,9 +13,8 @@ using namespace boost::algorithm;
                                           m.add_method(src, dest); } }
 
 bool valid_uint(string &s) {
-//  if((!(s.find_first_not_of("0123456789"))||
-//     (s[0]='0' && (s[1]=='x'||s[1]=='X') && (!(s.substr(2).find_first_not_of("01234567890abcdefABCDEF")))))) {
-  if(s.find_first_not_of("0123456789")==string::npos) {
+  if((s.find_first_not_of("0123456789")==string::npos)||
+     (s[0]='0' && (s[1]=='x'||s[1]=='X') && (!(s.substr(2).find_first_not_of("01234567890abcdefABCDEF"))==string::npos))) {
     return true;
   } else {
     return false; 
