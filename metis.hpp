@@ -1019,7 +1019,7 @@ class MetisASM {
     GLuint             get_GLuint(void);
     GLsizeiptr         get_GLsizeiptr(void);
     GLboolean          get_GLboolean(void);
-    metisgl_identifier get_metisid(void);
+    metisgl_identifier get_metisid(MetisVM &m);
 
 };
 

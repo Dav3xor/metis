@@ -110,8 +110,7 @@ string MetisASM::get_string(void) {
 }
 uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
-  *infile >> val >> ws;
-  cout << "--" << val << "--" << endl;
+  *infile >> val;
   if(valid_uint(val)) {
     try { 
       return stoull(val, 0, 10);
@@ -180,16 +179,27 @@ GLboolean MetisASM::get_GLboolean(void) {
   }
 }
 
-metisgl_identifier MetisASM::get_metisid(void) {
+metisgl_identifier MetisASM::get_metisid(MetisVM &m) {
   string val;
-  uint64_t val2;
-  try {
-    *infile >> val;
-    val2 = stoull(val, 0, 10);
-  } catch(invalid_argument) {
-    throw MasmException("not a valid integer (metisid): " + val, countbuf->lineNumber(), countbuf->column());
-  } catch(out_of_range) {
-    throw MasmException("metisid out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  *infile >> val;
+
+  metisgl_identifier val2=METIS_NUM_BUFFERS+1;
+
+  if(valid_uint(val)) {
+    try { 
+      val2 = stoull(val, 0, 10);
+    } catch(invalid_argument) {
+      throw MasmException("metisid not a valid integer: " + val, countbuf->lineNumber(), countbuf->column());
+    } catch(out_of_range) {
+      throw MasmException("metisid out of range: " + val, countbuf->lineNumber(), countbuf->column());
+    }
+
+  } else {
+    try {
+      val2 = m.get_label(val.c_str());
+    } catch(...) {
+      throw MasmException("label for metis not defined: " + val, countbuf->lineNumber(), countbuf->column());
+    }
   }
 
   if((val2 < 0)||(val2>METIS_NUM_BUFFERS)) {
@@ -307,15 +317,15 @@ MetisASM::MetisASM() :
                                                  m.add_gldrawarrays(mode, first, count); } },
 
     {"GLGENBUFFERS",               HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
-                                                 metisgl_identifier start = this->get_metisid();
+                                                 metisgl_identifier start = this->get_metisid(m);
                                                  m.add_glgenbuffers(numids, start); } },
     {"GLGENVERTEXARRAYS",          HANDLED_BY {  GLsizei numids           = this->get_GLsizei();
-                                                 metisgl_identifier start = this->get_metisid();
+                                                 metisgl_identifier start = this->get_metisid(m);
                                                  m.add_glgenvertexarrays(numids, start); } },
-    {"GLBINDVERTEXARRAY",          HANDLED_BY {  metisgl_identifier id    = this->get_metisid();
+    {"GLBINDVERTEXARRAY",          HANDLED_BY {  metisgl_identifier id    = this->get_metisid(m);
                                                  m.add_glbindvertexarray(id); } },
     {"GLBINDBUFFER",               HANDLED_BY {  GLenum target            = this->get_GLenum();
-                                                 metisgl_identifier id    = this->get_metisid();
+                                                 metisgl_identifier id    = this->get_metisid(m);
                                                  m.add_glbindbuffer(target, id); } },
 
 
@@ -336,7 +346,7 @@ MetisASM::MetisASM() :
                                                  GLenum type              = this->get_GLenum();
                                                  GLboolean normalized     = this->get_GLboolean();
                                                  GLsizei stride           = this->get_GLsizei();
-                                                 uint64_t pointer         = this->get_metisid();
+                                                 uint64_t pointer         = this->get_metisid(m);
                                                  m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
     {"GLDISABLEVERTEXATTRIBARRAY", HANDLED_BY {  GLuint index             = this->get_GLuint();
                                                  m.add_gldisablevertexattribarray(index); } },
@@ -346,48 +356,48 @@ MetisASM::MetisASM() :
     {"GLDEPTHFUNC",                HANDLED_BY {  GLenum function          = this->get_GLenum();
                                                  m.add_gldepthfunc(function); } },
     {"GLCREATESHADER",             HANDLED_BY {  GLenum type              = this->get_GLenum();
-                                                 metisgl_identifier index = this->get_metisid();
+                                                 metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcreateshader(type, index); } },
     {"GLSHADERSOURCE",             HANDLED_BY {  GLuint shader            = this->get_addr(m);
-                                                 metisgl_identifier index = this->get_metisid();
+                                                 metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glshadersource(shader, index); } },
-    {"GLCOMPILESHADER",            HANDLED_BY {  metisgl_identifier index = this->get_metisid();
+    {"GLCOMPILESHADER",            HANDLED_BY {  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcompileshader(index); } },
-    {"GLCREATEPROGRAM",            HANDLED_BY {  metisgl_identifier index = this->get_metisid();
+    {"GLCREATEPROGRAM",            HANDLED_BY {  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcreateprogram(index); } },
-    {"GLATTACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
-                                                 metisgl_identifier shader_index  = this->get_metisid();
+    {"GLATTACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid(m);
+                                                 metisgl_identifier shader_index  = this->get_metisid(m);
                                                  m.add_glattachshader(program_index, shader_index); } },
-    {"GLLINKPROGRAM",              HANDLED_BY {  metisgl_identifier index = this->get_metisid();
+    {"GLLINKPROGRAM",              HANDLED_BY {  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_gllinkprogram(index); } },
-    {"GLDETACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
-                                                 metisgl_identifier shader_index  = this->get_metisid();
+    {"GLDETACHSHADER",             HANDLED_BY {  metisgl_identifier program_index = this->get_metisid(m);
+                                                 metisgl_identifier shader_index  = this->get_metisid(m);
                                                  m.add_gldetachshader(program_index, shader_index); } },
-    {"GLDELETESHADER",             HANDLED_BY {  metisgl_identifier shader_index = this->get_metisid();
+    {"GLDELETESHADER",             HANDLED_BY {  metisgl_identifier shader_index = this->get_metisid(m);
                                                  m.add_gldeleteshader(shader_index); } },
-    {"GLUSEPROGRAM",               HANDLED_BY {  metisgl_identifier program_index = this->get_metisid();
+    {"GLUSEPROGRAM",               HANDLED_BY {  metisgl_identifier program_index = this->get_metisid(m);
                                                  m.add_gluseprogram(program_index); } },
     {"GLUNIFORMFV",                HANDLED_BY {  address_mode src                  = this->get_addr_mode();
-                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformfv(src, uniform_index); } },
     {"GLUNIFORMIV",                HANDLED_BY {  address_mode src                  = this->get_addr_mode();
-                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformiv(src, uniform_index); } },
     {"GLUNIFORMUIV",               HANDLED_BY {  address_mode src                  = this->get_addr_mode();
-                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformuiv(src, uniform_index); } },
     {"GLUNIFORMMATRIXFV",          HANDLED_BY {  address_mode src                  = this->get_addr_mode();
-                                                 metisgl_identifier uniform_index  = this->get_metisid();
+                                                 metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformmatrixfv(src, uniform_index); } },
-    {"GLGETUNIFORMLOCATION",       HANDLED_BY {  metisgl_identifier program_index  = this->get_metisid();
-                                                 metisgl_identifier uniform_index  = this->get_metisid();
+    {"GLGETUNIFORMLOCATION",       HANDLED_BY {  metisgl_identifier program_index  = this->get_metisid(m);
+                                                 metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  string uniform_name               = this->get_string();
                                                  m.add_glgetuniformlocation(program_index,uniform_index, uniform_name.c_str()); } },
     {"GLGENTEXTURES",              HANDLED_BY {  GLsizei num_identifiers           = this->get_addr_mode();
-                                                 metisgl_identifier start_index    = this->get_metisid();
+                                                 metisgl_identifier start_index    = this->get_metisid(m);
                                                  m.add_glgentextures(num_identifiers, start_index); } },
     {"GLBINDTEXTURE",              HANDLED_BY {  GLenum target                     = this->get_GLenum();
-                                                 metisgl_identifier texture_index  = this->get_metisid();
+                                                 metisgl_identifier texture_index  = this->get_metisid(m);
                                                  m.add_glbindtexture(target, texture_index); } },
     {"GLTEXPARAMETERI",            HANDLED_BY {  GLenum target                     = this->get_GLenum();
                                                  GLenum pname                      = this->get_GLenum();
@@ -407,12 +417,12 @@ MetisASM::MetisASM() :
                                                  GLint border                      = this->get_GLint();
                                                  GLenum format                     = this->get_GLenum();
                                                  GLenum type                       = this->get_GLenum();
-                                                 uint64_t data_index               = this->get_metisid();
+                                                 uint64_t data_index               = this->get_metisid(m);
                                             
                                                  m.add_glteximage2d(target, level, internal_format,
                                                                     width, height, border, format,
                                                                     type, data_index); } },
-    {"GLGETATTRIBLOCATION",        HANDLED_BY {  metisgl_identifier attrib_index   = this->get_metisid();
+    {"GLGETATTRIBLOCATION",        HANDLED_BY {  metisgl_identifier attrib_index   = this->get_metisid(m);
                                                  string attrib                     = this->get_string();
                                                  m.add_glgetattriblocation(attrib_index, attrib.c_str()); } },
     {"GLACTIVETEXTURE",            HANDLED_BY {  GLenum texture                    = this->get_GLenum();
