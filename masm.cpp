@@ -71,30 +71,14 @@ address_mode MetisASM::get_addr_mode(void) {
 
 uint64_t MetisASM::get_uint64(void) {
   string val;
-  uint64_t val2;
-  try {
-    *infile >> val;
-    val2 = stoull(val, 0, 10);
-  } catch(invalid_argument) {
-    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
-  } catch(out_of_range) {
-    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
-  }
-  return val2;
+  *infile >> val;
+  return convert_uint(val);
 }
 
 uint8_t MetisASM::get_uint8(void) {
   string val;
-  uint64_t val2;
-  try {
-    *infile >> val;
-    val2 = stoull(val, 0, 10);
-  } catch(invalid_argument) {
-    throw MasmException("not a valid uint8: " + val, countbuf->lineNumber(), countbuf->column());
-  } catch(out_of_range) {
-    throw MasmException("uint8 out of range: " + val, countbuf->lineNumber(), countbuf->column());
-  }
-
+  *infile >> val;
+  uint64_t val2 = convert_uint(val);
   if((val2 < 0)||(val2>255)) {
     throw MasmException("uint8 not between 0 and 255: " + val, countbuf->lineNumber(), countbuf->column());
   }
@@ -126,16 +110,8 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
   *infile >> val;
   if(valid_uint(val)) {
-    try { 
-      return stoull(val, 0, 10);
-    } catch(invalid_argument) {
-      throw MasmException("not a valid address: " + val, countbuf->lineNumber(), countbuf->column());
-    } catch(out_of_range) {
-      throw MasmException("address out of range: " + val, countbuf->lineNumber(), countbuf->column());
-    }
-
+    return convert_uint(val);
   } else {
-    cout << "---" << val << "---" << endl;
     try {
       return m.get_label(val.c_str());
     } catch(...) {
