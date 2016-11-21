@@ -12,7 +12,7 @@ using namespace boost::algorithm;
                                           address_mode dest = this->get_addr_mode(); \
                                           m.add_method(src, dest); } }
 
-bool valid_uint(string s) {
+bool MetisASM::valid_uint(string s) {
   if((s.find_first_not_of("0123456789")==string::npos)||
      (s[0]='0' && (s[1]=='x'||s[1]=='X') && (!(s.substr(2).find_first_not_of("01234567890abcdefABCDEF"))==string::npos))) {
     return true;
@@ -20,6 +20,20 @@ bool valid_uint(string s) {
     return false; 
   }
 }
+uint64_t MetisASM::convert_uint(const string s) {
+  uint64_t val= -1;
+  try {
+    val = stoull(s, 0, 10);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+  return val;
+}
+
+
+
 
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   ifstream initialfile(filename);
@@ -148,6 +162,8 @@ GLenum MetisASM::get_GLenum(void) {
   }
 }
 GLsizei MetisASM::get_GLsizei(void) {
+  string val;
+  *infile >> val;
   GLsizei size;
   *infile >> size;
   return size;

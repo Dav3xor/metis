@@ -1006,6 +1006,8 @@ class MetisASM {
     istream *infile;
     CountingStreamBuffer *countbuf;
 
+    bool               valid_uint(string s);
+    uint64_t           convert_uint(const string s);
     address_mode       get_addr_mode(void);
     uint64_t           get_uint64(void);
     uint8_t            get_uint8(void);
