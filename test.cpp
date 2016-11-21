@@ -923,7 +923,9 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   
   MetisVM m(buf,10000, stack, 5, glbuf, 10000);
   MetisASM a;
+  printf("---\n");
   a.assemble("asmtests/asmtest.m", m);
+  printf("---\n");
   m.eval();
   REQUIRE( m.get_registers()[REGA] == 155);
   REQUIRE( m.get_registers()[REGB] == 204);
@@ -992,8 +994,8 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/badintegeraddress.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/integeraddressoutofrange.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/labeladdressnotdefined.m", m), MasmException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badmetisid.m", m), MetisException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/metisidoutofrange.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badmetisid.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/metisidbadlabel.m", m), MasmException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
