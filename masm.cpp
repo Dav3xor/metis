@@ -22,6 +22,9 @@ bool MetisASM::valid_uint(string s) {
 }
 uint64_t MetisASM::convert_uint(const string s) {
   uint64_t val= -1;
+  if(s[0] == '-') {
+    throw MasmException("unsigned must be positive: " + val, countbuf->lineNumber(), countbuf->column());
+  } 
   try {
     val = stoull(s, 0, 10);
   } catch(invalid_argument) {
@@ -141,6 +144,7 @@ GLsizei MetisASM::get_GLsizei(void) {
   string val;
   *infile >> val;
   uint64_t size = convert_uint(val);
+  cout << "size = " << size << endl;
   if((int)size < numeric_limits<GLsizei>::min()) {
     throw MasmException("GLsizei less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
   } else if ((int)size > numeric_limits<GLsizei>::max()) {
