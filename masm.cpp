@@ -156,14 +156,26 @@ GLint MetisASM::get_GLint(void) {
 }
 
 GLuint MetisASM::get_GLuint(void) {
-  GLuint i;
-  *infile >> i;
+  string val;
+  *infile >> val;
+  uint64_t i = convert_uint(val);
+  if(i < numeric_limits<GLuint>::min()) {
+    throw MasmException("GLuint less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
+  } else if (i > numeric_limits<GLuint>::max()) {
+    throw MasmException("GLuint greater than maximum value: " + val, countbuf->lineNumber(), countbuf->column());
+  }
   return i;
 }
 
 GLsizeiptr MetisASM::get_GLsizeiptr(void) {
-  GLsizeiptr i;
-  *infile >> i;
+  string val;
+  *infile >> val;
+  uint64_t i = convert_uint(val);
+  if((int)i < numeric_limits<GLsizeiptr>::min()) {
+    throw MasmException("GLsizeiptr less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
+  } else if ((int)i > numeric_limits<GLsizeiptr>::max()) {
+    throw MasmException("GLsizeiptr greater than maximum value: " + val, countbuf->lineNumber(), countbuf->column());
+  }
   return i;
 }
 
