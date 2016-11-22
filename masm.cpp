@@ -140,8 +140,12 @@ GLenum MetisASM::get_GLenum(void) {
 GLsizei MetisASM::get_GLsizei(void) {
   string val;
   *infile >> val;
-  GLsizei size;
-  *infile >> size;
+  uint64_t size = convert_uint(val);
+  if((int)size < numeric_limits<GLsizei>::min()) {
+    throw MasmException("GLsizei less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
+  } else if ((int)size > numeric_limits<GLsizei>::max()) {
+    throw MasmException("GLsizei greater than maximum value: " + val, countbuf->lineNumber(), countbuf->column());
+  }
   return size;
 }
 
