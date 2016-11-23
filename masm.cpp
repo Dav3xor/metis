@@ -160,9 +160,9 @@ GLint MetisASM::get_GLint(void) {
   try {
     val = stoll(s, 0, 10);
   } catch(invalid_argument) {
-    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("not a valid GLint: " + val, countbuf->lineNumber(), countbuf->column());
   } catch(out_of_range) {
-    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("GLint out of range: " + val, countbuf->lineNumber(), countbuf->column());
   }
   return val;
 }

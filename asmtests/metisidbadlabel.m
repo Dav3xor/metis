@@ -1,0 +1,2 @@
+GLDELETESHADER bad_label
+END
