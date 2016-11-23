@@ -154,9 +154,17 @@ GLsizei MetisASM::get_GLsizei(void) {
 }
 
 GLint MetisASM::get_GLint(void) {
-  GLint i;
-  *infile >> i;
-  return i;
+  string s;
+  int64_t val=0;
+  *infile >> s;
+  try {
+    val = stoll(s, 0, 10);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+  return val;
 }
 
 GLuint MetisASM::get_GLuint(void) {
