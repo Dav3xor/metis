@@ -95,6 +95,8 @@ using namespace std;
 #define INS_GLTEXIMAGE2D_SIZE                1+sizeof(GLenum)+sizeof(GLint)+sizeof(GLint)+sizeof(GLsizei)+sizeof(GLsizei)+sizeof(GLint)+sizeof(GLenum)+sizeof(GLenum)+sizeof(uint64_t )
 #define INS_GLGETATTRIBLOCATION_SIZE         1+sizeof(metisgl_identifier)
 #define INS_GLACTIVETEXTURE_SIZE             1+sizeof(GLenum)
+#define INS_GLCLEARCOLOR_SIZE                1+sizeof(GLclampf)+sizeof(GLclampf)+sizeof(GLclampf)+sizeof(GLclampf)
+#define INS_GLCLEAR_SIZE                     1+sizeof(GLbitfield)
 
 #define INS_LOG_SIZE                         1 
 #define INS_DATA_SIZE                        9 
@@ -343,6 +345,9 @@ class MetisVM {
                                INS_GLTEXIMAGE2D                  =   64,
                                INS_GLGETATTRIBLOCATION           =   65,
                                INS_GLACTIVETEXTURE               =   66,
+                               INS_GLCLEARCOLOR                  =   67,
+                               INS_GLCLEAR                       =   68,
+
 
                                INS_LOG                           =  192,   //     log string pointed at by command
                                INS_DATA                          =  193,   //     global data
@@ -483,6 +488,8 @@ class MetisVM {
                               GLenum format, GLenum type, uint64_t data_index);
     uint64_t add_glgetattriblocation(metisgl_identifier attrib_index, const char *attrib_name);
     uint64_t add_glactivetexture(GLenum texture);
+    uint64_t add_glclearcolor(GLclampf r, GLclampf g, GLclampf b, GLclampf a);
+    uint64_t add_glclear(GLbitfield flags);
 
     bool doCompileShader(uint16_t index);
     bool doLinkProgram(uint16_t index);
@@ -764,6 +771,17 @@ class MetisVM {
         struct glactivetexture_t {
           GLenum texture;
         }__attribute__((packed)) glactivetexture;
+        
+        struct glclearcolor_t {
+          GLclampf r;
+          GLclampf b;
+          GLclampf g;
+          GLclampf a;
+        }__attribute__((packed)) glclearcolor;
+        
+        struct glclear_t {
+          GLbitfield flags;
+        }__attribute__((packed)) glclear;
 
 
         struct jumpi_t {
