@@ -739,3 +739,26 @@ uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
   registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
   RETURN_NEXT();
 };
+
+
+uint64_t  MetisVM::add_glclear(GLbitfield flags) {
+  CHECK_INSTRUCTION(INS_GLCLEAR_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_GLCLEAR;
+  instruction->commands.glclear.flags = flags;
+  registers[REGIP] += INS_GLCLEAR_SIZE;
+  RETURN_NEXT();
+};
+uint64_t  MetisVM::add_glclearcolor(GLclampf r, GLclampf g, GLclampf b,GLclampf a) {
+  CHECK_INSTRUCTION(INS_GLCLEARCOLOR_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_GLCLEARCOLOR;
+  instruction->commands.glclearcolor.r = r;
+  instruction->commands.glclearcolor.g = g;
+  instruction->commands.glclearcolor.b = b;
+  instruction->commands.glclearcolor.a = a;
+  registers[REGIP] += INS_GLCLEARCOLOR_SIZE;
+  RETURN_NEXT();
+};
