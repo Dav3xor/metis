@@ -484,6 +484,25 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
         break;
 
+      case INS_GLCLEAR:
+        glClear(instruction->commands.glclear.flags);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLCLEAR_SIZE;
+        break;
+
+      case INS_GLCLEARCOLOR:
+        glClearColor(instruction->commands.glclearcolor.r,
+                     instruction->commands.glclearcolor.g,
+                     instruction->commands.glclearcolor.b,
+                     instruction->commands.glclearcolor.a);
+        #ifdef TESTING_ENVIRONMENT
+        print_glerrors(__LINE__,__FILE__);
+        #endif
+        registers[REGIP] += INS_GLCLEARCOLOR_SIZE;
+        break;
+
       case INS_DATA:
         advance = instruction->commands.data.length;
         registers[REGIP] += INS_DATA_SIZE;
