@@ -746,7 +746,7 @@ uint64_t  MetisVM::add_glclear(GLbitfield flags) {
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_GLCLEAR;
-  instruction->commands.glclear.flags = flags;
+  instruction->commands.glclear.flags           = flags;
   registers[REGIP] += INS_GLCLEAR_SIZE;
   RETURN_NEXT();
 };
