@@ -1089,8 +1089,10 @@ TEST_CASE( "window stuff", "[MetisContext]") {
   m.add_storei(REGA, m.get_label("angle"));
   m.add_storei(REGB, m.get_label("delta"));
   m.add_gluniformfv(REGA, 6);
+  m.add_glclearcolor(0, 0, 0 , 0);
   m.add_end();
 
+  m.add_glclear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   m.add_label_ip("mainloop");
   m.add_storei(REGA, m.get_label("angle"));
   m.add_storei(REGB, m.get_label("delta"));
@@ -1117,9 +1119,7 @@ TEST_CASE( "window stuff", "[MetisContext]") {
 
   m.save("wintest.metis");
   m.eval("init");
-  glClearColor(0.0f,0.0f,0.4f,0.0f);
   while(!glfwWindowShouldClose(win)) {
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     m.eval("mainloop");
     glfwSwapBuffers(win);
     glfwPollEvents();
