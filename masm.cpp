@@ -477,6 +477,13 @@ MetisASM::MetisASM() :
                                                  m.add_glgetattriblocation(attrib_index, attrib.c_str()); } },
     {"GLACTIVETEXTURE",            HANDLED_BY {  GLenum texture                    = this->get_GLenum();
                                                  m.add_glactivetexture(texture); } },
+    {"GLCLEAR",                    HANDLED_BY {  GLbitfield bitfield               = this->get_GLbitfield();
+                                                 m.add_glclear(bitfield); } },
+    {"GLCLEARCOLOR",               HANDLED_BY {  GLclampf r                        = this->get_GLclampf();
+                                                 GLclampf g                        = this->get_GLclampf();
+                                                 GLclampf b                        = this->get_GLclampf();
+                                                 GLclampf a                        = this->get_GLclampf();
+                                                 m.add_glclearcolor(r,g,b,a); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
