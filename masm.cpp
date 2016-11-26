@@ -207,9 +207,9 @@ float MetisASM::get_GLclampf(void) {
   *infile >> val;
   float val2 = convert_float(val);
   if(val2 < 0.0) {
-    throw MasmException("GLclampf less than zero: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("GLclampf value less than zero: " + val, countbuf->lineNumber(), countbuf->column());
   } else if(val2 > 1.0) {
-    throw MasmException("GLclampf greater than one: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("GLclampf value greater than one: " + val, countbuf->lineNumber(), countbuf->column());
   }
   return val2;
 }
