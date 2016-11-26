@@ -35,8 +35,17 @@ uint64_t MetisASM::convert_uint(const string s) {
   return val;
 }
 
-
-
+float MetisASM::convert_float(const string s) {
+  float val = 0.0;
+  try {
+    val = stof(s);
+  } catch(invalid_argument) {
+    throw MasmException("not a valid float: " + s, countbuf->lineNumber(), countbuf->column());
+  } catch(out_of_range) {
+    throw MasmException("float out of range: " + s, countbuf->lineNumber(), countbuf->column());
+  }
+  return val;
+}
 
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   ifstream initialfile(filename);
@@ -91,16 +100,8 @@ uint8_t MetisASM::get_uint8(void) {
 
 float MetisASM::get_float(void) {
   string val;
-  float val2;
-  try {
-    *infile >> val;
-    val2 = stof(val);
-  } catch(invalid_argument) {
-    throw MasmException("not a valid float: " + val, countbuf->lineNumber(), countbuf->column());
-  } catch(out_of_range) {
-    throw MasmException("float out of range: " + val, countbuf->lineNumber(), countbuf->column());
-  }
-  return val2;
+  *infile >> val;
+  return convert_float(val);
 }
 
 string MetisASM::get_string(void) {
@@ -199,6 +200,33 @@ GLboolean MetisASM::get_GLboolean(void) {
   } else {
     return GL_TRUE;
   }
+}
+
+float MetisASM::get_GLclampf(void) {
+  string val;
+  *infile >> val;
+  float val2 = convert_float(val);
+  if(val2 < 0.0) {
+    throw MasmException("GLclampf less than zero: " + val, countbuf->lineNumber(), countbuf->column());
+  } else if(val2 > 1.0) {
+    throw MasmException("GLclampf greater than one: " + val, countbuf->lineNumber(), countbuf->column());
+  }
+  return val2;
+}
+GLbitfield MetisASM::get_GLbitfield(void) {
+  GLbitfield result = 0;
+  string bitfield;
+  *infile >> bitfield;
+  istringstream sbitfield(bitfield);
+  string bit;
+  while(getline(sbitfield, bit, '|')) {
+    try {
+      result |= gl_enums.at(bit);
+    } catch(...) {
+      throw MasmException("cant find GLbitfield value "+bit+" not valid in : " + bitfield, countbuf->lineNumber(), countbuf->column());
+    }
+  }
+  return result; 
 }
 
 metisgl_identifier MetisASM::get_metisid(MetisVM &m) {

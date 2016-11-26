@@ -13,6 +13,7 @@
 #include <exception>
 #include <stdexcept>
 #include <streambuf>
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <unordered_map>
@@ -1026,6 +1027,7 @@ class MetisASM {
 
     bool               valid_uint(string s);
     uint64_t           convert_uint(const string s);
+    float              convert_float(const string s);
     address_mode       get_addr_mode(void);
     uint64_t           get_uint64(void);
     uint8_t            get_uint8(void);
@@ -1039,6 +1041,8 @@ class MetisASM {
     GLuint             get_GLuint(void);
     GLsizeiptr         get_GLsizeiptr(void);
     GLboolean          get_GLboolean(void);
+    GLclampf           get_GLclampf(void);
+    GLbitfield         get_GLbitfield(void);
     metisgl_identifier get_metisid(MetisVM &m);
 
 };
