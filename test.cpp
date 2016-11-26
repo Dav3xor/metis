@@ -1005,7 +1005,9 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/glsizeiptrunder.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badglint.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/glintoutofrange.m", m), MasmException);
-  REQUIRE_THROWS_AS(a.assemble("asmtests/badglclampf.m", m), MetisException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badglclampf.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badglbitfield1.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badglbitfield2.m", m), MetisException);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
