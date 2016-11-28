@@ -271,6 +271,23 @@ union MetisMemoryCell {
   MetisMatrixHeader   matrix;
 }__attribute__((packed));
 
+
+#define TYPE_UBYTE  1
+#define TYPE_USHORT 2
+#define TYPE_UINT   3
+#define TYPE_ULONG  4
+#define TYPE_BYTE   5
+#define TYPE_SHORT  6
+#define TYPE_INT    7
+#define TYPE_WHOLE  8
+#define TYPE_FLOAT  9
+#define TYPE_DOUBLE 10 
+
+struct TypedCell {
+  MetisMemoryCell cell;
+  uint8_t type;
+};
+
 typedef uint16_t metisgl_identifier;
 
 class MetisVM {
@@ -509,7 +526,7 @@ class MetisVM {
 
     uint64_t get_label(const char *label) {
       try {
-        return labels.at(label);
+        return labels.at(label).cell.ulong;
       } catch (...) {
         throw MetisException(string("label does not exist - ") + label, __LINE__,__FILE__);
       }
@@ -553,7 +570,7 @@ class MetisVM {
     uint8_t           *buffer_end;
 
     uint8_t            header[11];
-    unordered_map<string, uint64_t> labels;
+    unordered_map<string, TypedCell> labels;
 
 
     struct MetisInstruction {

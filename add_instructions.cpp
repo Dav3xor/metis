@@ -137,9 +137,12 @@ uint64_t MetisVM::add_label_ip(const char *label) {
  
   // add a label pointing at the current IP Register value
   // not really an instruction, but it basically acts like one...
-  uint64_t new_loc = (registers[REGIP]-(uint64_t)code_start);
+  TypedCell new_loc;
+
+  new_loc.cell.ulong = (registers[REGIP]-(uint64_t)code_start);
+  new_loc.type  = TYPE_ULONG;
   labels[label] = new_loc;
-  return new_loc;
+  return new_loc.cell.ulong;
 }
 
 uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
@@ -147,7 +150,11 @@ uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
  
   // add a label pointing at the current IP Register value
   // not really an instruction, but it basically acts like one...
-  labels[label] = val;
+  TypedCell new_loc;
+
+  new_loc.cell.ulong = val;
+  new_loc.type  = TYPE_ULONG;
+  labels[label] = new_loc;
   return val;
 }
 uint64_t MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {

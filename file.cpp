@@ -20,7 +20,7 @@ void MetisVM::save(const string &filename) {
     outfile.write("L",1);
     outfile.write((char *) &label_len,2);
     outfile.write(kv.first.c_str(), kv.first.length());
-    outfile.write((char *) &kv.second, sizeof(uint64_t));
+    outfile.write((char *) &kv.second.cell.ulong, sizeof(uint64_t));
   }
   buffer_len = buffer_end-buffer;
   if(buffer_len > 0) {
@@ -44,6 +44,7 @@ void MetisVM::load(const string &filename) {
   uint64_t code_len;
   uint64_t buffer_len;
   uint64_t value;
+  TypedCell cell;
   reset();
   labels.clear();
 
@@ -70,8 +71,11 @@ void MetisVM::load(const string &filename) {
         label[label_len]='\0';
 
         infile.read((char *)&value,8);
+       
+        cell.cell.ulong = value;
+        cell.type = TYPE_ULONG;
 
-        labels[label] = value;
+        labels[label] = cell;
         break;
       case 'B':     // buffer
         infile.read((char *)&buffer_len,8);
