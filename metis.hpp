@@ -531,6 +531,13 @@ class MetisVM {
         throw MetisException(string("label does not exist - ") + label, __LINE__,__FILE__);
       }
     }
+    float get_label_float(const char *label) {
+      try {
+        return labels.at(label).cell.floats[0];
+      } catch (...) {
+        throw MetisException(string("label does not exist - ") + label, __LINE__,__FILE__);
+      }
+    }
 
     uint8_t  *get_ptr_from_label (const char *label) {
       return (uint8_t *)(code_start + get_label(label));
@@ -1043,12 +1050,13 @@ class MetisASM {
     CountingStreamBuffer *countbuf;
 
     bool               valid_uint(string s);
+    bool               valid_float(string s);
     uint64_t           convert_uint(const string s);
     float              convert_float(const string s);
     address_mode       get_addr_mode(void);
     uint64_t           get_uint64(void);
     uint8_t            get_uint8(void);
-    float              get_float(void);
+    float              get_float(MetisVM &m);
     string             get_string(void);
     string             get_line(void);
     uint64_t           get_addr(MetisVM &m);

@@ -20,6 +20,13 @@ bool MetisASM::valid_uint(string s) {
     return false; 
   }
 }
+bool MetisASM::valid_float(string s) {
+  if(s.find_first_not_of("0123456789.")==string::npos) {
+    return true;
+  } else {
+    return false; 
+  }
+}
 uint64_t MetisASM::convert_uint(const string s) {
   uint64_t val= -1;
   if(s[0] == '-') {
@@ -98,10 +105,20 @@ uint8_t MetisASM::get_uint8(void) {
   return val2;
 }
 
-float MetisASM::get_float(void) {
+float MetisASM::get_float(MetisVM &m) {
   string val;
   *infile >> val;
-  return convert_float(val);
+  if(valid_float(val)) {
+    return convert_float(val);
+  } else {
+    try {
+      return m.get_label_float(val.c_str());
+    } catch(...) {
+      cout << countbuf->lineNumber() << " - " << countbuf->column() << endl;
+      throw MasmException("label not defined: " + val, countbuf->lineNumber(), countbuf->column());
+    }
+  }
+    
 }
 
 string MetisASM::get_string(void) {
@@ -300,7 +317,7 @@ MetisASM::MetisASM() :
                                                  float *buffer   = new float[size];
                                                  
                                                  for(uint32_t i=0; i<size; i++) {
-                                                   buffer[i] = this->get_float();
+                                                   buffer[i] = this->get_float(m);
                                                  }
 
                                                  m.add_buffer((uint8_t *)buffer, size, label.c_str());
@@ -313,7 +330,7 @@ MetisASM::MetisASM() :
                                                  uint32_t size   = width*height;
                                                  float *mat      = new float[size];
                                                  for(uint32_t i=0; i<size; i++) {
-                                                   mat[i] = this->get_float();
+                                                   mat[i] = this->get_float(m);
                                                  }
                                                  m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
                                                  delete[] mat; } },
