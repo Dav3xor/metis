@@ -157,6 +157,20 @@ uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
   labels[label] = new_loc;
   return val;
 }
+
+uint64_t MetisVM::add_label_float(const char *label, float val) {
+  CHECK_POINTER(label);
+ 
+  // add a label pointing at the current IP Register value
+  // not really an instruction, but it basically acts like one...
+  TypedCell new_loc;
+
+  new_loc.cell.floats[0] = val;
+  new_loc.type  = TYPE_FLOAT;
+  labels[label] = new_loc;
+  return val;
+}
+
 uint64_t MetisVM::add_data(const uint8_t *data, const uint64_t length, const char *label) {
   CHECK_INSTRUCTION(INS_DATA_SIZE);
   CHECK_POINTER(data);

@@ -286,32 +286,43 @@ MetisASM::MetisASM() :
     {"NOOP",                       HANDLED_BY {  m.add_noop       (); } }, 
     {"JUMP",                       HANDLED_BY {  m.add_jump       (this->get_addr_mode()); } },
     {"JUMPI",                      HANDLED_BY {  m.add_jumpi      (this->get_addr(m));   } },
+
     {"JIZZ",                       HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                                  address_mode dest = this->get_addr_mode();
                                                  m.add_jizz       (src,dest); } }, 
+
     {"JNZ",                        HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                                  address_mode dest = this->get_addr_mode();
                                                  m.add_jnz        (src,dest); } },
+
     {"JNE",                        HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                                  address_mode dest = this->get_addr_mode();
                                                  uint64_t val      = this->get_addr(m);
                                                  m.add_jne        (src, dest, val); } }, 
+
     {"JMPE",                       HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                                  address_mode dest = this->get_addr_mode();
                                                  uint64_t val      = this->get_uint64();
                                                  m.add_jmpe       (src, dest, val); } },
+
     {"STORE",                      HANDLED_BY {  address_mode src  = this->get_addr_mode();
                                                  address_mode dest = this->get_addr_mode();
                                                  m.add_store      (src, dest); } },
+
     {"STOREI",                     HANDLED_BY {  address_mode dest = this->get_addr_mode();
                                                  uint64_t     val  = this->get_addr(m);
                                                  m.add_storei     (dest, val); } },
 
     {"LOC",                        HANDLED_BY {  m.add_label_ip   (this->get_string().c_str()); } },
+
     {"LABEL",                      HANDLED_BY {  string label = this->get_string();
                                                  uint64_t val = this->get_uint64();
                                                  m.add_label_val  (label.c_str(), val); } },
   
+    {"FLOAT",                      HANDLED_BY {  string label = this->get_string();
+                                                 float val = this->get_float(m);
+                                                 m.add_label_float  (label.c_str(), val); } },
+
     {"BUFFER",                     HANDLED_BY {  string  label   = this->get_string();
                                                  uint64_t size   = this->get_uint64(); 
                                                  float *buffer   = new float[size];
