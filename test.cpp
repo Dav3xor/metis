@@ -990,6 +990,7 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange2.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/uint8outofrange3.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badfloat.m", m), MasmException);
+  REQUIRE_THROWS_AS(a.assemble("asmtests/badfloatlabel.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/floatoutofrange.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badintegeraddress.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/integeraddressoutofrange.m", m), MasmException);
@@ -1008,6 +1009,10 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   REQUIRE_THROWS_AS(a.assemble("asmtests/badglclampf.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badglbitfield1.m", m), MasmException);
   REQUIRE_THROWS_AS(a.assemble("asmtests/badglbitfield2.m", m), MasmException);
+
+  a.assemble("asmtests/goodfloatlabel.m", m);
+  m.eval();
+  REQUIRE(m.get_label_float("is_a_float") == 5.5);
 };
 
 TEST_CASE( "window stuff", "[MetisContext]") {
