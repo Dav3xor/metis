@@ -1,0 +1,65 @@
+#!/usr/bin/python
+
+import os
+import platform
+
+platforms = {'Linux':  {'link_options':  '-lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
+                                         '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
+                                         '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
+                        'build_options': '-Wall -std=c++11 -ggdb',
+                        'compiler':      'g++' },
+            {'Darwin': {'link_options':  '-lglfw3 -lboost_program_options -framework Cocoa ' +
+                                         '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
+                        'build_options': '-Wall -std=c++11 -ggdb',
+                        'compiler':      'g++'} }
+
+programs =  {'test': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'test.cpp', 'masm.cpp'] },
+             'metis': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'metismain.cpp', 'masm.cpp'] } }
+
+files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] }, 
+             'file.cpp':                 {'dependencies': ['metis.hpp'] }, 
+             'util.cpp':                 {'dependencies': ['metis.hpp'] }, 
+             'eval.cpp':                 {'dependencies': ['metis.hpp'] }, 
+             'metismain.cpp':            {'dependencies': ['metis.hpp'] }, 
+             'test.cpp':                 {'dependencies': ['metis.hpp', 'catch.hpp'] }, 
+             'masm.cpp':                 {'dependencies': ['metis.hpp'] }, 
+
+for program in programs:
+  program = programs[program]
+  build_program = False
+  if not os.path.isfile(program):
+    build_program = True
+  program_modified = os.path.getmtime(program)
+  for file in program['files']:
+    build_source = False
+    for dependency in files[file]:
+      if (not os.path.isfile(dependency)) or :
+        build_source = True
+      
+CC     = g++
+CFLAGS = -Wall -std=c++11 -ggdb
+CLIBS  = -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0
+#CLIBS  = -lglfw3 -lboost_program_options -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -lm
+DEPS   = metis.hpp
+TESTSRCS   = add_instructions.cpp file.cpp util.cpp eval.cpp test.cpp masm.cpp
+METISSRCS   = add_instructions.cpp file.cpp util.cpp eval.cpp metismain.cpp masm.cpp
+TESTOBJS   = $(TESTSRCS:.cpp=.o)
+METISOBJS   = $(METISSRCS:.cpp=.o)
+TEST   = test
+METIS  = metis
+
+all: $(TEST) $(METIS)
+
+$(TEST): $(TESTOBJS)
+	$(CC) $(CFLAGS) -o $(TEST) $(TESTOBJS) $(CLIBS)
+
+$(METIS): $(METISOBJS)
+	$(CC) $(CFLAGS) -o $(METIS) $(METISOBJS) $(CLIBS)
+
+.cpp.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+depend: $(SRCS)
+	makedepend $^
+
+# ----

@@ -68,7 +68,7 @@ GLUSEPROGRAM                5
 GLCLEARCOLOR                0 0 .4 1.0
 END
 
-LOC                         mainloopx
+LOC                         mainloop
 GLCLEAR                     GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT
 GLENABLEVERTEXATTRIBARRAY   0
 GLBINDBUFFER                GL_ARRAY_BUFFER 1
