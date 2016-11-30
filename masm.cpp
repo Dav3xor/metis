@@ -21,7 +21,7 @@ bool MetisASM::valid_uint(string s) {
   }
 }
 bool MetisASM::valid_float(string s) {
-  if(s.find_first_not_of("0123456789.")==string::npos) {
+  if(s.find_first_not_of("-0123456789.")==string::npos) {
     return true;
   } else {
     return false; 
