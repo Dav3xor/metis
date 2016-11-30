@@ -22,20 +22,49 @@ files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] },
              'eval.cpp':                 {'dependencies': ['metis.hpp'] }, 
              'metismain.cpp':            {'dependencies': ['metis.hpp'] }, 
              'test.cpp':                 {'dependencies': ['metis.hpp', 'catch.hpp'] }, 
-             'masm.cpp':                 {'dependencies': ['metis.hpp'] }, 
+             'masm.cpp':                 {'dependencies': ['metis.hpp'] } }
 
-for program in programs:
-  program = programs[program]
+def check_dependencies(file):
+  file_modified = os.path.getmtime(file)
+  for dep in files[file]['dependencies']:
+    if not os.path.isfile(dep):
+      print "Dependency %s for file %s does not exist" % (dep, file)
+      sys.exit()
+    if file_modified <= os.path.getmtime(dep):
+      return True
+  return False 
+
+def build_source_file(file,program_age):
+  if not os.path.isfile(file):
+    print "File %s does not exist" % file
+    sys.exit()
+
+  if (check_dependencies(file)) or (os.path.getmtime(file) >= program_age):
+    platform = platforms[os.platform(terse=True).split('-')[0]]
+    command = platform['compiler']
+    
+  build_source = False
+  for dependency in files[file]:
+    if not os.path.isfile(dependency):
+      print "Dependency %s for file %s does not exist" % (dependency, file)
+      sys.exit()
+      build_source = True
+    elif check_dependencies(file):
+      build_source = True
+    
+def build_program(program):
   build_program = False
   if not os.path.isfile(program):
     build_program = True
   program_modified = os.path.getmtime(program)
   for file in program['files']:
-    build_source = False
-    for dependency in files[file]:
-      if (not os.path.isfile(dependency)) or :
-        build_source = True
-      
+    build_source_file(file,program_modified)
+
+
+for program in programs:
+  program = programs[program]
+  build_program(program)
+
 CC     = g++
 CFLAGS = -Wall -std=c++11 -ggdb
 CLIBS  = -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0
