@@ -7,11 +7,11 @@ platforms = {'Linux':  {'link_options':  '-lglfw3 -lGLEW -lX11 -lXrandr -lXinera
                                          '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
                                          '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
                         'build_options': '-Wall -std=c++11 -ggdb',
-                        'compiler':      'g++' },
-            {'Darwin': {'link_options':  '-lglfw3 -lboost_program_options -framework Cocoa ' +
+                        'compiler':      'g++' } ,
+             'Darwin': {'link_options':  '-lglfw3 -lboost_program_options -framework Cocoa ' +
                                          '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
                         'build_options': '-Wall -std=c++11 -ggdb',
-                        'compiler':      'g++'} }
+                        'compiler':      'g++'} } 
 
 programs =  {'test': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'test.cpp', 'masm.cpp'] },
              'metis': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'metismain.cpp', 'masm.cpp'] } }
@@ -38,11 +38,21 @@ def build_source_file(file,program_age):
   if not os.path.isfile(file):
     print "File %s does not exist" % file
     sys.exit()
-
-  if (check_dependencies(file)) or (os.path.getmtime(file) >= program_age):
+  object_file, ext = os.path.splitext(file)
+  object_file += ".o"
+  if (check_dependencies(file)) or \
+     (not (os.path.isfile(object_file))) or \
+     (os.path.getmtime(file) >= program_age):
     platform = platforms[os.platform(terse=True).split('-')[0]]
-    command = platform['compiler']
-    
+    command  = platform['compiler']
+    args     = platform['build_options']
+    try:
+      output = subprocess.check_output(command+args,stderr=subprocess.STDOUT)
+      
+      print "compiling: " + file
+    except subprocess.CalledProcessError:
+      print output
+      
   build_source = False
   for dependency in files[file]:
     if not os.path.isfile(dependency):
