@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import os
-import platform
+import sys, os, platform
 
 platforms = {'Linux':  {'link_options':  '-lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
                                          '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
@@ -46,12 +45,12 @@ def build_source_file(file,program_age):
     platform = platforms[os.platform(terse=True).split('-')[0]]
     command  = platform['compiler']
     args     = platform['build_options']
-    try:
-      output = subprocess.check_output(command+args,stderr=subprocess.STDOUT)
-      
-      print "compiling: " + file
-    except subprocess.CalledProcessError:
-      print output
+    
+    print "compiling: " + file
+    output = subprocess.check_output(command+args,stderr=subprocess.STDOUT)
+    
+    #except subprocess.CalledProcessError:
+    #  print output
       
   build_source = False
   for dependency in files[file]:
@@ -62,19 +61,21 @@ def build_source_file(file,program_age):
     elif check_dependencies(file):
       build_source = True
     
-def build_program(program):
+def build_program(program, files):
   build_program = False
   if not os.path.isfile(program):
     build_program = True
   program_modified = os.path.getmtime(program)
-  for file in program['files']:
+  for file in files:
     build_source_file(file,program_modified)
 
 
-for program in programs:
-  program = programs[program]
-  build_program(program)
+for program, attrs in programs.iteritems():
+  build_program(program, attrs['files'])
 
+
+
+"""
 CC     = g++
 CFLAGS = -Wall -std=c++11 -ggdb
 CLIBS  = -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama -lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0
@@ -102,3 +103,4 @@ depend: $(SRCS)
 	makedepend $^
 
 # ----
+"""
