@@ -41,10 +41,10 @@ def make_obj_file(file):
   return object_file
 
 def check_dependencies(file):
-  file_modified = os.path.getmtime(file)
+  object_file = make_obj_file(file)
+  file_modified = os.path.getmtime(object_file)
   for dep in files[file]['dependencies']:
     if not os.path.isfile(dep):
-      print "Dependency %s for file %s does not exist" % (dep, file)
       sys.exit()
     if file_modified <= os.path.getmtime(dep):
       return True
@@ -55,8 +55,8 @@ def build_source_file(file,program_age):
     print "File %s does not exist" % file
     sys.exit()
   object_file = make_obj_file(file)
-  if (check_dependencies(file)) or \
-     (not (os.path.isfile(object_file))) or \
+  if (not (os.path.isfile(object_file))) or \
+     (check_dependencies(file)) or \
      (os.path.getmtime(file) >= program_age):
     command  = pform['compiler']
     args     = pform['build_options'].format(**{'input': file})
