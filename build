@@ -1,19 +1,29 @@
 #!/usr/bin/python
 
-import sys, os, platform
+import sys, os, platform, subprocess, datetime
 
-platforms = {'Linux':  {'link_options':  '-lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
+platforms = {'Linux':  {'link_options':  '-o {output} {object_files} -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
                                          '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
                                          '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
-                        'build_options': '-Wall -std=c++11 -ggdb',
+                        'build_options': '{input} -c -Wall -std=c++11 -ggdb',
                         'compiler':      'g++' } ,
-             'Darwin': {'link_options':  '-lglfw3 -lboost_program_options -framework Cocoa ' +
+             'Darwin': {'link_options':  '-o {output} {object_files} -lglfw3 -lboost_program_options -framework Cocoa ' +
                                          '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
-                        'build_options': '-Wall -std=c++11 -ggdb',
+                        'build_options': '{input} -c -Wall -std=c++11 -ggdb',
                         'compiler':      'g++'} } 
 
-programs =  {'test': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'test.cpp', 'masm.cpp'] },
-             'metis': { 'files': ['add_instructions.cpp', 'file.cpp', 'util.cpp', 'eval.cpp', 'metismain.cpp', 'masm.cpp'] } }
+programs =  {'test': { 'files':  ['test.cpp', 
+                                  'add_instructions.cpp', 
+                                  'file.cpp', 
+                                  'util.cpp', 
+                                  'eval.cpp', 
+                                  'masm.cpp'] },
+             'metis': { 'files': ['metismain.cpp',
+                                  'add_instructions.cpp', 
+                                  'file.cpp', 
+                                  'util.cpp', 
+                                  'eval.cpp', 
+                                  'masm.cpp'] } }
 
 files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] }, 
              'file.cpp':                 {'dependencies': ['metis.hpp'] }, 
@@ -22,6 +32,13 @@ files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] },
              'metismain.cpp':            {'dependencies': ['metis.hpp'] }, 
              'test.cpp':                 {'dependencies': ['metis.hpp', 'catch.hpp'] }, 
              'masm.cpp':                 {'dependencies': ['metis.hpp'] } }
+
+pform    = platforms[platform.system().split('-')[0]]
+
+def make_obj_file(file):
+  object_file, ext = os.path.splitext(file)
+  object_file += ".o"
+  return object_file
 
 def check_dependencies(file):
   file_modified = os.path.getmtime(file)
@@ -37,43 +54,49 @@ def build_source_file(file,program_age):
   if not os.path.isfile(file):
     print "File %s does not exist" % file
     sys.exit()
-  object_file, ext = os.path.splitext(file)
-  object_file += ".o"
+  object_file = make_obj_file(file)
   if (check_dependencies(file)) or \
      (not (os.path.isfile(object_file))) or \
      (os.path.getmtime(file) >= program_age):
-    platform = platforms[os.platform(terse=True).split('-')[0]]
-    command  = platform['compiler']
-    args     = platform['build_options']
-    
+    command  = pform['compiler']
+    args     = pform['build_options'].format(**{'input': file})
+   
+    command_line = command + ' ' + args + ' ' + file
+    print command_line
     print "compiling: " + file
-    output = subprocess.check_output(command+args,stderr=subprocess.STDOUT)
-    
-    #except subprocess.CalledProcessError:
-    #  print output
+    output = subprocess.check_output(command_line,stderr=subprocess.STDOUT, shell=True)
+    return True
+  else:
+    return False
       
-  build_source = False
-  for dependency in files[file]:
-    if not os.path.isfile(dependency):
-      print "Dependency %s for file %s does not exist" % (dependency, file)
-      sys.exit()
-      build_source = True
-    elif check_dependencies(file):
-      build_source = True
     
 def build_program(program, files):
   build_program = False
   if not os.path.isfile(program):
     build_program = True
-  program_modified = os.path.getmtime(program)
+    program_modified = 0.0
+  else:
+    program_modified = os.path.getmtime(program)
   for file in files:
-    build_source_file(file,program_modified)
-
+    if build_source_file(file,program_modified):
+      build_program = True
+  return build_program
 
 for program, attrs in programs.iteritems():
-  build_program(program, attrs['files'])
+  if build_program(program, attrs['files']):
+    command  = pform['compiler']
+    args     = pform['link_options'].format(output=program, 
+                                            object_files=' '.join([make_obj_file(i) for i in attrs['files']]))
+    command_line = command + ' ' + args
+    print command_line
+    print "linking: " + program
+    try:
+      output = subprocess.check_output(command_line,stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError as e:
+      print e.output
+    
 
-
+print "Done."
 
 """
 CC     = g++
