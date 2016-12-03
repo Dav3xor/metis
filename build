@@ -47,7 +47,6 @@ def check_dependencies(file):
     if not os.path.isfile(dep):
       sys.exit()
     if file_modified <= os.path.getmtime(dep):
-      print "x"
       return True
   return False 
 
@@ -92,7 +91,6 @@ for program, attrs in programs.iteritems():
     args     = pform['link_options'].format(output=program, 
                                             object_files=' '.join([make_obj_file(i) for i in attrs['files']]))
     command_line = command + ' ' + args
-    print command_line
     print "linking: " + program
     try:
       output = subprocess.check_output(command_line,stderr=subprocess.STDOUT, shell=True)
