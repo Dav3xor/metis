@@ -18,7 +18,6 @@ SHADER                fragment_shader
 #version 330 core
 in  vec3 vcolor;
 out vec3 color;
-uniform sampler2D tex;
 void main(){
   color = vcolor;
 }
