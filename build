@@ -2,15 +2,45 @@
 
 import sys, os, platform, subprocess, datetime
 
-platforms = {'Linux':  {'link_options':  '-o {output} {object_files} -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
-                                         '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
-                                         '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
-                        'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
-                        'compiler':      'g++' } ,
-             'Darwin': {'link_options':  '-o {output} {object_files} -lglfw3 -lboost_program_options -framework Cocoa ' +
-                                         '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
-                        'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
-                        'compiler':      'g++'} } 
+
+def make_obj_file(file):
+  object_file, ext = os.path.splitext(file)
+  object_file += ".o"
+  return object_file
+
+def make_include_file(file):
+  object_file, ext = os.path.splitext(file)
+  object_file += ".h"
+  return object_file
+
+
+
+platforms = {'Linux':  {'c++': {'link_options':  '-o {output} {object_files} -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
+                                                 '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
+                                                 '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
+                                'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'g++' },
+                        'c':   {'link_options':  '-o {output} {object_files}',
+                                'build_options': '-Wall -c {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'gcc' },
+                        'xxd': {'build_options': '-Wall -i {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'xxd' } },
+             'Darwin': {'c++': {'link_options':  '-o {output} {object_files} -lglfw3 -lboost_program_options -framework Cocoa ' +
+                                                 '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
+                                'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'g++'},
+                        'c':   {'link_options':  '-o {output} {object_files}',
+                                'build_options': '-Wall -c {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'gcc' },
+                        'xxd': {'build_options': '-Wall -i {input} -o {output}',
+                                'make_output':   make_obj_file,
+                                'compiler':      'xxd' } } }
+
 
 programs =  {'test': { 'files':  ['test.cpp', 
                                   'add_instructions.cpp', 
@@ -34,11 +64,6 @@ files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] },
              'masm.cpp':                 {'dependencies': ['metis.hpp'] } }
 
 pform    = platforms[platform.system().split('-')[0]]
-
-def make_obj_file(file):
-  object_file, ext = os.path.splitext(file)
-  object_file += ".o"
-  return object_file
 
 def check_dependencies(file):
   object_file = make_obj_file(file)
