@@ -5,10 +5,12 @@ import sys, os, platform, subprocess, datetime
 
 def make_output_file(file):
   object_file, ext = os.path.splitext(file)
-  if ext in ['c','hpp','cpp']:
+  if ext in ['.c','.hpp','.cpp']:
     object_file += ".o"
-  elif ext == 'txt':
+  elif ext == '.txt':
     object_file += ".h"
+  else:
+    exit()
   return object_file, ext
 
 filetypes = {'.txt': 'xxd',
