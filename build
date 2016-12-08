@@ -37,7 +37,7 @@ platforms = {'Linux':  {'c++': {'link_options':  '-o {output} {object_files} -lg
                                 'build_options': '-Wall -c {input} -o {output}',
                                 'make_output':   make_obj_file,
                                 'compiler':      'gcc' },
-                        'xxd': {'build_options': '-Wall -i {input} -o {output}',
+                        'xxd': {'build_options': '-i {input} >{output}',
                                 'make_output':   make_obj_file,
                                 'compiler':      'xxd' } } }
 
@@ -48,6 +48,8 @@ programs =  {'test': { 'files':  ['test.cpp',
                                   'util.cpp', 
                                   'eval.cpp', 
                                   'masm.cpp'] },
+             'mc':    { 'files': ['grammar.txt',
+                                  'metiscompiler.c'] },
              'metis': { 'files': ['metismain.cpp',
                                   'add_instructions.cpp', 
                                   'file.cpp', 
@@ -55,7 +57,11 @@ programs =  {'test': { 'files':  ['test.cpp',
                                   'eval.cpp', 
                                   'masm.cpp'] } }
 
-files =     {'add_instructions.cpp':     {'dependencies': ['metis.hpp'] }, 
+files =     {'metiscompiler.c':          {'dependencies': ['metis.hpp', 'grammar.h'], 
+                                          'compiler': 'c'},
+             'grammar.h':                {'dependencies': ['grammar.txt'], 
+                                          'compiler': 'xxd' }
+             'add_instructions.cpp':     {'dependencies': ['metis.hpp'] }, 
              'file.cpp':                 {'dependencies': ['metis.hpp'] }, 
              'util.cpp':                 {'dependencies': ['metis.hpp'] }, 
              'eval.cpp':                 {'dependencies': ['metis.hpp'] }, 
