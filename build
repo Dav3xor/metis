@@ -114,7 +114,7 @@ def build_program(program, files):
 
 for program, attrs in programs.iteritems():
   if build_program(program, attrs['files']):
-    command  = pform[filetypes[ext]]['compiler']
+    command  = pform[programs[program]['language']]['compiler']
     args     = pform['link_options'].format(output=program, 
                                             object_files=' '.join([make_output_file(i)[0] for i in attrs['files']]))
     command_line = command + ' ' + args
