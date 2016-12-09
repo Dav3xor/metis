@@ -12,4 +12,7 @@ int main(int argc, char **argv) {
   PARSER(Vector,  vector);
   PARSER(Matrix,  matrix);
 
-  int fd = open(
+  mpca_lang(MPCA_LANG_PREDICTIVE, grammar_txt,
+            Unsigned, Float, Label, Vector, Matrix, NULL);
+
+}
