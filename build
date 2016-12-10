@@ -93,6 +93,7 @@ def build_source_file(file,program_age):
     args     = pform[filetypes[ext]]['build_options'].format(**{'input': file, 'output': object_file})
    
     command_line = command + ' ' + args 
+    print command_line
     print "compiling: " + file
     try:
       output = subprocess.check_output(command_line,stderr=subprocess.STDOUT, shell=True)
