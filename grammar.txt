@@ -31,6 +31,7 @@ term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
+function      : 'def' <ident> <ident>* ':' <body> ;
 
 metis         : /^/ <expr>* /$/ ;
 
