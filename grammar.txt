@@ -27,7 +27,7 @@ factor        : '(' <lexp> ')'
               | <vector>
               | <float>
 
-term          : <factor> (('*' | '/' | '%') <factor)* ;
+term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
