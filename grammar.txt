@@ -31,7 +31,12 @@ term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
-function      : 'def' <ident> <ident>* ':' <body> ;
+function      : "def" <ident> <ident>* ("<-" <type>) ':' <stmt>* "end" ;
+
+stmt          : "if" <exp> <stmt>* "end"
+              | "while" <exp> <stmt>* "end"
+              | "<-" <lexp> ;
+              
 
 metis         : /^/ <expr>* /$/ ;
 
@@ -41,4 +46,7 @@ metis         : /^/ <expr>* /$/ ;
 
 
 
+def square float x <- float:
+  <- x * x;
 
+x = 
