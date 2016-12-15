@@ -33,7 +33,9 @@ lexp          : <term> (('+' | '-') <term>)* ;
 
 typeident     : ("string" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") <ident> ;
 
-function      : "def" <ident> <ident>* ("<-" <type>) ':' <stmt>* "end" ;
+args          : <typeident>? (',' <typeident>)* ;
+
+function      : "def" <ident> <args> ("<-" <type>) ':' <stmt>* "end" ;
 
 stmt          : "if" <exp> <stmt>* "end"
               | "while" <exp> <stmt>* "end"
