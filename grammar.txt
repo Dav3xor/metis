@@ -25,11 +25,13 @@ factor        : '(' <lexp> ')'
               | <float>
               | <label>
               | <vector>
-              | <float>
+              | <matrix>
 
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
+
+typeident     : ("string" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") <ident> ;
 
 function      : "def" <ident> <ident>* ("<-" <type>) ':' <stmt>* "end" ;
 
@@ -49,6 +51,7 @@ metis         : /^/ <expr>* /$/ ;
 
 
 def square float x <- float:
+  i
   <- x * x;
 end
 
