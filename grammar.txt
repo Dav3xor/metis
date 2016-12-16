@@ -25,7 +25,7 @@ factor        : '(' <lexp> ')'
               | <float>
               | <label>
               | <vector>
-              | <matrix>
+              | <matrix>;
 
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
@@ -40,7 +40,7 @@ function      : "def" <ident> <args> ("<-" <type>) ':' <stmt>* "end" ;
 stmt          : "if" <exp> <stmt>* "end"
               | "while" <exp> <stmt>* "end"
               | "<-" <lexp> 
-              | "<-|" <label>
+              | "<-|" <label>;
 
               
 
@@ -48,12 +48,3 @@ metis         : /^/ <expr>* /$/ ;
 
 
 
-
-
-
-
-def square float x <- float:
-  <- x * x
-end
-
-x = 

@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
   PARSER(Stmt,  stmt);
   PARSER(Metis,  metis);
 
+  printf(grammar_txt);
+
   mpca_lang(MPCA_LANG_DEFAULT, grammar_txt,
             String, Unsigned, Integer, Float, Label, Vector, Matrix, 
             Factor, Term, Lexp, Typeident, Args, Function, Stmt, Metis, NULL);
