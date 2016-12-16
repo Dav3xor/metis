@@ -53,8 +53,7 @@ metis         : /^/ <expr>* /$/ ;
 
 
 def square float x <- float:
-  i
-  <- x * x;
+  <- x * x
 end
 
 x = 
