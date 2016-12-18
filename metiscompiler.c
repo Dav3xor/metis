@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
   printf((char *)grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Metis, NULL);
+            String,  Label, Unsigned, Val, Metis, NULL);
 
   mpc_print(String);
   mpc_print(Label);
