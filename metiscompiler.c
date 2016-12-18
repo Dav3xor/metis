@@ -7,28 +7,18 @@ int main(int argc, char **argv) {
   mpc_result_t r;
 
   PARSER(String,     "string");
-  PARSER(Unsigned,   "xunsigned");
-  PARSER(Integer,    "integer");
-  PARSER(Float,      "float");
-  PARSER(Label,      "label");
-  PARSER(Vector,     "vector");
-  PARSER(Matrix,     "matrix");
-  PARSER(Factor,     "factor");
-  PARSER(Term,       "term");
-  PARSER(Lexp,       "lexp");
-  PARSER(Typeident,  "typeident");
-  PARSER(Args,       "args");
-  PARSER(Function,   "function");
-  PARSER(Stmt,       "stmt");
+  PARSER(Unsigned,   "unsigned");
   PARSER(Metis,      "metis");
 
   printf(grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, grammar_txt,
-            String, Unsigned, Integer, Float, Label, Vector, Matrix, 
-            Factor, Term, Lexp, Typeident, Args, Function, Stmt, Metis, NULL);
+            String,  Metis, NULL);
 
+  mpc_print(String);
+  mpc_print(Unsigned);
   mpc_print(Metis);
+  
   if(mpc_parse_contents("test.m", Metis, &r)) {
     mpc_ast_print(r.output);
     mpc_ast_delete(r.output);
