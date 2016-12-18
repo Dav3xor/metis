@@ -7,16 +7,20 @@ int main(int argc, char **argv) {
   mpc_result_t r;
 
   PARSER(String,     "string");
+  PARSER(Label,      "label");
   PARSER(Unsigned,   "unsigned");
+  PARSER(Val,        "val");
   PARSER(Metis,      "metis");
 
-  printf(grammar_txt);
+  printf((char *)grammar_txt);
 
-  mpca_lang(MPCA_LANG_DEFAULT, grammar_txt,
+  mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Metis, NULL);
 
   mpc_print(String);
+  mpc_print(Label);
   mpc_print(Unsigned);
+  mpc_print(Val);
   mpc_print(Metis);
   
   if(mpc_parse_contents("test.m", Metis, &r)) {
