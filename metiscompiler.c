@@ -10,18 +10,20 @@ int main(int argc, char **argv) {
   PARSER(Label,      "label");
   PARSER(Unsigned,   "unsigned");
   PARSER(Integer,    "integer");
+  PARSER(Float,      "float");
   PARSER(Val,        "val");
   PARSER(Metis,      "metis");
 
   printf((char *)grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Label, Unsigned, Integer, Val, Metis, NULL);
+            String,  Label, Unsigned, Integer, Float, Val, Metis, NULL);
 
   mpc_print(String);
   mpc_print(Label);
   mpc_print(Unsigned);
   mpc_print(Integer);
+  mpc_print(Float);
   mpc_print(Val);
   mpc_print(Metis);
   
