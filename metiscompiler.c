@@ -6,24 +6,26 @@
 int main(int argc, char **argv) {
   mpc_result_t r;
 
-  PARSER(String,     "string");
   PARSER(Label,      "label");
+  PARSER(String,     "string");
   PARSER(Unsigned,   "unsigned");
   PARSER(Integer,    "integer");
   PARSER(Float,      "float");
+  PARSER(Vector,     "vector");
   PARSER(Val,        "val");
   PARSER(Metis,      "metis");
 
   printf((char *)grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Label, Unsigned, Integer, Float, Val, Metis, NULL);
+            String,  Label, Unsigned, Integer, Float, Vector, Val, Metis, NULL);
 
-  mpc_print(String);
   mpc_print(Label);
+  mpc_print(String);
   mpc_print(Unsigned);
   mpc_print(Integer);
   mpc_print(Float);
+  mpc_print(Vector);
   mpc_print(Val);
   mpc_print(Metis);
   
