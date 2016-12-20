@@ -15,15 +15,21 @@ int main(int argc, char **argv) {
   PARSER(Matrix,     "matrix");
   PARSER(Term,       "term");
   PARSER(Lexp,       "lexp");
+  PARSER(Type,       "type");
   PARSER(Typeident,  "typeident");
   PARSER(Args,       "args");
+  PARSER(Function,   "function");
   PARSER(Factor,     "factor");
   PARSER(Metis,      "metis");
 
   printf((char *)grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Label, Unsigned, Integer, Float, Vector, Matrix, Term, Lexp, Typeident, Args, Factor, Metis, NULL);
+            String,  Label, Unsigned, Integer, 
+            Float, Vector, Matrix, 
+            Term, Lexp, Type, 
+            Typeident, Args, Function, 
+            Factor, Metis, NULL);
 
   mpc_print(Label);
   mpc_print(String);
@@ -34,8 +40,10 @@ int main(int argc, char **argv) {
   mpc_print(Matrix);
   mpc_print(Term);
   mpc_print(Lexp);
+  mpc_print(Type);
   mpc_print(Typeident);
   mpc_print(Args);
+  mpc_print(Function);
   mpc_print(Factor);
   mpc_print(Metis);
   

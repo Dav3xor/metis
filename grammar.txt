@@ -22,9 +22,13 @@ term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
-typeident     : ("string" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") <ident> ;
+type          : ("string" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") ;
+
+typeident     : <type> <label> ;
 
 args          : <typeident>? (',' <typeident>)* ;
+
+function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end" ;
 
 factor        : '(' <lexp> ')'
               | <string>
@@ -35,7 +39,7 @@ factor        : '(' <lexp> ')'
               | <vector>
               | <matrix> ;
 
-metis         : /^/ <factor> /$/ ;
+metis         : /^/ <function> /$/ ;
 
 
 
