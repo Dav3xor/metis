@@ -12,13 +12,16 @@ int main(int argc, char **argv) {
   PARSER(Integer,    "integer");
   PARSER(Float,      "float");
   PARSER(Vector,     "vector");
-  PARSER(Val,        "val");
+  PARSER(Matrix,     "matrix");
+  PARSER(Term,       "term");
+  PARSER(Lexp,       "lexp");
+  PARSER(Factor,     "factor");
   PARSER(Metis,      "metis");
 
   printf((char *)grammar_txt);
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Label, Unsigned, Integer, Float, Vector, Val, Metis, NULL);
+            String,  Label, Unsigned, Integer, Float, Vector, Matrix, Term, Lexp, Factor, Metis, NULL);
 
   mpc_print(Label);
   mpc_print(String);
@@ -26,7 +29,10 @@ int main(int argc, char **argv) {
   mpc_print(Integer);
   mpc_print(Float);
   mpc_print(Vector);
-  mpc_print(Val);
+  mpc_print(Matrix);
+  mpc_print(Term);
+  mpc_print(Lexp);
+  mpc_print(Factor);
   mpc_print(Metis);
   
   if(mpc_parse_contents("test.m", Metis, &r)) {

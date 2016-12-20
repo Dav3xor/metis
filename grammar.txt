@@ -16,10 +16,22 @@ float         : /[-][0-9]+ /
 
 vector        : '|' <float>+ '|' ;
 
-val           : <string>
-              | <unsigned> ;
+matrix        : <vector> <vector>+ ;
 
-metis         : /^/ <val> /$/ ;
+term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
+
+lexp          : <term> (('+' | '-') <term>)* ;
+
+factor        : '(' <lexp> ')'
+              | <string>
+              | <unsigned>
+              | <integer>
+              | <float>
+              | <label>
+              | <vector>
+              | <matrix> ;
+
+metis         : /^/ <factor> /$/ ;
 
 
 
