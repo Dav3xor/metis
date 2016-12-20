@@ -22,6 +22,10 @@ term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
+typeident     : ("string" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") <ident> ;
+
+args          : <typeident>? (',' <typeident>)* ;
+
 factor        : '(' <lexp> ')'
               | <string>
               | <unsigned>
