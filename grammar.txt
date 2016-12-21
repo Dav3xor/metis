@@ -28,6 +28,11 @@ typeident     : <type> <label> ;
 
 args          : <typeident>? (',' <typeident>)* ;
 
+stmt          : "if" <exp> <stmt>* "end"
+              | "while" <exp> <stmt>* "end"
+              | "<-" <lexp> 
+              | "<-|" <label>;
+
 function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end" ;
 
 factor        : '(' <lexp> ')'
