@@ -26,21 +26,26 @@ type          : ("string" | "unsigned" | "integer" | "float" | "label" | "vector
 
 typeident     : <type> <label> ;
 
-args          : <typeident>? (',' <typeident>)* ;
+comparator    : (">" | ">" | "<=" | ">=" | "==") ;
+
+exp           : <label>
+              | <lexp> <comparator> <lexp> ;
 
 stmt          : "if" <exp> <stmt>* "end"
               | "while" <exp> <stmt>* "end"
               | "<-" <lexp> 
               | "<-|" <label>;
 
+args          : <typeident>? (',' <typeident>)* ;
+
 function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end" ;
 
 factor        : '(' <lexp> ')'
+              | <label>
               | <string>
               | <unsigned>
               | <integer>
               | <float>
-              | <label>
               | <vector>
               | <matrix> ;
 
