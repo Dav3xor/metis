@@ -17,6 +17,8 @@ int main(int argc, char **argv) {
   PARSER(Lexp,       "lexp");
   PARSER(Type,       "type");
   PARSER(Typeident,  "typeident");
+  PARSER(Comparator, "comparator");
+  PARSER(Exp,        "exp");
   PARSER(Args,       "args");
   PARSER(Function,   "function");
   PARSER(Stmt,       "stmt");
@@ -29,7 +31,8 @@ int main(int argc, char **argv) {
             String,  Label, Unsigned, Integer, 
             Float, Vector, Matrix, 
             Term, Lexp, Type, 
-            Typeident, Args, Function, 
+            Typeident, Comparator, 
+            Exp, Args, Function, 
             Stmt, Factor, Metis, NULL);
 
   mpc_print(Label);
@@ -43,6 +46,8 @@ int main(int argc, char **argv) {
   mpc_print(Lexp);
   mpc_print(Type);
   mpc_print(Typeident);
+  mpc_print(Comparator);
+  mpc_print(Exp);
   mpc_print(Args);
   mpc_print(Stmt);
   mpc_print(Function);
