@@ -6,8 +6,11 @@
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
+  mpc_ast_t *child;
+  mpc_ast_t *tree;
   mpc_ast_t *ast_next;
   mpc_ast_trav_t *traveller;
+  int index;
 
   PARSER(Label,      "label");
   PARSER(String,     "string");
@@ -60,7 +63,7 @@ int main(int argc, char **argv) {
   if(mpc_parse_contents("test.m", Metis, &r)) {
     ast = r.output;
     mpc_ast_print(r.output);
-    mpc_ast_delete(r.output);
+    //mpc_ast_delete(r.output);
   } else {
     mpc_err_print(r.error);
     mpc_err_delete(r.error);
@@ -69,11 +72,16 @@ int main(int argc, char **argv) {
                     Exp, Args, Stmt, Function, Factor, Metis);
     return EXIT_FAILURE;
   }
+
+
+
+
   traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
   ast_next  = mpc_ast_traverse_next(&traveller);
   while(ast_next) {
     printf("Tag: %s -- %s\n", ast_next->tag, ast_next->contents);
     ast_next = mpc_ast_traverse_next(&traveller);
   }
+
 }
 
