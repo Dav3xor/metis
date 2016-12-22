@@ -6,6 +6,7 @@
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
+  mpc_ast_trav_t *traveller;
 
   PARSER(Label,      "label");
   PARSER(String,     "string");
@@ -65,6 +66,7 @@ int main(int argc, char **argv) {
     mpc_cleanup(17, Label, String, Unsigned, Integer, Float, Vector,
                     Matrix, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Args, Stmt, Function, Factor, Metis);
+    return EXIT_FAILURE;
   }
 }
 
