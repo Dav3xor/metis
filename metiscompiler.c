@@ -6,6 +6,7 @@
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
+  mpc_ast_t *ast_next;
   mpc_ast_trav_t *traveller;
 
   PARSER(Label,      "label");
@@ -67,6 +68,12 @@ int main(int argc, char **argv) {
                     Matrix, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Args, Stmt, Function, Factor, Metis);
     return EXIT_FAILURE;
+  }
+  traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
+  ast_next  = mpc_ast_traverse_next(&traveller);
+  while(ast_next) {
+    printf("Tag: %s -- %s\n", ast_next->tag, ast_next->contents);
+    ast_next = mpc_ast_traverse_next(&traveller);
   }
 }
 
