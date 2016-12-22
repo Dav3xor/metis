@@ -5,6 +5,7 @@
 
 int main(int argc, char **argv) {
   mpc_result_t r;
+  mpc_ast_t *ast;
 
   PARSER(Label,      "label");
   PARSER(String,     "string");
@@ -55,11 +56,15 @@ int main(int argc, char **argv) {
   mpc_print(Metis);
   
   if(mpc_parse_contents("test.m", Metis, &r)) {
+    ast = r.output;
     mpc_ast_print(r.output);
     mpc_ast_delete(r.output);
   } else {
     mpc_err_print(r.error);
     mpc_err_delete(r.error);
+    mpc_cleanup(17, Label, String, Unsigned, Integer, Float, Vector,
+                    Matrix, Term, Lexp, Type, Typeident, Comparator,
+                    Exp, Args, Stmt, Function, Factor, Metis);
   }
 }
 
