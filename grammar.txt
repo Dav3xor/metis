@@ -51,7 +51,7 @@ factor        : '(' <lexp> ')'
               | <vector>
               | <matrix> ;
 
-metis         : /^/ <function> /$/ ;
+metis         : /^/ <function>* /$/ ;
 
 
 
