@@ -28,10 +28,9 @@ type          : ("string" | "bool" | "unsigned" | "integer" | "float" | "label" 
 
 typeident     : <type> <label> ;
 
-comparator    : (">" | ">" | "<=" | ">=" | "==") ;
+comparator    : (">" | "<" | "<=" | ">=" | "==") ;
 
-exp           : <label>
-              | <lexp> <comparator> <lexp> ;
+exp           : <lexp> <comparator> <lexp> ;
 
 stmt          : "if" <exp> <stmt>* "end"
               | "while" <exp> <stmt>* "end"

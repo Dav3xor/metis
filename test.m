@@ -4,7 +4,7 @@ def square float x <- float:
 end
 
 def is_positive float x <- bool:
-  if x > y
+  if x > 0
     <- true
   end
   <- false
