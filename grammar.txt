@@ -33,7 +33,7 @@ comparator    : (">" | "<" | "<=" | ">=" | "==") ;
 exp           : <lexp> <comparator> <lexp>
               | <label> ;
 
-stmt          : "if" <exp> <stmt>* "end"
+stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? "end"
               | "while" <exp> <stmt>* "end"
               | "<-" <lexp> 
               | "<-|" <label>;
