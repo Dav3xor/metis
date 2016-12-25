@@ -20,6 +20,15 @@ vector        : '|' <float>+ '|' ;
 
 matrix        : <vector> <vector>+ ;
 
+factor        : '(' <lexp> ')'
+              | <label>
+              | <string>
+              | <unsigned>
+              | <integer>
+              | <float>
+              | <vector>
+              | <matrix> ;
+
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
@@ -41,15 +50,6 @@ stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
 args          : <typeident>? (',' <typeident>)* ;
 
 function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end" ;
-
-factor        : '(' <lexp> ')'
-              | <label>
-              | <string>
-              | <unsigned>
-              | <integer>
-              | <float>
-              | <vector>
-              | <matrix> ;
 
 metis         : /^/ <function>* /$/ ;
 
