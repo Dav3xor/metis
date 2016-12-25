@@ -9,3 +9,10 @@ def is_positive float x <- bool:
   end
   <- false
 end
+
+def is_zero float x <- bool:
+  if x
+    <- false
+  end
+  <- true
+end

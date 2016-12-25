@@ -30,7 +30,8 @@ typeident     : <type> <label> ;
 
 comparator    : (">" | "<" | "<=" | ">=" | "==") ;
 
-exp           : <lexp> <comparator> <lexp> ;
+exp           : <lexp> <comparator> <lexp>
+              | <label> ;
 
 stmt          : "if" <exp> <stmt>* "end"
               | "while" <exp> <stmt>* "end"
