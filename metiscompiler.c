@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
   PARSER(Float,      "float");
   PARSER(Vector,     "vector");
   PARSER(Matrix,     "matrix");
+  PARSER(Fcall,      "fcall");
   PARSER(Term,       "term");
   PARSER(Lexp,       "lexp");
   PARSER(Type,       "type");
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Label, Unsigned, Integer, 
-            Float, Vector, Matrix, 
+            Float, Vector, Matrix, Fcall,
             Term, Lexp, Type, 
             Typeident, Comparator, 
             Exp, Args, Function, 
@@ -48,6 +49,7 @@ int main(int argc, char **argv) {
   mpc_print(Float);
   mpc_print(Vector);
   mpc_print(Matrix);
+  mpc_print(Fcall);
   mpc_print(Term);
   mpc_print(Lexp);
   mpc_print(Type);
@@ -67,8 +69,8 @@ int main(int argc, char **argv) {
   } else {
     mpc_err_print(r.error);
     mpc_err_delete(r.error);
-    mpc_cleanup(17, Label, String, Unsigned, Integer, Float, Vector,
-                    Matrix, Term, Lexp, Type, Typeident, Comparator,
+    mpc_cleanup(18, Label, String, Unsigned, Integer, Float, Vector,
+                    Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Args, Stmt, Function, Factor, Metis);
     return EXIT_FAILURE;
   }

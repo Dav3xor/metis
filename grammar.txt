@@ -29,6 +29,8 @@ factor        : '(' <lexp> ')'
               | <vector>
               | <matrix> ;
 
+fcall         : <label> <lexp>? (',' <lexp>)*;
+
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
