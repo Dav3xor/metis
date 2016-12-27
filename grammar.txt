@@ -29,7 +29,7 @@ factor        : '(' <lexp> ')'
               | <vector>
               | <matrix> ;
 
-fcall         : <label> <lexp>? (',' <lexp>)*;
+fcall         : <label> <lexp>? (',' <lexp>)* '.';
 
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
@@ -47,7 +47,8 @@ exp           : <lexp> <comparator> <lexp>
 stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? "end"
               | "while" <exp> <stmt>* "end"
               | "<-" <lexp> 
-              | "<-|" <label>;
+              | "<-|" <label>
+              | <fcall>;
 
 args          : <typeident>? (',' <typeident>)* ;
 
