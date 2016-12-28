@@ -20,16 +20,17 @@ vector        : '|' <float>+ '|' ;
 
 matrix        : <vector> <vector>+ ;
 
+fcall         : <label> <lexp>? (',' <lexp>)*;
+
 factor        : '(' <lexp> ')'
               | <label>
+              | '-' <fcall>
               | <string>
               | <unsigned>
               | <integer>
               | <float>
               | <vector>
-              | <matrix> ;
-
-fcall         : <label> <lexp>? (',' <lexp>)* '.';
+              | <matrix>;
 
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
@@ -39,22 +40,24 @@ type          : ("string" | "bool" | "unsigned" | "integer" | "float" | "label" 
 
 typeident     : <type> <label> ;
 
-comparator    : (">" | "<" | "<=" | ">=" | "==") ;
+comparator    : (">" | "<" | "<=" | ">=" | "=") ;
 
-exp           : <lexp> <comparator> <lexp>
-              | <label> ;
+exp           : <lexp> <comparator> <lexp>;
+
+assignment    : <typeident> ":=" <lexp>;
 
 stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? "end"
               | "while" <exp> <stmt>* "end"
               | "<-" <lexp> 
               | "<-|" <label>
-              | <fcall>;
+              | <assignment> '.'
+              | <fcall> '.';
 
-args          : <typeident>? (',' <typeident>)* ;
+args          : <typeident>? (',' <typeident>)*;
 
-function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end" ;
+function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "xend";
 
-metis         : /^/ <function>* /$/ ;
+metis         : /^/ <function>* /$/;
 
 
 
