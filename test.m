@@ -29,3 +29,12 @@ def divide float x, float y <- float:
   float result := x/y.
   <- result
 end
+
+
+
+
+if x > 1
+  print "x > 1.5!".
+end
+
+
