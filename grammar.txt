@@ -55,7 +55,8 @@ stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
 
 args          : <typeident>? (',' <typeident>)*;
 
-function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "xend";
+function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end";
+
 
 metis         : /^/ <function>* /$/;
 

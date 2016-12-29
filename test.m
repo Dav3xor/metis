@@ -1,7 +1,7 @@
 
 def square float x <- float:
   <- x * x
-xend
+end
 
 def is_positive float x <- bool:
   if x > 0
@@ -9,7 +9,7 @@ def is_positive float x <- bool:
   else
     <- false
   end
-xend
+end
 
 def is_zero float x <- bool:
   if x > 0
@@ -19,7 +19,7 @@ def is_zero float x <- bool:
   else
     <- true
   end
-xend
+end
 
 def divide float x, float y <- float:
   if -is_zero y = true
@@ -28,4 +28,4 @@ def divide float x, float y <- float:
 
   float result := x/y.
   <- result
-xend
+end
