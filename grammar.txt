@@ -46,15 +46,15 @@ exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
-function      : "def" <label> <args> ("<-" <type>) ':' <stmt>* "end";
+function      : "def" <label> <args> ("<-" <type>) ':' <stmt>*;
 
-stmt          : "if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? "end"
-              | "while" <exp> <stmt>* "end"
+stmt          : ("if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
+              | "while" <exp> <stmt>* 
               | <function>
               | "<-" <lexp> 
               | "<-|" <label>
-              | <assignment> '.'
-              | <fcall> '.';
+              | <assignment>
+              | <fcall> ) '.' ;
 
 args          : <typeident>? (',' <typeident>)*;
 
