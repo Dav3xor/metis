@@ -31,7 +31,7 @@ def divide float x, float y <- float:
 end
 
 
-
+float x := -square 5, 2.
 
 if x > 1
   print "x > 1.5!".
