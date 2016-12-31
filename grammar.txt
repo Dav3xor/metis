@@ -24,7 +24,7 @@ fcall         : <label> <lexp>? (',' <lexp>)*;
 
 factor        : '(' <lexp> ')'
               | <label>
-              | '-' <fcall>
+              | <fcall>
               | <string>
               | <unsigned>
               | <integer>
@@ -46,21 +46,25 @@ exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
+reserved      : ("if"|"else if"|"else"|"while"|"fin"|"string"|"bool"|"unsigned"|
+                 "integer"|"float"|"label"|"vector"|"matrix"|"dot"|"cross") ;
+
 function      : "def" <label> <args> ("<-" <type>) ':' <stmt>*;
 
-stmt          : ("if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
-              | "while" <exp> <stmt>* 
-              | <function>
-              | "<-" <lexp> 
-              | "<-|" <label>
-              | <assignment>
-              | <fcall> ) '.' ;
+block         : ("if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
+              |  "while" <exp> <stmt>* 
+              |  <function> ) "fin" ;
+               
+stmt          : ("<-" <lexp> 
+              |  "<-|" <label>
+              |  <assignment>
+              |  <fcall> ) '.' ;
 
 args          : <typeident>? (',' <typeident>)*;
 
 
 
-metis         : /^/ <stmt>* /$/;
+metis         : /^/ (<stmt>|<block>)* /$/;
 
 
 
