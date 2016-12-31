@@ -49,7 +49,7 @@ assignment    : <typeident> ":=" <lexp>;
 reserved      : ("if"|"else if"|"else"|"while"|"fin"|"string"|"bool"|"unsigned"|
                  "integer"|"float"|"label"|"vector"|"matrix"|"dot"|"cross") ;
 
-function      : "def" <label> <args> ("<-" <type>) ':' <stmt>*;
+function      : "def" <label> <args> ("<-" <type>) ':' (<block>|<stmt>)*;
 
 block         : ("if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
               |  "while" <exp> <stmt>* 
@@ -64,7 +64,7 @@ args          : <typeident>? (',' <typeident>)*;
 
 
 
-metis         : /^/ (<stmt>|<block>)* /$/;
+metis         : /^/ (<block>|<stmt>)* /$/;
 
 
 

@@ -29,6 +29,7 @@ int main(int argc, char **argv) {
   PARSER(Assignment, "assignment");
   PARSER(Args,       "args");
   PARSER(Function,   "function");
+  PARSER(Block,      "block");
   PARSER(Stmt,       "stmt");
   PARSER(Factor,     "factor");
   PARSER(Metis,      "metis");
@@ -41,7 +42,7 @@ int main(int argc, char **argv) {
             Term, Lexp, Type, 
             Typeident, Comparator, 
             Exp, Assignment, Args, Function, 
-            Stmt, Factor, Metis, NULL);
+            Block, Stmt, Factor, Metis, NULL);
 
   mpc_print(Label);
   mpc_print(String);
@@ -59,6 +60,7 @@ int main(int argc, char **argv) {
   mpc_print(Exp);
   mpc_print(Assignment);
   mpc_print(Args);
+  mpc_print(Block);
   mpc_print(Stmt);
   mpc_print(Function);
   mpc_print(Factor);
@@ -73,7 +75,7 @@ int main(int argc, char **argv) {
     mpc_err_delete(r.error);
     mpc_cleanup(18, Label, String, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
-                    Exp, Assignment, Args, Stmt, Function, Factor, Metis);
+                    Exp, Assignment, Args, Block, Stmt, Function, Factor, Metis);
     return EXIT_FAILURE;
   }
 
