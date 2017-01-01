@@ -24,7 +24,7 @@ fcall         : <label> <lexp>? (',' <lexp>)*;
 
 factor        : '(' <lexp> ')'
               | <label>
-              | <fcall>
+              | '-' <fcall>
               | <string>
               | <unsigned>
               | <integer>
@@ -51,8 +51,8 @@ reserved      : ("if"|"else if"|"else"|"while"|"fin"|"string"|"bool"|"unsigned"|
 
 function      : "def" <label> <args> ("<-" <type>) ':' (<block>|<stmt>)*;
 
-block         : ("if" <exp> <stmt>* ("else if" <exp> <stmt>*)* ("else" <stmt>*)? 
-              |  "while" <exp> <stmt>* 
+block         : ("if" <exp> (<block>|<stmt>)* ("else if" <exp> (<block>|<stmt>)*)* ("else" (<block>|<stmt>)*)? 
+              |  "while" <exp> (<block>|<stmt>)* 
               |  <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 

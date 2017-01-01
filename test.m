@@ -22,7 +22,7 @@ def is_zero float x <- bool:
 fin
 
 def divide float x, float y <- float:
-  if is_zero y = true
+  if -is_zero y = true
     <-| divide_by_zero_error.
   fin
 
@@ -31,7 +31,7 @@ def divide float x, float y <- float:
 fin
 
 
-float x := square 5, 2.
+float x := -square 5, 2.
 
 if x > 1
   print "x > 1.5!".
