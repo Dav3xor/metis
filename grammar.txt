@@ -8,10 +8,10 @@ unsigned      : /[0-9]+/ ;
 integer       : /[-][0-9]+/ 
               | /[0-9]+/ ;
 
-float         : /[-][0-9]+ /
-              | /[0-9]+ /
-              | /[-][0-9]+[.][0-9]* / 
-              | /[0-9]+[.][0-9]* /;
+float         : /[-][0-9]+[.][0-9]* / 
+              | /[0-9]+[.][0-9]* /
+              | /[-][0-9]+ /
+              | /[0-9]+ /;
 
 bool          : "true" 
               | "false";
@@ -29,8 +29,8 @@ factor        : '(' <lexp> ')'
               | <unsigned>
               | <integer>
               | <float>
-              | <vector>
-              | <matrix>;
+              | <matrix>
+              | <vector>;
 
 term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
 
