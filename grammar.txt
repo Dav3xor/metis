@@ -24,7 +24,7 @@ fcall         : <label> <lexp>? (',' <lexp>)*;
 
 factor        : '(' <lexp> ')'
               | <label>
-              | '-' <fcall>
+              | '{' <fcall> '}'
               | <string>
               | <unsigned>
               | <integer>
