@@ -42,3 +42,5 @@ matrix y := | 1.0 -2 -3.0 |
             | 7    8  9 |.
 
 float z := (x+y)*6 + y.
+
+string s := "quick brown fox.".
