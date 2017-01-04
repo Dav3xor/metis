@@ -42,6 +42,13 @@ matrix y := | 1.0 -2 -3.0 |
             | 7    8  9 |.
 
 float z := (x+y)*6 + y.
+float z1 := 5.
+float z2 := 5.0.
+float z3 := -5.
+float z1 := -5.0.
+float z1 := 5.
+
 
 string s := "quick brown fox.".
+unsigned u := 5.
 integer i := -5.

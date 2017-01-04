@@ -26,9 +26,9 @@ factor        : '(' <lexp> ')'
               | <label>
               | '{' <fcall> '}'
               | <string>
+              | <float>
               | <unsigned>
               | <integer>
-              | <float>
               | <matrix>
               | <vector>;
 
