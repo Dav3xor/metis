@@ -45,10 +45,12 @@ assignment    : <typeident> ":=" <lexp>;
 reserved      : ("if"|"else if"|"else"|"while"|"fin"|"string"|"bool"|"unsigned"|
                  "integer"|"float"|"label"|"vector"|"matrix"|"dot"|"cross") ;
 
-function      : "def" <label> <args> ("<-" <type>) ':' (<block>|<stmt>)*;
+bs            : (<block> | <stmt>) ;
 
-block         : ("if" <exp> (<block>|<stmt>)* ("else if" <exp> (<block>|<stmt>)*)* ("else" (<block>|<stmt>)*)? 
-              |  "while" <exp> (<block>|<stmt>)* 
+function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
+
+block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
+              |  "while" <exp> <bs>* 
               |  <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 
@@ -56,7 +58,6 @@ stmt          : ("<-" <lexp>
               |  <assignment>
               |  <fcall> ) '.' ;
 
-bs            : (<block> | <statement>) ;
 
 args          : <typeident>? (',' <typeident>)*;
 
