@@ -42,9 +42,6 @@ exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
-reserved      : ("if"|"else if"|"else"|"while"|"fin"|"string"|"bool"|"unsigned"|
-                 "integer"|"float"|"label"|"vector"|"matrix"|"dot"|"cross") ;
-
 bs            : (<block> | <stmt>) ;
 
 function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
