@@ -48,7 +48,7 @@ function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
 
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
-              |  "loop" <bs>*
+              |  "for" <assignment>? ';' <exp>? ';' <integer>?
               |  <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 
