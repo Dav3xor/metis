@@ -49,7 +49,7 @@ function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
-              |  "type" <label>
+              |  "type" <label> (<function>|<trait>|<typeident>)*
               |  <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 
