@@ -52,3 +52,7 @@ float z1 := 5.
 string s := "quick brown fox.".
 unsigned u := 5.
 integer i := -5.
+
+for integer x := 0 ; x < 5 ; 1
+  print "x".
+fin
