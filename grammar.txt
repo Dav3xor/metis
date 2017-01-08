@@ -46,6 +46,8 @@ bs            : (<block> | <stmt>) ;
 
 function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
 
+trait         : ":" <label> ;
+
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
