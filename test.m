@@ -56,3 +56,11 @@ integer i := -5.
 for integer x := 0 ; x < 5 ; 1
   print "x".
 fin
+
+type point
+  float x.
+  float y.
+
+  print:
+    print "x={x} y={y}".
+fin

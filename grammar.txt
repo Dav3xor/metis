@@ -44,7 +44,7 @@ assignment    : <typeident> ":=" <lexp>;
 
 bs            : (<block> | <stmt>) ;
 
-function      : "def" <label> <args> ("<-" <type>) ':' <bs>*;
+function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
 trait         : ":" <label> ;
 
@@ -52,7 +52,7 @@ block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)?
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
               |  "type" <label> ((<function>|<trait>|<typeident>) '.')*
-              |  <function> ) "fin" ;
+              |  "def" <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 
               |  "<-|" <label>
