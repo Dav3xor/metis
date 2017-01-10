@@ -48,6 +48,8 @@ function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
 trait         : ':' <label> <bs>*;
 
+traitident    : ':' <label> <args> ("<-" <type>);
+
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
@@ -57,6 +59,7 @@ block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)?
 stmt          : ("<-" <lexp> 
               |  "<-|" <label>
               |  <assignment>
+              |  <traitident>
               |  <fcall> ) '.' ;
 
 
