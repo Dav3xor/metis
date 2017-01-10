@@ -61,6 +61,7 @@ type point
   float x.
   float y.
 
-  print:
+  :print
     print "x={x} y={y}".
+  fin
 fin

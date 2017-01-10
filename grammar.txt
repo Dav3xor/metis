@@ -46,12 +46,12 @@ bs            : (<block> | <stmt>) ;
 
 function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
-trait         : ":" <label> ;
+trait         : ':' <label> <bs>*;
 
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
-              |  "type" <label> ((<function>|<trait>|<typeident>) '.')*
+              |  "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )*
               |  "def" <function> ) "fin" ;
                
 stmt          : ("<-" <lexp> 
