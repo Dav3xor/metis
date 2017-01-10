@@ -48,7 +48,7 @@ function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
 trait         : ':' <label> <bs>*;
 
-traitident    : ':' <label> <args> ("<-" <type>);
+traitident    : ':' <label> <args> ("<-" <type>)?;
 
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
               |  "while" <exp> <bs>*
