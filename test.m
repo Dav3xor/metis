@@ -57,9 +57,15 @@ for integer x := 0 ; x < 5 ; 1
   print "x".
 fin
 
+:magnitude <- float.
+
 type point
   float x.
   float y.
+
+  :magnitude
+    <- {sqrt x*x + y*y}.
+  fin
 
   :print
     print "x={x} y={y}".
