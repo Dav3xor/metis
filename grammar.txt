@@ -67,7 +67,7 @@ args          : <typeident>? (',' <typeident>)*;
 
 
 
-metis         : /^/ (<block>|<stmt>)* /$/;
+metis         : /^/ <bs>* /$/;
 
 
 
