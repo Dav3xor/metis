@@ -58,6 +58,7 @@ for integer x := 0 ; x < 5 ; 1
 fin
 
 :magnitude <- float.
+:print.
 
 type point
   float x.
