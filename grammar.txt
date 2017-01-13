@@ -42,6 +42,8 @@ exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
+comment       : /;;(.)*;;/ ;
+
 bs            : (<block> | <stmt>) ;
 
 function      : <label> <args> ("<-" <type>) ':' <bs>*;

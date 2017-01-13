@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
   PARSER(Comparator, "comparator");
   PARSER(Exp,        "exp");
   PARSER(Assignment, "assignment");
+  PARSER(Comment,    "comment");
   PARSER(Args,       "args");
   PARSER(Bs,         "bs");
   PARSER(Function,   "function");
@@ -44,7 +45,8 @@ int main(int argc, char **argv) {
             Float, Vector, Matrix, Fcall,
             Term, Lexp, Type, 
             Typeident, Comparator, 
-            Exp, Assignment, Args, Bs, Trait, Traitident, Function, 
+            Exp, Assignment, Comment, Args, 
+            Bs, Trait, Traitident, Function, 
             Block, Stmt, Factor, Metis, NULL);
 
   mpc_print(Label);
@@ -62,6 +64,7 @@ int main(int argc, char **argv) {
   mpc_print(Comparator);
   mpc_print(Exp);
   mpc_print(Assignment);
+  mpc_print(Comment);
   mpc_print(Args);
   mpc_print(Bs);
   mpc_print(Block);
