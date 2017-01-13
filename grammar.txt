@@ -42,9 +42,9 @@ exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
-comment       : /;;(.)*;;/ ;
+comment       : /\/\*(\*(?!\/)|[^*])*\*\// ;
 
-bs            : (<block> | <stmt>) ;
+bs            : (<block> | <stmt> | <comment>) ;
 
 function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
