@@ -9,6 +9,9 @@ integer       : /[-+]?[0-9]+/ ;
 
 float         : /[-+]?([0-9]*[.])?[0-9]+/ ;
 
+comment       : /\/\*(\*(?!\/)|[^*])*\*\// ;
+comment       : /;;(;(?!;)|[^;])*;;/ ;
+
 bool          : "true" 
               | "false";
 
@@ -41,8 +44,6 @@ comparator    : (">" | "<" | "<=" | ">=" | "=") ;
 exp           : <lexp> <comparator> <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
-
-comment       : /\/\*(\*(?!\/)|[^*])*\*\// ;
 
 bs            : (<block> | <stmt> | <comment>) ;
 
