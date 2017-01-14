@@ -3,9 +3,13 @@
 
    arguments: x (the number to square ;;
 
+
 def square float x <- float:
   <- x * x.
 fin
+
+; shortcomment
+;another short comment
 
 def is_positive float x <- bool:
   if x > 0

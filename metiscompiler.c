@@ -12,31 +12,33 @@ int main(int argc, char **argv) {
   mpc_ast_trav_t *traveller;
   int index;
 
-  PARSER(Label,      "label");
-  PARSER(String,     "string");
-  PARSER(Unsigned,   "unsigned");
-  PARSER(Integer,    "integer");
-  PARSER(Float,      "float");
-  PARSER(Vector,     "vector");
-  PARSER(Matrix,     "matrix");
-  PARSER(Fcall,      "fcall");
-  PARSER(Term,       "term");
-  PARSER(Lexp,       "lexp");
-  PARSER(Type,       "type");
-  PARSER(Typeident,  "typeident");
-  PARSER(Comparator, "comparator");
-  PARSER(Exp,        "exp");
-  PARSER(Assignment, "assignment");
-  PARSER(Comment,    "comment");
-  PARSER(Args,       "args");
-  PARSER(Bs,         "bs");
-  PARSER(Function,   "function");
-  PARSER(Trait,      "trait");
-  PARSER(Traitident, "traitident");
-  PARSER(Block,      "block");
-  PARSER(Stmt,       "stmt");
-  PARSER(Factor,     "factor");
-  PARSER(Metis,      "metis");
+  PARSER(Label,        "label");
+  PARSER(String,       "string");
+  PARSER(Unsigned,     "unsigned");
+  PARSER(Integer,      "integer");
+  PARSER(Float,        "float");
+  PARSER(Vector,       "vector");
+  PARSER(Matrix,       "matrix");
+  PARSER(Fcall,        "fcall");
+  PARSER(Term,         "term");
+  PARSER(Lexp,         "lexp");
+  PARSER(Type,         "type");
+  PARSER(Typeident,    "typeident");
+  PARSER(Comparator,   "comparator");
+  PARSER(Exp,          "exp");
+  PARSER(Assignment,   "assignment");
+  PARSER(Shortcomment, "shortcomment");
+  PARSER(Longcomment,  "longcomment");
+  PARSER(Comment,      "comment");
+  PARSER(Args,         "args");
+  PARSER(Bs,           "bs");
+  PARSER(Function,     "function");
+  PARSER(Trait,        "trait");
+  PARSER(Traitident,   "traitident");
+  PARSER(Block,        "block");
+  PARSER(Stmt,         "stmt");
+  PARSER(Factor,       "factor");
+  PARSER(Metis,        "metis");
 
   printf((char *)grammar_txt);
 
@@ -45,7 +47,7 @@ int main(int argc, char **argv) {
             Float, Vector, Matrix, Fcall,
             Term, Lexp, Type, 
             Typeident, Comparator, 
-            Exp, Assignment, Comment, Args, 
+            Exp, Assignment, Shortcomment, Longcomment, Comment, Args, 
             Bs, Trait, Traitident, Function, 
             Block, Stmt, Factor, Metis, NULL);
 
@@ -64,6 +66,8 @@ int main(int argc, char **argv) {
   mpc_print(Comparator);
   mpc_print(Exp);
   mpc_print(Assignment);
+  mpc_print(Shortcomment);
+  mpc_print(Longcomment);
   mpc_print(Comment);
   mpc_print(Args);
   mpc_print(Bs);
@@ -84,7 +88,7 @@ int main(int argc, char **argv) {
     mpc_err_delete(r.error);
     mpc_cleanup(18, Label, String, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
-                    Exp, Assignment, Args, Bs, Block, Stmt, Function, Trait, 
+                    Exp, Assignment, Comment, Shortcomment, Args, Bs, Block, Stmt, Function, Trait, 
                     Traitident, Factor, Metis);
     return EXIT_FAILURE;
   }

@@ -9,7 +9,11 @@ integer       : /[-+]?[0-9]+/ ;
 
 float         : /[-+]?([0-9]*[.])?[0-9]+/ ;
 
-comment       : /;;(;(?!;)|[^;])*;;/ ;
+longcomment   : /;;(;(?!;)|[^;])*;;/ ;
+
+shortcomment  : /;(.)*$/ ;
+
+comment       : (<longcomment> | <shortcomment>) ;
 
 bool          : "true" 
               | "false";
