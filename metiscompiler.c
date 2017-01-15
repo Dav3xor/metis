@@ -94,12 +94,18 @@ int main(int argc, char **argv) {
   }
 
 
+  void handle_comment(char *contents) {
+    // pass
+  }
 
+  void handle_string(char *contents) {
+    last_string = contents;
+  }
 
   traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
   ast_next  = mpc_ast_traverse_next(&traveller);
   while(ast_next) {
-    printf("Tag: %s -- %s\n", ast_next->tag, ast_next->contents);
+    printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
     ast_next = mpc_ast_traverse_next(&traveller);
   }
 
