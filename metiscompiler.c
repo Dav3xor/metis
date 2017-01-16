@@ -3,6 +3,18 @@
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
+typedef struct parser_state_t {
+  char *last_string;
+}parser_state;
+
+void handle_comment(parser_state *state, char *contents) {
+  // pass
+}
+
+void handle_string(parser_state *state, char *contents) {
+  state->last_string = contents;
+}
+
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
@@ -94,13 +106,6 @@ int main(int argc, char **argv) {
   }
 
 
-  void handle_comment(char *contents) {
-    // pass
-  }
-
-  void handle_string(char *contents) {
-    last_string = contents;
-  }
 
   traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
   ast_next  = mpc_ast_traverse_next(&traveller);
