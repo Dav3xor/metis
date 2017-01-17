@@ -1,4 +1,5 @@
 #include "mpc.h"
+#include "uthash.h"
 #include "grammar.h"
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
