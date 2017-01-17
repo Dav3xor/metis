@@ -8,6 +8,14 @@ typedef struct parser_state_t {
   char *last_string;
 }parser_state;
 
+typedef void (*grammar_handler)(parser_state *, char *);
+
+typedef struct handler_t {
+  char            handles[128];
+  grammar_handler handler;
+  UT_hash_handle  hh;
+} handler;
+  
 void handle_comment(parser_state *state, char *contents) {
   // pass
 }
