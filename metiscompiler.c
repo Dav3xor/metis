@@ -24,6 +24,11 @@ void handle_string(parser_state *state, char *contents) {
   state->last_string = contents;
 }
 
+handler handlers[] = { {"bs|comment|longcomment|regex",  &handle_comment},
+                       {"bs|comment|shortcomment|regex", &handle_comment},
+                       {"string",                        &handle_string}
+                     };
+
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
@@ -31,6 +36,9 @@ int main(int argc, char **argv) {
   mpc_ast_t *tree;
   mpc_ast_t *ast_next;
   mpc_ast_trav_t *traveller;
+
+  handler *handlers = NULL;
+
   int index;
 
   PARSER(Label,        "label");
