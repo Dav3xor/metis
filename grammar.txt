@@ -11,7 +11,7 @@ float         : /[-+]?([0-9]*[.])?[0-9]+/ ;
 
 longcomment   : /;;(;(?!;)|[^;])*;;/ ;
 
-shortcomment  : /;(.)*$/ ;
+shortcomment  : /;[^\n]*/ ;
 
 comment       : (<longcomment> | <shortcomment>) ;
 
