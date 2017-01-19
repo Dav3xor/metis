@@ -24,7 +24,7 @@ platforms = {'Linux':  {'c++': {'link_options':  '-o {output} {object_files} -lg
                                 'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
                                 'compiler':      'g++' },
                         'c':   {'link_options':  '-o {output} {object_files}',
-                                'build_options': '-Wall -c {input} -o {output}',
+                                'build_options': '-std=c11 -Wall -c {input} -o {output}',
                                 'compiler':      'gcc' },
                         'xxd': {'build_options': '-i {input} >{output}',
                                 'compiler':      'xxd' } },
@@ -33,7 +33,7 @@ platforms = {'Linux':  {'c++': {'link_options':  '-o {output} {object_files} -lg
                                 'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
                                 'compiler':      'g++'},
                         'c':   {'link_options':  '-o {output} {object_files}',
-                                'build_options': '-Wall -c {input} -o {output}',
+                                'build_options': '-std=c11 -Wall -c {input} -o {output}',
                                 'compiler':      'gcc' },
                         'xxd': {'build_options': '-i {input} >{output}',
                                 'compiler':      'xxd' } } }

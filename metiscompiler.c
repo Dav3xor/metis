@@ -11,7 +11,7 @@ typedef struct parser_state_t {
 typedef void (*grammar_handler)(parser_state *, char *);
 
 typedef struct handler_t {
-  char            handles[128];
+  char            handle[128];
   grammar_handler handler;
   UT_hash_handle  hh;
 } handler;
@@ -24,10 +24,10 @@ void handle_string(parser_state *state, char *contents) {
   state->last_string = contents;
 }
 
-handler handlers[] = { {"bs|comment|longcomment|regex",  &handle_comment},
-                       {"bs|comment|shortcomment|regex", &handle_comment},
-                       {"string",                        &handle_string}
-                     };
+handler handler_defs[] = { {"bs|comment|longcomment|regex",  &handle_comment},
+                           {"bs|comment|shortcomment|regex", &handle_comment},
+                           {"string",                        &handle_string}
+                         };
 
 int main(int argc, char **argv) {
   mpc_result_t r;
@@ -69,8 +69,10 @@ int main(int argc, char **argv) {
   PARSER(Factor,       "factor");
   PARSER(Metis,        "metis");
 
-  printf((char *)grammar_txt);
 
+  for(int i=0; i< 3; i++) {
+    HASH_ADD_STR(handlers, handle, &handler_defs[i]);
+  }
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Label, Unsigned, Integer, 
             Float, Vector, Matrix, Fcall,
