@@ -71,7 +71,8 @@ int main(int argc, char **argv) {
 
 
   for(int i=0; i< 3; i++) {
-    HASH_ADD_STR(handlers, handle, &handler_defs[i]);
+    handler *cur = &(handler_defs[i]);
+    HASH_ADD_STR(handlers, handle, cur);
   }
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Label, Unsigned, Integer, 
