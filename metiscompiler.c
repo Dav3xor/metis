@@ -28,6 +28,8 @@ handler handler_defs[] = { {"bs|comment|longcomment|regex",  &handle_comment},
                            {"bs|comment|shortcomment|regex", &handle_comment},
                            {"string",                        &handle_string}
                          };
+unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
+
 
 int main(int argc, char **argv) {
   mpc_result_t r;
@@ -40,6 +42,7 @@ int main(int argc, char **argv) {
   handler *handlers = NULL;
 
   int index;
+
 
   PARSER(Label,        "label");
   PARSER(String,       "string");
@@ -70,10 +73,11 @@ int main(int argc, char **argv) {
   PARSER(Metis,        "metis");
 
 
-  for(int i=0; i< 3; i++) {
+  for(int i=0; i<3; i++) {
     handler *cur = &(handler_defs[i]);
     HASH_ADD_STR(handlers, handle, cur);
   }
+
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Label, Unsigned, Integer, 
             Float, Vector, Matrix, Fcall,
