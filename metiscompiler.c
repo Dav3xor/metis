@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
   PARSER(Metis,        "metis");
 
 
-  for(int i=0; i<3; i++) {
+  for(int i=0; i<num_handlers; i++) {
     handler *cur = &(handler_defs[i]);
     HASH_ADD_STR(handlers, handle, cur);
   }
