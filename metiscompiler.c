@@ -24,6 +24,11 @@ void handle_comment(parser_state *state, char *contents) {
   printf("%s\n", contents);
 }
 
+void handle_label(parser_state *state, char *contents) {
+  state->last_label = contents;
+  printf("%s\n", contents);
+}
+
 void handle_string(parser_state *state, char *contents) {
   state->last_string = contents;
   printf("%s\n", contents);
@@ -41,6 +46,7 @@ void handle_float(parser_state *state, char * contents) {
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                            {"bs|comment|shortcomment|regex",  &handle_comment},
+                           {"label|regex",                    &handle_label},
                            {"lexp|term|factor|integer|regex", &handle_integer},
                            {"lexp|term|factor|float|regex",   &handle_float},
                            {"string",                         &handle_string}
