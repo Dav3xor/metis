@@ -8,6 +8,7 @@ typedef struct parser_state_t {
   char *last_string;
   char *last_label;
   char *last_integer;
+  char *last_float;
 }parser_state;
 
 typedef void (*grammar_handler)(parser_state *, char *);
@@ -33,10 +34,16 @@ void handle_integer(parser_state *state, char * contents) {
   printf("%s\n", contents);
 }
 
-handler handler_defs[] = { {"bs|comment|longcomment|regex",  &handle_comment},
-                           {"bs|comment|shortcomment|regex", &handle_comment},
+void handle_float(parser_state *state, char * contents) {
+  state->last_float = contents;
+  printf("%s\n", contents);
+}
+
+handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
+                           {"bs|comment|shortcomment|regex",  &handle_comment},
                            {"lexp|term|factor|integer|regex", &handle_integer},
-                           {"string",                        &handle_string}
+                           {"lexp|term|factor|float|regex",   &handle_float},
+                           {"string",                         &handle_string}
                          };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 
