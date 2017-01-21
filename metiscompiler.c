@@ -6,6 +6,8 @@
 
 typedef struct parser_state_t {
   char *last_string;
+  char *last_label;
+  char *last_integer;
 }parser_state;
 
 typedef void (*grammar_handler)(parser_state *, char *);
@@ -18,10 +20,17 @@ typedef struct handler_t {
   
 void handle_comment(parser_state *state, char *contents) {
   // pass
+  printf("%s\n", contents);
 }
 
 void handle_string(parser_state *state, char *contents) {
   state->last_string = contents;
+  printf("%s\n", contents);
+}
+
+void handle_integer(parser_state *state, char * contents) {
+  state->last_integer = contents;
+  printf("%s\n", contents);
 }
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",  &handle_comment},
@@ -40,6 +49,7 @@ int main(int argc, char **argv) {
   mpc_ast_trav_t *traveller;
 
   handler *handlers = NULL;
+  parser_state state;
 
   int index;
 
@@ -133,8 +143,14 @@ int main(int argc, char **argv) {
 
   traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
   ast_next  = mpc_ast_traverse_next(&traveller);
-  while(ast_next) {
+  while (ast_next) {
+    handler *cur;
+    HASH_FIND_STR(handlers, ast_next->tag, cur);
+    if (cur) {
+      cur->handler(&state, ast_next->contents);
+    }
     printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
+
     ast_next = mpc_ast_traverse_next(&traveller);
   }
 
