@@ -35,6 +35,7 @@ void handle_integer(parser_state *state, char * contents) {
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",  &handle_comment},
                            {"bs|comment|shortcomment|regex", &handle_comment},
+                           {"lexp|term|factor|integer|regex", &handle_integer},
                            {"string",                        &handle_string}
                          };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
