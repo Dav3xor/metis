@@ -162,8 +162,9 @@ int main(int argc, char **argv) {
     HASH_FIND_STR(handlers, ast_next->tag, cur);
     if (cur) {
       cur->handler(&state, ast_next->contents);
+    } else {
+      printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
     }
-    printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
 
     ast_next = mpc_ast_traverse_next(&traveller);
   }
