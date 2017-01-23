@@ -2,6 +2,7 @@ label         : /[a-zA-Z_][a-zA-Z0-9_]*/ ;
 
 string        : /"(\\.|[^"])*"/ ;
 
+file          : '-' <label> ;
 
 unsigned      : /[0-9]+/ ;
 
@@ -57,6 +58,7 @@ trait         : ':' <label> <bs>*;
 traitident    : ':' <label> <args> ("<-" <type>)?;
 
 block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
+              |  "include" <file>*
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
               |  "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )*

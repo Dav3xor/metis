@@ -34,14 +34,17 @@ void handle_string(parser_state *state, char *contents) {
   printf("%s\n", contents);
 }
 
-void handle_integer(parser_state *state, char * contents) {
+void handle_integer(parser_state *state, char *contents) {
   state->last_integer = contents;
   printf("%s\n", contents);
 }
 
-void handle_float(parser_state *state, char * contents) {
+void handle_float(parser_state *state, char *contents) {
   state->last_float = contents;
   printf("%s\n", contents);
+}
+void handle_fcall(parser_state *state, char *contents) {
+  printf("fcall start\n");
 }
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
@@ -49,6 +52,7 @@ handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                            {"label|regex",                    &handle_label},
                            {"lexp|term|factor|integer|regex", &handle_integer},
                            {"lexp|term|factor|float|regex",   &handle_float},
+                           {"fcall|>",                        &handle_fcall},
                            {"string",                         &handle_string}
                          };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);

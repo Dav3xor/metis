@@ -80,3 +80,9 @@ type point
     print "x={x} y={y}".
   fin
 fin
+
+include
+  - stuff
+  - things
+fin
+
