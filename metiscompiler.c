@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
 
   PARSER(Label,        "label");
   PARSER(String,       "string");
+  PARSER(File,         "file");
   PARSER(Unsigned,     "unsigned");
   PARSER(Integer,      "integer");
   PARSER(Float,        "float");
@@ -107,7 +108,7 @@ int main(int argc, char **argv) {
   }
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
-            String,  Label, Unsigned, Integer, 
+            String,  Label, File, Unsigned, Integer, 
             Float, Vector, Matrix, Fcall,
             Term, Lexp, Type, 
             Typeident, Comparator, 
@@ -117,6 +118,7 @@ int main(int argc, char **argv) {
 
   mpc_print(Label);
   mpc_print(String);
+  mpc_print(File);
   mpc_print(Unsigned);
   mpc_print(Integer);
   mpc_print(Float);
@@ -150,7 +152,7 @@ int main(int argc, char **argv) {
   } else {
     mpc_err_print(r.error);
     mpc_err_delete(r.error);
-    mpc_cleanup(18, Label, String, Unsigned, Integer, Float, Vector,
+    mpc_cleanup(18, Label, String, File, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Assignment, Comment, Shortcomment, Args, Bs, Block, Stmt, Function, Trait, 
                     Traitident, Factor, Metis);
