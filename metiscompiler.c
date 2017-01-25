@@ -11,7 +11,7 @@ typedef struct parser_state_t {
   char *last_float;
 }parser_state;
 
-typedef void (*grammar_handler)(parser_state *, char *);
+typedef mpc_ast_t *(*grammar_handler)(parser_state *, char *);
 
 typedef struct handler_t {
   char            handle[128];
@@ -19,31 +19,31 @@ typedef struct handler_t {
   UT_hash_handle  hh;
 } handler;
   
-void handle_comment(parser_state *state, char *contents) {
+mpc_ast_t * handle_comment(parser_state *state, char *contents) {
   // pass
   printf("%s\n", contents);
 }
 
-void handle_label(parser_state *state, char *contents) {
+mpc_ast_t *handle_label(parser_state *state, char *contents) {
   state->last_label = contents;
   printf("%s\n", contents);
 }
 
-void handle_string(parser_state *state, char *contents) {
+mpc_ast_t *handle_string(parser_state *state, char *contents) {
   state->last_string = contents;
   printf("%s\n", contents);
 }
 
-void handle_integer(parser_state *state, char *contents) {
+mpc_ast_t *handle_integer(parser_state *state, char *contents) {
   state->last_integer = contents;
   printf("%s\n", contents);
 }
 
-void handle_float(parser_state *state, char *contents) {
+mpc_ast_t *handle_float(parser_state *state, char *contents) {
   state->last_float = contents;
   printf("%s\n", contents);
 }
-void handle_fcall(parser_state *state, char *contents) {
+mpc_ast_t *handle_fcall(parser_state *state, char *contents) {
   printf("fcall start\n");
 }
 
