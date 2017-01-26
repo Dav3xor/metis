@@ -11,39 +11,41 @@ typedef struct parser_state_t {
   char *last_float;
 }parser_state;
 
-typedef mpc_ast_t *(*grammar_handler)(parser_state *, char *);
+typedef mpc_ast_t *(*grammar_handler)(parser_state *, mpc_ast_trav_t *traveller);
 
 typedef struct handler_t {
   char            handle[128];
   grammar_handler handler;
   UT_hash_handle  hh;
 } handler;
-  
-mpc_ast_t * handle_comment(parser_state *state, char *contents) {
+
+
+
+mpc_ast_t * handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
   printf("%s\n", contents);
 }
 
-mpc_ast_t *handle_label(parser_state *state, char *contents) {
+mpc_ast_t *handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   state->last_label = contents;
   printf("%s\n", contents);
 }
 
-mpc_ast_t *handle_string(parser_state *state, char *contents) {
+mpc_ast_t *handle_string(parser_state *state, mpc_ast_trav_t *contents) {
   state->last_string = contents;
   printf("%s\n", contents);
 }
 
-mpc_ast_t *handle_integer(parser_state *state, char *contents) {
+mpc_ast_t *handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
   state->last_integer = contents;
   printf("%s\n", contents);
 }
 
-mpc_ast_t *handle_float(parser_state *state, char *contents) {
+mpc_ast_t *handle_float(parser_state *state, mpc_ast_trav_t *contents) {
   state->last_float = contents;
   printf("%s\n", contents);
 }
-mpc_ast_t *handle_fcall(parser_state *state, char *contents) {
+mpc_ast_t *handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   printf("fcall start\n");
 }
 
@@ -167,12 +169,12 @@ int main(int argc, char **argv) {
     handler *cur;
     HASH_FIND_STR(handlers, ast_next->tag, cur);
     if (cur) {
-      cur->handler(&state, ast_next->contents);
+      cur = cur->handler(&state, traveller);
     } else {
       printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
+      ast_next = mpc_ast_traverse_next(&traveller);
     }
 
-    ast_next = mpc_ast_traverse_next(&traveller);
   }
 
 }
