@@ -20,7 +20,11 @@ typedef struct handler_t {
 } handler;
 
 
-
+mpc_ast_t * handle_start(parser_state *state, mpc_ast_trav_t *contents) {
+  ast_next = mpc_ast_traverse_next(&contents);
+  printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
+}
+  
 mpc_ast_t * handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
   printf("%s\n", contents);
@@ -149,7 +153,7 @@ int main(int argc, char **argv) {
   
   if(mpc_parse_contents("test.m", Metis, &r)) {
     ast = r.output;
-    mpc_ast_print(r.output);
+    //mpc_ast_print(r.output);
     //mpc_ast_delete(r.output);
   } else {
     mpc_err_print(r.error);
@@ -164,18 +168,7 @@ int main(int argc, char **argv) {
 
 
   traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
-  ast_next  = mpc_ast_traverse_next(&traveller);
-  while (ast_next) {
-    handler *cur;
-    HASH_FIND_STR(handlers, ast_next->tag, cur);
-    if (cur) {
-      cur = cur->handler(&state, traveller);
-    } else {
-      printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
-      ast_next = mpc_ast_traverse_next(&traveller);
-    }
-
-  }
+  handle_start(&state, traveller);
 
 }
 
