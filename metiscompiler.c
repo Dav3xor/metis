@@ -19,6 +19,7 @@ typedef struct handler_t {
   UT_hash_handle  hh;
 } handler;
 
+handler *handlers = NULL;
 
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
@@ -82,7 +83,6 @@ int main(int argc, char **argv) {
   mpc_ast_t *ast_next;
   mpc_ast_trav_t *traveller;
 
-  handler *handlers = NULL;
   parser_state state;
 
   int index;
