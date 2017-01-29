@@ -29,39 +29,40 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
     if (cur) {
       cur->handler(&state, contents);
     }
+    ast_next = mpc_ast_traverse_next(&contents);
   }
-  ast_next = mpc_ast_traverse_next(&contents);
-  ast_next = mpc_ast_traverse_next(&contents);
-  printf("%s\n", ast_next->contents);
-  printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
+  //ast_next = mpc_ast_traverse_next(&contents);
+  //ast_next = mpc_ast_traverse_next(&contents);
+  //printf("%s\n", ast_next->contents);
+  //printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
 }
   
 void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
-  printf("%s\n", contents);
+  //printf("%s\n", contents);
 }
 
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
-  state->last_label = contents;
-  printf("%s\n", contents);
+  //state->last_label = contents;
+  //printf("%s\n", contents);
 }
 
 void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
-  state->last_string = contents;
-  printf("%s\n", contents);
+  //state->last_string = contents;
+  //printf("%s\n", contents);
 }
 
 void handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
-  state->last_integer = contents;
-  printf("%s\n", contents);
+  //state->last_integer = contents;
+  //printf("%s\n", contents);
 }
 
 void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
-  state->last_float = contents;
-  printf("%s\n", contents);
+  //state->last_float = contents;
+  //printf("%s\n", contents);
 }
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
-  printf("fcall start\n");
+  //printf("fcall start\n");
 }
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
