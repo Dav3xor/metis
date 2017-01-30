@@ -44,7 +44,7 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
-  printf (ast_next->contents);
+  printf ("%s\n", ast_next->contents);
   // now get the actual function/if/while block...
   ast_next = mpc_ast_traverse_next(&contents);
 
@@ -99,7 +99,7 @@ void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                            {"bs|comment|shortcomment|regex",  &handle_comment},
                            {"bs|block|>",                     &handle_block},
-                           {"bs|function|>",                  &handle_function},
+                           {"function|>",                  &handle_function},
                            {"label|regex",                    &handle_label},
                            {"lexp|term|factor|integer|regex", &handle_integer},
                            {"lexp|term|factor|float|regex",   &handle_float},
