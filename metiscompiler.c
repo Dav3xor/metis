@@ -57,6 +57,22 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
+  handler   *cur;
+  // consume the function name.
+  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  printf ("LABEL %s\n",ast_next->contents);
+  // now get the actual function/if/while block...
+  ast_next = mpc_ast_traverse_next(&contents);
+
+  if(ast_next) {
+    HASH_FIND_STR(handlers, ast_next->tag, cur);
+    if (cur) {
+      cur->handler(&state, contents);
+    }
+  }  
+  // pass
+}
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   //state->last_label = contents;
   //printf("%s\n", contents);
@@ -83,6 +99,7 @@ void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                            {"bs|comment|shortcomment|regex",  &handle_comment},
                            {"bs|block|>",                     &handle_block},
+                           {"bs|function|>",                  &handle_function},
                            {"label|regex",                    &handle_label},
                            {"lexp|term|factor|integer|regex", &handle_integer},
                            {"lexp|term|factor|float|regex",   &handle_float},
