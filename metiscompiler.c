@@ -59,12 +59,32 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
+  uint64_t  num_arguments = 0;
+  bool      run           = true;
+
   // consume the function name.
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("LABEL %s\n",ast_next->contents);
-  // now get the actual function/if/while block...
-  ast_next = mpc_ast_traverse_next(&contents);
 
+  // now get the args
+  ast_next = mpc_ast_traverse_next(&contents);
+  if(!(strcmp(ast_next->tag, "args|>"))) {
+    while(run) {
+      ast_next = mpc_ast_traverse_next(&contents);
+      if(!(strcmp(ast_next->tag, "typeident|>"))) {
+        char *type = ast_next = mpc_ast_traverse_next(&contents);
+        char *var  = ast_next = mpc_ast_traverse_next(&contents);
+        printf("ARG: %s %s\n",type, var);
+      }
+      ast_next = mpc_ast_traverse_next(&contents);
+      if (strcmp(ast_next->content, ",")) {
+        run = false;
+      }
+    }
+  }
+        
+    
+    
   if(ast_next) {
     HASH_FIND_STR(handlers, ast_next->tag, cur);
     if (cur) {
