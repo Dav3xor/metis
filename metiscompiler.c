@@ -1,6 +1,7 @@
 #include "mpc.h"
 #include "uthash.h"
 #include "grammar.h"
+#include "stdbool.h"
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
@@ -82,16 +83,6 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
       }
     }
   }
-        
-    
-    
-  if(ast_next) {
-    HASH_FIND_STR(handlers, ast_next->tag, cur);
-    if (cur) {
-      cur->handler(&state, contents);
-    }
-  }  
-  // pass
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   //state->last_label = contents;
