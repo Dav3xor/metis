@@ -28,7 +28,7 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   while (ast_next) {
     HASH_FIND_STR(handlers, ast_next->tag, cur);
     if (cur) {
-      cur->handler(&state, contents);
+      cur->handler(state, contents);
     }
     ast_next = mpc_ast_traverse_next(&contents);
   }
@@ -52,7 +52,7 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   if(ast_next) {
     HASH_FIND_STR(handlers, ast_next->tag, cur);
     if (cur) {
-      cur->handler(&state, contents);
+      cur->handler(state, contents);
     }
   }  
   // pass
@@ -80,7 +80,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
         num_arguments += 1;
       }
       ast_next = mpc_ast_traverse_next(&contents);
-      if (strcmp(ast_next->content, ",")) {
+      if (strcmp(ast_next->contents, ",")) {
         run = false;
       }
     }
