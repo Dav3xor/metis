@@ -59,7 +59,6 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
 }
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
-  handler   *cur;
   uint64_t  num_arguments = 0;
   bool      run           = true;
 
@@ -73,9 +72,12 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     while(run) {
       ast_next = mpc_ast_traverse_next(&contents);
       if(!(strcmp(ast_next->tag, "typeident|>"))) {
-        char *type = ast_next = mpc_ast_traverse_next(&contents);
-        char *var  = ast_next = mpc_ast_traverse_next(&contents);
+        ast_next = mpc_ast_traverse_next(&contents);
+        char *type = ast_next->contents;
+        ast_next = mpc_ast_traverse_next(&contents);
+        char *var  = ast_next->contents;
         printf("ARG: %s %s\n",type, var);
+        num_arguments += 1;
       }
       ast_next = mpc_ast_traverse_next(&contents);
       if (strcmp(ast_next->content, ",")) {
@@ -123,15 +125,9 @@ unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 int main(int argc, char **argv) {
   mpc_result_t r;
   mpc_ast_t *ast;
-  mpc_ast_t *child;
-  mpc_ast_t *tree;
-  mpc_ast_t *ast_next;
   mpc_ast_trav_t *traveller;
 
   parser_state state;
-
-  int index;
-
 
   PARSER(Label,        "label");
   PARSER(String,       "string");
