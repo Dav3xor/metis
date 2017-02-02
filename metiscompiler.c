@@ -91,6 +91,8 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     return_type = ast_next->contents;
     printf("RETURN: %s\n", return_type);
   }
+  // next token must be the :, so consume it.
+  ast_next = mpc_ast_traverse_next(&contents);
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   //state->last_label = contents;
