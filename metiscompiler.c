@@ -60,6 +60,7 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
+  char *return_type       = NULL;
   bool      run           = true;
 
   // consume the function name.
@@ -84,6 +85,11 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
         run = false;
       }
     }
+  }
+  if(!(strcmp(ast_next->contents, "<-"))) {
+    ast_next = mpc_ast_traverse_next(&contents);
+    return_type = ast_next->contents;
+    printf("RETURN: %s\n", return_type);
   }
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
