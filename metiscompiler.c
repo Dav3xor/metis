@@ -58,6 +58,10 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
   char *return_type       = NULL;
