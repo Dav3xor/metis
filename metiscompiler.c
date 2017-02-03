@@ -127,6 +127,13 @@ handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                            {"fcall|>",                        &handle_fcall},
                            {"string",                         &handle_string}
                          };
+
+handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment},
+                          {"bs|comment|shortcomment|regex",  &handle_comment},
+                          {"bs|block|>",                     &handle_block},
+                          {"bs|stmt|>",                      &handle_stmt}
+                        };
+
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 
 
