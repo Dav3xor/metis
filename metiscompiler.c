@@ -139,6 +139,7 @@ handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                         };
 
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
+unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
 
 
 int main(int argc, char **argv) {
@@ -180,6 +181,11 @@ int main(int argc, char **argv) {
 
   for(int i=0; i<num_handlers; i++) {
     handler *cur = &(handler_defs[i]);
+    HASH_ADD_STR(handlers, handle, cur);
+  }
+  
+  for(int i=0; i<num_bs_handlers; i++) {
+    handler *cur = &(bs_handlers[i]);
     HASH_ADD_STR(handlers, handle, cur);
   }
 
