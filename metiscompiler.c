@@ -21,6 +21,7 @@ typedef struct handler_t {
 } handler;
 
 handler *handlers = NULL;
+handler *bshandlers = NULL;
 
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
@@ -186,7 +187,7 @@ int main(int argc, char **argv) {
   
   for(int i=0; i<num_bs_handlers; i++) {
     handler *cur = &(bs_handlers[i]);
-    HASH_ADD_STR(handlers, handle, cur);
+    HASH_ADD_STR(bshandlers, handle, cur);
   }
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
