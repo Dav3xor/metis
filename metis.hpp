@@ -304,71 +304,71 @@ class MetisVM {
                                INS_STOREI                        =    8,   // *   store immediate value into 
 
                                // Math
-                               INS_INC                           =    9,   // *   increment ... 
-                               INS_DEC                           =   10,   // *   decrement ... 
-                               INS_ADD                           =   11,   // *   A = A+...  (integer)
-                               INS_SUB                           =   12,   // *   A = A-...  (integer)
-                               INS_MUL                           =   13,   // *   A = A*...  (integer)
-                               INS_DIV                           =   14,   // *   A = A/...  (integer)
-                               INS_MOD                           =   15,   // *   A = A%...  (integer)
+                               INS_INC                           =   16,   // *   increment ... 
+                               INS_DEC                           =   17,   // *   decrement ... 
+                               INS_ADD                           =   18,   // *   A = A+...  (integer)
+                               INS_SUB                           =   19,   // *   A = A-...  (integer)
+                               INS_MUL                           =   20,   // *   A = A*...  (integer)
+                               INS_DIV                           =   21,   // *   A = A/...  (integer)
+                               INS_MOD                           =   22,   // *   A = A%...  (integer)
 
                                // Bitwise
-                               INS_AND                           =   16,   // *   A = A&...  (integer) 
-                               INS_OR                            =   17,   // *   A = A|...  (integer) 
-                               INS_XOR                           =   18,   // *   A = A^...  (integer) 
-                               INS_NOT                           =   19,   // *   A = A&...  (integer) 
+                               INS_AND                           =   32,   // *   A = A&...  (integer) 
+                               INS_OR                            =   33,   // *   A = A|...  (integer) 
+                               INS_XOR                           =   34,   // *   A = A^...  (integer) 
+                               INS_NOT                           =   35,   // *   A = A&...  (integer) 
                                
                                // Matrix Ops
-                               INS_MATRIX_MULTIPLY               =   20,   // *   Matrix Multiplication
-                               INS_PUSH_MATRIX                   =   21,   //     Push Matrix onto stack
+                               INS_MATRIX_MULTIPLY               =   48,   // *   Matrix Multiplication
+                               INS_PUSH_MATRIX                   =   49,   //     Push Matrix onto stack
                                
                                // Vector Ops                    
-                               INS_VECTOR_DOT                    =   25,   // *   Dot Product
-                               INS_VECTOR_CROSS                  =   26,   // *   Cross Product
-                               INS_MATRIX_ADD                    =   27,   // *   Cross Product
+                               INS_VECTOR_DOT                    =   64,   // *   Dot Product
+                               INS_VECTOR_CROSS                  =   65,   // *   Cross Product
+                               INS_MATRIX_ADD                    =   66,   // *   Cross Product
 
                                // GL Instructions
-                               INS_GLDRAWELEMENTS                =   32,   
-                               INS_GLDRAWARRAYS                  =   34,   
-                               INS_GLGENBUFFERS                  =   35,   
-                               INS_GLBINDBUFFER                  =   36,   
-                               INS_GLBUFFERDATA                  =   37,   
-                               INS_GLENABLEVERTEXATTRIBARRAY     =   38,   
-                               INS_GLVERTEXATTRIBPOINTER         =   39,   
-                               INS_GLDISABLEVERTEXATTRIBARRAY    =   40,   
-                               INS_GLGENVERTEXARRAYS             =   41,   
-                               INS_GLBINDVERTEXARRAY             =   42,   
-                               INS_GLENABLE                      =   43,
-                               INS_GLDEPTHFUNC                   =   44,
-                               INS_GLCREATESHADER                =   45,
-                               INS_GLSHADERSOURCE                =   46,
-                               INS_GLCOMPILESHADER               =   47,
-                               INS_GLCREATEPROGRAM               =   48,
-                               INS_GLATTACHSHADER                =   49,
-                               INS_GLLINKPROGRAM                 =   50,
-                               INS_GLDETACHSHADER                =   51,
-                               INS_GLDELETESHADER                =   52,
-                               INS_GLUSEPROGRAM                  =   53,
-                               INS_GLUNIFORMFV                   =   54,
-                               INS_GLUNIFORMIV                   =   55,
-                               INS_GLUNIFORMUIV                  =   56,
-                               INS_GLUNIFORMMATRIXFV             =   57,
-                               INS_GLGETUNIFORMLOCATION          =   58,
+                               INS_GLDRAWELEMENTS                =   96,   
+                               INS_GLDRAWARRAYS                  =   97,   
+                               INS_GLGENBUFFERS                  =   98,   
+                               INS_GLBINDBUFFER                  =   99,   
+                               INS_GLBUFFERDATA                  =   100,   
+                               INS_GLENABLEVERTEXATTRIBARRAY     =   101,   
+                               INS_GLVERTEXATTRIBPOINTER         =   102,   
+                               INS_GLDISABLEVERTEXATTRIBARRAY    =   103,   
+                               INS_GLGENVERTEXARRAYS             =   104,   
+                               INS_GLBINDVERTEXARRAY             =   105,   
+                               INS_GLENABLE                      =   106,
+                               INS_GLDEPTHFUNC                   =   107,
+                               INS_GLCREATESHADER                =   108,
+                               INS_GLSHADERSOURCE                =   109,
+                               INS_GLCOMPILESHADER               =   110,
+                               INS_GLCREATEPROGRAM               =   111,
+                               INS_GLATTACHSHADER                =   112,
+                               INS_GLLINKPROGRAM                 =   113,
+                               INS_GLDETACHSHADER                =   114,
+                               INS_GLDELETESHADER                =   115,
+                               INS_GLUSEPROGRAM                  =   116,
+                               INS_GLUNIFORMFV                   =   117,
+                               INS_GLUNIFORMIV                   =   118,
+                               INS_GLUNIFORMUIV                  =   119,
+                               INS_GLUNIFORMMATRIXFV             =   120,
+                               INS_GLGETUNIFORMLOCATION          =   121,
 
-                               INS_GLGENTEXTURES                 =   59,
-                               INS_GLBINDTEXTURE                 =   60,
-                               INS_GLTEXPARAMETERI               =   61,
-                               INS_GLTEXPARAMETERFV              =   62,
-                               INS_GLGENERATEMIPMAP              =   63,
-                               INS_GLTEXIMAGE2D                  =   64,
-                               INS_GLGETATTRIBLOCATION           =   65,
-                               INS_GLACTIVETEXTURE               =   66,
-                               INS_GLCLEARCOLOR                  =   67,
-                               INS_GLCLEAR                       =   68,
+                               INS_GLGENTEXTURES                 =   122,
+                               INS_GLBINDTEXTURE                 =   123,
+                               INS_GLTEXPARAMETERI               =   124,
+                               INS_GLTEXPARAMETERFV              =   125,
+                               INS_GLGENERATEMIPMAP              =   126,
+                               INS_GLTEXIMAGE2D                  =   127,
+                               INS_GLGETATTRIBLOCATION           =   128,
+                               INS_GLACTIVETEXTURE               =   129,
+                               INS_GLCLEARCOLOR                  =   130,
+                               INS_GLCLEAR                       =   131,
 
 
-                               INS_LOG                           =  192,   //     log string pointed at by command
-                               INS_DATA                          =  193,   //     global data
+                               INS_LOG                           =  252,   //     log string pointed at by command
+                               INS_DATA                          =  253,   //     global data
                                INS_NOOP                          =  254,
                                INS_END                           =  255,   //     End Program 
                                };
