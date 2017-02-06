@@ -144,6 +144,16 @@ uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   RETURN_NEXT();
 };
 
+uint64_t MetisVM::add_load_sr(address_mode dest, uint64_t offset) {
+  CHECK_INSTRUCTION(INS_LOAD_SR_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_LOAD_SR;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
+  instruction->commands.extended.ext.load_sr.offset = offset;
+  registers[REGIP] += INS_LOAD_SR_SIZE;
+  RETURN_NEXT();
+};
 uint64_t MetisVM::add_label_ip(const char *label) {
   CHECK_POINTER(label);
  
