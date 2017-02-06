@@ -55,8 +55,8 @@ using namespace std;
 #define INS_JMPE_SIZE     10
 #define INS_STORE_SIZE    2
 #define INS_STOREI_SIZE   10
-#define INS_STO_STK       10
-#define INS_LD_STK        10
+#define INS_STO_STK_SIZE  10
+#define INS_LD_STK_SIZE   10
 
 #define INS_MATH_SIZE     2
 
