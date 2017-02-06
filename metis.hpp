@@ -55,8 +55,8 @@ using namespace std;
 #define INS_JMPE_SIZE     10
 #define INS_STORE_SIZE    2
 #define INS_STOREI_SIZE   10
-#define INS_STO_STK_SIZE  10
-#define INS_LD_STK_SIZE   10
+#define INS_STORE_SR_SIZE  10
+#define INS_LOAD_SR_SIZE   10
 
 #define INS_MATH_SIZE     2
 
@@ -304,8 +304,8 @@ class MetisVM {
                                INS_JMPE                          =    6,   // *   jump if equal
                                INS_STORE                         =    7,   // *   store ... into stack offset #...
                                INS_STOREI                        =    8,   // *   store immediate value into
-                               INS_STO_STK                       =    9,   // *   store value at stack offset
-                               INS_LD_STK                        =   10,   // *   load value from stack offset
+                               INS_STORE_SR                      =    9,   // *   store value at stack offset
+                               INS_LOAD_SR                       =   10,   // *   load value from stack offset
 
                                // Math
                                INS_INC                           =   16,   // *   increment ... 
@@ -421,6 +421,10 @@ class MetisVM {
     uint64_t add_jmpe        (address_mode src, address_mode dest, uint64_t location);
     uint64_t add_store       (address_mode src, address_mode dest);
     uint64_t add_storei      (address_mode dest, uint64_t value);
+    uint64_t add_store_sr    (address_mode src, uint64_t offset);
+    uint64_t add_load_sr     (address_mode dest, uint64_t offset);
+#define INS_STO_STK_SIZE  10
+#define INS_LD_STK_SIZE   10
     uint64_t add_label_ip    (const char *label);
     uint64_t add_label_val   (const char *label, uint64_t val);
     uint64_t add_label_float (const char *label, float val);
@@ -598,6 +602,14 @@ class MetisVM {
             struct ext_storei_t {
               uint64_t value;
             }__attribute__((packed))storei;
+            
+            struct ext_stack_load_sr_t {
+              uint64_t offset;
+            }__attribute__((packed))stack_load_sr;
+            
+            struct ext_stack_store_sr_t {
+              uint64_t offset;
+            }__attribute__((packed))stack_store_sr;
 
             struct ext_jne_t {
               uint64_t value;
