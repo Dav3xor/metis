@@ -605,11 +605,11 @@ class MetisVM {
             
             struct ext_stack_load_sr_t {
               uint64_t offset;
-            }__attribute__((packed))stack_load_sr;
+            }__attribute__((packed))load_sr;
             
             struct ext_stack_store_sr_t {
               uint64_t offset;
-            }__attribute__((packed))stack_store_sr;
+            }__attribute__((packed))store_sr;
 
             struct ext_jne_t {
               uint64_t value;

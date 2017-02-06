@@ -121,6 +121,7 @@ uint64_t MetisVM::add_store(address_mode src, address_mode dest) {
   registers[REGIP] += INS_STORE_SIZE;
   RETURN_NEXT();
 }; 
+
 uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   CHECK_INSTRUCTION(INS_STOREI_SIZE);
 
@@ -129,6 +130,17 @@ uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
   instruction->commands.extended.ext.storei.value = value;
   registers[REGIP] += INS_STOREI_SIZE;
+  RETURN_NEXT();
+};
+
+uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
+  CHECK_INSTRUCTION(INS_STORE_SR_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  instruction->type                             = INS_STORE_SR;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
+  instruction->commands.extended.ext.store_sr.offset = offset;
+  registers[REGIP] += INS_STORE_SR_SIZE;
   RETURN_NEXT();
 };
 
