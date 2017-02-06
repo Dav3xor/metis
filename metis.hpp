@@ -55,6 +55,8 @@ using namespace std;
 #define INS_JMPE_SIZE     10
 #define INS_STORE_SIZE    2
 #define INS_STOREI_SIZE   10
+#define INS_STO_STK       10
+#define INS_LD_STK        10
 
 #define INS_MATH_SIZE     2
 
@@ -301,7 +303,9 @@ class MetisVM {
                                INS_JNE                           =    5,   // *   jump if not equal
                                INS_JMPE                          =    6,   // *   jump if equal
                                INS_STORE                         =    7,   // *   store ... into stack offset #...
-                               INS_STOREI                        =    8,   // *   store immediate value into 
+                               INS_STOREI                        =    8,   // *   store immediate value into
+                               INS_STO_STK                       =    9,   // *   store value at stack offset
+                               INS_LD_STK                        =   10,   // *   load value from stack offset
 
                                // Math
                                INS_INC                           =   16,   // *   increment ... 
