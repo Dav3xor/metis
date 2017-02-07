@@ -85,6 +85,10 @@ bool MetisVM::do_eval() {
                 instruction->commands.extended.ext.storei.value);
         registers[REGIP] += INS_STOREI_SIZE;
         break;
+      case INS_STORE_SR:
+        stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole = get_val(ADDR_MODES);
+        registers[REGIP] += INS_STORE_SR_SIZE;
+        break;
       
       // math instructions
       case INS_INC:
