@@ -470,6 +470,32 @@ TEST_CASE( "storei", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val() == 5);
 }
 
+TEST_CASE( "store_sr/load_sr", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+  
+  m.add_storei(STACK_PUSH, 1);
+  m.add_storei(STACK_PUSH, 2);
+  m.add_storei(STACK_PUSH, 3);
+  
+  m.add_storei(REGA, 10);
+  m.add_store_sr(REGA, 2);
+  m.add_storei(REGB, 20);
+  m.add_store_sr(REGA, 1);
+
+  m.add_store(STACK_POP, REGA);
+  m.add_store(STACK_POP, REGB);
+  m.add_store(STACK_POP, REGC);
+
+  m.eval();
+
+  REQUIRE( m.get_registers()[REGA] == 3);
+  REQUIRE( m.get_registers()[REGB] == 20);
+  REQUIRE( m.get_registers()[REGC] == 10);
+}
+
 TEST_CASE( "noop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
