@@ -482,7 +482,7 @@ TEST_CASE( "store_sr/load_sr", "[MetisVM]" ) {
   
   m.add_storei(REGA, 10);
   m.add_store_sr(REGA, 2);
-  m.add_storei(REGB, 20);
+  m.add_storei(REGA, 20);
   m.add_store_sr(REGA, 1);
 
   m.add_store(STACK_POP, REGA);
