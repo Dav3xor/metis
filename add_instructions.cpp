@@ -144,7 +144,7 @@ uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   RETURN_NEXT();
 };
 
-uint64_t MetisVM::add_load_sr(address_mode dest, uint64_t offset) {
+uint64_t MetisVM::add_load_sr(uint64_t offset, address_mode dest) {
   CHECK_INSTRUCTION(INS_LOAD_SR_SIZE);
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];

@@ -422,7 +422,7 @@ class MetisVM {
     uint64_t add_store       (address_mode src, address_mode dest);
     uint64_t add_storei      (address_mode dest, uint64_t value);
     uint64_t add_store_sr    (address_mode src, uint64_t offset);
-    uint64_t add_load_sr     (address_mode dest, uint64_t offset);
+    uint64_t add_load_sr     (uint64_t offset, address_mode dest);
 #define INS_STO_STK_SIZE  10
 #define INS_LD_STK_SIZE   10
     uint64_t add_label_ip    (const char *label);
