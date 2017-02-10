@@ -139,7 +139,7 @@ uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_STORE_SR;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
-  instruction->commands.extended.ext.store_sr.offset = offset;
+  instruction->commands.extended.ext.store_sr.offset = offset+1;
   registers[REGIP] += INS_STORE_SR_SIZE;
   RETURN_NEXT();
 };

@@ -491,7 +491,7 @@ TEST_CASE( "store_sr/load_sr", "[MetisVM]" ) {
   m.add_end();
 
   m.eval();
-
+  printf("%d %d %d\n",m.get_registers()[REGA],m.get_registers()[REGB],m.get_registers()[REGC]);
   REQUIRE( m.get_registers()[REGA] == 3);
   REQUIRE( m.get_registers()[REGB] == 20);
   REQUIRE( m.get_registers()[REGC] == 10);
