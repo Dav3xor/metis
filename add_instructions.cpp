@@ -150,7 +150,7 @@ uint64_t MetisVM::add_load_sr(address_mode dest, uint64_t offset) {
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_LOAD_SR;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
-  instruction->commands.extended.ext.load_sr.offset = offset;
+  instruction->commands.extended.ext.load_sr.offset = offset+1;
   registers[REGIP] += INS_LOAD_SR_SIZE;
   RETURN_NEXT();
 };
