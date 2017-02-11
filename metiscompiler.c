@@ -98,6 +98,12 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   }
   // next token must be the :, so consume it.
   ast_next = mpc_ast_traverse_next(&contents);
+  printf("x: %s\n", ast_next->contents);
+  while(strcmp(ast_next->contents, "fin")) {
+    handle_stmt(state, contents);
+    ast_next = mpc_ast_traverse_next(&contents);
+    printf("y: %s\n", ast_next->contents);
+  }
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   //state->last_label = contents;
