@@ -41,6 +41,9 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
+void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
 
 void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
