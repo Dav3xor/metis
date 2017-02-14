@@ -45,6 +45,7 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   handler   *cur;
   while (ast_next) {
+    printf("zz %s\n", ast_next->contents);
     HASH_FIND_STR(bshandlers, ast_next->tag, cur);
     if (cur) {
       cur->handler(state, contents);
@@ -111,7 +112,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   ast_next = mpc_ast_traverse_next(&contents);
   printf("x: %s\n", ast_next->contents);
   while(strcmp(ast_next->contents, "fin")) {
-    handle_stmt(state, contents);
+    handle_bs(state, contents);
     ast_next = mpc_ast_traverse_next(&contents);
     printf("y: %s\n", ast_next->contents);
   }
