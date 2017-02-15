@@ -48,7 +48,10 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
     printf("zz %s - %s\n", ast_next->tag, ast_next->contents);
     HASH_FIND_STR(bshandlers, ast_next->tag, cur);
     if (cur) {
+      printf("zzz\n");
       cur->handler(state, contents);
+    } else {
+      printf("zzz?\n");
     }
     ast_next = mpc_ast_traverse_next(&contents);
   }
