@@ -79,6 +79,25 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+void handle_type(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+void handle_if(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+void handle_include(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+void handle_while(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+void handle_for(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
+  // pass
+}
+
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
   char *return_type       = NULL;
@@ -165,9 +184,11 @@ handler block_handlers[] = { {"type",                          &handle_type},
                              {"include",                       &handle_include},
                              {"while",                         &handle_while},
                              {"for",                           &handle_for},
-                             {"def",                           &handle_def},
+                             {"def",                           &handle_def} 
+                           };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
+unsigned int num_block_handlers = sizeof(block_handlers)/sizeof(handler);
 
 
 int main(int argc, char **argv) {
@@ -215,6 +236,10 @@ int main(int argc, char **argv) {
   for(int i=0; i<num_bs_handlers; i++) {
     handler *cur = &(bs_handlers[i]);
     HASH_ADD_STR(bshandlers, handle, cur);
+  }
+  for(int i=0; i<num_block_handlers; i++) {
+    handler *cur = &(block_handlers[i]);
+    HASH_ADD_STR(blockhandlers, handle, cur);
   }
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
