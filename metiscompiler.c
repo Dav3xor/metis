@@ -22,6 +22,7 @@ typedef struct handler_t {
 
 handler *handlers = NULL;
 handler *bshandlers = NULL;
+handler *blockhandlers = NULL;
 
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
@@ -66,7 +67,7 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   ast_next = mpc_ast_traverse_next(&contents);
 
   if(ast_next) {
-    HASH_FIND_STR(handlers, ast_next->tag, cur);
+    HASH_FIND_STR(blockhandlers, ast_next->tag, cur);
     if (cur) {
       cur->handler(state, contents);
     }
@@ -159,7 +160,12 @@ handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment},
                           {"bs|block|>",                     &handle_block},
                           {"bs|stmt|>",                      &handle_stmt}
                         };
-
+handler block_handlers[] = { {"type",                          &handle_type},
+                             {"if",                            &handle_if},
+                             {"include",                       &handle_include},
+                             {"while",                         &handle_while},
+                             {"for",                           &handle_for},
+                             {"def",                           &handle_def},
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
 
