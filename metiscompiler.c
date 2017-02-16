@@ -129,9 +129,10 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     ast_next = mpc_ast_traverse_next(&contents);
     char *var  = ast_next->contents;
     printf("ARG: %s %s\n",type, var);
+    ast_next = mpc_ast_traverse_next(&contents);
     num_arguments += 1;
   }
-
+  printf("??? %s %s\n",ast_next->tag,ast_next->contents);
   if(!(strcmp(ast_next->contents, "<-"))) {
     ast_next = mpc_ast_traverse_next(&contents);
     return_type = ast_next->contents;
