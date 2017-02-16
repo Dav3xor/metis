@@ -63,8 +63,6 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   // consume the def/if/while/for/type/etc...  string.
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("block type: %s\n", ast_next->contents);
-  // now get the actual function/if/while block...
-  ast_next = mpc_ast_traverse_next(&contents);
 
   if(ast_next) {
     HASH_FIND_STR(blockhandlers, ast_next->tag, cur);
