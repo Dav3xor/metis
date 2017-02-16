@@ -123,7 +123,15 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
         run = false;
       }
     }
+  } else if ((!(strcmp(ast_next->tag, "args|typeident|>")))) {
+    ast_next = mpc_ast_traverse_next(&contents);
+    char *type = ast_next->contents;
+    ast_next = mpc_ast_traverse_next(&contents);
+    char *var  = ast_next->contents;
+    printf("ARG: %s %s\n",type, var);
+    num_arguments += 1;
   }
+
   if(!(strcmp(ast_next->contents, "<-"))) {
     ast_next = mpc_ast_traverse_next(&contents);
     return_type = ast_next->contents;
