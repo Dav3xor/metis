@@ -68,8 +68,8 @@ block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)?
               |  "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )*
               |  "def" <function> ) "fin" ;
                
-stmt          : (<return> 
-              |  <error>
+stmt          : (<exception> 
+              |  <return>
               |  <assignment>
               |  <traitident>
               |  <fcall> ) '.' ;
