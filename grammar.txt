@@ -49,7 +49,7 @@ exp           : <lexp> <comparator> <lexp>;
 
 return        : "<-" <lexp>;
 
-error         : "<-" <label>;
+exception     : "<-|" <label>;
 
 assignment    : <typeident> ":=" <lexp>;
 

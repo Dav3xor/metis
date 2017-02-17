@@ -220,6 +220,8 @@ int main(int argc, char **argv) {
   PARSER(Typeident,    "typeident");
   PARSER(Comparator,   "comparator");
   PARSER(Exp,          "exp");
+  PARSER(Return,       "return");
+  PARSER(Exception,    "exception");
   PARSER(Assignment,   "assignment");
   PARSER(Shortcomment, "shortcomment");
   PARSER(Longcomment,  "longcomment");
@@ -273,6 +275,8 @@ int main(int argc, char **argv) {
   mpc_print(Typeident);
   mpc_print(Comparator);
   mpc_print(Exp);
+  mpc_print(Return);
+  mpc_print(Exception);
   mpc_print(Assignment);
   mpc_print(Shortcomment);
   mpc_print(Longcomment);
@@ -296,7 +300,8 @@ int main(int argc, char **argv) {
     mpc_err_delete(r.error);
     mpc_cleanup(18, Label, String, File, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
-                    Exp, Assignment, Comment, Shortcomment, Args, Bs, Block, Stmt, Function, Trait, 
+                    Exp, Return, Exception, Assignment, Comment, Shortcomment, 
+                    Args, Bs, Block, Stmt, Function, Trait, 
                     Traitident, Factor, Metis);
     return EXIT_FAILURE;
   }
