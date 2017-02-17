@@ -256,7 +256,7 @@ int main(int argc, char **argv) {
             Float, Vector, Matrix, Fcall,
             Term, Lexp, Type, 
             Typeident, Comparator, 
-            Exp, Assignment, Shortcomment, Longcomment, Comment, Args, 
+            Exp, Return, Exception, Assignment, Shortcomment, Longcomment, Comment, Args, 
             Bs, Trait, Traitident, Function, 
             Block, Stmt, Factor, Metis, NULL);
 

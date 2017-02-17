@@ -47,9 +47,9 @@ comparator    : (">" | "<" | "<=" | ">=" | "=") ;
 
 exp           : <lexp> <comparator> <lexp>;
 
-return        : "<-" <lexp>;
-
 exception     : "<-|" <label>;
+
+return        : "<-" <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
