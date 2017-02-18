@@ -47,9 +47,9 @@ comparator    : (">" | "<" | "<=" | ">=" | "=") ;
 
 exp           : <lexp> <comparator> <lexp>;
 
-exception     : "<-|" <label>;
-
 return        : "<-" <lexp>;
+
+raise         : "<-|" <label>;
 
 assignment    : <typeident> ":=" <lexp>;
 
@@ -68,7 +68,7 @@ block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)?
               |  "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )*
               |  "def" <function> ) "fin" ;
                
-stmt          : (<exception> 
+stmt          : (<raise> 
               |  <return>
               |  <assignment>
               |  <traitident>
