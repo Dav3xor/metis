@@ -31,7 +31,7 @@ fin
 
 def divide float x, float y <- float:
   if {is_zero y} = true
-    <-| divide_by_zero_error.
+    <-! divide_by_zero_error.
   fin
 
   float result := x/y.
