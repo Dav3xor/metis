@@ -75,6 +75,18 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
 }
 
 void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
+  handler   *cur;
+  // consume the def/if/while/for/type/etc...  string.
+  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  printf ("stmt type: %s\n", ast_next->tag);
+
+  if(ast_next) {
+    HASH_FIND_STR(stmthandlers, ast_next->tag, cur);
+    if (cur) {
+      cur->handler(state, contents);
+    }
+  }  
+  // pass
   // pass
 }
 void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
