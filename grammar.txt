@@ -47,6 +47,8 @@ comparator    : (">" | "<" | "<=" | ">=" | "=") ;
 
 exp           : <lexp> <comparator> <lexp>;
 
+returnnv      : "<~" ;
+
 return        : "<-" <lexp>;
 
 raise         : "<-!" <lexp>;
@@ -70,6 +72,7 @@ block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)?
                
 stmt          : (<raise> 
               |  <return>
+              |  <returnnv>
               |  <assignment>
               |  <traitident>
               |  <fcall> ) '.' ;
