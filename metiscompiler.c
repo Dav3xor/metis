@@ -90,6 +90,7 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
+  handle_stmt(state, contents);
   // pass
 }
 
