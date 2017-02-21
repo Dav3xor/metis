@@ -41,6 +41,8 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
 }
 void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
@@ -98,21 +100,33 @@ void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
 }
 
 void handle_type(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_if(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_include(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_while(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_for(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   // pass
 }
 
@@ -167,54 +181,64 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   //state->last_label = contents;
   //printf("%s\n", contents);
 }
 
 void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   //state->last_string = contents;
   //printf("%s\n", contents);
 }
 
 void handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   //state->last_integer = contents;
   //printf("%s\n", contents);
 }
 
 void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   //state->last_float = contents;
   //printf("%s\n", contents);
 }
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
   //printf("fcall start\n");
 }
 
-handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment},
-                           {"bs|comment|shortcomment|regex",  &handle_comment},
-                           {"bs|block|>",                     &handle_block},
-                           {"function|>",                  &handle_function},
-                           {"label|regex",                    &handle_label},
-                           {"lexp|term|factor|integer|regex", &handle_integer},
-                           {"lexp|term|factor|float|regex",   &handle_float},
-                           {"fcall|>",                        &handle_fcall},
-                           {"string",                         &handle_string}
+handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
+                           {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
+                           {"bs|block|>",                     &handle_block, {0}},
+                           {"function|>",                  &handle_function, {0}},
+                           {"label|regex",                    &handle_label, {0}},
+                           {"lexp|term|factor|integer|regex", &handle_integer, {0}},
+                           {"lexp|term|factor|float|regex",   &handle_float, {0}},
+                           {"fcall|>",                        &handle_fcall, {0}},
+                           {"string",                         &handle_string, {0}}
                          };
 
-handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment},
-                          {"bs|comment|shortcomment|regex",  &handle_comment},
-                          {"bs|block|>",                     &handle_block},
-                          {"bs|stmt|>",                      &handle_stmt}
+handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
+                          {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
+                          {"bs|block|>",                     &handle_block, {0}},
+                          {"bs|stmt|>",                      &handle_stmt, {0}}
                         };
 
-handler block_handlers[] = { {"type",                          &handle_type},
-                             {"if",                            &handle_if},
-                             {"include",                       &handle_include},
-                             {"while",                         &handle_while},
-                             {"for",                           &handle_for},
-                             {"def",                           &handle_def} 
+handler block_handlers[] = { {"type",                          &handle_type, {0}},
+                             {"if",                            &handle_if, {0}},
+                             {"include",                       &handle_include, {0}},
+                             {"while",                         &handle_while, {0}},
+                             {"for",                           &handle_for, {0}},
+                             {"def",                           &handle_def, {0}} 
                            };
 
-handler stmt_handlers[] =  { {"return|>",                      &handle_return}
+handler stmt_handlers[] =  { {"return|>",                      &handle_return, {0}}
                            };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
@@ -223,6 +247,8 @@ unsigned int num_stmt_handlers = sizeof(stmt_handlers)/sizeof(handler);
 
 
 int main(int argc, char **argv) {
+  (void)argc;
+  (void)argv;
   mpc_result_t r;
   mpc_ast_t *ast;
   mpc_ast_trav_t *traveller;
@@ -262,20 +288,20 @@ int main(int argc, char **argv) {
   PARSER(Metis,        "metis");
 
 
-  for(int i=0; i<num_handlers; i++) {
+  for(uint64_t i=0; i<num_handlers; i++) {
     handler *cur = &(handler_defs[i]);
     HASH_ADD_STR(handlers, handle, cur);
   }
   
-  for(int i=0; i<num_bs_handlers; i++) {
+  for(uint64_t i=0; i<num_bs_handlers; i++) {
     handler *cur = &(bs_handlers[i]);
     HASH_ADD_STR(bshandlers, handle, cur);
   }
-  for(int i=0; i<num_block_handlers; i++) {
+  for(uint64_t i=0; i<num_block_handlers; i++) {
     handler *cur = &(block_handlers[i]);
     HASH_ADD_STR(blockhandlers, handle, cur);
   }
-  for(int i=0; i<num_stmt_handlers; i++) {
+  for(uint64_t i=0; i<num_stmt_handlers; i++) {
     handler *cur = &(stmt_handlers[i]);
     HASH_ADD_STR(stmthandlers, handle, cur);
   }

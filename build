@@ -21,19 +21,19 @@ filetypes = {'.txt': 'xxd',
 platforms = {'Linux':  {'c++': {'link_options':  '-o {output} {object_files} -lglfw3 -lGLEW -lX11 -lXrandr -lXinerama ' +
                                                  '-lXi -lXxf86vm -lXcursor -ldl -lGL -lm -lpthread ' +
                                                  '/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0',
-                                'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
+                                'build_options': '-Wall -Wextra -Wpedantic -Werror -std=c++11 -ggdb -c {input} -o {output}',
                                 'compiler':      'g++' },
                         'c':   {'link_options':  '-o {output} {object_files}',
-                                'build_options': '-std=c11 -Wall -c {input} -o {output}',
+                                'build_options': '-std=c11 -Wall -Wextra -Wpedantic -Werror -c {input} -o {output}',
                                 'compiler':      'gcc' },
                         'xxd': {'build_options': '-i {input} >{output}',
                                 'compiler':      'xxd' } },
              'Darwin': {'c++': {'link_options':  '-o {output} {object_files} -lglfw3 -lboost_program_options -framework Cocoa ' +
                                                  '-framework OpenGL -framework IOKit -framework CoreVideo -lm',
-                                'build_options': '-Wall -std=c++11 -ggdb -c {input} -o {output}',
+                                'build_options': '-Wall -Wextra -Wpedantic -Werror -std=c++11 -ggdb -c {input} -o {output}',
                                 'compiler':      'g++'},
                         'c':   {'link_options':  '-o {output} {object_files}',
-                                'build_options': '-std=c11 -Wall -c {input} -o {output}',
+                                'build_options': '-std=c11 -Wall -Wextra -Wpedantic -Werror -c {input} -o {output}',
                                 'compiler':      'gcc' },
                         'xxd': {'build_options': '-i {input} >{output}',
                                 'compiler':      'xxd' } } }

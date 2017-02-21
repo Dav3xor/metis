@@ -14,13 +14,13 @@ bool MetisVM::eval(const char *label) {
   reset();
   registers[REGIP] = (uint64_t)get_ptr_from_label(label);
   return do_eval();
-};
+}
 
 
 bool MetisVM::eval() {
   reset();
   return do_eval();
-};
+}
 
 bool MetisVM::do_eval() {
   uint64_t advance;
@@ -541,7 +541,7 @@ bool MetisVM::do_eval() {
     };
   };
   return false;
-};
+}
 
 
 

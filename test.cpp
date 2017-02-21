@@ -17,7 +17,7 @@ TEST_CASE( "addressing modes", "[MetisVM]" ) {
   REQUIRE( BUILD_ADDR(REGB, REGC) == 0x21);
   REQUIRE( GET_SRC(0x21) == 1);
   REQUIRE( GET_DEST(0x21) == 2);
-};
+}
 
 
 TEST_CASE( "labels", "[MetisVM]" ) {
@@ -961,7 +961,7 @@ TEST_CASE( "load/save", "[MetisVM]" ) {
 
   // test bad filename or file...
   REQUIRE_THROWS_AS( m.load("zyyylxsdfsdfssadfsdf"), MetisException);
-};
+}
 
 TEST_CASE( "assembler", "[MetisVM]" ) {
   uint8_t buf[10000];
@@ -1004,7 +1004,7 @@ TEST_CASE( "assembler", "[MetisVM]" ) {
   REQUIRE(matrix2[0] == Approx(.83));
   REQUIRE(matrix2[1] == Approx(-403.53778));
   REQUIRE(matrix2[15] == Approx(0.0));
-};
+}
 
 TEST_CASE( "assembler math", "[MetisVM]" ) {
   uint8_t buf[10000];
@@ -1019,7 +1019,7 @@ TEST_CASE( "assembler math", "[MetisVM]" ) {
   m.eval();
   REQUIRE( m.get_registers()[REGA] == 1);
   REQUIRE( m.get_registers()[REGB] == 0);
-};
+}
 
 TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   uint8_t buf[10000];
@@ -1062,7 +1062,7 @@ TEST_CASE( "assembler syntax errors", "[MetisVM]" ) {
   a.assemble("asmtests/goodfloatlabel.m", m);
   m.eval();
   REQUIRE(m.get_label_float("is_a_float") == 5.5);
-};
+}
 
 TEST_CASE( "window stuff", "[MetisContext]") {
   

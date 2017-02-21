@@ -27,7 +27,7 @@ uint64_t MetisVM::add_noop(void) {
   instruction->type                        = INS_NOOP;      
   registers[REGIP] += INS_NOOP_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_end(void) {
   CHECK_INSTRUCTION(INS_END_SIZE);
@@ -36,7 +36,7 @@ uint64_t MetisVM::add_end(void) {
   instruction->type                        = INS_END;      
   registers[REGIP] += INS_END_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_error(void) {
   CHECK_INSTRUCTION(INS_ERROR_SIZE);
@@ -45,7 +45,7 @@ uint64_t MetisVM::add_error(void) {
   instruction->type                        = INS_ERROR;      
   registers[REGIP] += INS_ERROR_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_jump(address_mode src) {
   CHECK_INSTRUCTION(INS_JUMP_SIZE);
@@ -55,7 +55,7 @@ uint64_t MetisVM::add_jump(address_mode src) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
   registers[REGIP] += INS_JUMP_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_jumpi(uint64_t location) {
   CHECK_INSTRUCTION(INS_JUMPI_SIZE);
@@ -66,7 +66,7 @@ uint64_t MetisVM::add_jumpi(uint64_t location) {
   instruction->commands.jumpi.value = location;
   registers[REGIP] += INS_JUMPI_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_jizz(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_JIZZ_SIZE);
@@ -76,7 +76,7 @@ uint64_t MetisVM::add_jizz(address_mode src, address_mode dest) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_JIZZ_SIZE;
   RETURN_NEXT();
-}; 
+} 
 
 uint64_t MetisVM::add_jnz(address_mode src, address_mode dest) {
   CHECK_INSTRUCTION(INS_JNZ_SIZE);
@@ -86,7 +86,7 @@ uint64_t MetisVM::add_jnz(address_mode src, address_mode dest) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_JNZ_SIZE;
   RETURN_NEXT();
-}; 
+} 
 
 uint64_t MetisVM::add_jne(address_mode src, address_mode dest, uint64_t location) {
   CHECK_INSTRUCTION(INS_JNE_SIZE);
@@ -120,7 +120,7 @@ uint64_t MetisVM::add_store(address_mode src, address_mode dest) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_STORE_SIZE;
   RETURN_NEXT();
-}; 
+} 
 
 uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   CHECK_INSTRUCTION(INS_STOREI_SIZE);
@@ -131,7 +131,7 @@ uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   instruction->commands.extended.ext.storei.value = value;
   registers[REGIP] += INS_STOREI_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   CHECK_INSTRUCTION(INS_STORE_SR_SIZE);
@@ -142,7 +142,7 @@ uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   instruction->commands.extended.ext.store_sr.offset = offset+1;
   registers[REGIP] += INS_STORE_SR_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_load_sr(uint64_t offset, address_mode dest) {
   CHECK_INSTRUCTION(INS_LOAD_SR_SIZE);
@@ -153,7 +153,7 @@ uint64_t MetisVM::add_load_sr(uint64_t offset, address_mode dest) {
   instruction->commands.extended.ext.load_sr.offset = offset+1;
   registers[REGIP] += INS_LOAD_SR_SIZE;
   RETURN_NEXT();
-};
+}
 uint64_t MetisVM::add_label_ip(const char *label) {
   CHECK_POINTER(label);
  
@@ -353,7 +353,7 @@ uint64_t MetisVM::add_not(address_mode src, address_mode dest) {
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   registers[REGIP] += INS_MATH_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gldrawelements(GLenum mode, GLsizei count, 
                                  GLenum type, uint64_t indices) {
@@ -367,7 +367,7 @@ uint64_t MetisVM::add_gldrawelements(GLenum mode, GLsizei count,
   instruction->commands.gldrawelements.indices = indices;
   registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
   RETURN_NEXT();
-}; 
+} 
 
 uint64_t MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   CHECK_INSTRUCTION(INS_GLDRAWARRAYS_SIZE);
@@ -379,7 +379,7 @@ uint64_t MetisVM::add_gldrawarrays(GLenum mode, GLint first, GLsizei count) {
   instruction->commands.gldrawarrays.count = count;
   registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glgenbuffers(GLsizei n, metisgl_identifier start_index) {
   CHECK_INSTRUCTION(INS_GLGENBUFFERS_SIZE);
@@ -390,7 +390,7 @@ uint64_t MetisVM::add_glgenbuffers(GLsizei n, metisgl_identifier start_index) {
   instruction->commands.glgenbuffers.start_index = start_index;
   registers[REGIP] += INS_GLGENBUFFERS_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, metisgl_identifier start_index) {
   CHECK_INSTRUCTION(INS_GLGENVERTEXARRAYS_SIZE);
@@ -401,7 +401,7 @@ uint64_t MetisVM::add_glgenvertexarrays(GLsizei num_identifiers, metisgl_identif
   instruction->commands.glgenvertexarrays.start_index = start_index;
   registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glbindvertexarray(metisgl_identifier array_index) {
   CHECK_INSTRUCTION(INS_GLBINDVERTEXARRAY_SIZE);
@@ -411,7 +411,7 @@ uint64_t MetisVM::add_glbindvertexarray(metisgl_identifier array_index) {
   instruction->commands.glbindvertexarray.array_index = array_index;
   registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_glbindbuffer(GLenum target, metisgl_identifier buffer_index) {
@@ -423,7 +423,7 @@ uint64_t MetisVM::add_glbindbuffer(GLenum target, metisgl_identifier buffer_inde
   instruction->commands.glbindbuffer.buffer_index = buffer_index;
   registers[REGIP] += INS_GLBINDBUFFER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data_index, GLenum usage) {
   CHECK_INSTRUCTION(INS_GLBUFFERDATA_SIZE);
@@ -436,7 +436,7 @@ uint64_t MetisVM::add_glbufferdata(GLenum target, GLsizeiptr size, uint64_t data
   instruction->commands.glbufferdata.usage        = usage;
   registers[REGIP] +=  INS_GLBUFFERDATA_SIZE;  
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_glenablevertexattribarray(GLuint index) {
@@ -447,7 +447,7 @@ uint64_t MetisVM::add_glenablevertexattribarray(GLuint index) {
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glvertexattribpointer(GLuint index, GLint size, 
                              GLenum type, GLboolean normalized, 
@@ -465,7 +465,7 @@ uint64_t MetisVM::add_glvertexattribpointer(GLuint index, GLint size,
   instruction->commands.glvertexattribpointer.pointer = pointer;
   registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gldisablevertexattribarray(GLuint index) {
   CHECK_INSTRUCTION(INS_GLDISABLEVERTEXATTRIBARRAY_SIZE);
@@ -475,7 +475,7 @@ uint64_t MetisVM::add_gldisablevertexattribarray(GLuint index) {
   instruction->commands.glenablevertexattribarray.index = index;
   registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_glenable(GLenum capability) {
@@ -486,7 +486,7 @@ uint64_t MetisVM::add_glenable(GLenum capability) {
   instruction->commands.glenable.capability = capability;
   registers[REGIP] += INS_GLENABLE_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gldepthfunc(GLenum function) {
   CHECK_INSTRUCTION(INS_GLDEPTHFUNC_SIZE);
@@ -496,7 +496,7 @@ uint64_t MetisVM::add_gldepthfunc(GLenum function) {
   instruction->commands.gldepthfunc.function   = function;
   registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_glcreateshader(GLenum type, metisgl_identifier start_index) {
@@ -508,7 +508,7 @@ uint64_t MetisVM::add_glcreateshader(GLenum type, metisgl_identifier start_index
   instruction->commands.glcreateshader.start_index = start_index;
   registers[REGIP] += INS_GLCREATESHADER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glshadersource(GLuint shader, metisgl_identifier source_index) {
   CHECK_INSTRUCTION(INS_GLSHADERSOURCE_SIZE);
@@ -519,7 +519,7 @@ uint64_t MetisVM::add_glshadersource(GLuint shader, metisgl_identifier source_in
   instruction->commands.glshadersource.source_index = source_index;
   registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
   RETURN_NEXT();
-};
+}
 uint64_t MetisVM::add_glcompileshader(metisgl_identifier index) {
   CHECK_INSTRUCTION(INS_GLCOMPILESHADER_SIZE);
 
@@ -528,7 +528,7 @@ uint64_t MetisVM::add_glcompileshader(metisgl_identifier index) {
   instruction->commands.glcompileshader.shader_index = index;
   registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glcreateprogram(metisgl_identifier program_index) {
   CHECK_INSTRUCTION(INS_GLCREATEPROGRAM_SIZE);
@@ -538,7 +538,7 @@ uint64_t MetisVM::add_glcreateprogram(metisgl_identifier program_index) {
   instruction->commands.glcreateprogram.program_index = program_index;
   registers[REGIP] += INS_GLCREATEPROGRAM_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 
@@ -552,7 +552,7 @@ uint64_t MetisVM::add_glattachshader(metisgl_identifier program_index,
   instruction->commands.glattachshader.shader_index  = shader_index;
   registers[REGIP] += INS_GLATTACHSHADER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gllinkprogram(metisgl_identifier program_index) {
   CHECK_INSTRUCTION(INS_GLLINKPROGRAM_SIZE);
@@ -562,7 +562,7 @@ uint64_t MetisVM::add_gllinkprogram(metisgl_identifier program_index) {
   instruction->commands.gllinkprogram.program_index   = program_index;
   registers[REGIP] += INS_GLLINKPROGRAM_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gldetachshader(metisgl_identifier program_index,
                                      metisgl_identifier shader_index) {
@@ -574,7 +574,7 @@ uint64_t MetisVM::add_gldetachshader(metisgl_identifier program_index,
   instruction->commands.gldetachshader.shader_index  = shader_index;
   registers[REGIP] += INS_GLDETACHSHADER_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gldeleteshader(metisgl_identifier shader_index) {
   CHECK_INSTRUCTION(INS_GLDELETESHADER_SIZE);
@@ -584,7 +584,7 @@ uint64_t MetisVM::add_gldeleteshader(metisgl_identifier shader_index) {
   instruction->commands.gldeleteshader.shader_index   = shader_index;
   registers[REGIP] += INS_GLDELETESHADER_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
@@ -595,7 +595,7 @@ uint64_t MetisVM::add_gluseprogram(metisgl_identifier program_index) {
   instruction->commands.gluseprogram.program_index   = program_index;
   registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_gluniformfv(address_mode src, metisgl_identifier uniform_index) {
@@ -607,7 +607,7 @@ uint64_t MetisVM::add_gluniformfv(address_mode src, metisgl_identifier uniform_i
   instruction->commands.extended.ext.gluniformfv.uniform_index      = uniform_index;
   registers[REGIP] += INS_GLUNIFORMFV_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gluniformiv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMIV_SIZE);
@@ -618,7 +618,7 @@ uint64_t MetisVM::add_gluniformiv(address_mode src, metisgl_identifier uniform_i
   instruction->commands.extended.ext.gluniformiv.uniform_index          = uniform_index;
   registers[REGIP] += INS_GLUNIFORMIV_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gluniformuiv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMUIV_SIZE);
@@ -629,7 +629,7 @@ uint64_t MetisVM::add_gluniformuiv(address_mode src, metisgl_identifier uniform_
   instruction->commands.extended.ext.gluniformuiv.uniform_index         = uniform_index;
   registers[REGIP] += INS_GLUNIFORMUIV_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, metisgl_identifier uniform_index) {
   CHECK_INSTRUCTION(INS_GLUNIFORMMATRIXFV_SIZE);
@@ -640,7 +640,7 @@ uint64_t MetisVM::add_gluniformmatrixfv(address_mode src, metisgl_identifier uni
   instruction->commands.extended.ext.gluniformmatrixfv.uniform_index    = uniform_index;
   registers[REGIP] += INS_GLUNIFORMMATRIXFV_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
                                            metisgl_identifier uniform_index, 
@@ -668,7 +668,7 @@ uint64_t MetisVM::add_glgetuniformlocation(metisgl_identifier program_index,
   registers[REGIP] += length;
 
   RETURN_NEXT();
-};
+}
 
 
 uint64_t MetisVM::add_glgentextures(GLsizei num_identifiers, 
@@ -681,7 +681,7 @@ uint64_t MetisVM::add_glgentextures(GLsizei num_identifiers,
   instruction->commands.glgentextures.start_index        = start_index;
   registers[REGIP] += INS_GLGENTEXTURES_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t  MetisVM::add_glbindtexture(GLenum target, 
                            metisgl_identifier texture_index) {
@@ -693,7 +693,7 @@ uint64_t  MetisVM::add_glbindtexture(GLenum target,
   instruction->commands.glbindtexture.texture_index      = texture_index;
   registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t  MetisVM::add_gltexparameteri(GLenum target, GLenum pname, GLint param) {
   CHECK_INSTRUCTION(INS_GLTEXPARAMETERI_SIZE);
@@ -705,7 +705,7 @@ uint64_t  MetisVM::add_gltexparameteri(GLenum target, GLenum pname, GLint param)
   instruction->commands.gltexparameteri.param            = param;
   registers[REGIP] += INS_GLTEXPARAMETERI_SIZE;
   RETURN_NEXT();
-};
+}
 uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum pname) {
   CHECK_INSTRUCTION(INS_GLTEXPARAMETERFV_SIZE);
 
@@ -716,7 +716,7 @@ uint64_t  MetisVM::add_gltexparameterfv(address_mode src, GLenum target, GLenum 
   instruction->commands.extended.ext.gltexparameterfv.pname  = pname;
   registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
   RETURN_NEXT();
-};
+}
 uint64_t  MetisVM::add_glgeneratemipmap(GLenum target) {
   CHECK_INSTRUCTION(INS_GLGENERATEMIPMAP_SIZE);
 
@@ -725,7 +725,7 @@ uint64_t  MetisVM::add_glgeneratemipmap(GLenum target) {
   instruction->commands.glgeneratemipmap.target = target;
   registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_format,
                           GLsizei width, GLsizei height, GLint border,
@@ -745,7 +745,7 @@ uint64_t  MetisVM::add_glteximage2d(GLenum target, GLint level, GLint internal_f
   instruction->commands.glteximage2d.data_index        = data_index;
   registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
   RETURN_NEXT();
-};
+}
 
 uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index, const char *attrib_name) {
   CHECK_INSTRUCTION(INS_GLGETATTRIBLOCATION_SIZE);
@@ -771,7 +771,7 @@ uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index, cons
 
   RETURN_NEXT();
 
-};
+}
 
 uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
   CHECK_INSTRUCTION(INS_GLACTIVETEXTURE_SIZE);
@@ -781,7 +781,7 @@ uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
   instruction->commands.glactivetexture.texture = texture;
   registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
   RETURN_NEXT();
-};
+}
 
 
 uint64_t  MetisVM::add_glclear(GLbitfield flags) {
@@ -792,7 +792,7 @@ uint64_t  MetisVM::add_glclear(GLbitfield flags) {
   instruction->commands.glclear.flags           = flags;
   registers[REGIP] += INS_GLCLEAR_SIZE;
   RETURN_NEXT();
-};
+}
 uint64_t  MetisVM::add_glclearcolor(GLclampf r, GLclampf g, GLclampf b,GLclampf a) {
   CHECK_INSTRUCTION(INS_GLCLEARCOLOR_SIZE);
 
@@ -804,4 +804,4 @@ uint64_t  MetisVM::add_glclearcolor(GLclampf r, GLclampf g, GLclampf b,GLclampf 
   instruction->commands.glclearcolor.a = a;
   registers[REGIP] += INS_GLCLEARCOLOR_SIZE;
   RETURN_NEXT();
-};
+}

@@ -129,7 +129,7 @@ using namespace std;
         instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
         registers[REGIP] += ADVANCE(1, 0); \
         return (uint64_t)code_start-(uint64_t)instruction; \
-      };
+      }
 
 #define METIS_NUM_BUFFERS 16
 
