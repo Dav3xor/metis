@@ -65,12 +65,23 @@ traitident    : ':' <label> <args> ("<-" <type>)?;
 
 if            : "if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? ;
 
+include       : "include" <file>* ;
+
+while         : "while" <exp> <bs>* ;
+
+for           : "for" <assignment>? ';' <exp>? ';' <integer>? <bs>* ;
+
+typedef       : "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )* ;
+
+functiondef   : "def" <function> ;
+ 
+
 block         : (<if>
-              |  "include" <file>*
-              |  "while" <exp> <bs>*
-              |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
-              |  "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )*
-              |  "def" <function> ) "fin" ;
+              |  <include>
+              |  <while>
+              |  <for>
+              |  <typedef>
+              |  <functiondef>) "fin" ;
                
 stmt          : (<raise> 
               |  <return>
