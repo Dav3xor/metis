@@ -216,7 +216,7 @@ void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
                            {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
                            {"bs|block|>",                     &handle_block, {0}},
-                           {"function|>",                  &handle_function, {0}},
+                           {"function|>",                     &handle_function, {0}},
                            {"label|regex",                    &handle_label, {0}},
                            {"lexp|term|factor|integer|regex", &handle_integer, {0}},
                            {"lexp|term|factor|float|regex",   &handle_float, {0}},
@@ -230,15 +230,15 @@ handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0
                           {"bs|stmt|>",                      &handle_stmt, {0}}
                         };
 
-handler block_handlers[] = { {"type",                          &handle_type, {0}},
-                             {"if",                            &handle_if, {0}},
-                             {"include",                       &handle_include, {0}},
-                             {"while",                         &handle_while, {0}},
-                             {"for",                           &handle_for, {0}},
-                             {"def",                           &handle_def, {0}} 
+handler block_handlers[] = { {"typedef|>",                   &handle_type, {0}},
+                             {"if|>",                        &handle_if, {0}},
+                             {"include|>",                   &handle_include, {0}},
+                             {"while|>",                     &handle_while, {0}},
+                             {"for|>",                       &handle_for, {0}},
+                             {"functiondef|>",               &handle_def, {0}} 
                            };
 
-handler stmt_handlers[] =  { {"return|>",                      &handle_return, {0}}
+handler stmt_handlers[] =  { {"return|>",                    &handle_return, {0}}
                            };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
