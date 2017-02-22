@@ -224,11 +224,11 @@ handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {
                            {"string",                         &handle_string, {0}}
                          };
 
-handler bs_handlers[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
-                          {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
-                          {"bs|block|>",                     &handle_block, {0}},
-                          {"bs|stmt|>",                      &handle_stmt, {0}}
-                        };
+handler bs_handlers[] =  { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
+                           {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
+                           {"bs|block|>",                     &handle_block, {0}},
+                           {"bs|stmt|>",                      &handle_stmt, {0}}
+                         };
 
 handler block_handlers[] = { {"typedef|>",                   &handle_type, {0}},
                              {"if|>",                        &handle_if, {0}},
