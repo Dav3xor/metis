@@ -63,7 +63,9 @@ trait         : ':' <label> <bs>*;
 
 traitident    : ':' <label> <args> ("<-" <type>)?;
 
-block         : ("if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? 
+if            : "if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? ;
+
+block         : (<if>
               |  "include" <file>*
               |  "while" <exp> <bs>*
               |  "for" <assignment>? ';' <exp>? ';' <integer>? <bs>*
