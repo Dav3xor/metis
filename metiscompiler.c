@@ -88,7 +88,7 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
       cur->handler(state, contents);
     }
   }  
-
+  printf("(return contents of REGA)\n");
 }
 void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
   // consume <-
@@ -211,6 +211,12 @@ void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   (void)contents;
   //printf("fcall start\n");
 }
+
+handler lexp_defs[] = { {"lexp|term|factor|>",                &handle_comment, {0}},
+                        {"lexp|term|>",                       &handle_comment, {0}},
+                        {"lexp|term|factor|label|regex",      &handle_comment, {0}},
+                        {"lexp|term|factor|float|regex",      &handle_comment, {0}}
+                      };
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
                            {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
