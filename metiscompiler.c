@@ -21,6 +21,7 @@ typedef struct handler_t {
 } handler;
 
 handler *handlers = NULL;
+handler *lexphandlers = NULL;
 handler *bshandlers = NULL;
 handler *blockhandlers = NULL;
 handler *stmthandlers = NULL;
@@ -212,7 +213,7 @@ void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("fcall start\n");
 }
 
-handler lexp_defs[] = { {"lexp|term|factor|>",                &handle_comment, {0}},
+handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_comment, {0}},
                         {"lexp|term|>",                       &handle_comment, {0}},
                         {"lexp|term|factor|label|regex",      &handle_comment, {0}},
                         {"lexp|term|factor|float|regex",      &handle_comment, {0}}
@@ -246,6 +247,7 @@ handler block_handlers[] = { {"typedef|>",                   &handle_type, {0}},
 handler stmt_handlers[] =  { {"return|>",                    &handle_return, {0}}
                            };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
+unsigned int num_lexp_handlers = sizeof(lexp_handlers)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
 unsigned int num_block_handlers = sizeof(block_handlers)/sizeof(handler);
 unsigned int num_stmt_handlers = sizeof(stmt_handlers)/sizeof(handler);
@@ -304,6 +306,10 @@ int main(int argc, char **argv) {
     HASH_ADD_STR(handlers, handle, cur);
   }
   
+  for(uint64_t i=0; i<num_lexp_handlers; i++) {
+    handler *cur = &(lexp_handlers[i]);
+    HASH_ADD_STR(lexphandlers, handle, cur);
+  }
   for(uint64_t i=0; i<num_bs_handlers; i++) {
     handler *cur = &(bs_handlers[i]);
     HASH_ADD_STR(bshandlers, handle, cur);
