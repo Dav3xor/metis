@@ -52,7 +52,6 @@ int main(int argc, char **argv) {
   (void)argv;
   mpc_result_t r;
   mpc_ast_t *ast;
-  mpc_ast_trav_t *traveller;
 
   parser_state state;
 
@@ -181,8 +180,7 @@ int main(int argc, char **argv) {
 
 
 
-  traveller = mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre);
-  handle_start(&state, traveller);
+  handle_start(&state, mpc_ast_traverse_start(ast, mpc_ast_trav_order_pre));
 
 }
 
