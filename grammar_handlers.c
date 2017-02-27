@@ -80,9 +80,13 @@ void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
 }
 
 void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
-  (void)state;
+  handler   *cur;
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("lexp type: %s - %s\n", ast_next->tag, ast_next->contents);
+  HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
+  if (cur) {
+    cur->handler(state, contents);
+  }
 }
 
 void handle_type(parser_state *state, mpc_ast_trav_t *contents) {
