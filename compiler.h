@@ -4,20 +4,23 @@
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
+typedef struct label_t {
+  char label[256];
+  UT_hash_handle hh;
+} label;
+
 typedef struct parser_state_t {
   char *last_string;
   char *last_label;
   char *last_integer;
   char *last_float;
+
+  label *label_contexts[256];
+  uint64_t cur_context;
   
 }parser_state;
 
 typedef void (*grammar_handler)(parser_state *, mpc_ast_trav_t *traveller);
-
-typedef struct label_t {
-  char label[256];
-  UT_hash_handle hh;
-} label;
 
 typedef struct handler_t {
   char            handle[128];
