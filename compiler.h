@@ -2,6 +2,9 @@
 #include "uthash.h"
 #include "stdbool.h"
 
+#define NUM_CONTEXTS 256
+
+
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
 typedef struct label_t {
@@ -15,7 +18,7 @@ typedef struct parser_state_t {
   char *last_integer;
   char *last_float;
 
-  label *label_contexts[256];
+  label *label_contexts[NUM_CONTEXTS];
   uint64_t cur_context;
   
 }parser_state;
