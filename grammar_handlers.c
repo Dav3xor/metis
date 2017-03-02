@@ -8,6 +8,7 @@ extern handler *stmthandlers;
 
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+
   handler   *cur;
   while (ast_next) {
     HASH_FIND_STR(handlers, ast_next->tag, cur);
