@@ -8,7 +8,8 @@
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
 typedef struct label_t {
-  char label[256];
+  char *label;
+  uint64_t value;
   UT_hash_handle hh;
 } label;
 

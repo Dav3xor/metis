@@ -22,4 +22,14 @@ void pop_label_context(parser_state *state)
     free(cur);
   }
   state->cur_context -= 1;
-} 
+}
+
+void add_label(parser_state *state, char *label_name, uint64_t value)
+{
+  label *new_label;
+  new_label        = malloc(sizeof(new_label));
+  new_label->label = label_name;
+  new_label->value = value;
+  
+  HASH_ADD_STR(state->label_contexts[state->cur_context],label,new_label);
+}
