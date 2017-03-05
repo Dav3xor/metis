@@ -15,7 +15,7 @@ using namespace boost::algorithm;
 
 bool MetisASM::valid_uint(string s) {
   if((s.find_first_not_of("0123456789")==string::npos)||
-     (s[0]='0' && (s[1]=='x'||s[1]=='X') && (!(s.substr(2).find_first_not_of("01234567890abcdefABCDEF"))==string::npos))) {
+     (s[0]='0' && (s[1]=='x'||s[1]=='X') && ((s.substr(2).find_first_not_of("01234567890abcdefABCDEF"))!=string::npos))) {
     return true;
   } else {
     return false; 
@@ -31,14 +31,14 @@ bool MetisASM::valid_float(string s) {
 uint64_t MetisASM::convert_uint(const string s) {
   uint64_t val= -1;
   if(s[0] == '-') {
-    throw MasmException("unsigned must be positive: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("unsigned must be positive: " + to_string(val), countbuf->lineNumber(), countbuf->column());
   } 
   try {
     val = stoull(s, 0, 10);
   } catch(invalid_argument) {
-    throw MasmException("not a valid uint64: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("not a valid uint64: " + to_string(val), countbuf->lineNumber(), countbuf->column());
   } catch(out_of_range) {
-    throw MasmException("uint64 out of range: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("uint64 out of range: " + to_string(val), countbuf->lineNumber(), countbuf->column());
   }
   return val;
 }
@@ -179,9 +179,9 @@ GLint MetisASM::get_GLint(void) {
   try {
     val = stoll(s, 0, 10);
   } catch(invalid_argument) {
-    throw MasmException("not a valid GLint: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("not a valid GLint: " + to_string(val), countbuf->lineNumber(), countbuf->column());
   } catch(out_of_range) {
-    throw MasmException("GLint out of range: " + val, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("GLint out of range: " + to_string(val), countbuf->lineNumber(), countbuf->column());
   }
   return val;
 }
@@ -190,9 +190,7 @@ GLuint MetisASM::get_GLuint(void) {
   string val;
   *infile >> val;
   uint64_t i = convert_uint(val);
-  if(i < numeric_limits<GLuint>::min()) {
-    throw MasmException("GLuint less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
-  } else if (i > numeric_limits<GLuint>::max()) {
+  if (i > numeric_limits<GLuint>::max()) {
     throw MasmException("GLuint greater than maximum value: " + val, countbuf->lineNumber(), countbuf->column());
   }
   return i;
@@ -202,11 +200,6 @@ GLsizeiptr MetisASM::get_GLsizeiptr(void) {
   string val;
   *infile >> val;
   uint64_t i = convert_uint(val);
-  if((int)i < numeric_limits<GLsizeiptr>::min()) {
-    throw MasmException("GLsizeiptr less than minimum value: " + val, countbuf->lineNumber(), countbuf->column());
-  } else if ((int)i > numeric_limits<GLsizeiptr>::max()) {
-    throw MasmException("GLsizeiptr greater than maximum value: " + val, countbuf->lineNumber(), countbuf->column());
-  }
   return i;
 }
 
