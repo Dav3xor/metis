@@ -55,6 +55,9 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents);
 
 
 
+void push_label_context(parser_state *state);
+void pop_label_context(parser_state *state);
+
 
 
 

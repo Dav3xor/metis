@@ -126,6 +126,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   char *return_type       = NULL;
   bool      run           = true;
 
+  push_label_context(state);
   // consume the function name.
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("LABEL %s\n",ast_next->contents);
@@ -170,6 +171,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     ast_next = mpc_ast_traverse_next(&contents);
     printf("y: %s\n", ast_next->contents);
   }
+  pop_label_context(state);
 }
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
