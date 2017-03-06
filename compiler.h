@@ -55,9 +55,10 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents);
 
 
 
-void push_label_context(parser_state *state);
-void pop_label_context(parser_state *state);
-
+void     push_label_context(parser_state *state);
+void     pop_label_context(parser_state *state);
+void     add_label(parser_state *state, char *label_name, uint64_t value);
+uint64_t find_label(parser_state *state, char *label_name);
 
 
 

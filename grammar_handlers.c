@@ -142,6 +142,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
         ast_next = mpc_ast_traverse_next(&contents);
         char *var  = ast_next->contents;
         printf("ARG: %s %s\n",type, var);
+        add_label(state, var, num_arguments);
         num_arguments += 1;
       }
       ast_next = mpc_ast_traverse_next(&contents);
