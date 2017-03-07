@@ -90,6 +90,33 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 
+void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
+  // pass
+}
+
+void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
+  // pass
+}
+
+void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
+  // pass
+}
+
+void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
+  (void)state;
+  (void)contents;
+  // pass
+}
+
+
+
+
 void handle_type(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
@@ -174,12 +201,6 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   }
   pop_label_context(state);
 }
-void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
-  (void)state;
-  (void)contents;
-  //state->last_label = contents;
-  //printf("%s\n", contents);
-}
 
 void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
@@ -195,12 +216,6 @@ void handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("%s\n", contents);
 }
 
-void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
-  (void)state;
-  (void)contents;
-  //state->last_float = contents;
-  //printf("%s\n", contents);
-}
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
