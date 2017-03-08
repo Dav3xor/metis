@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
   PARSER(Vector,       "vector");
   PARSER(Matrix,       "matrix");
   PARSER(Fcall,        "fcall");
+  PARSER(Operator,     "operator");
   PARSER(Term,         "term");
   PARSER(Lexp,         "lexp");
   PARSER(Type,         "type");
@@ -118,7 +119,7 @@ int main(int argc, char **argv) {
 
   mpca_lang(MPCA_LANG_DEFAULT, (char *)grammar_txt,
             String,  Label, File, Unsigned, Integer, 
-            Float, Vector, Matrix, Fcall,
+            Float, Vector, Matrix, Fcall, Operator,
             Term, Lexp, Type, 
             Typeident, Comparator, 
             Exp, Return, Returnnv, Raise, Assignment, Shortcomment, Longcomment, Comment, Args, 
@@ -134,6 +135,7 @@ int main(int argc, char **argv) {
   mpc_print(Vector);
   mpc_print(Matrix);
   mpc_print(Fcall);
+  mpc_print(Operator);
   mpc_print(Term);
   mpc_print(Lexp);
   mpc_print(Type);
@@ -171,7 +173,7 @@ int main(int argc, char **argv) {
     mpc_err_print(r.error);
     mpc_err_delete(r.error);
     mpc_cleanup(18, Label, String, File, Unsigned, Integer, Float, Vector,
-                    Matrix, Fcall, Term, Lexp, Type, Typeident, Comparator,
+                    Matrix, Fcall, Operator, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Return, Returnnv, Raise, Assignment, Comment, Shortcomment, 
                     Args, Bs, If, Include, While, For, Typedef, Functiondef, Block, Stmt, Function, Trait, 
                     Traitident, Factor, Metis);
