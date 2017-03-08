@@ -35,7 +35,9 @@ factor        : '(' <lexp> ')'
               | <matrix>
               | <vector>;
 
-term          : <factor> (('*' | '/' | '%' | "dot" | "cross") <factor>)* ;
+operator      : ('*' | '/' | '%' | "dot" | "cross") ;
+
+term          : <factor> (<operator> <factor>)* ;
 
 lexp          : <term> (('+' | '-') <term>)* ;
 
