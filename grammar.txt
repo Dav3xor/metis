@@ -25,7 +25,9 @@ matrix        : <vector> <vector>+ ;
 
 fcall         : <label> <lexp>? (',' <lexp>)*;
 
-factor        : '(' <lexp> ')'
+group         : '(' <lexp> ')' ;
+
+factor        : <group>
               | <label>
               | '{' <fcall> '}'
               | <string>
