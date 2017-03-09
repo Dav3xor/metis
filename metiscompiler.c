@@ -7,10 +7,10 @@ handler *bshandlers = NULL;
 handler *blockhandlers = NULL;
 handler *stmthandlers = NULL;
 
-handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_comment, {0}},
-                            {"lexp|term|>",                       &handle_comment, {0}},
-                            {"lexp|term|factor|label|regex",      &handle_comment, {0}},
-                            {"lexp|term|factor|float|regex",      &handle_comment, {0}}
+handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_factor, {0}},
+                            {"lexp|term|>",                       &handle_term, {0}},
+                            {"lexp|term|factor|label|regex",      &handle_label, {0}},
+                            {"lexp|term|factor|float|regex",      &handle_float, {0}}
                       };
 
 handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},

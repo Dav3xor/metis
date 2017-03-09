@@ -52,6 +52,10 @@ void handle_integer(parser_state *state, mpc_ast_trav_t *contents);
 void handle_float(parser_state *state, mpc_ast_trav_t *contents);
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents);
 void handle_lexp(parser_state *state, mpc_ast_trav_t *contents);
+void handle_factor(parser_state *state, mpc_ast_trav_t *contents);
+void handle_term(parser_state *state, mpc_ast_trav_t *contents);
+void handle_label(parser_state *state, mpc_ast_trav_t *contents);
+void handle_float(parser_state *state, mpc_ast_trav_t *contents);
 
 
 
