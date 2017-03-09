@@ -96,6 +96,7 @@ int main(int argc, char **argv) {
   PARSER(Stmt,         "stmt");
   PARSER(Factor,       "factor");
   PARSER(Group,        "group");
+  PARSER(Ffcall,       "ffcall");
   PARSER(Metis,        "metis");
 
 
@@ -128,7 +129,7 @@ int main(int argc, char **argv) {
             Typeident, Comparator, 
             Exp, Return, Returnnv, Raise, Assignment, Shortcomment, Longcomment, Comment, Args, 
             Bs, Trait, Traitident, Function, 
-            If, Include, While, For, Typedef, Functiondef, Block, Stmt, Factor, Group, Metis, NULL);
+            If, Include, While, For, Typedef, Functiondef, Block, Stmt, Factor, Group, Ffcall, Metis, NULL);
 
   mpc_print(Label);
   mpc_print(String);
@@ -167,6 +168,7 @@ int main(int argc, char **argv) {
   mpc_print(Trait);
   mpc_print(Traitident);
   mpc_print(Group);
+  mpc_print(Ffcall);
   mpc_print(Factor);
   mpc_print(Metis);
   
@@ -181,7 +183,7 @@ int main(int argc, char **argv) {
                     Matrix, Fcall, Operator, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Return, Returnnv, Raise, Assignment, Comment, Shortcomment, 
                     Args, Bs, If, Include, While, For, Typedef, Functiondef, Block, Stmt, Function, Trait, 
-                    Traitident, Group, Factor, Metis);
+                    Traitident, Group, Ffcall, Factor, Metis);
     return EXIT_FAILURE;
   }
 

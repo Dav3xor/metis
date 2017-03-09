@@ -27,9 +27,11 @@ fcall         : <label> <lexp>? (',' <lexp>)*;
 
 group         : '(' <lexp> ')' ;
 
+ffcall        : '{' <fcall> '}' ;
+
 factor        : <group>
               | <label>
-              | '{' <fcall> '}'
+              | <ffcall>
               | <string>
               | <float>
               | <unsigned>
