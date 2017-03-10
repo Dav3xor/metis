@@ -7,41 +7,41 @@ handler *bshandlers = NULL;
 handler *blockhandlers = NULL;
 handler *stmthandlers = NULL;
 
-handler factor_handlers[] = { {"factor|label|regex",              &handle_label, {0}}
+handler factor_handlers[] = { {"factor|label|regex",              &handle_label, FILL_HASH}
                             };
                               
-handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_factor, {0}},
-                            {"lexp|term|>",                       &handle_term, {0}},
-                            {"lexp|term|factor|label|regex",      &handle_label, {0}},
-                            {"lexp|term|factor|float|regex",      &handle_float, {0}}
+handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_factor, FILL_HASH},
+                            {"lexp|term|>",                       &handle_term, FILL_HASH},
+                            {"lexp|term|factor|label|regex",      &handle_label, FILL_HASH},
+                            {"lexp|term|factor|float|regex",      &handle_float, FILL_HASH}
                           };
 
-handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
-                           {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
-                           {"bs|block|>",                     &handle_block, {0}},
-                           {"function|>",                     &handle_function, {0}},
-                           {"label|regex",                    &handle_label, {0}},
-                           {"lexp|term|factor|integer|regex", &handle_integer, {0}},
-                           {"lexp|term|factor|float|regex",   &handle_float, {0}},
-                           {"fcall|>",                        &handle_fcall, {0}},
-                           {"string",                         &handle_string, {0}}
+handler handler_defs[] = { {"bs|comment|longcomment|regex",   &handle_comment, FILL_HASH},
+                           {"bs|comment|shortcomment|regex",  &handle_comment, FILL_HASH},
+                           {"bs|block|>",                     &handle_block, FILL_HASH},
+                           {"function|>",                     &handle_function, FILL_HASH},
+                           {"label|regex",                    &handle_label, FILL_HASH},
+                           {"lexp|term|factor|integer|regex", &handle_integer, FILL_HASH},
+                           {"lexp|term|factor|float|regex",   &handle_float, FILL_HASH},
+                           {"fcall|>",                        &handle_fcall, FILL_HASH},
+                           {"string",                         &handle_string, FILL_HASH}
                          };
 
-handler bs_handlers[] =  { {"bs|comment|longcomment|regex",   &handle_comment, {0}},
-                           {"bs|comment|shortcomment|regex",  &handle_comment, {0}},
-                           {"bs|block|>",                     &handle_block, {0}},
-                           {"bs|stmt|>",                      &handle_stmt, {0}}
+handler bs_handlers[] =  { {"bs|comment|longcomment|regex",   &handle_comment, FILL_HASH},
+                           {"bs|comment|shortcomment|regex",  &handle_comment, FILL_HASH},
+                           {"bs|block|>",                     &handle_block, FILL_HASH},
+                           {"bs|stmt|>",                      &handle_stmt, FILL_HASH}
                          };
 
-handler block_handlers[] = { {"typedef|>",                   &handle_type, {0}},
-                             {"if|>",                        &handle_if, {0}},
-                             {"include|>",                   &handle_include, {0}},
-                             {"while|>",                     &handle_while, {0}},
-                             {"for|>",                       &handle_for, {0}},
-                             {"functiondef|>",               &handle_def, {0}} 
+handler block_handlers[] = { {"typedef|>",                   &handle_type, FILL_HASH},
+                             {"if|>",                        &handle_if, FILL_HASH},
+                             {"include|>",                   &handle_include, FILL_HASH},
+                             {"while|>",                     &handle_while, FILL_HASH},
+                             {"for|>",                       &handle_for, FILL_HASH},
+                             {"functiondef|>",               &handle_def, FILL_HASH} 
                            };
 
-handler stmt_handlers[] =  { {"return|>",                    &handle_return, {0}}
+handler stmt_handlers[] =  { {"return|>",                    &handle_return, FILL_HASH}
                            };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
 unsigned int num_lexp_handlers = sizeof(lexp_handlers)/sizeof(handler);
