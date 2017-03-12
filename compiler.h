@@ -8,7 +8,7 @@
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
 #define FILL_HASH {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0}
-#define CONTAINS (!(strcmp(ast_next->tag, "args|>")))
+#define CMP(a,b) (!(strcmp(a, b)))
 typedef struct label_t {
   char *label;
   uint64_t value;
