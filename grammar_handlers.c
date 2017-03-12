@@ -113,6 +113,7 @@ void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("label: %s - %s\n", ast_next->tag, ast_next->contents);
   location = find_label(state, ast_next->contents);
+  printf ("%ju\n",location);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
@@ -172,10 +173,10 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
 
   // now get the args
   ast_next = mpc_ast_traverse_next(&contents);
-  if(!(strcmp(ast_next->tag, "args|>"))) {
+  if(CMP(ast_next->tag, "args|>")) {
     while(run) {
       ast_next = mpc_ast_traverse_next(&contents);
-      if(!(strcmp(ast_next->tag, "typeident|>"))) {
+      if(CMP(ast_next->tag, "typeident|>")) {
         ast_next = mpc_ast_traverse_next(&contents);
         char *type = ast_next->contents;
         ast_next = mpc_ast_traverse_next(&contents);
@@ -185,11 +186,11 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
         num_arguments += 1;
       }
       ast_next = mpc_ast_traverse_next(&contents);
-      if (strcmp(ast_next->contents, ",")) {
+      if (!CMP(ast_next->contents, ",")) {
         run = false;
       }
     }
-  } else if ((!(strcmp(ast_next->tag, "args|typeident|>")))) {
+  } else if (CMP(ast_next->tag, "args|typeident|>")) {
     ast_next = mpc_ast_traverse_next(&contents);
     char *type = ast_next->contents;
     ast_next = mpc_ast_traverse_next(&contents);
@@ -199,14 +200,14 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     num_arguments += 1;
   }
   //printf("??? %s %s\n",ast_next->tag,ast_next->contents);
-  if(!(strcmp(ast_next->contents, "<-"))) {
+  if(CMP(ast_next->contents, "<-")) {
     ast_next = mpc_ast_traverse_next(&contents);
     return_type = ast_next->contents;
     printf("RETURN: %s\n", return_type);
   }
   // next token must be the :, so consume it.
   ast_next = mpc_ast_traverse_next(&contents);
-  while(strcmp(ast_next->contents, "fin")) {
+  while(!CMP(ast_next->contents, "fin")) {
     handle_bs(state, contents);
     ast_next = mpc_ast_traverse_next(&contents);
     printf("y: %s\n", ast_next->contents);
