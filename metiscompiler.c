@@ -1,13 +1,14 @@
 #include "compiler.h"
 #include "grammar.h"
 
-handler *handlers = NULL;
-handler *lexphandlers = NULL;
-handler *bshandlers = NULL;
+handler *handlers      = NULL;
+handler *termhandlers  = NULL;
+handler *lexphandlers  = NULL;
+handler *bshandlers    = NULL;
 handler *blockhandlers = NULL;
-handler *stmthandlers = NULL;
+handler *stmthandlers  = NULL;
 
-handler factor_handlers[] = { {"factor|label|regex",              &handle_label, FILL_HASH}
+handler term_handlers[] = { {"factor|label|regex",              &handle_label, FILL_HASH}
                             };
                               
 handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_factor, FILL_HASH},
@@ -44,6 +45,7 @@ handler block_handlers[] = { {"typedef|>",                   &handle_type, FILL_
 handler stmt_handlers[] =  { {"return|>",                    &handle_return, FILL_HASH}
                            };
 unsigned int num_handlers = sizeof(handler_defs)/sizeof(handler);
+unsigned int num_term_handlers = sizeof(term_handlers)/sizeof(handler);
 unsigned int num_lexp_handlers = sizeof(lexp_handlers)/sizeof(handler);
 unsigned int num_bs_handlers = sizeof(bs_handlers)/sizeof(handler);
 unsigned int num_block_handlers = sizeof(block_handlers)/sizeof(handler);
@@ -103,6 +105,11 @@ int main(int argc, char **argv) {
   for(uint64_t i=0; i<num_handlers; i++) {
     handler *cur = &(handler_defs[i]);
     HASH_ADD_STR(handlers, handle, cur);
+  }
+  
+  for(uint64_t i=0; i<num_term_handlers; i++) {
+    handler *cur = &(term_handlers[i]);
+    HASH_ADD_STR(termhandlers, handle, cur);
   }
   
   for(uint64_t i=0; i<num_lexp_handlers; i++) {

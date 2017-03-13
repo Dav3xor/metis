@@ -1,6 +1,7 @@
 #include "compiler.h"
 
 extern handler *handlers;
+extern handler *termhandlers;
 extern handler *lexphandlers;
 extern handler *bshandlers;
 extern handler *blockhandlers;
@@ -100,7 +101,7 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
-  HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
+  HASH_FIND_STR(termhandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
   }
