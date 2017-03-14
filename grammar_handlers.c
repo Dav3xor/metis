@@ -97,10 +97,18 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+void do_label(parser_state *state, char *destination, char *label) {
+  uint64_t stack_offset = find_label(state, label);
+  printf("STORESR %ju, %s\n", stack_offset, destination);
+}
+
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
+  if(CMP(ast_next->tag, "factor|label|regex")) {
+    do_label(state, "REGA", ast_next->contents);
+  }
   HASH_FIND_STR(termhandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
