@@ -320,6 +320,16 @@ MetisASM::MetisASM() :
                                                  uint64_t     val  = this->get_addr(m);
                                                  m.add_storei     (dest, val); } },
 
+    {"STORESR",                    HANDLED_BY {  (void)s;
+                                                 address_mode src    = this->get_addr_mode();
+                                                 uint64_t     offset = this->get_addr(m);
+                                                 m.add_store_sr     (src, offset); } },
+
+    {"LOADSR",                     HANDLED_BY {  (void)s;
+                                                 uint64_t     offset = this->get_addr(m);
+                                                 address_mode dest   = this->get_addr_mode();
+                                                 m.add_load_sr      (offset, dest); } },
+
     {"LOC",                        HANDLED_BY {  (void)s;
                                                  m.add_label_ip   (this->get_string().c_str()); } },
 
