@@ -99,7 +99,7 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
 
 void do_label(parser_state *state, char *destination, char *label) {
   uint64_t stack_offset = find_label(state, label);
-  printf("STORESR %ju, %s\n", stack_offset, destination);
+  printf("LOADSR %ju, %s\n", stack_offset, destination);
 }
 
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
