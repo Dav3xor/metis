@@ -3,7 +3,7 @@
 
 void push_label_context(parser_state *state)
 {
-  if (state->cur_context < NUM_CONTEXTS-1) {
+  if (state->cur_context > NUM_CONTEXTS-1) {
     printf("out of label contexts\n");
     exit(1);
   }

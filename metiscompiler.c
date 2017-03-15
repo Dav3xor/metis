@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
   mpc_ast_t *ast;
 
   parser_state state;
+  memset((void *)&state, 0, sizeof(parser_state));
 
   PARSER(Label,        "label");
   PARSER(String,       "string");
