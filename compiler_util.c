@@ -26,12 +26,13 @@ void pop_label_context(parser_state *state)
 
 void add_label(parser_state *state, char *label_name, uint64_t value)
 {
+  label *cur_context = state->label_contexts[state->cur_context];
   label *new_label;
   new_label        = malloc(sizeof(new_label));
   strncpy(new_label->label, label_name, MAX_LABEL_SIZE);
   new_label->value = value;
-  
-  HASH_ADD_STR(state->label_contexts[state->cur_context],label,new_label);
+   
+  HASH_ADD_STR(cur_context,label,new_label);
 }
 
 uint64_t find_label(parser_state *state, char *label_name)
