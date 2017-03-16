@@ -3,7 +3,9 @@
 #include "stdbool.h"
 
 #define NUM_CONTEXTS 256
+
 #define MAX_LABEL_SIZE 128
+#define MAX_HANDLE_SIZE 128
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
@@ -31,7 +33,7 @@ typedef struct parser_state_t {
 typedef void (*grammar_handler)(parser_state *, mpc_ast_trav_t *traveller);
 
 typedef struct handler_t {
-  char            handle[128];
+  char            handle[MAX_HANDLE_SIZE];
   grammar_handler handler;
   UT_hash_handle  hh;
 } handler;
