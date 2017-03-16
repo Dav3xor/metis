@@ -28,7 +28,7 @@ void add_label(parser_state *state, char *label_name, uint64_t value)
 {
   label *new_label;
   new_label        = malloc(sizeof(new_label));
-  new_label->label = label_name;
+  strncpy(new_label->label, label_name, MAX_LABEL_SIZE);
   new_label->value = value;
   
   HASH_ADD_STR(state->label_contexts[state->cur_context],label,new_label);
@@ -38,6 +38,7 @@ uint64_t find_label(parser_state *state, char *label_name)
 {
   label *cur;
   for(int64_t i = state->cur_context; i>=0; i--) {
+    printf("%jd\n",i);
     HASH_FIND_STR(state->label_contexts[i], label_name, cur);
     if(cur) {
       return cur->value;

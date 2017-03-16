@@ -3,7 +3,7 @@
 #include "stdbool.h"
 
 #define NUM_CONTEXTS 256
-
+#define MAX_LABEL_SIZE 128
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
@@ -12,7 +12,7 @@
 #define CMP(a,b) (!(strcmp(a, b)))
 
 typedef struct label_t {
-  char *label;
+  char label[MAX_LABEL_SIZE];
   uint64_t value;
   UT_hash_handle hh;
 } label;
