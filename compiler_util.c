@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include "compiler.h"
 
 
@@ -39,7 +40,7 @@ uint64_t find_label(parser_state *state, char *label_name)
 {
   label *cur;
   for(int64_t i = state->cur_context; i>=0; i--) {
-    printf("%jd\n",i);
+    printf("%" PRId64 "\n",i);
     HASH_FIND_STR(state->label_contexts[i], label_name, cur);
     if(cur) {
       return cur->value;

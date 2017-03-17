@@ -1,5 +1,5 @@
+#include <inttypes.h>
 #include "compiler.h"
-
 extern handler *handlers;
 extern handler *termhandlers;
 extern handler *lexphandlers;
@@ -99,7 +99,7 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
 
 void do_label(parser_state *state, char *destination, char *label) {
   uint64_t stack_offset = find_label(state, label);
-  printf("LOADSR %ju, %s\n", stack_offset, destination);
+  printf("LOADSR %" PRIu64 ", %s\n", stack_offset, destination);
 }
 
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
@@ -107,11 +107,13 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
   if(CMP(ast_next->tag, "factor|label|regex")) {
+    printf("got factor label\n");
     do_label(state, "REGA", ast_next->contents);
-  }
-  HASH_FIND_STR(termhandlers, ast_next->tag, cur);
-  if (cur) {
-    cur->handler(state, contents);
+  } else {
+    HASH_FIND_STR(termhandlers, ast_next->tag, cur);
+    if (cur) {
+      cur->handler(state, contents);
+    }
   }
   // pass
 }
@@ -122,7 +124,7 @@ void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("label: %s - %s\n", ast_next->tag, ast_next->contents);
   location = find_label(state, ast_next->contents);
-  printf ("%ju\n",location);
+  printf ("%" PRIu64 "\n",location);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
