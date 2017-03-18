@@ -27,7 +27,7 @@ void pop_label_context(parser_state *state)
 
 void add_label(parser_state *state, char *label_name, uint64_t value)
 {
-  printf("add label: %s %ju\n",label_name,value);
+  printf("add label: %s %" PRId64 "\n",label_name,value);
   label *cur_context = state->label_contexts[state->cur_context];
   label *new_label;
   new_label        = malloc(sizeof(label));
