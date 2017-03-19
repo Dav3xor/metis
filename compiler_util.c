@@ -27,27 +27,28 @@ void pop_label_context(parser_state *state)
 
 void add_label(parser_state *state, char *label_name, uint64_t value)
 {
-  printf("add label: %s %" PRId64 "\n",label_name,value);
   label *cur_context = state->label_contexts[state->cur_context];
   label *new_label;
   new_label        = malloc(sizeof(label));
+
   strncpy(new_label->label, label_name, MAX_LABEL_SIZE);
   new_label->value = value;
    
   HASH_ADD_STR(cur_context,label,new_label);
+  state->label_contexts[state->cur_context] = cur_context;
+
 }
 
 uint64_t find_label(parser_state *state, char *label_name)
 {
   label *cur;
   for(int64_t i = state->cur_context; i>=0; i--) {
-    printf("%" PRId64 "\n",i);
-    HASH_FIND_STR(state->label_contexts[i], label_name, cur);
+    label *cur_context = state->label_contexts[state->cur_context];
+    HASH_FIND_STR(cur_context, label_name, cur);
     if(cur) {
       return cur->value;
     }
   }
-  printf("could not find label: %s\n",label_name);
   exit(1);
 }
   
