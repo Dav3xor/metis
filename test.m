@@ -12,6 +12,10 @@ def complex float x, float y <- float:
   <- x*(x+y)*5+7.
 fin
 
+def complex float x <- float:
+  <- x.
+fin
+
 ; shortcomment
 ;another short comment
 
