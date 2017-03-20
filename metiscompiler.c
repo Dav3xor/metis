@@ -8,7 +8,7 @@ handler *bshandlers    = NULL;
 handler *blockhandlers = NULL;
 handler *stmthandlers  = NULL;
 
-handler term_handlers[] = { {"factor|label|regex",              &handle_label, FILL_HASH}
+handler term_handlers[] = { /* deprecated ? */{"factor|label|regex",              &handle_label, FILL_HASH}
                             };
                               
 handler lexp_handlers[] = { {"lexp|term|factor|>",                &handle_factor, FILL_HASH},

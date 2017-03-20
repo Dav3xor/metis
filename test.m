@@ -19,6 +19,10 @@ def is_positive float x <- bool:
   fin
 fin
 
+def complex float x, float y <- float:
+  <- x*(x+y)*5+7.
+fin
+
 def is_zero float x <- bool:
   if x > 0
     <- false.
