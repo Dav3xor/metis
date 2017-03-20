@@ -8,6 +8,10 @@ def square float x <- float:
   <- x * x.
 fin
 
+def complex float x, float y <- float:
+  <- x*(x+y)*5+7.
+fin
+
 ; shortcomment
 ;another short comment
 
@@ -17,10 +21,6 @@ def is_positive float x <- bool:
   else
     <- false.
   fin
-fin
-
-def complex float x, float y <- float:
-  <- x*(x+y)*5+7.
 fin
 
 def is_zero float x <- bool:
