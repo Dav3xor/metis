@@ -39,7 +39,7 @@ factor        : <group>
               | <matrix>
               | <vector>;
 
-operator      : '*' | '/' | '%' | "dot" | "cross" ;
+operator      : "*" | "/" | "%" | "dot" | "cross" ;
 
 term          : <factor> (<operator> <factor>)* ;
 

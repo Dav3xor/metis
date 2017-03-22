@@ -7,6 +7,16 @@ extern handler *bshandlers;
 extern handler *blockhandlers;
 extern handler *stmthandlers;
 
+uint64_t get_operator(char *operator) {
+  uint64_t operator_type = 0;
+  if(CMP(operator,"*")) operator_type = OPERATOR_MULTIPLY;
+  else if (CMP(operator,"/")) operator_type = OPERATOR_DIVIDE;
+  else if (CMP(operator,"%")) operator_type = OPERATOR_MODULUS;
+  else if (CMP(operator,"dot")) operator_type = OPERATOR_DOT;
+  else if (CMP(operator,"cross")) operator_type = OPERATOR_CROSS;
+  return operator_type;
+}
+
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
 
@@ -104,11 +114,20 @@ void do_label(parser_state *state, char *destination, char *label) {
 
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
+
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+
   printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
+
   if(CMP(ast_next->tag, "factor|label|regex")) {
+    uint64_t operator;
     printf("got factor label\n");
     do_label(state, "REGA", ast_next->contents);
+    ast_next = mpc_ast_traverse_next(&contents);
+    if(CMP(ast_next->tag, "operator|string")) {
+      operator = get_operator(ast_next->contents);
+      printf("%ju\n",operator);
+    }
   } else {
     HASH_FIND_STR(termhandlers, ast_next->tag, cur);
     if (cur) {
