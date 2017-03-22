@@ -13,6 +13,12 @@
 
 #define CMP(a,b) (!(strcmp(a, b)))
 
+#define OPERATOR_MULTIPLY 1
+#define OPERATOR_DIVIDE   2
+#define OPERATOR_MODULUS  3
+#define OPERATOR_DOT      4
+#define OPERATOR_CROSS    5
+
 typedef struct label_t {
   char label[MAX_LABEL_SIZE];
   uint64_t value;
