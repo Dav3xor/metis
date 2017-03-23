@@ -19,6 +19,8 @@
 #define OPERATOR_DOT      4
 #define OPERATOR_CROSS    5
 
+enum operator {MULTIPLY, DIVIDE, MODULUS, DOT, CROSS};
+
 typedef struct label_t {
   char label[MAX_LABEL_SIZE];
   uint64_t value;
