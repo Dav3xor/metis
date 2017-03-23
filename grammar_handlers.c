@@ -126,7 +126,7 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
     ast_next = mpc_ast_traverse_next(&contents);
     if(CMP(ast_next->tag, "operator|string")) {
       operator = get_operator(ast_next->contents);
-      printf("%ju\n",operator);
+      printf("operator = %ju\n",operator);
     }
   } else {
     HASH_FIND_STR(termhandlers, ast_next->tag, cur);
