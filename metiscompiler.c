@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
   PARSER(Shortcomment, "shortcomment");
   PARSER(Longcomment,  "longcomment");
   PARSER(Comment,      "comment");
+  PARSER(Bool,         "bool");
   PARSER(Args,         "args");
   PARSER(Bs,           "bs");
   PARSER(Function,     "function");
@@ -135,7 +136,7 @@ int main(int argc, char **argv) {
             Float, Vector, Matrix, Fcall, Operator,
             Term, Lexp, Type, 
             Typeident, Comparator, 
-            Exp, Return, Returnnv, Raise, Assignment, Shortcomment, Longcomment, Comment, Args, 
+            Exp, Return, Returnnv, Raise, Assignment, Shortcomment, Longcomment, Comment, Bool, Args, 
             Bs, Trait, Traitident, Function, 
             If, Include, While, For, Typedef, Functiondef, Block, Stmt, Factor, Group, Ffcall, Metis, NULL);
 
@@ -162,6 +163,7 @@ int main(int argc, char **argv) {
   mpc_print(Shortcomment);
   mpc_print(Longcomment);
   mpc_print(Comment);
+  mpc_print(Bool);
   mpc_print(Args);
   mpc_print(Bs);
   mpc_print(If);
@@ -189,7 +191,7 @@ int main(int argc, char **argv) {
     mpc_err_delete(r.error);
     mpc_cleanup(18, Label, String, File, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Operator, Term, Lexp, Type, Typeident, Comparator,
-                    Exp, Return, Returnnv, Raise, Assignment, Comment, Shortcomment, 
+                    Exp, Return, Returnnv, Raise, Assignment, Comment, Bool, Shortcomment, 
                     Args, Bs, If, Include, While, For, Typedef, Functiondef, Block, Stmt, Function, Trait, 
                     Traitident, Group, Ffcall, Factor, Metis);
     return EXIT_FAILURE;
