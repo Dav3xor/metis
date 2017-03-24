@@ -30,6 +30,7 @@ group         : '(' <lexp> ')' ;
 ffcall        : '{' <fcall> '}' ;
 
 factor        : <group>
+              | <bool>
               | <label>
               | <ffcall>
               | <string>
@@ -43,7 +44,7 @@ operator      : "*" | "/" | "%" | "dot" | "cross" ;
 
 term          : <factor> (<operator> <factor>)* ;
 
-lexp          : <term> (('+' | '-') <term>)* ;
+lexp          : <term> (("+" | "-") <term>)* ;
 
 type          : ("string" | "bool" | "unsigned" | "integer" | "float" | "label" | "vector" | "matrix") ;
 
