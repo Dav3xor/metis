@@ -16,8 +16,7 @@ shortcomment  : /;[^\n]*/ ;
 
 comment       : (<longcomment> | <shortcomment>) ;
 
-bool          : "true" 
-              | "false";
+bool          : ("true" | "false");
 
 vector        : '|' <float>+ '|' ;
 
