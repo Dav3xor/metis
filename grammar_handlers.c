@@ -7,13 +7,13 @@ extern handler *bshandlers;
 extern handler *blockhandlers;
 extern handler *stmthandlers;
 
-uint64_t get_operator(char *operator) {
-  uint64_t operator_type = 0;
-  if(CMP(operator,"*")) operator_type = OPERATOR_MULTIPLY;
-  else if (CMP(operator,"/")) operator_type = OPERATOR_DIVIDE;
-  else if (CMP(operator,"%")) operator_type = OPERATOR_MODULUS;
-  else if (CMP(operator,"dot")) operator_type = OPERATOR_DOT;
-  else if (CMP(operator,"cross")) operator_type = OPERATOR_CROSS;
+Operator get_operator(char *operator) {
+  Operator operator_type = NONE;
+  if(CMP(operator,"*")) operator_type = MULTIPLY;
+  else if (CMP(operator,"/")) operator_type = DIVIDE;
+  else if (CMP(operator,"%")) operator_type = MODULUS;
+  else if (CMP(operator,"dot")) operator_type = DOT;
+  else if (CMP(operator,"cross")) operator_type = CROSS;
   return operator_type;
 }
 
