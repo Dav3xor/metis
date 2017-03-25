@@ -101,40 +101,33 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 
-void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
-  (void)state;
-  (void)contents;
-  // pass
-}
-
 void do_label(parser_state *state, char *destination, char *label) {
   uint64_t stack_offset = find_label(state, label);
   printf("LOADSR %" PRIu64 ", %s\n", stack_offset, destination);
 }
 
-void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
-  handler   *cur;
-
+void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
-
-  printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
-
   if(CMP(ast_next->tag, "factor|label|regex")) {
-    uint64_t operator;
     printf("got factor label\n");
     do_label(state, "REGA", ast_next->contents);
-    ast_next = mpc_ast_traverse_next(&contents);
-    if(CMP(ast_next->tag, "operator|string")) {
-      operator = get_operator(ast_next->contents);
-      printf("operator = %ju\n",operator);
-    }
-  } else {
-    HASH_FIND_STR(termhandlers, ast_next->tag, cur);
-    if (cur) {
-      cur->handler(state, contents);
-    }
   }
   // pass
+}
+
+void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
+  handle_factor(state, contents);
+
+  //printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
+  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  // if we get an operator, do another factor
+  if(CMP(ast_next->tag, "operator|string")) {
+    uint64_t operator;
+    operator = get_operator(ast_next->contents);
+    printf("operator = %ju\n",operator);
+
+    handle_factor(state, contents);
+  }
 }
 
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
