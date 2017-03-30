@@ -46,6 +46,8 @@ using namespace std;
 #define GET_SRC(location)         (location & 0x0F)
 #define GET_LABEL(instruction)    ((char *)(&instruction->type)+1)
 
+
+// instruction sizes (in bytes)
 #define INS_ERROR_SIZE    1
 #define INS_JUMP_SIZE     2 
 #define INS_JUMPI_SIZE    9 
@@ -112,6 +114,7 @@ using namespace std;
 #define INS_END_SIZE                         1
 
 
+// macro for calculating the start of the next instruction
 #define ADVANCE(extended, data)   (1+extended+data)
 
 
@@ -145,6 +148,7 @@ enum address_mode: uint8_t {REGA                    =    0,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
+
 class MasmException: public runtime_error {
   public:
     MasmException(string error, 
@@ -165,6 +169,7 @@ class MasmException: public runtime_error {
     }
     static ostringstream cnvt;
 };
+
 
 class MetisException: public runtime_error {
   public:
@@ -187,10 +192,12 @@ class MetisException: public runtime_error {
     static ostringstream cnvt;
 };
 
+
 void error_callback(int error, const char* description);
 void print_glerrors(unsigned int line, const char *file);
 void print_matrix(float *matrix, uint8_t width, uint8_t height);
 
+// a class for storing the window/opengl context
 class MetisContext {
   public:
     MetisContext() {
@@ -249,6 +256,8 @@ class MetisContext {
     GLFWmonitor *monitor;
     uint32_t cur_window; 
 };
+
+
 
 struct MetisMatrixHeader {
   uint8_t   width;
@@ -850,6 +859,7 @@ class MetisVM {
         }__attribute__((packed)) pushmatrix;
       }__attribute__((packed)) commands;
     }__attribute__((packed));
+
     void push(uint64_t val) {
       if( registers[REGSP] >= stack_size) {
         throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
