@@ -265,6 +265,7 @@ struct MetisMatrixHeader {
   uint16_t  filler;       // remove me when this grows...
 }__attribute__((packed));
 
+
 union MetisMemoryCell {
   uint8_t             ubytes[8];
   uint16_t            ushorts[4];
@@ -283,20 +284,21 @@ union MetisMemoryCell {
 }__attribute__((packed));
 
 
-#define TYPE_UBYTE  1
-#define TYPE_USHORT 2
-#define TYPE_UINT   3
-#define TYPE_ULONG  4
-#define TYPE_BYTE   5
-#define TYPE_SHORT  6
-#define TYPE_INT    7
-#define TYPE_WHOLE  8
-#define TYPE_FLOAT  9
-#define TYPE_DOUBLE 10 
+
 
 struct TypedCell {
   MetisMemoryCell cell;
-  uint8_t type;
+  typedef enum uint8_t { TYPE_UBYTE   = 1,
+                               TYPE_USHORT  = 2,
+                               TYPE_UINT    = 3,
+                               TYPE_ULONG   = 4,
+                               TYPE_BYTE    = 5,
+                               TYPE_SHORT   = 6,
+                               TYPE_INT     = 7,
+                               TYPE_WHOLE   = 8,
+                               TYPE_FLOAT   = 9,
+                               TYPE_DOUBLE  = 10 }CellType; 
+  TypedCell::CellType type;
 };
 
 typedef uint16_t metisgl_identifier;

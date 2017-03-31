@@ -162,7 +162,7 @@ uint64_t MetisVM::add_label_ip(const char *label) {
   TypedCell new_loc;
 
   new_loc.cell.ulong = (registers[REGIP]-(uint64_t)code_start);
-  new_loc.type  = TYPE_ULONG;
+  new_loc.type  = TypedCell::TYPE_ULONG;
   labels[label] = new_loc;
   return new_loc.cell.ulong;
 }
@@ -175,7 +175,7 @@ uint64_t MetisVM::add_label_val(const char *label, uint64_t val) {
   TypedCell new_loc;
 
   new_loc.cell.ulong = val;
-  new_loc.type  = TYPE_ULONG;
+  new_loc.type  = TypedCell::TYPE_ULONG;
   labels[label] = new_loc;
   return val;
 }
@@ -188,7 +188,7 @@ uint64_t MetisVM::add_label_float(const char *label, float val) {
   TypedCell new_loc;
 
   new_loc.cell.floats[0] = val;
-  new_loc.type  = TYPE_FLOAT;
+  new_loc.type  = TypedCell::TYPE_FLOAT;
   labels[label] = new_loc;
   return val;
 }

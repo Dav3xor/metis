@@ -73,7 +73,7 @@ void MetisVM::load(const string &filename) {
         infile.read((char *)&value,8);
        
         cell.cell.ulong = value;
-        cell.type = TYPE_ULONG;
+        cell.type = TypedCell::TYPE_ULONG;
 
         labels[label] = cell;
         break;
