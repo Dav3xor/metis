@@ -11,6 +11,7 @@ void push_label_context(parser_state *state)
   state->cur_context += 1;
 }
 
+
 void pop_label_context(parser_state *state)
 {
   label *cur, *temp;
@@ -25,6 +26,7 @@ void pop_label_context(parser_state *state)
   state->cur_context -= 1;
 }
 
+
 void add_label(parser_state *state, char *label_name, uint64_t value)
 {
   label *cur_context = state->label_contexts[state->cur_context];
@@ -38,6 +40,7 @@ void add_label(parser_state *state, char *label_name, uint64_t value)
   state->label_contexts[state->cur_context] = cur_context;
 
 }
+
 
 uint64_t find_label(parser_state *state, char *label_name)
 {
