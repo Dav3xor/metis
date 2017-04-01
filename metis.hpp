@@ -549,6 +549,7 @@ class MetisVM {
         throw MetisException(string("label does not exist - ") + label, __LINE__,__FILE__);
       }
     }
+
     float get_label_float(const char *label) {
       try {
         return labels.at(label).cell.floats[0];
@@ -596,7 +597,6 @@ class MetisVM {
 
     uint8_t            header[11];
     unordered_map<string, TypedCell> labels;
-
 
     struct MetisInstruction {
       instruction type;
@@ -779,8 +779,6 @@ class MetisVM {
           uint8_t id_length;
         }__attribute__((packed)) glgetuniformlocation;
 
-
-
         struct glgentextures_t {
           GLsizei num_identifiers; 
           metisgl_identifier start_index;
@@ -796,7 +794,6 @@ class MetisVM {
           GLenum pname; 
           GLint param;
         }__attribute__((packed)) gltexparameteri;
-
 
         struct glgeneratemipmap_t {
           GLenum target;
@@ -834,7 +831,6 @@ class MetisVM {
           GLbitfield flags;
         }__attribute__((packed)) glclear;
 
-
         struct jumpi_t {
           uint64_t value;
         }__attribute__((packed)) jumpi;
@@ -854,6 +850,7 @@ class MetisVM {
             int x;
           }__attribute__((packed)) contents;
         }__attribute__((packed)) data;
+
         struct pushmatrix_t {
           uint64_t location;
         }__attribute__((packed)) pushmatrix;
@@ -1055,7 +1052,6 @@ protected:
             return std::streambuf::seekpos(pos, mode);
     }
 
-
 private:
     std::streambuf*     streamBuf_;     // hosted streambuffer
     unsigned int        lineNumber_;    // current line number
@@ -1064,7 +1060,11 @@ private:
     unsigned int        prevColumn_;    // previous column
     std::streamsize     filePos_;       // file position
 };
+
+
 typedef function<void (MetisVM &, istream &s)> instruction_handler;
+
+
 class MetisASM {
   public:
     MetisASM();

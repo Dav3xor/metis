@@ -21,6 +21,8 @@ bool MetisASM::valid_uint(string s) {
     return false; 
   }
 }
+
+
 bool MetisASM::valid_float(string s) {
   if(s.find_first_not_of("-0123456789.")==string::npos) {
     return true;
@@ -28,6 +30,8 @@ bool MetisASM::valid_float(string s) {
     return false; 
   }
 }
+
+
 uint64_t MetisASM::convert_uint(const string s) {
   uint64_t val= -1;
   if(s[0] == '-') {
@@ -43,6 +47,7 @@ uint64_t MetisASM::convert_uint(const string s) {
   return val;
 }
 
+
 float MetisASM::convert_float(const string s) {
   float val = 0.0;
   try {
@@ -54,6 +59,7 @@ float MetisASM::convert_float(const string s) {
   }
   return val;
 }
+
 
 void MetisASM::assemble(const string &filename, MetisVM &vm) {
   ifstream initialfile(filename);
@@ -78,6 +84,7 @@ void MetisASM::assemble(const string &filename, MetisVM &vm) {
   delete infile;
 }
 
+
 address_mode MetisASM::get_addr_mode(void) {
   string mode;
   *infile >> mode;
@@ -89,11 +96,13 @@ address_mode MetisASM::get_addr_mode(void) {
     }
 }
 
+
 uint64_t MetisASM::get_uint64(void) {
   string val;
   *infile >> val;
   return convert_uint(val);
 }
+
 
 uint8_t MetisASM::get_uint8(void) {
   string val;
@@ -105,6 +114,7 @@ uint8_t MetisASM::get_uint8(void) {
 
   return val2;
 }
+
 
 float MetisASM::get_float(MetisVM &m) {
   string val;
@@ -122,12 +132,15 @@ float MetisASM::get_float(MetisVM &m) {
     
 }
 
+
 string MetisASM::get_string(void) {
   string val; 
   *infile >> val;
   //printf(" - %s\n", val.c_str());
   return val;
 }
+
+
 uint64_t MetisASM::get_addr(MetisVM &m) {
   string val;
   *infile >> val;
@@ -142,12 +155,14 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
     }
   }
 }
-    
+
+
 string MetisASM::get_line(void) {
   string comment;
   getline(*infile, comment);
   return comment;
 }
+
 
 GLenum MetisASM::get_GLenum(void) {
   string glenum;
@@ -159,6 +174,8 @@ GLenum MetisASM::get_GLenum(void) {
     throw MasmException("unknown glenum: " + glenum, countbuf->lineNumber(), countbuf->column());
   }
 }
+
+
 GLsizei MetisASM::get_GLsizei(void) {
   string val;
   *infile >> val;
@@ -171,6 +188,7 @@ GLsizei MetisASM::get_GLsizei(void) {
   }
   return size;
 }
+
 
 GLint MetisASM::get_GLint(void) {
   string s;
@@ -186,6 +204,7 @@ GLint MetisASM::get_GLint(void) {
   return val;
 }
 
+
 GLuint MetisASM::get_GLuint(void) {
   string val;
   *infile >> val;
@@ -196,12 +215,14 @@ GLuint MetisASM::get_GLuint(void) {
   return i;
 }
 
+
 GLsizeiptr MetisASM::get_GLsizeiptr(void) {
   string val;
   *infile >> val;
   uint64_t i = convert_uint(val);
   return i;
 }
+
 
 GLboolean MetisASM::get_GLboolean(void) {
   string i;
@@ -212,6 +233,7 @@ GLboolean MetisASM::get_GLboolean(void) {
     return GL_TRUE;
   }
 }
+
 
 float MetisASM::get_GLclampf(void) {
   string val;
@@ -224,6 +246,8 @@ float MetisASM::get_GLclampf(void) {
   }
   return val2;
 }
+
+
 GLbitfield MetisASM::get_GLbitfield(void) {
   GLbitfield result = 0;
   string bitfield;
@@ -239,6 +263,7 @@ GLbitfield MetisASM::get_GLbitfield(void) {
   }
   return result; 
 }
+
 
 metisgl_identifier MetisASM::get_metisid(MetisVM &m) {
   string val;
@@ -277,14 +302,19 @@ MetisASM::MetisASM() :
     {"*",                          HANDLED_BY {  (void)m;
                                                  (void)s;
                                                  get_line(); } }, 
+
     {"ERROR",                      HANDLED_BY {  (void)s;
                                                  m.add_error      (); } },
+
     {"END",                        HANDLED_BY {  (void)s;
                                                  m.add_end        (); } }, 
+
     {"NOOP",                       HANDLED_BY {  (void)s;
                                                  m.add_noop       (); } }, 
+
     {"JUMP",                       HANDLED_BY {  (void)s;
                                                  m.add_jump       (this->get_addr_mode()); } },
+
     {"JUMPI",                      HANDLED_BY {  (void)s;
                                                  m.add_jumpi      (this->get_addr(m));   } },
 
@@ -354,6 +384,7 @@ MetisASM::MetisASM() :
 
                                                  m.add_buffer((uint8_t *)buffer, size, label.c_str());
                                                  delete[] buffer; } },
+
     {"MATRIX",                     HANDLED_BY {  (void)s;
                                                  string  label   = this->get_string();
                                                  // have to use uint32_t to get iostream
@@ -367,6 +398,7 @@ MetisASM::MetisASM() :
                                                  }
                                                  m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
                                                  delete[] mat; } },
+
     {"SHADER",                     HANDLED_BY {  (void)s;
                                                  string  label    = this->get_string();
                                                  string  shader   = "";
@@ -388,24 +420,29 @@ MetisASM::MetisASM() :
                                                  uint32_t width  = this->get_uint8(); 
                                                  uint32_t height = this->get_uint8(); 
                                                  m.add_identity_matrix(width,height,label.c_str()); } },
+
     {"MPUSH",                      HANDLED_BY {  (void)s;
                                                  uint64_t loc    = this->get_addr(m);
                                                  m.add_push_matrix(loc); } },
+
     {"MMUL",                       HANDLED_BY {  (void)s;
                                                  address_mode src1 = this->get_addr_mode();
                                                  address_mode src2 = this->get_addr_mode();
                                                  uint64_t     dest = this->get_addr(m);
                                                  m.add_matrix_multiply(src1, src2, dest); } },
+
     {"MADD",                       HANDLED_BY {  (void)s;
                                                  address_mode src1 = this->get_addr_mode();
                                                  address_mode src2 = this->get_addr_mode();
                                                  uint64_t     dest = this->get_addr(m);
                                                  m.add_matrix_add(src1, src2, dest); } },
+
     {"VDOT",                       HANDLED_BY {  (void)s;
                                                  address_mode src1 = this->get_addr_mode();
                                                  address_mode src2 = this->get_addr_mode();
                                                  uint64_t     dest = this->get_addr(m);
                                                  m.add_vector_dot(src1, src2, dest); } },
+
     {"VCROSS",                     HANDLED_BY {  (void)s;
                                                  address_mode src1 = this->get_addr_mode();
                                                  address_mode src2 = this->get_addr_mode();
@@ -429,19 +466,20 @@ MetisASM::MetisASM() :
                                                  GLsizei numids           = this->get_GLsizei();
                                                  metisgl_identifier start = this->get_metisid(m);
                                                  m.add_glgenbuffers(numids, start); } },
+
     {"GLGENVERTEXARRAYS",          HANDLED_BY {  (void)s;
                                                  GLsizei numids           = this->get_GLsizei();
                                                  metisgl_identifier start = this->get_metisid(m);
                                                  m.add_glgenvertexarrays(numids, start); } },
+
     {"GLBINDVERTEXARRAY",          HANDLED_BY {  (void)s;
                                                  metisgl_identifier id    = this->get_metisid(m);
                                                  m.add_glbindvertexarray(id); } },
+
     {"GLBINDBUFFER",               HANDLED_BY {  (void)s;
                                                  GLenum target            = this->get_GLenum();
                                                  metisgl_identifier id    = this->get_metisid(m);
                                                  m.add_glbindbuffer(target, id); } },
-
-
 
     {"GLBUFFERDATA",               HANDLED_BY {  (void)s;
                                                  GLenum target            = this->get_GLenum();
@@ -450,11 +488,10 @@ MetisASM::MetisASM() :
                                                  GLenum usage             = this->get_GLenum();
                                                  m.add_glbufferdata(target, size, data_index, usage); } },
 
-
-
     {"GLENABLEVERTEXATTRIBARRAY",  HANDLED_BY {  (void)s;
                                                  GLuint index             = this->get_GLuint();
                                                  m.add_glenablevertexattribarray(index); } },
+
     {"GLVERTEXATTRIBPOINTER",      HANDLED_BY {  (void)s;
                                                  GLuint index             = this->get_GLuint();
                                                  GLint  size              = this->get_GLint();
@@ -464,6 +501,7 @@ MetisASM::MetisASM() :
                                                  GLsizei stride           = this->get_GLsizei();
                                                  uint64_t pointer         = this->get_metisid(m);
                                                  m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
+
     {"GLDISABLEVERTEXATTRIBARRAY", HANDLED_BY {  (void)s;
                                                  GLuint index             = this->get_GLuint();
                                                  m.add_gldisablevertexattribarray(index); } },
@@ -471,82 +509,103 @@ MetisASM::MetisASM() :
     {"GLENABLE",                   HANDLED_BY {  (void)s;
                                                  GLenum capability        = this->get_GLenum();
                                                  m.add_glenable(capability); } },
+
     {"GLDEPTHFUNC",                HANDLED_BY {  (void)s;
                                                  GLenum function          = this->get_GLenum();
                                                  m.add_gldepthfunc(function); } },
+
     {"GLCREATESHADER",             HANDLED_BY {  (void)s;
                                                  GLenum type              = this->get_GLenum();
                                                  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcreateshader(type, index); } },
+
     {"GLSHADERSOURCE",             HANDLED_BY {  (void)s;
                                                  GLuint shader            = this->get_addr(m);
                                                  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glshadersource(shader, index); } },
+
     {"GLCOMPILESHADER",            HANDLED_BY {  (void)s;
                                                  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcompileshader(index); } },
+
     {"GLCREATEPROGRAM",            HANDLED_BY {  (void)s;
                                                  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_glcreateprogram(index); } },
+
     {"GLATTACHSHADER",             HANDLED_BY {  (void)s;
                                                  metisgl_identifier program_index = this->get_metisid(m);
                                                  metisgl_identifier shader_index  = this->get_metisid(m);
                                                  m.add_glattachshader(program_index, shader_index); } },
+
     {"GLLINKPROGRAM",              HANDLED_BY {  (void)s;
                                                  metisgl_identifier index = this->get_metisid(m);
                                                  m.add_gllinkprogram(index); } },
+
     {"GLDETACHSHADER",             HANDLED_BY {  (void)s;
                                                  metisgl_identifier program_index = this->get_metisid(m);
                                                  metisgl_identifier shader_index  = this->get_metisid(m);
                                                  m.add_gldetachshader(program_index, shader_index); } },
+
     {"GLDELETESHADER",             HANDLED_BY {  (void)s;
                                                  metisgl_identifier shader_index = this->get_metisid(m);
                                                  m.add_gldeleteshader(shader_index); } },
+
     {"GLUSEPROGRAM",               HANDLED_BY {  (void)s;
                                                  metisgl_identifier program_index = this->get_metisid(m);
                                                  m.add_gluseprogram(program_index); } },
+
     {"GLUNIFORMFV",                HANDLED_BY {  (void)s;
                                                  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformfv(src, uniform_index); } },
+
     {"GLUNIFORMIV",                HANDLED_BY {  (void)s;
                                                  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformiv(src, uniform_index); } },
+
     {"GLUNIFORMUIV",               HANDLED_BY {  (void)s;
                                                  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformuiv(src, uniform_index); } },
+
     {"GLUNIFORMMATRIXFV",          HANDLED_BY {  (void)s;
                                                  address_mode src                  = this->get_addr_mode();
                                                  metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  m.add_gluniformmatrixfv(src, uniform_index); } },
+
     {"GLGETUNIFORMLOCATION",       HANDLED_BY {  (void)s;
                                                  metisgl_identifier program_index  = this->get_metisid(m);
                                                  metisgl_identifier uniform_index  = this->get_metisid(m);
                                                  string uniform_name               = this->get_string();
                                                  m.add_glgetuniformlocation(program_index,uniform_index, uniform_name.c_str()); } },
+
     {"GLGENTEXTURES",              HANDLED_BY {  (void)s;
                                                  GLsizei num_identifiers           = this->get_addr_mode();
                                                  metisgl_identifier start_index    = this->get_metisid(m);
                                                  m.add_glgentextures(num_identifiers, start_index); } },
+
     {"GLBINDTEXTURE",              HANDLED_BY {  (void)s;
                                                  GLenum target                     = this->get_GLenum();
                                                  metisgl_identifier texture_index  = this->get_metisid(m);
                                                  m.add_glbindtexture(target, texture_index); } },
+
     {"GLTEXPARAMETERI",            HANDLED_BY {  (void)s;
                                                  GLenum target                     = this->get_GLenum();
                                                  GLenum pname                      = this->get_GLenum();
                                                  GLint param                       = this->get_GLint();
                                                  m.add_gltexparameteri(target, pname, param); } },
+
     {"GLTEXPARAMETERFV",           HANDLED_BY {  (void)s;
                                                  address_mode src                  = this->get_addr_mode();
                                                  GLenum target                     = this->get_GLenum();
                                                  GLenum pname                      = this->get_GLenum();
                                                  m.add_gltexparameterfv(src, target, pname); } },
+
     {"GLGENERATEMIPMAP",           HANDLED_BY {  (void)s;
                                                  GLenum target                     = this->get_GLenum();
                                                  m.add_glgeneratemipmap(target); } },
+
     {"GLTEXIMAGE2D",               HANDLED_BY {  (void)s;
                                                  GLenum target                     = this->get_GLenum();
                                                  GLint level                       = this->get_GLint();
@@ -561,16 +620,20 @@ MetisASM::MetisASM() :
                                                  m.add_glteximage2d(target, level, internal_format,
                                                                     width, height, border, format,
                                                                     type, data_index); } },
+
     {"GLGETATTRIBLOCATION",        HANDLED_BY {  (void)s;
                                                  metisgl_identifier attrib_index   = this->get_metisid(m);
                                                  string attrib                     = this->get_string();
                                                  m.add_glgetattriblocation(attrib_index, attrib.c_str()); } },
+
     {"GLACTIVETEXTURE",            HANDLED_BY {  (void)s;
                                                  GLenum texture                    = this->get_GLenum();
                                                  m.add_glactivetexture(texture); } },
+
     {"GLCLEAR",                    HANDLED_BY {  (void)s;
                                                  GLbitfield bitfield               = this->get_GLbitfield();
                                                  m.add_glclear(bitfield); } },
+
     {"GLCLEARCOLOR",               HANDLED_BY {  (void)s;
                                                  GLclampf r                        = this->get_GLclampf();
                                                  GLclampf g                        = this->get_GLclampf();
