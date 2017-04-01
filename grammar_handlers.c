@@ -263,6 +263,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   pop_label_context(state);
 }
 
+
 void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
@@ -270,12 +271,14 @@ void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("%s\n", contents);
 }
 
+
 void handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   //state->last_integer = contents;
   //printf("%s\n", contents);
 }
+
 
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
