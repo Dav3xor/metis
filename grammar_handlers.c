@@ -17,6 +17,7 @@ Operator get_operator(char *operator) {
   return operator_type;
 }
 
+
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
 
@@ -33,11 +34,15 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("%s\n", ast_next->contents);
   //printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
 }
+
+
 void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   handler   *cur;
@@ -54,6 +59,7 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 
+
 void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
@@ -69,6 +75,7 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+
 void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
@@ -83,6 +90,8 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   }  
   printf("(return contents of REGA)\n");
 }
+
+
 void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
   // consume <-
   mpc_ast_traverse_next(&contents);
@@ -90,6 +99,7 @@ void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
   handle_lexp(state, contents);
   // pass
 }
+
 
 void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
@@ -101,10 +111,12 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 
+
 void do_label(parser_state *state, char *destination, char *label) {
   uint64_t stack_offset = find_label(state, label);
   printf("LOADSR %" PRIu64 ", %s\n", stack_offset, destination);
 }
+
 
 void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
@@ -114,6 +126,7 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
   }
   // pass
 }
+
 
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handle_factor(state, contents);
@@ -130,6 +143,7 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   }
 }
 
+
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   uint64_t location;
@@ -144,6 +158,7 @@ void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   // pass
 }
 
+
 void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
@@ -151,38 +166,47 @@ void handle_float(parser_state *state, mpc_ast_trav_t *contents) {
 }
 
 
-
-
 void handle_type(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_if(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_include(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_while(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_for(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
+
 void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
   // pass
 }
+
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
