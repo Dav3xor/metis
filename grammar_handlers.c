@@ -141,6 +141,23 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
     printf("operator = %ju\n",operator);
 
     handle_factor(state, contents);
+    switch (operator) {
+      case OPERATOR_MULTIPLY:
+        printf("MUL REGA, REGC\n");
+        break;
+      case OPERATOR_DIVIDE:
+        printf("DIV REGA, REGC\n");
+        break;
+      case OPERATOR_MODULUS:
+        printf("MOD REGA, REGC\n");
+        break;
+      case OPERATOR_DOT:
+        printf("DOT REGA, REGC\n");
+        break;
+      case OPERATOR_CROSS:
+        printf("CROSS REGA, REGC\n");
+        break;
+    } 
   }
 }
 
