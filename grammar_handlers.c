@@ -136,6 +136,7 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   // if we get an operator, do another factor
   if(CMP(ast_next->tag, "operator|string")) {
     uint64_t operator;
+    printf("STORE REGA, REGC\n");
     operator = get_operator(ast_next->contents);
     printf("operator = %ju\n",operator);
 
