@@ -5,7 +5,7 @@
 
 
 def square float x <- float:
-  <- x * x.
+  <- x * 5.0.
 fin
 
 def complex float x, float y <- float:

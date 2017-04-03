@@ -121,8 +121,9 @@ void do_label(parser_state *state, char *destination, char *label) {
 void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   if(CMP(ast_next->tag, "factor|label|regex")) {
-    printf("got factor label\n");
     do_label(state, "REGA", ast_next->contents);
+  } else if (CMP(ast_next->tag, "factor|float|regex")) {
+    printf ("STOREI REGA %s\n", ast_next->contents);
   }
   // pass
 }
