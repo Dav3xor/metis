@@ -82,7 +82,7 @@ bool MetisVM::do_eval() {
         break;
       case INS_STOREI:
         set_val(ADDR_MODES,
-                instruction->commands.extended.ext.storei.value);
+                instruction->commands.extended.ext.storei.value.ulong);
         registers[REGIP] += INS_STOREI_SIZE;
         break;
       case INS_STORE_SR:
