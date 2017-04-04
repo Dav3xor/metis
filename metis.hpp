@@ -431,7 +431,7 @@ class MetisVM {
     uint64_t add_jne         (address_mode src, address_mode dest, uint64_t location);
     uint64_t add_jmpe        (address_mode src, address_mode dest, uint64_t location);
     uint64_t add_store       (address_mode src, address_mode dest);
-    uint64_t add_storei      (address_mode dest, uint64_t value);
+    uint64_t add_storei      (address_mode dest, TypedCell value);
     uint64_t add_store_sr    (address_mode src, uint64_t offset);
     uint64_t add_load_sr     (uint64_t offset, address_mode dest);
     uint64_t add_label_ip    (const char *label);
@@ -609,7 +609,7 @@ class MetisVM {
             }__attribute__((packed))jumpi;
 
             struct ext_storei_t {
-              uint64_t value;
+              TypedCell value;
             }__attribute__((packed))storei;
             
             struct ext_stack_load_sr_t {
