@@ -609,7 +609,7 @@ class MetisVM {
             }__attribute__((packed))jumpi;
 
             struct ext_storei_t {
-              TypedCell value;
+              MetisMemoryCell value;
             }__attribute__((packed))storei;
             
             struct ext_stack_load_sr_t {

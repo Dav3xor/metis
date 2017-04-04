@@ -128,8 +128,7 @@ uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
   instruction->type                             = INS_STOREI;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
-  instruction->commands.extended.ext.storei.value.cell.ulong = value;
-  instruction->commands.extended.ext.storei.value.type = TypedCell::TYPE_ULONG;
+  instruction->commands.extended.ext.storei.value.ulong = value;
   registers[REGIP] += INS_STOREI_SIZE;
   RETURN_NEXT();
 }
