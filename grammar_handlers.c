@@ -233,7 +233,7 @@ void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
-  char *return_type       = NULL;
+  //char *return_type       = NULL;
   bool      run           = true;
 
   push_label_context(state);
@@ -273,8 +273,8 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   //printf("??? %s %s\n",ast_next->tag,ast_next->contents);
   if(CMP(ast_next->contents, "<-")) {
     ast_next = mpc_ast_traverse_next(&contents);
-    return_type = ast_next->contents;
-    printf("RETURN: %s\n", return_type);
+    //return_type = ast_next->contents;
+    //printf("RETURN: %s\n", return_type);
   }
   // next token must be the :, so consume it.
   ast_next = mpc_ast_traverse_next(&contents);
