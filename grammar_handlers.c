@@ -88,11 +88,6 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
       cur->handler(state, contents);
     }
   }  
-  ast_next = mpc_ast_traverse_next(&contents);
-  if(ast_next) {
-    printf("end of stmt, got %s\n",ast_next->tag);
-  }
-  //printf("(return contents of REGA)\n");
 }
 
 
