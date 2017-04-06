@@ -29,10 +29,6 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
     }
     ast_next = mpc_ast_traverse_next(&contents);
   }
-  //ast_next = mpc_ast_traverse_next(&contents);
-  //ast_next = mpc_ast_traverse_next(&contents);
-  //printf("%s\n", ast_next->contents);
-  //printf("Tag: %s -- %d -- %s\n", ast_next->tag, ast_next->state, ast_next->contents);
 }
 
 
@@ -47,15 +43,10 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   handler   *cur;
   while (ast_next) {
-    printf("zz %s - %s\n", ast_next->tag, ast_next->contents);
     HASH_FIND_STR(bshandlers, ast_next->tag, cur);
     if (cur) {
-      printf("zzz\n");
       cur->handler(state, contents);
-    } else {
-      printf("zzz?\n");
-    }
-    //ast_next = mpc_ast_traverse_next(&contents);
+    } 
   }
 }
 
@@ -64,7 +55,6 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
-  //printf ("block type: %s\n", ast_next->contents);
 
   if(ast_next) {
     HASH_FIND_STR(blockhandlers, ast_next->tag, cur);
@@ -82,7 +72,6 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
 
   if(ast_next) {
-    //printf ("stmt type: %s\n", ast_next->tag);
     HASH_FIND_STR(stmthandlers, ast_next->tag, cur);
     if (cur) {
       cur->handler(state, contents);
@@ -103,7 +92,6 @@ void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
-  //printf ("lexp type: %s - %s\n", ast_next->tag, ast_next->contents);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
@@ -131,14 +119,12 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handle_factor(state, contents);
 
-  //printf ("term: %s - %s\n", ast_next->tag, ast_next->contents);
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   // if we get an operator, do another factor
   if(CMP(ast_next->tag, "operator|string")) {
     uint64_t operator;
     printf("STORE REGA, REGC\n");
     operator = get_operator(ast_next->contents);
-    //printf("operator = %ju\n",operator);
 
     handle_factor(state, contents);
     switch (operator) {
@@ -166,7 +152,6 @@ void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   uint64_t location;
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
-  //printf ("label: %s - %s\n", ast_next->tag, ast_next->contents);
   location = find_label(state, ast_next->contents);
   printf ("%" PRIu64 "\n",location);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
@@ -228,7 +213,6 @@ void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
 
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
-  //char *return_type       = NULL;
   bool      run           = true;
 
   push_label_context(state);
@@ -243,10 +227,8 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
       ast_next = mpc_ast_traverse_next(&contents);
       if(CMP(ast_next->tag, "typeident|>")) {
         ast_next = mpc_ast_traverse_next(&contents);
-        //char *type = ast_next->contents;
         ast_next = mpc_ast_traverse_next(&contents);
         char *var  = ast_next->contents;
-        //printf("ARG: %s %s\n",type, var);
         add_label(state, var, num_arguments);
         num_arguments += 1;
       }
@@ -257,26 +239,20 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     }
   } else if (CMP(ast_next->tag, "args|typeident|>")) {
     ast_next = mpc_ast_traverse_next(&contents);
-    //char *type = ast_next->contents;
     ast_next = mpc_ast_traverse_next(&contents);
     char *var  = ast_next->contents;
-    //printf("ARG: %s %s\n",type, var);
     add_label(state, var, num_arguments);
     ast_next = mpc_ast_traverse_next(&contents);
     num_arguments += 1;
   }
-  //printf("??? %s %s\n",ast_next->tag,ast_next->contents);
   if(CMP(ast_next->contents, "<-")) {
     ast_next = mpc_ast_traverse_next(&contents);
-    //return_type = ast_next->contents;
-    //printf("RETURN: %s\n", return_type);
   }
   // next token must be the :, so consume it.
   ast_next = mpc_ast_traverse_next(&contents);
   while(!CMP(ast_next->contents, "fin")) {
     handle_bs(state, contents);
     ast_next = mpc_ast_traverse_next(&contents);
-    //printf("y: %s\n", ast_next->contents);
   }
   pop_label_context(state);
 }
@@ -285,22 +261,17 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_string(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
-  //state->last_string = contents;
-  //printf("%s\n", contents);
 }
 
 
 void handle_integer(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
-  //state->last_integer = contents;
-  //printf("%s\n", contents);
 }
 
 
 void handle_fcall(parser_state *state, mpc_ast_trav_t *contents) {
   (void)state;
   (void)contents;
-  //printf("fcall start\n");
 }
 
