@@ -48,17 +48,18 @@ using namespace std;
 
 
 // instruction sizes (in bytes)
-#define INS_ERROR_SIZE    1
-#define INS_JUMP_SIZE     2 
-#define INS_JUMPI_SIZE    9 
-#define INS_JIZZ_SIZE     2 
-#define INS_JNZ_SIZE      2
-#define INS_JNE_SIZE      10 
-#define INS_JMPE_SIZE     10
-#define INS_STORE_SIZE    2
-#define INS_STOREI_SIZE   10
+#define INS_ERROR_SIZE     1
+#define INS_JUMP_SIZE      2 
+#define INS_JUMPI_SIZE     9 
+#define INS_JIZZ_SIZE      2 
+#define INS_JNZ_SIZE       2
+#define INS_JNE_SIZE       10 
+#define INS_JMPE_SIZE      10
+#define INS_STORE_SIZE     2
+#define INS_STOREI_SIZE    10
 #define INS_STORE_SR_SIZE  10
 #define INS_LOAD_SR_SIZE   10
+#define INS_STACK_ADJ_SIZE 9 
 
 #define INS_MATH_SIZE     2
 
@@ -316,6 +317,7 @@ class MetisVM {
                                INS_STOREI                        =    8,   // *   store immediate value into
                                INS_STORE_SR                      =    9,   // *   store value at stack offset
                                INS_LOAD_SR                       =   10,   // *   load value from stack offset
+                               INS_STACK_ADJ                     =   11,   // *   subtract value from stack
 
                                // Math
                                INS_INC                           =   16,   // *   increment ... 
@@ -434,6 +436,7 @@ class MetisVM {
     uint64_t add_storei      (address_mode dest, uint64_t value);
     uint64_t add_store_sr    (address_mode src, uint64_t offset);
     uint64_t add_load_sr     (uint64_t offset, address_mode dest);
+    uint64_t add_stack_adj   (uint64_t amount);
     uint64_t add_label_ip    (const char *label);
     uint64_t add_label_val   (const char *label, uint64_t val);
     uint64_t add_label_float (const char *label, float val);
@@ -667,6 +670,10 @@ class MetisVM {
             
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
+
+        struct stack_adj_t {
+          uint64_t amount;
+        }__attribute__((packed)) stack_adj;
 
         struct gldrawelements_t {
           GLenum mode;
