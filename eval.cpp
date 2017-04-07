@@ -94,6 +94,10 @@ bool MetisVM::do_eval() {
                 stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole);
         registers[REGIP] += INS_LOAD_SR_SIZE;
         break;
+      case INS_STACK_ADJ:
+        registers[REGSP] -= instruction->commands.stack_adj.amount;
+        registers[REGIP] += INS_STACK_ADJ_SIZE;
+        break;
       
       // math instructions
       case INS_INC:
