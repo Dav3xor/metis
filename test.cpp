@@ -530,11 +530,13 @@ TEST_CASE( "stack_adj", "[MetisVM]" ) {
   m.add_storei(STACK_PUSH,102);
   m.add_storei(STACK_PUSH,103);
   m.add_stack_adj(2);
+  m.add_store(STACK_POP, REGA);
   m.add_end();
 
   m.eval();
 
-  REQUIRE( m.get_registers()[REGSP] == 2);
+  REQUIRE( m.get_registers()[REGSP] == 1);
+  REQUIRE( m.get_registers()[REGA] == 101);
 }
 
 TEST_CASE( "noop", "[MetisVM]" ) {
