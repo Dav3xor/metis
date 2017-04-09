@@ -360,6 +360,10 @@ MetisASM::MetisASM() :
                                                  address_mode dest   = this->get_addr_mode();
                                                  m.add_load_sr      (offset, dest); } },
 
+    {"STACK_ADJ",                  HANDLED_BY {  (void)s;
+                                                 uint64_t     amount = this->get_uint64();
+                                                 m.add_stack_adj    (amount); } },
+
     {"LOC",                        HANDLED_BY {  (void)s;
                                                  m.add_label_ip   (this->get_string().c_str()); } },
 
