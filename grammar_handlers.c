@@ -255,6 +255,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     ast_next = mpc_ast_traverse_next(&contents);
   }
   pop_label_context(state);
+  printf("STACK_ADJ %" PRIu64 "\n", num_arguments);
 }
 
 
