@@ -42,12 +42,10 @@ void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   handler   *cur;
-  while (ast_next) {
-    HASH_FIND_STR(bshandlers, ast_next->tag, cur);
-    if (cur) {
-      cur->handler(state, contents);
-    } 
-  }
+  HASH_FIND_STR(bshandlers, ast_next->tag, cur);
+  if (cur) {
+    cur->handler(state, contents);
+  } 
 }
 
 
@@ -217,6 +215,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
 
   push_label_context(state);
   // consume the function name.
+  printf("y\n");
   mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
   printf ("LABEL %s\n",ast_next->contents);
 
@@ -224,6 +223,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   ast_next = mpc_ast_traverse_next(&contents);
   if(CMP(ast_next->tag, "args|>")) {
     while(run) {
+      printf("x\n");
       ast_next = mpc_ast_traverse_next(&contents);
       if(CMP(ast_next->tag, "typeident|>")) {
         ast_next = mpc_ast_traverse_next(&contents);

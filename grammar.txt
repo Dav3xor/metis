@@ -80,21 +80,24 @@ for           : "for" <assignment>? ';' <exp>? ';' <integer>? <bs>* ;
 typedef       : "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )* ;
 
 functiondef   : "def" <function> ;
- 
+
+end_block     : "fin" ;
+
+end_stmt      : "." ;
 
 block         : (<if>
               |  <include>
               |  <while>
               |  <for>
               |  <typedef>
-              |  <functiondef>) "fin" ;
+              |  <functiondef>) <end_block> ;
                
 stmt          : (<raise> 
               |  <return>
               |  <returnnv>
               |  <assignment>
               |  <traitident>
-              |  <fcall> ) '.' ;
+              |  <fcall> ) <end_stmt> ;
 
 
 args          : <typeident>? (',' <typeident>)*;
