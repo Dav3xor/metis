@@ -81,23 +81,23 @@ typedef       : "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.')
 
 functiondef   : "def" <function> ;
 
-end_block     : "fin" ;
+endblock     : "fin" ;
 
-end_stmt      : "." ;
+endstmt      : "." ;
 
 block         : (<if>
               |  <include>
               |  <while>
               |  <for>
               |  <typedef>
-              |  <functiondef>) <end_block> ;
+              |  <functiondef>) <endblock> ;
                
 stmt          : (<raise> 
               |  <return>
               |  <returnnv>
               |  <assignment>
               |  <traitident>
-              |  <fcall> ) <end_stmt> ;
+              |  <fcall> ) <endstmt> ;
 
 
 args          : <typeident>? (',' <typeident>)*;
