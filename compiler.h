@@ -9,6 +9,12 @@
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
+#define PARSER_NEXT(contents, next) \
+          next = mpc_ast_traverse_next(&contents); \
+          if(!next) { \
+            printf("tokens exhausted?\n"); \
+          }
+
 #define FILL_HASH {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0}
 
 #define CMP(a,b) (!(strcmp(a, b)))
