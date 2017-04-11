@@ -13,7 +13,8 @@
           next = mpc_ast_traverse_next(&contents); \
           if(!next) { \
             printf("tokens exhausted?\n"); \
-          }
+            exit(0); \
+          } \
 
 #define FILL_HASH {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0}
 

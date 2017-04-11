@@ -19,7 +19,8 @@ Operator get_operator(char *operator) {
 
 
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
 
   handler   *cur;
   while (ast_next) {
@@ -27,7 +28,7 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
     if (cur) {
       cur->handler(state, contents);
     }
-    ast_next = mpc_ast_traverse_next(&contents);
+    PARSER_NEXT(contents, ast_next);
   }
 }
 
@@ -40,7 +41,8 @@ void handle_comment(parser_state *state, mpc_ast_trav_t *contents) {
 
 
 void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   handler   *cur;
   HASH_FIND_STR(bshandlers, ast_next->tag, cur);
   if (cur) {
@@ -52,7 +54,8 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
 
   if(ast_next) {
     HASH_FIND_STR(blockhandlers, ast_next->tag, cur);
@@ -67,7 +70,8 @@ void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
 
   if(ast_next) {
     HASH_FIND_STR(stmthandlers, ast_next->tag, cur);
@@ -89,7 +93,8 @@ void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
 
 void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
   if (cur) {
     cur->handler(state, contents);
@@ -104,7 +109,8 @@ void do_label(parser_state *state, char *destination, char *label) {
 
 
 void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   if(CMP(ast_next->tag, "factor|label|regex")) {
     do_label(state, "REGA", ast_next->contents);
   } else if (CMP(ast_next->tag, "factor|float|regex")) {
@@ -117,7 +123,8 @@ void handle_factor(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   handle_factor(state, contents);
 
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   // if we get an operator, do another factor
   if(CMP(ast_next->tag, "operator|string")) {
     uint64_t operator;
@@ -149,7 +156,8 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   uint64_t location;
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   location = find_label(state, ast_next->contents);
   printf ("%" PRIu64 "\n",location);
   HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
@@ -216,43 +224,44 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   push_label_context(state);
   // consume the function name.
   printf("y\n");
-  mpc_ast_t *ast_next = mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
   printf ("LABEL %s\n",ast_next->contents);
 
   // now get the args
-  ast_next = mpc_ast_traverse_next(&contents);
+  PARSER_NEXT(contents, ast_next);
   if(CMP(ast_next->tag, "args|>")) {
     while(run) {
       printf("x\n");
-      ast_next = mpc_ast_traverse_next(&contents);
+      PARSER_NEXT(contents, ast_next);
       if(CMP(ast_next->tag, "typeident|>")) {
-        ast_next = mpc_ast_traverse_next(&contents);
-        ast_next = mpc_ast_traverse_next(&contents);
+        PARSER_NEXT(contents, ast_next);
+        PARSER_NEXT(contents, ast_next);
         char *var  = ast_next->contents;
         add_label(state, var, num_arguments);
         num_arguments += 1;
       }
-      ast_next = mpc_ast_traverse_next(&contents);
+      PARSER_NEXT(contents, ast_next);
       if (!CMP(ast_next->contents, ",")) {
         run = false;
       }
     }
   } else if (CMP(ast_next->tag, "args|typeident|>")) {
-    ast_next = mpc_ast_traverse_next(&contents);
-    ast_next = mpc_ast_traverse_next(&contents);
+    PARSER_NEXT(contents, ast_next);
+    PARSER_NEXT(contents, ast_next);
     char *var  = ast_next->contents;
     add_label(state, var, num_arguments);
-    ast_next = mpc_ast_traverse_next(&contents);
+    PARSER_NEXT(contents, ast_next);
     num_arguments += 1;
   }
   if(CMP(ast_next->contents, "<-")) {
-    ast_next = mpc_ast_traverse_next(&contents);
+    PARSER_NEXT(contents, ast_next);
   }
   // next token must be the :, so consume it.
-  ast_next = mpc_ast_traverse_next(&contents);
+  PARSER_NEXT(contents, ast_next);
   while(!CMP(ast_next->contents, "fin")) {
     handle_bs(state, contents);
-    ast_next = mpc_ast_traverse_next(&contents);
+    PARSER_NEXT(contents, ast_next);
   }
   pop_label_context(state);
   printf("STACK_ADJ %" PRIu64 "\n", num_arguments);
