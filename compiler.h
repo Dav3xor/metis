@@ -20,10 +20,8 @@
           } \
           if(!next->tag) { \
             printf("no next tag\n"); \
-          } else { \
-            printf("tag: %s\n", next->tag); \
           } \
-
+          printf("tag: %s contents: %s\n", next->tag, next->contents); \
 
 #define FILL_HASH {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0}
 
