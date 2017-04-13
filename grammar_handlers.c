@@ -254,9 +254,13 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   }
   // next token must be the :, so consume it.
   PARSER_NEXT(contents, ast_next);
-  while(!CMP(ast_next->contents, "fin")) {
+
+  while(!CMP(ast_next->tag, "endblock|string")) {
+    printf("1\n");
     handle_bs(state, contents);
+    printf("3\n");
     PARSER_NEXT(contents, ast_next);
+    printf("2\n");
   }
   pop_label_context(state);
   printf("STACK_ADJ %" PRIu64 "\n", num_arguments);
