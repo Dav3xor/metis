@@ -154,16 +154,11 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
 
 
 void handle_label(parser_state *state, mpc_ast_trav_t *contents) {
-  handler   *cur;
   uint64_t location;
   mpc_ast_t *ast_next;
   PARSER_NEXT(contents, ast_next);
   location = find_label(state, ast_next->contents);
   printf ("%" PRIu64 "\n",location);
-  HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
-  if (cur) {
-    cur->handler(state, contents);
-  }
   // pass
 }
 
