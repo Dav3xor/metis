@@ -127,25 +127,28 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
   PARSER_NEXT(contents, ast_next);
   // if we get an operator, do another factor
   if(CMP(ast_next->tag, "operator|string")) {
-    uint64_t operator;
+    Operator operator;
     printf("STORE REGA, REGC\n");
     operator = get_operator(ast_next->contents);
 
     handle_factor(state, contents);
     switch (operator) {
-      case OPERATOR_MULTIPLY:
+      case NONE:
+        printf("No operator?!?\n");
+        break;
+      case MULTIPLY:
         printf("MUL REGA, REGC\n");
         break;
-      case OPERATOR_DIVIDE:
+      case DIVIDE:
         printf("DIV REGA, REGC\n");
         break;
-      case OPERATOR_MODULUS:
+      case MODULUS:
         printf("MOD REGA, REGC\n");
         break;
-      case OPERATOR_DOT:
+      case DOT:
         printf("DOT REGA, REGC\n");
         break;
-      case OPERATOR_CROSS:
+      case CROSS:
         printf("CROSS REGA, REGC\n");
         break;
     } 
