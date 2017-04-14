@@ -27,12 +27,6 @@
 
 #define CMP(a,b) (!(strcmp(a, b)))
 
-#define OPERATOR_MULTIPLY 1
-#define OPERATOR_DIVIDE   2
-#define OPERATOR_MODULUS  3
-#define OPERATOR_DOT      4
-#define OPERATOR_CROSS    5
-
 typedef enum operator_t {NONE, MULTIPLY, DIVIDE, MODULUS, DOT, CROSS} Operator;
 
 typedef struct label_t {
