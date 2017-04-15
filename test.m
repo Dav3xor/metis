@@ -1,8 +1,3 @@
-;; square: 
-   a function for squaring a number
-
-   arguments: x (the number to square ;;
-
 
 def square float x <- float:
   <- x * x.

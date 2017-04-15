@@ -61,7 +61,7 @@ raise         : "<-!" <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
-bs            : (<block> | <stmt> | <comment>) ;
+bs            : ( <comment> | <block> | <stmt> ) ;
 
 function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
