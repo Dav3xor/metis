@@ -14,14 +14,13 @@
           if(!next) { \
             printf("tokens exhausted?\n"); \
             exit(0); \
-          } \
-          if(!next->contents) { \
+          } else if(!next->contents) { \
             printf("no next contents\n"); \
-          } \
-          if(!next->tag) { \
+          } else if(!next->tag) { \
             printf("no next tag\n"); \
+          } else { \
+            printf("tag: %s contents: %s\n", next->tag, next->contents); \
           } \
-          printf("tag: %s contents: %s\n", next->tag, next->contents); \
 
 #define FILL_HASH {NULL, NULL, NULL, NULL, NULL, NULL, 0, 0}
 
