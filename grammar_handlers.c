@@ -79,6 +79,9 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
       cur->handler(state, contents);
     }
   }  
+  printf("--\n");
+  PARSER_NEXT(contents, ast_next);
+  printf("--\n");
 }
 
 
@@ -153,9 +156,6 @@ void handle_term(parser_state *state, mpc_ast_trav_t *contents) {
         break;
     } 
   }
-  printf("--\n");
-  PARSER_NEXT(contents, ast_next);
-  printf("--\n");
 }
 
 
