@@ -13,6 +13,7 @@
     cur->handler(state, contents); \
   } else { \
     printf("could not find handler for tag: %s\n", tag); \
+    exit(1); \
   } \
 
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
