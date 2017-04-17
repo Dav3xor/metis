@@ -7,6 +7,14 @@
 #define MAX_LABEL_SIZE 128
 #define MAX_HANDLE_SIZE 128
 
+#define DISPATCH(handlers, tag, cur) \
+  HASH_FIND_STR(handlers, tag, cur); \
+  if (cur) { \
+    cur->handler(state, contents); \
+  } else { \
+    printf("could not find handler for tag: %s\n", tag); \
+  } \
+
 #define PARSER(name, symbol) mpc_parser_t *name      = mpc_new(symbol);
 
 #define PARSER_NEXT(contents, next) \

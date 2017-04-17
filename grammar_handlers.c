@@ -79,15 +79,18 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
       cur->handler(state, contents);
     }
   }  
+  // consume the '.' at the end of the stmt.
   printf("--\n");
   PARSER_NEXT(contents, ast_next);
+
   printf("--\n");
 }
 
 
 void handle_return(parser_state *state, mpc_ast_trav_t *contents) {
   // consume <-
-  mpc_ast_traverse_next(&contents);
+  mpc_ast_t *ast_next;
+  PARSER_NEXT(contents, ast_next);
 
   handle_lexp(state, contents);
   // pass
