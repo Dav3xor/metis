@@ -65,10 +65,7 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
   PARSER_NEXT(contents, ast_next);
 
   if(ast_next) {
-    HASH_FIND_STR(stmthandlers, ast_next->tag, cur);
-    if (cur) {
-      cur->handler(state, contents);
-    }
+    DISPATCH(stmthandlers, ast_next->tag, cur);
   }  
   // consume the '.' at the end of the stmt.
   printf("--\n");
