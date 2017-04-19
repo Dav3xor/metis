@@ -89,10 +89,9 @@ void handle_lexp(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   mpc_ast_t *ast_next;
   PARSER_NEXT(contents, ast_next);
-  HASH_FIND_STR(lexphandlers, ast_next->tag, cur);
-  if (cur) {
-    cur->handler(state, contents);
-  }
+  if(ast_next) {
+    DISPATCH(lexphandlers, ast_next->tag, cur);
+  }  
 }
 
 
