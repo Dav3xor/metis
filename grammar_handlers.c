@@ -21,6 +21,7 @@ Operator get_operator(char *operator) {
 void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   mpc_ast_t *ast_next;
   PARSER_NEXT(contents, ast_next);
+  PARSER_NEXT(contents, ast_next);
 
   handler   *cur;
   while (ast_next) {
