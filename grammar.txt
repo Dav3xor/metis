@@ -77,13 +77,13 @@ while         : "while" <exp> <bs>* ;
 
 for           : "for" <assignment>? ';' <exp>? ';' <integer>? <bs>* ;
 
-typedef       : "type" <label> ((<function> "fin"|<trait> "fin"|<typeident> '.') )* ;
-
-functiondef   : "def" <function> ;
-
 endblock     : "fin" ;
 
 endstmt      : '.' ;
+
+typedef       : "type" <label> ((<function> <endblock>|<trait> <endblock>|<typeident> <endstmt>) )* ;
+
+functiondef   : "def" <function> ;
 
 block         : (<if>
               |  <include>
