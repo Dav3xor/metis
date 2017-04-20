@@ -77,9 +77,9 @@ while         : "while" <exp> <bs>* ;
 
 for           : "for" <assignment>? ';' <exp>? ';' <integer>? <bs>* ;
 
-endblock     : "fin" ;
+endblock      : "fin" ;
 
-endstmt      : '.' ;
+endstmt       : '.' ;
 
 typedef       : "type" <label> ((<function> <endblock>|<trait> <endblock>|<typeident> <endstmt>) )* ;
 
