@@ -61,7 +61,7 @@ raise         : "<-!" <lexp>;
 
 assignment    : <typeident> ":=" <lexp>;
 
-bs            : ( <comment> | <block> | <stmt> ) ;
+bs            : ( <block> | <stmt> | <comment> ) ;
 
 function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
@@ -83,7 +83,7 @@ functiondef   : "def" <function> ;
 
 endblock     : "fin" ;
 
-endstmt      : "." ;
+endstmt      : '.' ;
 
 block         : (<if>
               |  <include>
