@@ -94,6 +94,7 @@ int main(int argc, char **argv) {
   PARSER(Include,      "include");
   PARSER(While,        "while");
   PARSER(For,          "for");
+  PARSER(Startdef,     "startdef");
   PARSER(Typedef,      "typedef");
   PARSER(Functiondef,  "functiondef");
   PARSER(Endblock,     "endblock");
@@ -140,7 +141,7 @@ int main(int argc, char **argv) {
             Typeident, Comparator, 
             Exp, Return, Returnnv, Raise, Assignment, Shortcomment, Longcomment, Comment, Bool, Args, 
             Bs, Trait, Traitident, Function, 
-            If, Include, While, For, Typedef, Functiondef, Endblock, Endstmt, Block, Stmt, Factor, Group, Ffcall, Metis, NULL);
+            If, Include, While, For, Startdef, Typedef, Functiondef, Endblock, Endstmt, Block, Stmt, Factor, Group, Ffcall, Metis, NULL);
 
   mpc_print(Label);
   mpc_print(String);
@@ -172,6 +173,7 @@ int main(int argc, char **argv) {
   mpc_print(Include);
   mpc_print(While);
   mpc_print(For);
+  mpc_print(Startdef);
   mpc_print(Typedef);
   mpc_print(Functiondef);
   mpc_print(Endblock);
@@ -196,7 +198,7 @@ int main(int argc, char **argv) {
     mpc_cleanup(18, Label, String, File, Unsigned, Integer, Float, Vector,
                     Matrix, Fcall, Operator, Term, Lexp, Type, Typeident, Comparator,
                     Exp, Return, Returnnv, Raise, Assignment, Comment, Bool, Shortcomment, 
-                    Args, Bs, If, Include, While, For, Typedef, Functiondef, Endblock, Endstmt, Block, Stmt, Function, Trait, 
+                    Args, Bs, If, Include, While, For, Startdef, Typedef, Functiondef, Endblock, Endstmt, Block, Stmt, Function, Trait, 
                     Traitident, Group, Ffcall, Factor, Metis);
     return EXIT_FAILURE;
   }

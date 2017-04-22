@@ -77,20 +77,22 @@ while         : "while" <exp> <bs>* ;
 
 for           : "for" <assignment>? ';' <exp>? ';' <integer>? <bs>* ;
 
+startdef      : "def" ;
+
 endblock      : "fin" ;
 
-endstmt       : '.' ;
+endstmt       : "." ;
 
 typedef       : "type" <label> ((<function> <endblock>|<trait> <endblock>|<typeident> <endstmt>) )* ;
 
-functiondef   : "def" <function> ;
+functiondef   : <startdef> <function> ;
 
 block         : (<if>
               |  <include>
               |  <while>
               |  <for>
-              |  <typedef>
-              |  <functiondef>) <endblock> ;
+              |  <functiondef>
+              |  <typedef>) <endblock> ;
                
 stmt          : (<raise> 
               |  <return>
