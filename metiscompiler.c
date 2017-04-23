@@ -39,7 +39,7 @@ handler block_handlers[] = { {"typedef|>",                   &handle_type, FILL_
                              {"include|>",                   &handle_include, FILL_HASH},
                              {"while|>",                     &handle_while, FILL_HASH},
                              {"for|>",                       &handle_for, FILL_HASH},
-                             {"functiondef|>",               &handle_def, FILL_HASH} 
+                             {"functiondef|>",               &handle_function, FILL_HASH} 
                            };
 
 handler stmt_handlers[] =  { {"return|>",                    &handle_return, FILL_HASH}

@@ -50,6 +50,7 @@ void handle_bs(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_block(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   // consume the def/if/while/for/type/etc...  string.
+  printf("block\n");
   mpc_ast_t *ast_next;
   PARSER_NEXT(contents, ast_next);
 
@@ -213,11 +214,16 @@ void handle_def(parser_state *state, mpc_ast_trav_t *contents) {
 void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   uint64_t  num_arguments = 0;
   bool      run           = true;
-
+  printf("function\n");
   push_label_context(state);
   // consume the function name.
   printf("y\n");
   mpc_ast_t *ast_next;
+  // consume def
+  PARSER_NEXT(contents, ast_next);
+  // consume function start
+  PARSER_NEXT(contents, ast_next);
+  // consume function name
   PARSER_NEXT(contents, ast_next);
   printf ("LABEL %s\n",ast_next->contents);
 
