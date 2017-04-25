@@ -71,7 +71,7 @@ void handle_stmt(parser_state *state, mpc_ast_trav_t *contents) {
     DISPATCH(stmthandlers, ast_next->tag, cur);
   }  
   // consume the '.' at the end of the stmt.
-  PARSER_NEXT(contents, ast_next);
+  //PARSER_NEXT(contents, ast_next);
 }
 
 
@@ -260,6 +260,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     printf("1\n");
     handle_bs(state, contents);
     printf("3\n");
+    PARSER_NEXT(contents, ast_next);
     PARSER_NEXT(contents, ast_next);
     printf("2\n");
   }
