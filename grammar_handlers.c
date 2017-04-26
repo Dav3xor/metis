@@ -27,6 +27,7 @@ void handle_start(parser_state *state, mpc_ast_trav_t *contents) {
   handler   *cur;
   while (ast_next) {
     DISPATCH(handlers, ast_next->tag, cur);
+    // remove ./end
     PARSER_NEXT(contents, ast_next);
   }
 }
@@ -260,7 +261,6 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
     printf("1\n");
     handle_bs(state, contents);
     printf("3\n");
-    PARSER_NEXT(contents, ast_next);
     PARSER_NEXT(contents, ast_next);
     printf("2\n");
   }
