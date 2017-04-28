@@ -222,6 +222,7 @@ void handle_function(parser_state *state, mpc_ast_trav_t *contents) {
   printf("y\n");
   mpc_ast_t *ast_next;
   // consume def
+  printf("def");
   PARSER_NEXT(contents, ast_next);
   // consume function start
   PARSER_NEXT(contents, ast_next);
