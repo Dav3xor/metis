@@ -1,14 +1,26 @@
 # an attempt at a compiler using shlex...
 import shlex
 
-block_handlers = {'if':        None,
-                  'include':   None,
-                  'while':     None,
-                  'for':       None,
-                  'def':       handle_functiondef,
-                  'type':      None}
 
 
+def handle_functiondef(tokens):
+  label = tokens.get_token() 
+
+def handle_block(tokens):
+  block_handlers = {'if':        None,
+                    'include':   None,
+                    'while':     None,
+                    'for':       None,
+                    'def':       handle_functiondef,
+                    'type':      None}
+  token = tokens.get_token()
+
+  if token in block_handlers:
+    # do stuff
+    return block_handlers[token](tokens)
+  else:
+    tokens.push_token(token)
+    return None
 
 with open("test.m","r") as input:
   input = input.read()
