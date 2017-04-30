@@ -5,7 +5,11 @@ import shlex
 
 def handle_functiondef(tokens):
   label = tokens.get_token() 
-
+def handle_stmt(tokens):
+  token = tokens.get_token()
+  # handle return/returnnv/raise
+  if token == "<":
+    
 def handle_block(tokens):
   block_handlers = {'if':        None,
                     'include':   None,
