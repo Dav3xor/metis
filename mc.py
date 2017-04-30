@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # an attempt at a compiler using shlex...
 import shlex
 
