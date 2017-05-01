@@ -3,6 +3,10 @@
 # an attempt at a compiler using shlex...
 import shlex
 
+atomic_types = ['string', 'bool', 
+                'unsigned', 'integer', 
+                'float', 'label', 
+                'vector', 'matrix']
 
 
 def handle_functiondef(tokens):
