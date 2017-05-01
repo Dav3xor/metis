@@ -11,6 +11,17 @@ def handle_stmt(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
   if token == "<":
+    token += tokens.get_token()
+    if token == "<-":
+      israise = tokens.get_token()
+      if israise == '!':
+        token += israise
+      else:
+        tokens.push_token(israise)
+    else:
+      raise Exception("syntax error: statement start with < but not <-")
+      
+
     
 def handle_block(tokens):
   block_handlers = {'if':        None,
