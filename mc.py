@@ -8,6 +8,12 @@ import shlex
 def handle_functiondef(tokens):
   label = tokens.get_token() 
 def handle_stmt(tokens):
+  # statements start with a return arrow, a colon, a type signature, or a label
+  stmt_handlers = {'<-':      None,
+                   '<-!':     None,
+                   ':':       None}
+                   
+
   token = tokens.get_token()
   # handle return/returnnv/raise
   if token == "<":
