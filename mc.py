@@ -10,7 +10,26 @@ atomic_types = {'string':1, 'bool':1,
 
 
 def handle_functiondef(tokens):
-  label = tokens.get_token() 
+  label = tokens.get_token()
+
+def handle_return_arrows(tokens):
+  token = tokens.get_token()
+  # handle return/returnnv/raise
+  if token == "<":
+    token += tokens.get_token()
+    if token == "<-":
+      israise = tokens.get_token()
+      if israise == '!':
+        token += israise
+      else:
+        tokens.push_token(israise)
+    else:
+      raise Exception("syntax error: statement start with < but not <-")
+    return token
+  else:
+    tokens.push_token(israise)
+    return None
+
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
   stmt_handlers = {'<-':      None,
@@ -18,8 +37,15 @@ def handle_stmt(tokens):
                    ':':       None}
                    
 
-  token = tokens.get_token()
   # handle return/returnnv/raise
+  token = handle_return_arrows(tokens)
+
+  # else, the next token is our thing...
+  if not token:
+    token = tokens.get_token()
+
+    
+    
   if token == "<":
     token += tokens.get_token()
     if token == "<-":
