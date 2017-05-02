@@ -8,6 +8,8 @@ atomic_types = {'string':1, 'bool':1,
                 'float':1, 'label':1, 
                 'vector':1, 'matrix':1}
 
+def valid_label(token):
+  return re.match('[a-zA-Z_][a-zA-Z0-9_]', token)
 
 def handle_functiondef(tokens):
   label = tokens.get_token()
@@ -44,18 +46,15 @@ def handle_stmt(tokens):
   if not token:
     token = tokens.get_token()
 
-    
-    
-  if token == "<":
-    token += tokens.get_token()
-    if token == "<-":
-      israise = tokens.get_token()
-      if israise == '!':
-        token += israise
-      else:
-        tokens.push_token(israise)
-    else:
-      raise Exception("syntax error: statement start with < but not <-")
+  if token in stmt_handlers:
+    stmt_handlers[token](tokens)
+
+  if token in atomic_types:
+    atomic_types[token](tokens)
+
+  if valid_label(token):
+    # do label stuff here, remove print
+    print "label"
       
 
     
