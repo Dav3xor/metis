@@ -32,9 +32,18 @@ def handle_return_arrows(tokens):
     tokens.push_token(israise)
     return None
 
+def handle_lexp(tokens):
+  handle_term(tokens)
+  operator = tokens.get_token()
+  if operator in ('+','-'):
+    handle_term(tokens)
+
+def handle_return(tokens):
+  handle_lexp(tokens)
+
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
-  stmt_handlers = {'<-':      None,
+  stmt_handlers = {'<-':      handle_return,
                    '<-!':     None,
                    ':':       None}
                    
