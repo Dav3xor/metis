@@ -8,6 +8,10 @@ atomic_types = {'string':1, 'bool':1,
                 'float':1, 'label':1, 
                 'vector':1, 'matrix':1}
 
+low_precedence = {'+':1,'-':1}
+
+high_precedence = {'*':1, '/':1, '%', 'dot', 'cross'}
+
 def valid_label(token):
   return re.match('[a-zA-Z_][a-zA-Z0-9_]', token)
 
@@ -35,7 +39,7 @@ def handle_return_arrows(tokens):
 def handle_lexp(tokens):
   handle_term(tokens)
   operator = tokens.get_token()
-  if operator in ('+','-'):
+  if operator in low_precedence:
     handle_term(tokens)
 
 def handle_return(tokens):
