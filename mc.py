@@ -10,7 +10,7 @@ atomic_types = {'string':1, 'bool':1,
 
 low_precedence = {'+':1,'-':1}
 
-high_precedence = {'*':1, '/':1, '%', 'dot', 'cross'}
+high_precedence = {'*':1, '/':1, '%':1, 'dot':1, 'cross':1}
 
 def valid_label(token):
   return re.match('[a-zA-Z_][a-zA-Z0-9_]', token)
@@ -36,11 +36,21 @@ def handle_return_arrows(tokens):
     tokens.push_token(israise)
     return None
 
+def handle_term(tokens):
+  handle_factor(tokens)
+  operator = tokens.get_token()
+  if operator in high_precedence:
+    handle_factor(tokens)
+  else:
+    tokens.push_token(operator)
+    
 def handle_lexp(tokens):
   handle_term(tokens)
   operator = tokens.get_token()
   if operator in low_precedence:
     handle_term(tokens)
+  else:
+    tokens.push_token(operator)
 
 def handle_return(tokens):
   handle_lexp(tokens)
