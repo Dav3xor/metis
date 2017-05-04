@@ -35,6 +35,16 @@ def handle_return_arrows(tokens):
   else:
     tokens.push_token(israise)
     return None
+def handle_factor(tokens):
+  factor_handlers = { '(': handle_group,
+                      '{': handle_ffcall,
+                      'true': handle_bool_true,
+                      'false': handle_bool_false,
+                      '"': handle_string,
+                      '|': handle_matrix }                      
+  token = tokens.get_token()
+  if token in factor_handlers:
+    factor_handlers[token](tokens)
 
 def handle_term(tokens):
   handle_factor(tokens)
