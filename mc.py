@@ -13,7 +13,10 @@ low_precedence = {'+':1,'-':1}
 high_precedence = {'*':1, '/':1, '%':1, 'dot':1, 'cross':1}
 
 def valid_label(token):
-  return re.match('[a-zA-Z_][a-zA-Z0-9_]', token)
+  if re.match('[a-zA-Z_][a-zA-Z0-9_]', token):
+    return token
+  else:
+    return None
 
 def handle_functiondef(tokens):
   label = tokens.get_token()
@@ -41,6 +44,9 @@ def handle_group(tokens):
   end = tokens.get_token()
   if end != ')':
    raise Exception("syntax error: grouped lexp doesn't end with ')'")
+
+def handle_fcall(tokens):
+  label = validate_label(tokens 
 def handle_ffcall(tokens):
   handle_fcall(tokens);
   end = tokens.get_token()
