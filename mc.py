@@ -35,6 +35,13 @@ def handle_return_arrows(tokens):
   else:
     tokens.push_token(israise)
     return None
+
+def handle_group(tokens):
+  handle_lexp(tokens);
+  end = tokens.get_token()
+  if end != ')':
+   raise Exception("syntax error: grouped lexp doesn't end with ')'")
+
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
                       '{': handle_ffcall,
@@ -45,6 +52,7 @@ def handle_factor(tokens):
   token = tokens.get_token()
   if token in factor_handlers:
     factor_handlers[token](tokens)
+  elif valid_label(token):
 
 def handle_term(tokens):
   handle_factor(tokens)
