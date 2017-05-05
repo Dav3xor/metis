@@ -46,7 +46,13 @@ def handle_group(tokens):
    raise Exception("syntax error: grouped lexp doesn't end with ')'")
 
 def handle_fcall(tokens):
-  label = validate_label(tokens 
+  function_name = validate_label(tokens.get_token()
+  token         = tokens.get_token()
+  while token # continue here tomorrow
+
+
+
+
 def handle_ffcall(tokens):
   handle_fcall(tokens);
   end = tokens.get_token()
