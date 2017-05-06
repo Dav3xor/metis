@@ -38,6 +38,12 @@ def valid_label(token):
   else:
     return None
 
+def valid_float(token):
+  if re.match('[-+]?([0-9*[.])?[0-9]+', token):
+    return float(token)
+  else:
+    return None
+
 def handle_functiondef(tokens):
   label = tokens.get_token()
 
@@ -92,8 +98,8 @@ def handle_factor(tokens):
   if token in factor_handlers:
     factor_handlers[token](tokens)
   elif valid_label(token):
-    labels.push_label(token)
-
+    label = labels.find_label(token)
+    
 def handle_term(tokens):
   handle_factor(tokens)
   operator = tokens.get_token()
