@@ -37,7 +37,12 @@ def valid_label(token):
     return token
   else:
     return None
-
+def valid_integer(token):
+  if re.match('[-+]?[0-9]+', token):
+    return int(token)
+  else:
+    return None
+  
 def valid_float(token):
   if re.match('[-+]?([0-9*[.])?[0-9]+', token):
     return float(token)
