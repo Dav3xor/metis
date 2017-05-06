@@ -3,6 +3,26 @@
 # an attempt at a compiler using shlex...
 import shlex
 
+
+class LabelStack(object):
+  def __init__(self):
+    self.stack = []
+  def push_context(self):
+    self.stack.append({})
+  def pop_context(self):
+    self.stack.pop()
+
+  def add_label(self,label,value):
+    self.stack[-1][label] = value
+  def find_label(self,label):
+    for i in self.stack.reversed():
+      if label in i:
+        return i[label]
+    raise Exception("syntax error: label does not exist - " + label)
+
+
+labels = LabelStack()
+
 atomic_types = {'string':1, 'bool':1, 
                 'unsigned':1, 'integer':1, 
                 'float':1, 'label':1, 
@@ -46,9 +66,10 @@ def handle_group(tokens):
    raise Exception("syntax error: grouped lexp doesn't end with ')'")
 
 def handle_fcall(tokens):
-  function_name = validate_label(tokens.get_token()
+  function_name = validate_label(tokens.get_token())
   token         = tokens.get_token()
-  while token # continue here tomorrow
+  #while token # continue here tomorrow
+  
 
 
 
@@ -71,6 +92,7 @@ def handle_factor(tokens):
   if token in factor_handlers:
     factor_handlers[token](tokens)
   elif valid_label(token):
+    labels.push_label(token)
 
 def handle_term(tokens):
   handle_factor(tokens)
