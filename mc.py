@@ -126,6 +126,7 @@ def handle_return(tokens):
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
+  print "stmt"
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     None,
                    ':':       None}
@@ -158,6 +159,7 @@ block_handlers = {'if':        None,
                   'type':      None}
 
 def handle_block(tokens):
+  print "block"
   token = tokens.get_token()
 
   if token in block_handlers:
@@ -168,6 +170,7 @@ def handle_block(tokens):
     return None
 
 def handle_bs(tokens):
+  print "bs"
   # shlex removes comments for us.
   token = tokens.get_token()
   if token in block_handlers:
@@ -181,5 +184,6 @@ with open("test.m","r") as input:
   input = input.read()
 
   lexer = shlex.shlex(input)
-  for token in lexer:
-    print token
+  #for token in lexer:
+  #  print token
+  handle_bs(lexer)
