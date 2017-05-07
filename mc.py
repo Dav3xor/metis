@@ -50,6 +50,7 @@ def valid_float(token):
     return None
 
 def handle_functiondef(tokens):
+  print "function"
   label = tokens.get_token()
 
 def handle_return_arrows(tokens):
@@ -71,12 +72,14 @@ def handle_return_arrows(tokens):
     return None
 
 def handle_group(tokens):
+  print "group"
   handle_lexp(tokens);
   end = tokens.get_token()
   if end != ')':
    raise Exception("syntax error: grouped lexp doesn't end with ')'")
 
 def handle_fcall(tokens):
+  print "fcall"
   function_name = validate_label(tokens.get_token())
   token         = tokens.get_token()
   #while token # continue here tomorrow
@@ -86,6 +89,7 @@ def handle_fcall(tokens):
 
 
 def handle_ffcall(tokens):
+  print "ffcall"
   handle_fcall(tokens);
   end = tokens.get_token()
   if end != '}':
@@ -98,7 +102,8 @@ def handle_factor(tokens):
                       'true': handle_bool_true,
                       'false': handle_bool_false,
                       '"': handle_string,
-                      '|': handle_matrix }                      
+                      '|': handle_matrix }    
+  print "factor"
   token = tokens.get_token()
   if token in factor_handlers:
     factor_handlers[token](tokens)
@@ -106,6 +111,7 @@ def handle_factor(tokens):
     label = labels.find_label(token)
     
 def handle_term(tokens):
+  print "term"
   handle_factor(tokens)
   operator = tokens.get_token()
   if operator in high_precedence:
@@ -114,6 +120,7 @@ def handle_term(tokens):
     tokens.push_token(operator)
     
 def handle_lexp(tokens):
+  print "lexp"
   handle_term(tokens)
   operator = tokens.get_token()
   if operator in low_precedence:
@@ -122,6 +129,7 @@ def handle_lexp(tokens):
     tokens.push_token(operator)
 
 def handle_return(tokens):
+  print "return"
   handle_lexp(tokens)
 
 def handle_stmt(tokens):
