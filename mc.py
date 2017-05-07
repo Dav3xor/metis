@@ -50,9 +50,12 @@ def valid_float(token):
     return None
 
 def handle_functiondef(tokens):
-  print "function"
-  label = tokens.get_token()
+  print "functiondef"
+  label = valid_label(tokens.get_token())
+  if not label:
+    raise Exception("syntax error: invalid label - " + label)
 
+   
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
