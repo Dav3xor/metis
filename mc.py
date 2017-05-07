@@ -150,13 +150,14 @@ def handle_stmt(tokens):
       
 
     
+block_handlers = {'if':        None,
+                  'include':   None,
+                  'while':     None,
+                  'for':       None,
+                  'def':       handle_functiondef,
+                  'type':      None}
+
 def handle_block(tokens):
-  block_handlers = {'if':        None,
-                    'include':   None,
-                    'while':     None,
-                    'for':       None,
-                    'def':       handle_functiondef,
-                    'type':      None}
   token = tokens.get_token()
 
   if token in block_handlers:
@@ -165,6 +166,16 @@ def handle_block(tokens):
   else:
     tokens.push_token(token)
     return None
+
+def handle_bs(tokens):
+  # shlex removes comments for us.
+  token = tokens.get_token()
+  if token in block_handlers:
+    tokens.push_token(token)
+    handle_block(tokens)
+  else:
+    tokens.push_token(token)
+    handle_stmt(tokens)
 
 with open("test.m","r") as input:
   input = input.read()
