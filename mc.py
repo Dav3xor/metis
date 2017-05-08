@@ -33,7 +33,7 @@ low_precedence = {'+':1,'-':1}
 high_precedence = {'*':1, '/':1, '%':1, 'dot':1, 'cross':1}
 
 def valid_label(token):
-  if re.match('[a-zA-Z_][a-zA-Z0-9_]', token):
+  if re.match('[a-zA-Z_][a-zA-Z0-9_]*', token):
     return token
   else:
     return None
