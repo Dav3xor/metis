@@ -2,7 +2,7 @@
 
 # an attempt at a compiler using shlex...
 import shlex
-
+import re
 
 class LabelStack(object):
   def __init__(self):
@@ -37,6 +37,7 @@ def valid_label(token):
     return token
   else:
     return None
+
 def valid_integer(token):
   if re.match('[-+]?[0-9]+', token):
     return int(token)
@@ -48,6 +49,15 @@ def valid_float(token):
     return float(token)
   else:
     return None
+
+def handle_typeident(tokens):
+  vartype = tokens.get_token()
+  if vartype not in atomic_types:
+    tokens.push_token(vartype)
+    return None
+  else:
+    label = valid_label(tokens.get_token())
+    return (vartype, label)
 
 def handle_functiondef(tokens):
   print "functiondef"
