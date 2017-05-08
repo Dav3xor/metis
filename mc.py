@@ -51,6 +51,7 @@ def valid_float(token):
     return None
 
 def handle_typeident(tokens):
+  print "typeident"
   vartype = tokens.get_token()
   if vartype not in atomic_types:
     tokens.push_token(vartype)
@@ -62,10 +63,23 @@ def handle_typeident(tokens):
 def handle_functiondef(tokens):
   print "functiondef"
   label = valid_label(tokens.get_token())
+  args = []
   if not label:
     raise Exception("syntax error: invalid label - " + label)
 
-   
+  arg = handle_typeident(tokens) 
+  if arg:
+    args.append(arg)
+    while True:
+      comma = tokens.get_token()
+      if comma == ',':
+        arg = handle_typeident(tokens)
+        if arg:
+          args.append(arg)
+      else:
+        tokens.push_token(comma)
+        break
+  print args
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
