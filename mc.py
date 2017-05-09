@@ -81,8 +81,13 @@ def handle_functiondef(tokens):
         break
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
+    if returntype not in atomic_types:
+      raise Exception("syntax error: unknown return type - " + returntype)
     print returntype
-
+  colon = tokens.get_token()
+  if colon != ':':
+    raise Exception("syntax error: function does not end in ':' - " + returntype)
+    
   print args
 def handle_return_arrows(tokens):
   token = tokens.get_token()
