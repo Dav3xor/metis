@@ -79,6 +79,10 @@ def handle_functiondef(tokens):
       else:
         tokens.push_token(comma)
         break
+  if handle_return_arrows(tokens) == '<-':
+    returntype = tokens.get_token()
+    print returntype
+
   print args
 def handle_return_arrows(tokens):
   token = tokens.get_token()
