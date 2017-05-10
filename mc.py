@@ -4,6 +4,11 @@
 import shlex
 import re
 
+def peek(tokens):
+  token = tokens.get_token()
+  tokens.push_token(token)
+  return token
+
 class LabelStack(object):
   def __init__(self):
     self.stack = []
@@ -86,8 +91,11 @@ def handle_functiondef(tokens):
     print returntype
   colon = tokens.get_token()
   if colon != ':':
-    raise Exception("syntax error: function does not end in ':' - " + returntype)
-    
+    raise Exception("syntax error: function declaration does not end in ':' - " + returntype)
+  print tokens.read_token()
+  print tokens.read_token()
+  print tokens.read_token()
+  print tokens.read_token()
   print args
 def handle_return_arrows(tokens):
   token = tokens.get_token()
