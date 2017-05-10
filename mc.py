@@ -84,6 +84,7 @@ def handle_functiondef(tokens):
       else:
         tokens.push_token(comma)
         break
+  print args
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
     if returntype not in atomic_types:
@@ -92,11 +93,9 @@ def handle_functiondef(tokens):
   colon = tokens.get_token()
   if colon != ':':
     raise Exception("syntax error: function declaration does not end in ':' - " + returntype)
-  print tokens.read_token()
-  print tokens.read_token()
-  print tokens.read_token()
-  print tokens.read_token()
-  print args
+  while peek(tokens) != "fin":
+    handle_bs(tokens)
+
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
