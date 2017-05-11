@@ -63,6 +63,7 @@ def handle_typeident(tokens):
     return None
   else:
     label = valid_label(tokens.get_token())
+    labels.add_label(label,1)
     return (vartype, label)
 
 def handle_functiondef(tokens):
