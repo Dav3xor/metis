@@ -20,7 +20,7 @@ class LabelStack(object):
   def add_label(self,label,value):
     self.stack[-1][label] = value
   def find_label(self,label):
-    for i in self.stack.reversed():
+    for i in reversed(self.stack):
       if label in i:
         return i[label]
     raise Exception("syntax error: label does not exist - " + label)
@@ -140,12 +140,12 @@ def handle_ffcall(tokens):
 
 
 def handle_factor(tokens):
-  factor_handlers = { '(': handle_group,
-                      '{': handle_ffcall,
-                      'true': handle_bool_true,
-                      'false': handle_bool_false,
-                      '"': handle_string,
-                      '|': handle_matrix }    
+  factor_handlers = { '(': None,
+                      '{': None,
+                      'true': None,
+                      'false': None,
+                      '"': None,
+                      '|': None }    
   print "factor"
   token = tokens.get_token()
   if token in factor_handlers:
