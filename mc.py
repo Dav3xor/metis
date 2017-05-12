@@ -11,7 +11,7 @@ def peek(tokens):
 
 class LabelStack(object):
   def __init__(self):
-    self.stack = []
+    self.stack = [{}]
   def push_context(self):
     self.stack.append({})
   def pop_context(self):
@@ -95,6 +95,7 @@ def handle_functiondef(tokens):
   if colon != ':':
     raise Exception("syntax error: function declaration does not end in ':' - " + returntype)
   while peek(tokens) != "fin":
+    print "-->" + peek(tokens)
     handle_bs(tokens)
 
 def handle_return_arrows(tokens):
@@ -112,7 +113,7 @@ def handle_return_arrows(tokens):
       raise Exception("syntax error: statement start with < but not <-")
     return token
   else:
-    tokens.push_token(israise)
+    tokens.push_token(token)
     return None
 
 def handle_group(tokens):
