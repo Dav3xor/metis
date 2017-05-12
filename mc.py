@@ -97,7 +97,7 @@ def handle_functiondef(tokens):
   while peek(tokens) != "fin":
     print "-->" + peek(tokens)
     handle_bs(tokens)
-
+  print "end function"
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
