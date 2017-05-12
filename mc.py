@@ -98,6 +98,8 @@ def handle_functiondef(tokens):
     print "-->" + peek(tokens)
     handle_bs(tokens)
   print "end function"
+
+
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
@@ -201,7 +203,11 @@ def handle_stmt(tokens):
   if valid_label(token):
     # do label stuff here, remove print
     print "label"
-      
+
+  end = tokens.get_token()
+  if end != ".":
+    raise Exception("syntax error: stmt does not end in '.'")
+
 
     
 block_handlers = {'if':        None,
