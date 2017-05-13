@@ -98,7 +98,7 @@ def handle_functiondef(tokens):
     print "-->" + peek(tokens)
     handle_bs(tokens)
   print "end function"
-
+  
 
 def handle_return_arrows(tokens):
   token = tokens.get_token()
@@ -227,6 +227,10 @@ def handle_block(tokens):
   else:
     tokens.push_token(token)
     return None
+  
+  end = tokens.get_token()
+  if end != "fin":
+    raise Exception("syntax error: block does not end in 'fin'")
 
 def handle_bs(tokens):
   print "bs - " + peek(tokens)
