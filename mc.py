@@ -229,7 +229,7 @@ def handle_block(tokens):
     return None
 
 def handle_bs(tokens):
-  print "bs"
+  print "bs - " + peek(tokens)
   # shlex removes comments for us.
   token = tokens.get_token()
   if token in block_handlers:
@@ -245,4 +245,5 @@ with open("test.m","r") as input:
   lexer = shlex.shlex(input)
   #for token in lexer:
   #  print token
-  handle_bs(lexer)
+  while peek(lexer):
+    handle_bs(lexer)
