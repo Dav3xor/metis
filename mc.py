@@ -178,6 +178,8 @@ def handle_lexp(tokens):
 def handle_return(tokens):
   print "return"
   handle_lexp(tokens)
+def handle_trait(tokens):
+  print "trait"
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
@@ -199,11 +201,13 @@ def handle_stmt(tokens):
 
   if token in atomic_types:
     atomic_types[token](tokens)
+  if token == ":":
+    handle_trait(tokens)
 
   if valid_label(token):
     # do label stuff here, remove print
     print "label"
-
+  
   end = tokens.get_token()
   if end != ".":
     raise Exception("syntax error: stmt does not end in '.'")
