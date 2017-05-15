@@ -201,6 +201,7 @@ def handle_stmt(tokens):
 
   elif token in atomic_types:
     atomic_types[token](tokens)
+
   elif token == ":":
     handle_trait(tokens)
 
@@ -209,10 +210,13 @@ def handle_stmt(tokens):
     print "function call"
     
     function_name = token
+
     print function_name + " - ",
+
     while peek(tokens) != ".":
       arg = tokens.get_token()
       print arg + ", ",
+
     print "\n", 
   
   end = tokens.get_token()
