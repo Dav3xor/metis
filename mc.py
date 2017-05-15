@@ -199,14 +199,21 @@ def handle_stmt(tokens):
   if token in stmt_handlers:
     stmt_handlers[token](tokens)
 
-  if token in atomic_types:
+  elif token in atomic_types:
     atomic_types[token](tokens)
-  if token == ":":
+  elif token == ":":
     handle_trait(tokens)
 
-  if valid_label(token):
-    # do label stuff here, remove print
-    print "label"
+  elif valid_label(token):
+    # function call
+    print "function call"
+    
+    function_name = token
+    print function_name + " - ",
+    while peek(tokens) != ".":
+      arg = tokens.get_token()
+      print arg + ", ",
+    print "\n", 
   
   end = tokens.get_token()
   if end != ".":
