@@ -239,10 +239,9 @@ def handle_block(tokens):
 
   if token in block_handlers:
     # do stuff
-    return block_handlers[token](tokens)
+    block_handlers[token](tokens)
   else:
     tokens.push_token(token)
-    return None
   
   end = tokens.get_token()
   if end != "fin":
@@ -255,6 +254,7 @@ def handle_bs(tokens):
   if token in block_handlers:
     tokens.push_token(token)
     handle_block(tokens)
+    tokens.get_token()
   else:
     tokens.push_token(token)
     handle_stmt(tokens)
