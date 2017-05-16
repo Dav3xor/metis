@@ -162,6 +162,7 @@ def handle_term(tokens):
   handle_factor(tokens)
   operator = tokens.get_token()
   if operator in high_precedence:
+    print operator
     handle_factor(tokens)
   else:
     tokens.push_token(operator)
