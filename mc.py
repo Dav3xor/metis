@@ -162,6 +162,7 @@ def handle_term(tokens):
   handle_factor(tokens)
   operator = tokens.get_token()
   if operator in high_precedence:
+    print operator
     handle_factor(tokens)
   else:
     tokens.push_token(operator)
@@ -178,6 +179,8 @@ def handle_lexp(tokens):
 def handle_return(tokens):
   print "return"
   handle_lexp(tokens)
+def handle_trait(tokens):
+  print "trait"
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
@@ -197,13 +200,26 @@ def handle_stmt(tokens):
   if token in stmt_handlers:
     stmt_handlers[token](tokens)
 
-  if token in atomic_types:
+  elif token in atomic_types:
     atomic_types[token](tokens)
 
-  if valid_label(token):
-    # do label stuff here, remove print
-    print "label"
+  elif token == ":":
+    handle_trait(tokens)
 
+  elif valid_label(token):
+    # function call
+    print "function call"
+    
+    function_name = token
+
+    print function_name + " - ",
+
+    while peek(tokens) != ".":
+      arg = tokens.get_token()
+      print arg + ", ",
+
+    print "\n", 
+  
   end = tokens.get_token()
   if end != ".":
     raise Exception("syntax error: stmt does not end in '.'")
@@ -223,10 +239,9 @@ def handle_block(tokens):
 
   if token in block_handlers:
     # do stuff
-    return block_handlers[token](tokens)
+    block_handlers[token](tokens)
   else:
     tokens.push_token(token)
-    return None
   
   end = tokens.get_token()
   if end != "fin":
@@ -238,6 +253,7 @@ def handle_bs(tokens):
   token = peek(tokens)
   if token in block_handlers:
     handle_block(tokens)
+    tokens.get_token()
   else:
     handle_stmt(tokens)
 

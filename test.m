@@ -4,6 +4,7 @@
 # comment
 
 def square float x <- float:
+  print "hello".
   <- x * x.
 fin
 
