@@ -235,12 +235,10 @@ def handle_block(tokens):
 def handle_bs(tokens):
   print "bs - " + peek(tokens)
   # shlex removes comments for us.
-  token = tokens.get_token()
+  token = peek(tokens)
   if token in block_handlers:
-    tokens.push_token(token)
     handle_block(tokens)
   else:
-    tokens.push_token(token)
     handle_stmt(tokens)
 
 with open("test.m","r") as input:
