@@ -57,11 +57,11 @@ def valid_float(token):
 
 def handle_typeident(tokens):
   print "typeident"
-  vartype = tokens.get_token()
+  vartype = peek(tokens)
   if vartype not in atomic_types:
-    tokens.push_token(vartype)
     return None
   else:
+    tokens.get_token()
     label = valid_label(tokens.get_token())
     labels.add_label(label,1)
     return (vartype, label)
