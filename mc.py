@@ -235,13 +235,9 @@ block_handlers = {'if':        None,
 
 def handle_block(tokens):
   print "block"
-  token = peek(tokens)
-
-  if token in block_handlers:
+  if peek(tokens) in block_handlers:
     # do stuff
     block_handlers[tokens.get_token()](tokens)
-  else:
-    tokens.push_token(token)
   
   #end = tokens.get_token()
   #if end != "fin":
