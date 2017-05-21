@@ -142,9 +142,15 @@ def handle_ffcall(tokens):
   if end != '}':
    raise Exception("syntax error: ffcall doesn't end with '}'")
 
+def handle_group(tokens):
+  print "group"
+  handle_lexp(tokens)
+  end = tokens.get_token()
+  if end != ")":
+    raise Exception("syntax error: group does not end with ')'")
 
 def handle_factor(tokens):
-  factor_handlers = { '(': None,
+  factor_handlers = { '(': handle_group,
                       '{': None,
                       'true': None,
                       'false': None,
