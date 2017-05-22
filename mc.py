@@ -60,10 +60,16 @@ def parse_number(tokens):
   if cur == "-":
     num_type = "signed"
 
-  
   if all([i.is_digit() for i in cur]):
     num_type = "unsigned"
+  
+  if num_type:
+    tokens.get_token()
+    cur = peek(tokens)
+    if cur = ".":
+      num_type = "float"
 
+      
 
 def valid_float(token):
   if re.match('[-+]?([0-9*[.])?[0-9]+', token):
