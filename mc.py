@@ -48,7 +48,21 @@ def valid_integer(token):
     return int(token)
   else:
     return None
+
+def parse_number(tokens):
+  cur      = peek(tokens)
+  num_type = None
+  sign     = "positive"
+
+  if cur == ".":
+    num_type = "float"
+
+  if cur == "-":
+    num_type = "unsigned"
+
   
+
+
 def valid_float(token):
   if re.match('[-+]?([0-9*[.])?[0-9]+', token):
     return float(token)
@@ -264,7 +278,7 @@ with open("test.m","r") as input:
   input = input.read()
 
   lexer = shlex.shlex(input)
-  #for token in lexer:
-  #  print token
+  for token in lexer:
+    print token
   while peek(lexer):
     handle_bs(lexer)
