@@ -58,9 +58,11 @@ def parse_number(tokens):
     num_type = "float"
 
   if cur == "-":
-    num_type = "unsigned"
+    num_type = "signed"
 
   
+  if all([i.is_digit() for i in cur]):
+    num_type = "unsigned"
 
 
 def valid_float(token):
