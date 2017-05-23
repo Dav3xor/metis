@@ -65,12 +65,19 @@ def parse_number(tokens):
     num_type = "unsigned"
     number   = int(cur)
 
-  if num_type:
-    # first burn the current token...
-    tokens.get_token()
-    cur = peek(tokens)
-    if cur = ".":
-      num_type = "float"
+  if not num_type:
+    return None
+
+  # ok, we have a number...
+
+  # first burn the current token...
+  tokens.get_token()
+
+
+  cur = peek(tokens)
+  if cur = ".":
+    
+    num_type = "float"
 
       
 
