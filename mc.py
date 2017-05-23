@@ -53,6 +53,7 @@ def parse_number(tokens):
   cur      = peek(tokens)
   num_type = None
   sign     = "positive"
+  number   = None
 
   if cur == ".":
     num_type = "float"
@@ -62,8 +63,10 @@ def parse_number(tokens):
 
   if all([i.is_digit() for i in cur]):
     num_type = "unsigned"
-  
+    number   = int(cur)
+
   if num_type:
+    # first burn the current token...
     tokens.get_token()
     cur = peek(tokens)
     if cur = ".":
