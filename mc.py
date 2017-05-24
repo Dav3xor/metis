@@ -51,15 +51,17 @@ def valid_integer(token):
 
 def parse_number(tokens):
   cur      = peek(tokens)
-  num_type = None
   sign     = "positive"
   number   = None
 
-  if cur == ".":
-    num_type = "float"
-
   if cur == "-":
     num_type = "signed"
+    sign = "negative"
+    tokens.get_token()
+    cur  = peek(tokens)
+
+  if cur == ".":
+    number = 0.0
 
   if all([i.is_digit() for i in cur]):
     num_type = "unsigned"
