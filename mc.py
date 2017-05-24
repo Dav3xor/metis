@@ -51,21 +51,41 @@ def valid_integer(token):
 
 def parse_number(tokens):
   cur      = peek(tokens)
+  got_period = False
   sign     = "positive"
-  number   = None
+  num_type = "unsigned"
+  number   = "" 
 
   if cur == "-":
+    number += cur
     num_type = "signed"
     sign = "negative"
     tokens.get_token()
     cur  = peek(tokens)
 
   if cur == ".":
-    number = 0.0
+    got_period = True
+    number += cur
+    tokens.get_token()
+    cur    = peek(tokens)
 
   if all([i.is_digit() for i in cur]):
-    num_type = "unsigned"
-    number   = int(cur)
+    number   += cur 
+    tokens.get_token()
+    cur = peek(tokens)
+
+  if got_period:
+    return number
+
+  if cur == ".":
+    got_period = True
+    number += cur
+    num_type = "signed"
+    sign = "negative"
+    tokens.get_token()
+    cur  = peek(tokens)
+
+
 
   if not num_type:
     return None
