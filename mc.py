@@ -75,7 +75,7 @@ def parse_number(tokens):
 
 
   cur = peek(tokens)
-  if cur = ".":
+  if cur == ".":
     
     num_type = "float"
 
