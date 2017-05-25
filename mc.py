@@ -51,7 +51,6 @@ def valid_integer(token):
 
 def parse_number(tokens):
   cur      = peek(tokens)
-  got_period = False
   sign     = "positive"
   num_type = "unsigned"
   number   = "" 
@@ -64,7 +63,6 @@ def parse_number(tokens):
     cur  = peek(tokens)
 
   if cur == ".":
-    got_period = True
     number += cur
     tokens.get_token()
     cur    = peek(tokens)
@@ -74,11 +72,10 @@ def parse_number(tokens):
     tokens.get_token()
     cur = peek(tokens)
 
-  if got_period:
+  if "." in number:
     return number
 
   if cur == ".":
-    got_period = True
     number += cur
     num_type = "signed"
     sign = "negative"
