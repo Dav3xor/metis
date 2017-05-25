@@ -52,7 +52,6 @@ def valid_integer(token):
 def parse_number(tokens):
   cur      = peek(tokens)
   sign     = "positive"
-  num_type = "unsigned"
   number   = "" 
 
   if cur == "-":
@@ -77,10 +76,16 @@ def parse_number(tokens):
 
   if cur == ".":
     number += cur
-    num_type = "signed"
-    sign = "negative"
     tokens.get_token()
     cur  = peek(tokens)
+  else:
+    return number
+ 
+  # read numbers past the . (we got a float...)
+  if all([i.is_digit() for i in cur]):
+    number   += cur 
+
+  return number
 
 
 
