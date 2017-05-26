@@ -213,12 +213,15 @@ def handle_factor(tokens):
                       '"': None,
                       '|': None }    
   print "factor"
-  token = tokens.get_token()
-  if token in factor_handlers:
-    factor_handlers[token](tokens)
-  elif valid_label(token):
-    label = labels.find_label(token)
-    
+  number = parse_number(tokens)
+  if number:
+    print "number: " + number
+  else:
+    token = tokens.get_token()
+    if token in factor_handlers:
+      factor_handlers[token](tokens)
+    elif valid_label(token):
+      label = labels.find_label(token)
 def handle_term(tokens):
   print "term"
   handle_factor(tokens)
@@ -320,7 +323,7 @@ with open("test.m","r") as input:
   input = input.read()
 
   lexer = shlex.shlex(input)
-  for token in lexer:
-    print token
+  #for token in lexer:
+  #  print token
   while peek(lexer):
     handle_bs(lexer)
