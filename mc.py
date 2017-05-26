@@ -66,7 +66,7 @@ def parse_number(tokens):
     tokens.get_token()
     cur    = peek(tokens)
 
-  if all([i.is_digit() for i in cur]):
+  if cur.isdigit():
     number   += cur 
     tokens.get_token()
     cur = peek(tokens)
@@ -82,7 +82,7 @@ def parse_number(tokens):
     return number
  
   # read numbers past the . (we got a float...)
-  if all([i.is_digit() for i in cur]):
+  if cur.isdigit():
     number   += cur 
 
   return number
