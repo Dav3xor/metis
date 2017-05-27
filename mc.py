@@ -237,6 +237,7 @@ def handle_term(tokens):
   handle_factor(tokens)
   operator = peek(tokens)
   while operator in high_precedence:
+    print "term operator : " + operator
     print operator
     tokens.get_token()
     handle_factor(tokens)
@@ -245,11 +246,12 @@ def handle_term(tokens):
 def handle_lexp(tokens):
   print "lexp"
   handle_term(tokens)
-  operator = tokens.get_token()
-  if operator in low_precedence:
+  operator = peek(tokens)
+  while operator in low_precedence:
+    print "lexp operator : " + operator
+    tokens.get_token()
     handle_term(tokens)
-  else:
-    tokens.push_token(operator)
+    operator = peek(tokens)
 
 def handle_return(tokens):
   print "return"
