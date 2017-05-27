@@ -53,8 +53,10 @@ def parse_number(tokens):
   cur      = peek(tokens)
   sign     = "positive"
   number   = "" 
-
+  print "running parse_number ----------- "
+  print "cur = " + cur
   if cur == "-":
+    print "negative"
     number += cur
     num_type = "signed"
     sign = "negative"
@@ -62,32 +64,40 @@ def parse_number(tokens):
     cur  = peek(tokens)
 
   if cur == ".":
+    print "decimal 1"
     number += cur
     tokens.get_token()
     cur    = peek(tokens)
 
   if cur.isdigit():
+    print "got number 1: " + cur
     number   += cur 
     tokens.get_token()
     cur = peek(tokens)
 
   if "." in number:
+    print "decimal 2 returned " + number
     return number
 
   if cur == ".":
+    print "decimal 3"
     number += cur
     tokens.get_token()
     cur  = peek(tokens)
   else:
+    print "integer returned : " + number
     return number
  
   # read numbers past the . (we got a float...)
   if cur.isdigit():
+    print "got number 2: " + cur
     number   += cur 
+  
 
   return number
 
 
+  print "finished ----------------------- "
 
   if not num_type:
     return None
