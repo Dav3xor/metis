@@ -92,7 +92,7 @@ def parse_number(tokens):
   if cur.isdigit():
     print "got number 2: " + cur
     number   += cur 
-  
+    tokens.get_token() 
 
   return number
 
@@ -242,6 +242,7 @@ def handle_term(tokens):
     tokens.get_token()
     handle_factor(tokens)
     operator = peek(tokens)
+  print peek(tokens) 
   print "end term" 
 
 def handle_lexp(tokens):
@@ -253,6 +254,7 @@ def handle_lexp(tokens):
     tokens.get_token()
     handle_term(tokens)
     operator = peek(tokens)
+  print peek(tokens) 
   print "end lexp" 
 
 def handle_return(tokens):
