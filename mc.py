@@ -184,8 +184,8 @@ def handle_group(tokens):
 def handle_fcall(tokens):
   print "fcall"
   function_name = validate_label(tokens.get_token())
-  token         = tokens.get_token()
-  #while token # continue here tomorrow
+  token         = peek(tokens)
+  while token != "."# continue here tomorrow
   
 
 
@@ -247,8 +247,6 @@ def handle_lexp(tokens):
     tokens.get_token()
     handle_term(tokens)
     operator = peek(tokens)
-  print peek(tokens) 
-  print "end lexp" 
 
 def handle_return(tokens):
   print "return"
