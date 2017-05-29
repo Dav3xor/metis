@@ -217,11 +217,14 @@ def handle_factor(tokens):
   if number:
     print "number: " + number
   else:
-    token = tokens.get_token()
+    token = peek(tokens)
     if token in factor_handlers:
+      tokens.get_token()
       factor_handlers[token](tokens)
     elif valid_label(token):
+      tokens.get_token()
       label = labels.find_label(token)
+
 def handle_term(tokens):
   print "term"
   handle_factor(tokens)
