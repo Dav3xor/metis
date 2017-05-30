@@ -184,8 +184,10 @@ def handle_group(tokens):
 def handle_fcall(tokens):
   print "fcall"
   function_name = validate_label(tokens.get_token())
-  token         = peek(tokens)
-  while token != "."# continue here tomorrow
+  while handle_lexp(tokens):
+    comma = peek(tokens)
+    if comma != ",":
+      break
   
 
 
@@ -216,37 +218,45 @@ def handle_factor(tokens):
   number = parse_number(tokens)
   if number:
     print "number: " + number
+    return True
   else:
     token = peek(tokens)
     if token in factor_handlers:
       tokens.get_token()
       factor_handlers[token](tokens)
+      return True
     elif valid_label(token):
       tokens.get_token()
       label = labels.find_label(token)
+      return True
+  return False
 
 def handle_term(tokens):
   print "term"
-  handle_factor(tokens)
-  operator = peek(tokens)
-  while operator in high_precedence:
-    print "term operator : " + operator
-    print operator
-    tokens.get_token()
-    handle_factor(tokens)
+  if handle_factor(tokens):
     operator = peek(tokens)
-  print peek(tokens) 
-  print "end term" 
+    while operator in high_precedence:
+      print "term operator : " + operator
+      print operator
+      tokens.get_token()
+      handle_factor(tokens)
+      operator = peek(tokens)
+    print peek(tokens) 
+    print "end term" 
+    return True
+  return False
 
 def handle_lexp(tokens):
   print "lexp"
-  handle_term(tokens)
-  operator = peek(tokens)
-  while operator in low_precedence:
-    print "lexp operator : " + operator
-    tokens.get_token()
-    handle_term(tokens)
+  if handle_term(tokens):
     operator = peek(tokens)
+    while operator in low_precedence:
+      print "lexp operator : " + operator
+      tokens.get_token()
+      handle_term(tokens)
+      operator = peek(tokens)
+    return True
+  return False
 
 def handle_return(tokens):
   print "return"
