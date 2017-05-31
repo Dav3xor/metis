@@ -183,11 +183,13 @@ def handle_group(tokens):
 
 def handle_fcall(tokens):
   print "fcall"
-  function_name = validate_label(tokens.get_token())
+  function_name = tokens.get_token()
+  print "function = " + function_name
   while handle_lexp(tokens):
     comma = peek(tokens)
     if comma != ",":
       break
+    tokens.get_token() # consume the comma
   
 
 
@@ -277,34 +279,31 @@ def handle_stmt(tokens):
 
   # else, the next token is our thing...
   if not token:
-    token = tokens.get_token()
+    token = peek(tokens)
 
   if token in stmt_handlers:
+    print "handler"
+    tokens.get_token()
     stmt_handlers[token](tokens)
 
   elif token in atomic_types:
+    print "atomic"
+    tokens.get_token()
     atomic_types[token](tokens)
 
   elif token == ":":
+    print "trait"
+    tokens.get_token()
     handle_trait(tokens)
 
   elif valid_label(token):
     # function call
     print "function call"
-    
-    function_name = token
-
-    print function_name + " - ",
-
-    while peek(tokens) != ".":
-      arg = tokens.get_token()
-      print arg + ", ",
-
-    print "\n", 
+    handle_fcall(tokens) 
   
   end = tokens.get_token()
   if end != ".":
-    raise Exception("syntax error: stmt does not end in '.'")
+    raise Exception("syntax error: stmt does not end in '.' (got '"+end+"' instead)")
 
 
     
