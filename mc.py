@@ -208,19 +208,12 @@ def handle_group(tokens):
   end = tokens.get_token()
   if end != ")":
     raise Exception("syntax error: group does not end with ')'")
-def handle_string(tokens):
-  output = ""
-  while peek(tokens) != '"':
-    output += tokens.get_token()
-  # consume the remaining "
-  tokens.get_token()
 
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
                       '{': None,
                       'true': None,
                       'false': None,
-                      '"': handle_string,
                       '|': None }    
   print "factor"
   number = parse_number(tokens)
@@ -229,7 +222,11 @@ def handle_factor(tokens):
     return True
   else:
     token = peek(tokens)
-    if token in factor_handlers:
+    if token[0] == '"':
+      print token[1:-1]
+      tokens.get_token()
+      return True
+    elif token in factor_handlers:
       tokens.get_token()
       factor_handlers[token](tokens)
       return True
