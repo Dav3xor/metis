@@ -189,7 +189,8 @@ def handle_fcall(tokens):
     comma = peek(tokens)
     if comma != ",":
       break
-    tokens.get_token() # consume the comma
+    else:
+      tokens.get_token() # consume the comma
   
 
 
@@ -279,30 +280,31 @@ def handle_stmt(tokens):
 
   # handle return/returnnv/raise
   token = handle_return_arrows(tokens)
-
-  # else, the next token is our thing...
-  if not token:
-    token = peek(tokens)
-
+  
   if token in stmt_handlers:
     print "handler"
     tokens.get_token()
     stmt_handlers[token](tokens)
 
-  elif token in atomic_types:
-    print "atomic"
-    tokens.get_token()
-    atomic_types[token](tokens)
 
-  elif token == ":":
-    print "trait"
-    tokens.get_token()
-    handle_trait(tokens)
+  # else, the next token is our thing...
+  elif not token:
+    token = peek(tokens)
 
-  elif valid_label(token):
-    # function call
-    print "function call"
-    handle_fcall(tokens) 
+    if token in atomic_types:
+      print "atomic"
+      tokens.get_token()
+      atomic_types[token](tokens)
+
+    elif token == ":":
+      print "trait"
+      tokens.get_token()
+      handle_trait(tokens)
+
+    elif valid_label(token):
+      # function call
+      print "function call"
+      handle_fcall(tokens) 
   
   end = tokens.get_token()
   if end != ".":
