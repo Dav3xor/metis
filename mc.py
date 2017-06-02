@@ -54,6 +54,7 @@ def parse_number(tokens):
   sign     = "positive"
   number   = "" 
   if cur == "-":
+    print "pn -"
     number += cur
     num_type = "signed"
     sign = "negative"
@@ -61,11 +62,13 @@ def parse_number(tokens):
     cur  = peek(tokens)
 
   if cur == ".":
+    print "pn ."
     number += cur
     tokens.get_token()
     cur    = peek(tokens)
 
   if cur.isdigit():
+    print "pn digit"
     number   += cur 
     tokens.get_token()
     cur = peek(tokens)
@@ -264,6 +267,7 @@ def handle_lexp(tokens):
   print "lexp"
   if handle_term(tokens):
     operator = peek(tokens)
+    print "++++" + peek(tokens)
     while operator in low_precedence:
       print "lexp operator : " + operator
       tokens.get_token()
