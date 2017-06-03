@@ -220,6 +220,7 @@ def handle_factor(tokens):
                       'false': None,
                       '|': None }    
   print "factor"
+  print peek(tokens)
   number = parse_number(tokens)
   if number:
     print "a"
@@ -250,6 +251,7 @@ def handle_factor(tokens):
 
 def handle_term(tokens):
   print "term"
+  print peek(tokens)
   if handle_factor(tokens):
     operator = peek(tokens)
     while operator in high_precedence:
@@ -266,6 +268,7 @@ def handle_term(tokens):
 
 def handle_lexp(tokens):
   print "lexp"
+  print peek(tokens)
   if handle_term(tokens):
     operator = peek(tokens)
     print "++++" + peek(tokens)
@@ -279,6 +282,7 @@ def handle_lexp(tokens):
 
 def handle_return(tokens):
   print "return"
+  print peek(tokens)
   handle_lexp(tokens)
 def handle_trait(tokens):
   print "trait"
@@ -286,6 +290,7 @@ def handle_trait(tokens):
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
   print "stmt"
+  print peek(tokens)
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     None,
                    ':':       None}
@@ -293,7 +298,7 @@ def handle_stmt(tokens):
 
   # handle return/returnnv/raise
   token = handle_return_arrows(tokens)
-  
+  print "---" + peek(tokens)  
   if token in stmt_handlers:
     print "handler"
     tokens.get_token()
