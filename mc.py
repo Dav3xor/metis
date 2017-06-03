@@ -261,6 +261,7 @@ def handle_term(tokens):
     print peek(tokens) 
     print "end term" 
     return True
+  print "end term 2"
   return False
 
 def handle_lexp(tokens):
