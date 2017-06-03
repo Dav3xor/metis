@@ -298,10 +298,10 @@ def handle_stmt(tokens):
 
   # handle return/returnnv/raise
   token = handle_return_arrows(tokens)
-  print "---" + peek(tokens)  
+  print "---" + peek(tokens) + "---" + str(token )
   if token in stmt_handlers:
     print "handler"
-    tokens.get_token()
+    #tokens.get_token()
     stmt_handlers[token](tokens)
 
 
