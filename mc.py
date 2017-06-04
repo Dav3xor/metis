@@ -328,10 +328,15 @@ def handle_stmt(tokens):
   if end != ".":
     raise Exception("syntax error: stmt does not end in '.' (got '"+end+"' instead)")
 
-
+def handle_include(tokens):
+  dash = peek(tokens)
+  while dash == '-':
+    tokens.get_token()
+    print "file: " + tokens.get_token()
+    dash = peek(tokens)
     
 block_handlers = {'if':        None,
-                  'include':   None,
+                  'include':   handle_include,
                   'while':     None,
                   'for':       None,
                   'def':       handle_functiondef,
