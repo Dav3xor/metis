@@ -10,6 +10,6 @@ fin
 
 
 def complex float x, float y <- float:
-  <- x*(x+y)*5.05+7.777.
+  <- x*(x+y)*{ square 5 }+5.05+7.777.
 fin
 

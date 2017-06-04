@@ -215,7 +215,7 @@ def handle_group(tokens):
 
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
-                      '{': None,
+                      '{': handle_ffcall,
                       'true': None,
                       'false': None,
                       '|': None }    
