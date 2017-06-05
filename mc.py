@@ -336,7 +336,24 @@ def handle_include(tokens):
     dash = peek(tokens)
   print peek(tokens)
 
-block_handlers = {'if':        None,
+def handle_exp(tokens):
+  handle_lexp(tokens)
+  print "comparator = " + tokens.get_token()
+  handle_lexp(tokens)
+
+def handle_if(tokens):
+  handle_exp(tokens)
+  token = peek(tokens)
+  while token == "else":
+    token = tokens.get_token()
+    token = tokens.peek()
+    if token == "if":
+      tokens.get_token()
+      handle_exp(tokens) 
+    handle_bs(tokens)
+
+
+block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     None,
                   'for':       None,
