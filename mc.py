@@ -334,7 +334,8 @@ def handle_include(tokens):
     tokens.get_token()
     print "file: " + tokens.get_token()
     dash = peek(tokens)
-    
+  print peek(tokens)
+
 block_handlers = {'if':        None,
                   'include':   handle_include,
                   'while':     None,

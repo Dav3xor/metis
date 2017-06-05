@@ -3,8 +3,10 @@
 # longer
 # comment
 
-include - filea
-        - fileb
+include 
+ - filea
+ - fileb
+fin
 
 def square float x <- float:
   print "hello".
