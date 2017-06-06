@@ -342,12 +342,15 @@ def handle_exp(tokens):
   handle_lexp(tokens)
 
 def handle_if(tokens):
+  print "if"
   handle_exp(tokens)
   token = peek(tokens)
   while token == "else":
+    print "else"
     token = tokens.get_token()
     token = tokens.peek()
     if token == "if":
+      print "if after else"
       tokens.get_token()
       handle_exp(tokens) 
     handle_bs(tokens)
