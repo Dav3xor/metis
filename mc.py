@@ -380,10 +380,12 @@ def handle_bs(tokens):
   token = peek(tokens)
   print "xxxx " + token
   if token in block_handlers:
-    handle_block(tokens)
-    tokens.get_token()
+    if handle_block(tokens):
+      tokens.get_token()
+      return True
   else:
-    handle_stmt(tokens)
+    if handle_stmt(tokens):
+      return True
 
 with open("test.m","r") as input:
   input = input.read()
