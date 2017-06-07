@@ -303,7 +303,7 @@ def handle_stmt(tokens):
     print "handler"
     #tokens.get_token()
     stmt_handlers[token](tokens)
-
+    return True
 
   # else, the next token is our thing...
   elif not token:
@@ -349,7 +349,7 @@ def handle_if(tokens):
   while token == "else":
     print "else"
     token = tokens.get_token()
-    token = tokens.peek()
+    token = peek(tokens)
     if token == "if":
       print "if after else"
       tokens.get_token()
@@ -369,6 +369,9 @@ def handle_block(tokens):
   if peek(tokens) in block_handlers:
     # do stuff
     block_handlers[tokens.get_token()](tokens)
+    return True
+  else:
+    return False
   
   #end = tokens.get_token()
   #if end != "fin":
@@ -383,9 +386,15 @@ def handle_bs(tokens):
     if handle_block(tokens):
       tokens.get_token()
       return True
+    else:
+      return False
   else:
-    if handle_stmt(tokens):
-      return True
+    return handle_stmt(tokens)
+
+
+
+
+
 
 with open("test.m","r") as input:
   input = input.read()
