@@ -357,9 +357,14 @@ def handle_if(tokens):
     handle_bs(tokens)
 
 
+def handle_while(tokens):
+  print "while"
+  handle_exp(tokens)
+  handle_bs(tokens)
+
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
-                  'while':     None,
+                  'while':     handle_while,
                   'for':       None,
                   'def':       handle_functiondef,
                   'type':      None}
