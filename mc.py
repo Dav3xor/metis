@@ -284,8 +284,13 @@ def handle_return(tokens):
   print "return"
   print peek(tokens)
   handle_lexp(tokens)
+
 def handle_trait(tokens):
   print "trait"
+
+def handle_assignment(tokens):
+  assigned = tokens.get_token()
+  handle_lexp(tokens)
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
@@ -320,9 +325,15 @@ def handle_stmt(tokens):
       handle_trait(tokens)
 
     elif valid_label(token):
-      # function call
-      print "function call"
-      handle_fcall(tokens) 
+      # might be assignment...
+      label = tokens.get_token()
+      if peek(tokens) == ':=':
+        tokens.push_token(label)
+        handle_assignment(tokens)
+      else:
+        # function call
+        print "function call"
+        handle_fcall(tokens) 
   
   end = tokens.get_token()
   if end != ".":
