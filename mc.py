@@ -158,7 +158,16 @@ def handle_functiondef(tokens):
     handle_bs(tokens)
   print "end function"
    
-
+def handle_assignment_operator(tokens):
+  colon = peek(tokens)
+  if colon != ':':
+    return False
+  tokens.get_token()
+  equals = peek(tokens)
+  if equals != '=':
+    raise Exception("syntax error: = should follow :, not " + equals)
+  tokens.get_token()
+  return True
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
@@ -329,7 +338,7 @@ def handle_stmt(tokens):
     elif valid_label(token):
       # might be assignment...
       label = tokens.get_token()
-      if peek(tokens) == ':=':
+      if handle_assignment_operator(tokens):
         tokens.push_token(label)
         handle_assignment(tokens)
       else:
@@ -419,7 +428,7 @@ with open("test.m","r") as input:
   input = input.read()
 
   lexer = shlex.shlex(input)
-  #for token in lexer:
-  #  print token
+  for token in lexer:
+    print token
   while peek(lexer):
     handle_bs(lexer)
