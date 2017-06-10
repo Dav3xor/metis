@@ -159,6 +159,7 @@ def handle_functiondef(tokens):
   print "end function"
    
 def handle_assignment_operator(tokens):
+  "handling assignment..."
   colon = peek(tokens)
   if colon != ':':
     return False
@@ -428,7 +429,7 @@ with open("test.m","r") as input:
   input = input.read()
 
   lexer = shlex.shlex(input)
-  for token in lexer:
-    print token
+  #for token in lexer:
+  #  print token
   while peek(lexer):
     handle_bs(lexer)
