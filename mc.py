@@ -50,11 +50,11 @@ def valid_integer(token):
     return None
 
 def parse_number(tokens):
+  print "parsing number"
   cur      = peek(tokens)
   sign     = "positive"
   number   = "" 
   if cur == "-":
-    print "pn -"
     number += cur
     num_type = "signed"
     sign = "negative"
@@ -62,13 +62,11 @@ def parse_number(tokens):
     cur  = peek(tokens)
 
   if cur == ".":
-    print "pn ."
     number += cur
     tokens.get_token()
     cur    = peek(tokens)
 
   if cur.isdigit():
-    print "pn digit"
     number   += cur 
     tokens.get_token()
     cur = peek(tokens)
