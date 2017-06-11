@@ -152,7 +152,6 @@ def handle_functiondef(tokens):
   if colon != ':':
     raise Exception("syntax error: function declaration does not end in ':' - " + returntype)
   while peek(tokens) != "fin":
-    print "-->" + peek(tokens)
     handle_bs(tokens)
   print "end function"
    
@@ -167,6 +166,7 @@ def handle_assignment_operator(tokens):
     raise Exception("syntax error: = should follow :, not " + equals)
   tokens.get_token()
   return True
+
 def handle_return_arrows(tokens):
   token = tokens.get_token()
   # handle return/returnnv/raise
