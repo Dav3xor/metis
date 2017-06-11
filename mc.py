@@ -231,27 +231,20 @@ def handle_factor(tokens):
   print peek(tokens)
   number = parse_number(tokens)
   if number:
-    print "a"
     print "number: " + number
     return True
   else:
-    print "b"
     token = peek(tokens)
     print token
     if token[0] == '"':
-      print "1"
       print token[1:-1]
-      print "--- " +peek(tokens)
       tokens.get_token()
-      print "--- " +peek(tokens)
       return True
     elif token in factor_handlers:
-      print "2"
       tokens.get_token()
       factor_handlers[token](tokens)
       return True
     elif valid_label(token):
-      print "3"
       tokens.get_token()
       label = labels.find_label(token)
       return True
