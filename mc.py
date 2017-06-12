@@ -370,7 +370,8 @@ def handle_if(tokens):
 def handle_while(tokens):
   print "while"
   handle_exp(tokens)
-  handle_bs(tokens)
+  while handle_bs(token):
+    pass
 
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
@@ -393,16 +394,12 @@ def handle_block(tokens):
   #  raise Exception("syntax error: block does not end in 'fin'")
 
 def handle_bs(tokens):
-  print "bs - " + peek(tokens)
   # shlex removes comments for us.
   token = peek(tokens)
-  print "xxxx " + token
-  if token in block_handlers:
-    if handle_block(tokens):
-      tokens.get_token()
-      return True
-    else:
-      return False
+  print "bs - " + token
+  if handle_block(tokens):
+    tokens.get_token()
+    return True
   else:
     return handle_stmt(tokens)
 
