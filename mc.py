@@ -293,7 +293,6 @@ def handle_assignment(tokens):
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
   print "stmt"
-  print peek(tokens)
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     None,
                    ':':       None}
@@ -370,9 +369,9 @@ def handle_if(tokens):
 def handle_while(tokens):
   print "while"
   handle_exp(tokens)
-  while handle_bs(token):
-    pass
-
+  while handle_bs(tokens):
+    print "xxxxxxxxxx"
+  
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
