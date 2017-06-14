@@ -50,7 +50,6 @@ def valid_integer(token):
     return None
 
 def parse_number(tokens):
-  print "parsing number"
   cur      = peek(tokens)
   sign     = "positive"
   number   = "" 
@@ -349,7 +348,7 @@ def handle_exp(tokens):
   handle_lexp(tokens)
   print "comparator = " + tokens.get_token()
   handle_lexp(tokens)
-
+  print "end exp" + peek(tokens)
 def handle_if(tokens):
   print "if"
   handle_exp(tokens)
