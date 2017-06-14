@@ -201,7 +201,7 @@ def handle_fcall(tokens):
       break
     else:
       tokens.get_token() # consume the comma
-  
+  return True 
 
 
 
@@ -292,6 +292,9 @@ def handle_assignment(tokens):
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
   print "stmt"
+
+  retval = False
+
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     None,
                    ':':       None}
@@ -304,7 +307,7 @@ def handle_stmt(tokens):
     print "handler"
     #tokens.get_token()
     stmt_handlers[token](tokens)
-    return True
+    retval = True
 
   # else, the next token is our thing...
   elif not token:
@@ -313,28 +316,29 @@ def handle_stmt(tokens):
     if token in atomic_types:
       print "atomic"
       tokens.get_token()
-      atomic_types[token](tokens)
+      retval = atomic_types[token](tokens)
 
     elif token == ":":
       print "trait"
       tokens.get_token()
-      handle_trait(tokens)
+      retval = handle_trait(tokens) #TODO
 
     elif valid_label(token):
       # might be assignment...
       label = tokens.get_token()
       if handle_assignment_operator(tokens):
         tokens.push_token(label)
-        handle_assignment(tokens)
+        retval = handle_assignment(tokens) #TODO
       else:
         # function call
         tokens.push_token(label)
         print "function call"
-        handle_fcall(tokens) 
+        retval = handle_fcall(tokens)
   
   end = tokens.get_token()
   if end != ".":
     raise Exception("syntax error: stmt does not end in '.' (got '"+end+"' instead)")
+  return retval
 
 def handle_include(tokens):
   dash = peek(tokens)
@@ -397,9 +401,14 @@ def handle_bs(tokens):
   print "bs - " + token
   if handle_block(tokens):
     tokens.get_token()
+    print "end block"
+    return True
+  elif handle_stmt(tokens):
+    print "end stmt"
     return True
   else:
-    return handle_stmt(tokens)
+    print "bad bs?"
+    return False
 
 
 
