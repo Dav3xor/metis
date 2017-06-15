@@ -285,9 +285,6 @@ def handle_trait(tokens):
   return True
 
 def handle_assignment(tokens):
-  assigned = tokens.get_token()
-  operator = tokens.get_token()
-  print "assignment operator = " + operator
   return handle_lexp(tokens)
 
 def handle_stmt(tokens):
@@ -328,7 +325,6 @@ def handle_stmt(tokens):
       # might be assignment...
       label = tokens.get_token()
       if handle_assignment_operator(tokens):
-        tokens.push_token(label)
         retval = handle_assignment(tokens) #TODO
       else:
         # function call
