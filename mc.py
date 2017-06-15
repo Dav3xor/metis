@@ -282,12 +282,13 @@ def handle_return(tokens):
 
 def handle_trait(tokens):
   print "trait"
+  return True
 
 def handle_assignment(tokens):
   assigned = tokens.get_token()
   operator = tokens.get_token()
   print "assignment operator = " + operator
-  handle_lexp(tokens)
+  return handle_lexp(tokens)
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
@@ -321,7 +322,7 @@ def handle_stmt(tokens):
     elif token == ":":
       print "trait"
       tokens.get_token()
-      retval = handle_trait(tokens) #TODO
+      retval = handle_trait(tokens)
 
     elif valid_label(token):
       # might be assignment...
