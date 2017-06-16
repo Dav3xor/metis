@@ -371,8 +371,8 @@ def handle_if(tokens):
 def handle_while(tokens):
   print "while"
   handle_exp(tokens)
-  while handle_bs(tokens):
-    print "xxxxxxxxxx"
+  while peek(tokens) != "fin":
+    handle_bs(tokens)
   
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
