@@ -231,6 +231,8 @@ def handle_factor(tokens):
   number = parse_number(tokens)
   if number:
     print "number: " + number
+    if number[-1] == '.':
+      tokens.push_token('.')
     return True
   else:
     token = peek(tokens)
