@@ -355,7 +355,8 @@ def handle_exp(tokens):
 def handle_if(tokens):
   print "if"
   handle_exp(tokens)
-  handle_bs(tokens)
+  while peek(tokens) not in ['else','fin']:
+    handle_bs(tokens)
   token = peek(tokens)
   while token == "else":
     print "else"
@@ -365,7 +366,8 @@ def handle_if(tokens):
       print "if after else"
       tokens.get_token()
       handle_exp(tokens) 
-    handle_bs(tokens)
+    while peek(tokens) not in ['else','fin']:
+      handle_bs(tokens)
 
 
 def handle_while(tokens):
