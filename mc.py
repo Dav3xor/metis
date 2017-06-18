@@ -223,6 +223,14 @@ def handle_group(tokens):
 def handle_vector(tokens):
   while peek(tokens) != '|':
     handle_lexp(tokens)
+  # consume the end |
+  tokens.get_token()
+
+def handle_matrix(tokens):
+  while True:
+    handle_vector(tokens)
+    if peek(tokens) != '|':
+      break
 
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
