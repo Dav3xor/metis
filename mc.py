@@ -220,6 +220,10 @@ def handle_group(tokens):
   if end != ")":
     raise Exception("syntax error: group does not end with ')'")
 
+def handle_vector(tokens):
+  while peek(tokens) != '|':
+    handle_lexp(tokens)
+
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
                       '{': handle_ffcall,
