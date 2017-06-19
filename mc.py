@@ -327,7 +327,8 @@ def handle_stmt(tokens):
 
     if token in atomic_types:
       print "atomic"
-      tokens.get_token()
+      vartype = tokens.get_token()
+      varname = tokens.get_token()
       retval = atomic_types[token](tokens)
 
     elif token == ":":
