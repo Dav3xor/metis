@@ -331,7 +331,7 @@ def handle_stmt(tokens):
       varname = tokens.get_token()
       if handle_assignment_operator(tokens):
         retval = handle_assignment(tokens) #TODO
-      retval = atomic_types[token](tokens)
+      #retval = atomic_types[token](tokens)
 
     elif token == ":":
       print "trait"
