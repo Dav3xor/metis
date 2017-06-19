@@ -237,7 +237,7 @@ def handle_factor(tokens):
                       '{': handle_ffcall,
                       'true': None,
                       'false': None,
-                      '|': None }    
+                      '|': handle_matrix }    
   print "factor"
   print peek(tokens)
   number = parse_number(tokens)
@@ -329,6 +329,8 @@ def handle_stmt(tokens):
       print "atomic"
       vartype = tokens.get_token()
       varname = tokens.get_token()
+      if handle_assignment_operator(tokens):
+        retval = handle_assignment(tokens) #TODO
       retval = atomic_types[token](tokens)
 
     elif token == ":":
@@ -338,12 +340,12 @@ def handle_stmt(tokens):
 
     elif valid_label(token):
       # might be assignment...
-      label = tokens.get_token()
+      varname = tokens.get_token()
       if handle_assignment_operator(tokens):
         retval = handle_assignment(tokens) #TODO
       else:
         # function call
-        tokens.push_token(label)
+        tokens.push_token(varname)
         print "function call"
         retval = handle_fcall(tokens)
   
