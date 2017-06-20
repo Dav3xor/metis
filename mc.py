@@ -10,7 +10,7 @@ def peek(tokens):
   return token
 
 class SyntaxError(Exception):
-  def __init__(self, tokens, message):
+  def __init__(self, message, tokens=None):
     print "Syntax Error: " + message
 
 
@@ -28,7 +28,7 @@ class LabelStack(object):
     for i in reversed(self.stack):
       if label in i:
         return i[label]
-    raise Exception("syntax error: label does not exist - " + label)
+    raise SyntaxError(" label does not exist - " + label)
 
 
 labels = LabelStack()
@@ -132,7 +132,7 @@ def handle_functiondef(tokens):
   label = valid_label(tokens.get_token())
   args = []
   if not label:
-    raise Exception("syntax error: invalid label - " + label)
+    raise SyntaxError("invalid label - " + label)
 
   arg = handle_typeident(tokens) 
   if arg:
@@ -150,11 +150,11 @@ def handle_functiondef(tokens):
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
     if returntype not in atomic_types:
-      raise Exception("syntax error: unknown return type - " + returntype)
+      raise SyntaxError("unknown return type - " + returntype)
     print returntype
   colon = tokens.get_token()
   if colon != ':':
-    raise Exception("syntax error: function declaration does not end in ':' - " + returntype)
+    raise SyntaxError("function declaration does not end in ':' - " + returntype)
   while peek(tokens) != "fin":
     handle_bs(tokens)
   print "end function"
@@ -167,7 +167,7 @@ def handle_assignment_operator(tokens):
   tokens.get_token()
   equals = peek(tokens)
   if equals != '=':
-    raise Exception("syntax error: = should follow :, not " + equals)
+    raise SyntaxError("= should follow :, not " + equals)
   tokens.get_token()
   return True
 
@@ -183,7 +183,7 @@ def handle_return_arrows(tokens):
       else:
         tokens.push_token(israise)
     else:
-      raise Exception("syntax error: statement start with < but not <-")
+      raise SyntaxError("statement start with < but not <-")
     return token
   else:
     tokens.push_token(token)
@@ -194,7 +194,7 @@ def handle_group(tokens):
   handle_lexp(tokens);
   end = tokens.get_token()
   if end != ')':
-   raise Exception("syntax error: grouped lexp doesn't end with ')'")
+   raise SyntaxError("grouped lexp doesn't end with ')'")
 
 def handle_fcall(tokens):
   print "fcall"
@@ -216,14 +216,14 @@ def handle_ffcall(tokens):
   handle_fcall(tokens);
   end = tokens.get_token()
   if end != '}':
-   raise Exception("syntax error: ffcall doesn't end with '}'")
+   raise SyntaxError("ffcall doesn't end with '}'")
 
 def handle_group(tokens):
   print "group"
   handle_lexp(tokens)
   end = tokens.get_token()
   if end != ")":
-    raise Exception("syntax error: group does not end with ')'")
+    raise SyntaxError("group does not end with ')'")
 
 def handle_vector(tokens):
   while peek(tokens) != '|':
@@ -356,7 +356,7 @@ def handle_stmt(tokens):
   
   end = tokens.get_token()
   if end != ".":
-    raise Exception("syntax error: stmt does not end in '.' (got '"+end+"' instead)")
+    raise SyntaxError("stmt does not end in '.' (got '"+end+"' instead)")
   return retval
 
 def handle_include(tokens):
@@ -414,7 +414,7 @@ def handle_block(tokens):
   
   #end = tokens.get_token()
   #if end != "fin":
-  #  raise Exception("syntax error: block does not end in 'fin'")
+  #  raise SyntaxError("block does not end in 'fin'")
 
 def handle_bs(tokens):
   # shlex removes comments for us.
