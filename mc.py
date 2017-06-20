@@ -9,6 +9,11 @@ def peek(tokens):
   tokens.push_token(token)
   return token
 
+class SyntaxError(Exception):
+  def __init__(self, tokens, message):
+    print "Syntax Error: " + message
+
+
 class LabelStack(object):
   def __init__(self):
     self.stack = [{}]
