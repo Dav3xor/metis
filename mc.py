@@ -400,13 +400,22 @@ def handle_while(tokens):
   handle_exp(tokens)
   while peek(tokens) != "fin":
     handle_bs(tokens)
-  
+
+def handle_typedef(tokens):
+  type_handlers = {'def':      handle_functiondef,
+                   'trait':    None,
+                   
+  while peek(tokens) != "fin":
+    if handle_typeident(tokens):
+      pass
+
+    
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
                   'for':       None,
                   'def':       handle_functiondef,
-                  'type':      None}
+                  'type':      handle_type}
 
 def handle_block(tokens):
   print "block"
