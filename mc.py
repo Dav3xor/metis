@@ -11,7 +11,10 @@ def peek(tokens):
 
 class SyntaxError(Exception):
   def __init__(self, message, tokens=None):
-    print "Syntax Error: " + message
+    if tokens:
+      print "Syntax Error: " + message + " line - " + str(tokens.lineno)
+    else:
+      print "Syntax Error: " + message
 
 
 class LabelStack(object):
@@ -132,7 +135,7 @@ def handle_functiondef(tokens):
   label = valid_label(tokens.get_token())
   args = []
   if not label:
-    raise SyntaxError("invalid label - " + label)
+    raise SyntaxError("invalid label - " + label, tokens)
 
   arg = handle_typeident(tokens) 
   if arg:
@@ -150,11 +153,11 @@ def handle_functiondef(tokens):
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
     if returntype not in atomic_types:
-      raise SyntaxError("unknown return type - " + returntype)
+      raise SyntaxError("unknown return type - " + returntype, tokens)
     print returntype
   colon = tokens.get_token()
   if colon != ':':
-    raise SyntaxError("function declaration does not end in ':' - " + returntype)
+    raise SyntaxError("function declaration does not end in ':' - " + returntype, tokens)
   while peek(tokens) != "fin":
     handle_bs(tokens)
   print "end function"
@@ -167,7 +170,7 @@ def handle_assignment_operator(tokens):
   tokens.get_token()
   equals = peek(tokens)
   if equals != '=':
-    raise SyntaxError("= should follow :, not " + equals)
+    raise SyntaxError("= should follow :, not " + equals, tokens)
   tokens.get_token()
   return True
 
@@ -183,7 +186,7 @@ def handle_return_arrows(tokens):
       else:
         tokens.push_token(israise)
     else:
-      raise SyntaxError("statement start with < but not <-")
+      raise SyntaxError("statement start with < but not <-", tokens)
     return token
   else:
     tokens.push_token(token)
@@ -194,7 +197,7 @@ def handle_group(tokens):
   handle_lexp(tokens);
   end = tokens.get_token()
   if end != ')':
-   raise SyntaxError("grouped lexp doesn't end with ')'")
+   raise SyntaxError("grouped lexp doesn't end with ')'", tokens)
 
 def handle_fcall(tokens):
   print "fcall"
@@ -216,14 +219,14 @@ def handle_ffcall(tokens):
   handle_fcall(tokens);
   end = tokens.get_token()
   if end != '}':
-   raise SyntaxError("ffcall doesn't end with '}'")
+   raise SyntaxError("ffcall doesn't end with '}'", tokens)
 
 def handle_group(tokens):
   print "group"
   handle_lexp(tokens)
   end = tokens.get_token()
   if end != ")":
-    raise SyntaxError("group does not end with ')'")
+    raise SyntaxError("group does not end with ')'", tokens)
 
 def handle_vector(tokens):
   while peek(tokens) != '|':
@@ -236,6 +239,8 @@ def handle_matrix(tokens):
     handle_vector(tokens)
     if peek(tokens) != '|':
       break
+    # consume the next |
+    tokens.get_token()
 
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
@@ -356,7 +361,7 @@ def handle_stmt(tokens):
   
   end = tokens.get_token()
   if end != ".":
-    raise SyntaxError("stmt does not end in '.' (got '"+end+"' instead)")
+    raise SyntaxError("stmt does not end in '.' (got '"+end+"' instead)", tokens)
   return retval
 
 def handle_include(tokens):
@@ -414,7 +419,7 @@ def handle_block(tokens):
   
   #end = tokens.get_token()
   #if end != "fin":
-  #  raise SyntaxError("block does not end in 'fin'")
+  #  raise SyntaxError("block does not end in 'fin'", tokens)
 
 def handle_bs(tokens):
   # shlex removes comments for us.
