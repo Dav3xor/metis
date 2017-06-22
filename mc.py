@@ -402,13 +402,16 @@ def handle_while(tokens):
     handle_bs(tokens)
 
 def handle_typedef(tokens):
-  type_handlers = {'def':      handle_functiondef,
+  typedef_handlers = {'def':      handle_functiondef,
                    'trait':    None,
                    
   while peek(tokens) != "fin":
     if handle_typeident(tokens):
-      pass
-
+      dot = tokens.get_token()
+      if dot != ".":
+        raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
+    elif peek(tokens) in typedef_handlers:
+       
     
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
