@@ -403,7 +403,7 @@ def handle_while(tokens):
 
 def handle_typedef(tokens):
   typedef_handlers = {'def':      handle_functiondef,
-                   'trait':    None,
+                      'trait':    None}
                    
   while peek(tokens) != "fin":
     if handle_typeident(tokens):
@@ -411,14 +411,14 @@ def handle_typedef(tokens):
       if dot != ".":
         raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
     elif peek(tokens) in typedef_handlers:
-       
+      typedef_handlers[tokens.get_token()](tokens) 
     
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
                   'for':       None,
                   'def':       handle_functiondef,
-                  'type':      handle_type}
+                  'type':      handle_typedef}
 
 def handle_block(tokens):
   print "block"
