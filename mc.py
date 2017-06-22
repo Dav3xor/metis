@@ -402,6 +402,7 @@ def handle_while(tokens):
     handle_bs(tokens)
 
 def handle_typedef(tokens):
+  name = tokens.get_token()
   typedef_handlers = {'def':      handle_functiondef,
                       'trait':    None}
                    
