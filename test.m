@@ -17,6 +17,15 @@ def square float x <- float:
   <- x * x.
 fin
 
+type Ship
+  float xpos.
+  float ypos.
+  float xcomp.
+  float ycomp.
+  def speed <- float:
+    <- { sqrt (xcomp*xcomp + ycomp*ycomp) }.
+  fin
+fin
 
 def complex float x, float y <- float:
   if x = 0
