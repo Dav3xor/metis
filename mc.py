@@ -417,8 +417,7 @@ def handle_typedef(tokens):
         raise SyntaxError("block in type declaration doesn't end with 'fin'")
       else:
         tokens.get_token()
-  tokens.get_token() # get the trailing fin
-
+  print "end typedef"
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
