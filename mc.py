@@ -413,7 +413,12 @@ def handle_typedef(tokens):
         raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
     elif peek(tokens) in typedef_handlers:
       typedef_handlers[tokens.get_token()](tokens) 
-    
+      if peek(tokens) != "fin":
+        raise SyntaxError("block in type declaration doesn't end with 'fin'")
+      else:
+        tokens.get_token()
+  tokens.get_token() # get the trailing fin
+
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
