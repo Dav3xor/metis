@@ -353,24 +353,13 @@ def handle_stmt(tokens):
   # else, the next token is our thing...
   elif not token:
     token = peek(tokens)
-
-    if token in atomic_types:
-      retval = handle_assignment(tokens) #TODO
-      #retval = atomic_types[token](tokens)
-
-    elif token == ":":
+    if token == ":":
       print "trait"
       tokens.get_token()
       retval = handle_trait(tokens)
+    else:
+      retval = handle_assignment(tokens)
 
-    elif valid_label(token):
-      # might be assignment...
-      if not handle_assignment(tokens):
-        # function call
-        tokens.push_token(varname)
-        print "function call"
-        retval = handle_fcall(tokens)
-  
   end = tokens.get_token()
   if end != ".":
     raise SyntaxError("stmt does not end in '.' (got '"+end+"' instead)", tokens)
