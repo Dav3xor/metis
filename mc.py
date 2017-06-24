@@ -310,18 +310,26 @@ def handle_trait(tokens):
 
 def handle_assignment(tokens):
   token   = tokens.get_token()
-  type    = None
+  vartype = None
   varname = None
 
   if token in atomic_types:
-    type = token
-    token = tokens.get_token()
-
-  varname = token
+    vartype = token
+    varname = tokens.get_token()
+  
 
   if handle_assignment_operator(tokens):
+    if not valid_label(varname):
+      raise SyntaxError("variable name: " + varname + " is not a valid label")
     return handle_lexp(tokens)
-
+  else:
+    if varname:
+      tokens.push_token(varname)
+    if vartype:
+      tokens.push_token(vartype)
+    return false
+      
+    
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
   print "stmt"
@@ -347,11 +355,7 @@ def handle_stmt(tokens):
     token = peek(tokens)
 
     if token in atomic_types:
-      print "atomic"
-      vartype = tokens.get_token()
-      varname = tokens.get_token()
-      if handle_assignment_operator(tokens):
-        retval = handle_assignment(tokens) #TODO
+      retval = handle_assignment(tokens) #TODO
       #retval = atomic_types[token](tokens)
 
     elif token == ":":
@@ -361,10 +365,7 @@ def handle_stmt(tokens):
 
     elif valid_label(token):
       # might be assignment...
-      varname = tokens.get_token()
-      if handle_assignment_operator(tokens):
-        retval = handle_assignment(tokens) #TODO
-      else:
+      if not handle_assignment(tokens):
         # function call
         tokens.push_token(varname)
         print "function call"
