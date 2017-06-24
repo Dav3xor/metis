@@ -401,6 +401,10 @@ def handle_while(tokens):
   while peek(tokens) != "fin":
     handle_bs(tokens)
 
+def handle_for(tokens):
+  if peek(tokens) != ';':
+    # we have an initial condition
+    handle_assignment(tokens)
 def handle_typedef(tokens):
   name = tokens.get_token()
   typedef_handlers = {'def':      handle_functiondef,
@@ -421,7 +425,7 @@ def handle_typedef(tokens):
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
-                  'for':       None,
+                  'for':       handle_for,
                   'def':       handle_functiondef,
                   'type':      handle_typedef}
 
