@@ -309,7 +309,18 @@ def handle_trait(tokens):
   return True
 
 def handle_assignment(tokens):
-  return handle_lexp(tokens)
+  token   = tokens.get_token()
+  type    = None
+  varname = None
+
+  if token in atomic_types:
+    type = token
+    token = tokens.get_token()
+
+  varname = token
+
+  if handle_assignment_operator(tokens):
+    return handle_lexp(tokens)
 
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
