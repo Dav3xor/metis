@@ -327,7 +327,7 @@ def handle_assignment(tokens):
       tokens.push_token(varname)
     if vartype:
       tokens.push_token(vartype)
-    return false
+    return False
       
     
 def handle_stmt(tokens):
@@ -359,7 +359,8 @@ def handle_stmt(tokens):
       retval = handle_trait(tokens)
     else:
       retval = handle_assignment(tokens)
-
+      if not retval:
+        retval = handle_fcall(tokens)
   end = tokens.get_token()
   if end != ".":
     raise SyntaxError("stmt does not end in '.' (got '"+end+"' instead)", tokens)
