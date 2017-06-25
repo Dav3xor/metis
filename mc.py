@@ -361,6 +361,7 @@ def handle_stmt(tokens):
       print "stmt assignment"
       retval = handle_assignment(tokens)
       if not retval:
+        print "stmt fcall"
         retval = handle_fcall(tokens)
   end = tokens.get_token()
   if end != ".":
