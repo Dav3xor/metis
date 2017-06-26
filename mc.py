@@ -316,9 +316,13 @@ def handle_assignment(tokens):
   if token in atomic_types:
     vartype = token
     varname = tokens.get_token()
+  else:
+    varname = token
+    print varname
   
 
   if handle_assignment_operator(tokens):
+    print varname
     if not valid_label(varname):
       raise SyntaxError("variable name: " + varname + " is not a valid label")
     return handle_lexp(tokens)
