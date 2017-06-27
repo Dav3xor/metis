@@ -243,11 +243,9 @@ def handle_matrix(tokens):
     tokens.get_token()
 
 def handle_true(tokens):
-  tokens.get_token()
   return True
 
 def handle_false(tokens):
-  tokens.get_token()
   return True
 
 def handle_factor(tokens):
