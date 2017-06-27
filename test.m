@@ -35,6 +35,8 @@ def complex float x, float y <- float:
   fin
   while x > 5
     print "3".
+    print true.
+    print false.
     x := x - 1.
   fin
   <- x*(x+y)*{ square 5 }+5.05+7.777.
