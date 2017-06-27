@@ -242,10 +242,14 @@ def handle_matrix(tokens):
     # consume the next |
     tokens.get_token()
 
+def handle_true(tokens):
+  tokens.get_token()
+  return True
+
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
                       '{': handle_ffcall,
-                      'true': None,
+                      'true': handle_true,
                       'false': None,
                       '|': handle_matrix }    
   print "factor"
