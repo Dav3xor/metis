@@ -246,11 +246,15 @@ def handle_true(tokens):
   tokens.get_token()
   return True
 
+def handle_false(tokens):
+  tokens.get_token()
+  return True
+
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
                       '{': handle_ffcall,
                       'true': handle_true,
-                      'false': None,
+                      'false': handle_false,
                       '|': handle_matrix }    
   print "factor"
   print peek(tokens)
