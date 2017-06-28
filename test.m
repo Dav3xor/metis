@@ -30,6 +30,7 @@ fin
 def complex float x, float y <- float:
   if x = 0
     print "1".
+    <-! "x can't be zero!".
   else
     print "2".
   fin
