@@ -310,9 +310,19 @@ def handle_return(tokens):
   print peek(tokens)
   handle_lexp(tokens)
 
+def handle_throw_exception(tokens):
+  print "throw exception"
+  print peek(tokens)
+  handle_lexp(tokens)
+
 def handle_trait(tokens):
   print "trait"
   return True
+
+def handle_throw_exception(tokens):
+  print "throw exception"
+  print peek(tokens)
+  handle_lexp(tokens)
 
 def handle_assignment(tokens):
   token   = tokens.get_token()
@@ -347,7 +357,7 @@ def handle_stmt(tokens):
   retval = False
 
   stmt_handlers = {'<-':      handle_return,
-                   '<-!':     None,
+                   '<-!':     handle_throw_exception,
                    ':':       None}
                    
 
