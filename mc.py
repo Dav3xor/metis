@@ -348,7 +348,12 @@ def handle_assignment(tokens):
     if vartype:
       tokens.push_token(vartype)
     return False
-      
+
+def handle_traitident(tokens):
+  label = tokens.get_token()
+  if not valid_label(label):
+    raise SyntaxError("trait identifier not valid label")
+
     
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
