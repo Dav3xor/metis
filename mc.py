@@ -130,13 +130,8 @@ def handle_typeident(tokens):
     labels.add_label(label,1)
     return (vartype, label)
 
-def handle_functiondef(tokens):
-  print "functiondef"
-  label = valid_label(tokens.get_token())
+def handle_args(tokens):
   args = []
-  if not label:
-    raise SyntaxError("invalid label - " + label, tokens)
-
   arg = handle_typeident(tokens) 
   if arg:
     args.append(arg)
@@ -150,6 +145,15 @@ def handle_functiondef(tokens):
         tokens.push_token(comma)
         break
   print args
+    
+def handle_functiondef(tokens):
+  print "functiondef"
+  label = valid_label(tokens.get_token())
+  if not label:
+    raise SyntaxError("invalid label - " + label, tokens)
+
+  handle_args(tokens)
+  
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
     if returntype not in atomic_types:
