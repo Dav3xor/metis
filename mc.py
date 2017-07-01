@@ -367,7 +367,7 @@ def handle_stmt(tokens):
 
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     handle_throw_exception,
-                   ':':       None}
+                   ':':       handle_traitident}
                    
 
   # handle return/returnnv/raise
