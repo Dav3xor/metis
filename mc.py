@@ -357,6 +357,7 @@ def handle_assignment(tokens):
     return False
 
 def handle_traitident(tokens):
+  handle_urfunction(tokens)
   label = tokens.get_token()
   if not valid_label(label):
     raise SyntaxError("trait identifier not valid label")
