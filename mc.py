@@ -145,8 +145,8 @@ def handle_args(tokens):
         tokens.push_token(comma)
         break
   print args
-    
-def handle_functiondef(tokens):
+
+def handle_urfunction(tokens):
   print "functiondef"
   label = valid_label(tokens.get_token())
   if not label:
@@ -159,6 +159,9 @@ def handle_functiondef(tokens):
     if returntype not in atomic_types:
       raise SyntaxError("unknown return type - " + returntype, tokens)
     print returntype
+
+def handle_functiondef(tokens):
+  handle_urfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
     raise SyntaxError("function declaration does not end in ':' - " + returntype, tokens)
