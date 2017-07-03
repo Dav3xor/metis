@@ -443,9 +443,10 @@ def handle_for(tokens):
     # we have an initial condition
     handle_assignment(tokens)
 def handle_typedef(tokens):
+  print "typedef"
   name = tokens.get_token()
-  typedef_handlers = {'def':      handle_functiondef,
-                      'trait':    None}
+  typedef_handlers = {'def':      handle_functiondef
+                      'trait':    handle_traitdef}
                    
   while peek(tokens) != "fin":
     if handle_typeident(tokens):
@@ -459,6 +460,7 @@ def handle_typedef(tokens):
       else:
         tokens.get_token()
   print "end typedef"
+  
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,

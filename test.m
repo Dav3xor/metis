@@ -22,6 +22,7 @@ type Ship
   float ypos.
   float xcomp.
   float ycomp.
+  : float size <-float.
   def speed <- float:
     <- { sqrt (xcomp*xcomp + ycomp*ycomp) }.
   fin
