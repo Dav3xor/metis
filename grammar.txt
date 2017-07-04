@@ -67,7 +67,7 @@ function      : <label> <args> ("<-" <type>) ':' <bs>*;
 
 trait         : ':' <label> <bs>*;
 
-traitident    : ':' <label> <args> ("<-" <type>)?;
+traitident    : 'trait' <label> <args> ("<-" <type>)?;
 
 if            : "if" <exp> <bs>* ("else if" <exp> <bs>*)* ("else" <bs>*)? ;
 
