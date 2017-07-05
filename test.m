@@ -18,11 +18,13 @@ def square float x <- float:
 fin
 
 trait size <- float.
+
 type Ship
   float xpos.
   float ypos.
   float xcomp.
   float ycomp.
+  float weight.
   :size
     <- 5.
   fin
