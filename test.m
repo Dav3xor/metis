@@ -17,12 +17,16 @@ def square float x <- float:
   <- x * x.
 fin
 
+trait size <- float.
 type Ship
   float xpos.
   float ypos.
   float xcomp.
   float ycomp.
-  : float size <-float.
+  :size
+    <- 5.
+  fin
+  
   def speed <- float:
     <- { sqrt (xcomp*xcomp + ycomp*ycomp) }.
   fin
