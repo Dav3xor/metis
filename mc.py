@@ -371,7 +371,7 @@ def handle_stmt(tokens):
 
   stmt_handlers = {'<-':      handle_return,
                    '<-!':     handle_throw_exception,
-                   ':':       handle_traitident}
+                   'trait':   handle_traitident}
                    
 
   # handle return/returnnv/raise
@@ -445,8 +445,8 @@ def handle_for(tokens):
 def handle_typedef(tokens):
   print "typedef"
   name = tokens.get_token()
-  typedef_handlers = {'def':      handle_functiondef
-                      'trait':    handle_traitdef}
+  typedef_handlers = {'def':      handle_functiondef,
+                      ':':        handle_traitdef}
                    
   while peek(tokens) != "fin":
     if handle_typeident(tokens):
