@@ -12,7 +12,7 @@ def peek(tokens):
 class SyntaxError(Exception):
   def __init__(self, message, tokens=None):
     if tokens:
-      print "Syntax Error: " + message + " line - " + str(tokens.lineno)
+      print "Syntax Error: " + message + " at line: " + str(tokens.lineno)
     else:
       print "Syntax Error: " + message
 
@@ -27,11 +27,11 @@ class LabelStack(object):
 
   def add_label(self,label,value):
     self.stack[-1][label] = value
-  def find_label(self,label):
+  def find_label(self,label, tokens):
     for i in reversed(self.stack):
       if label in i:
         return i[label]
-    raise SyntaxError(" label does not exist - " + label)
+    raise SyntaxError(" label does not exist - " + label, tokens)
 
 
 labels = LabelStack()
@@ -282,7 +282,7 @@ def handle_factor(tokens):
       return True
     elif valid_label(token):
       tokens.get_token()
-      label = labels.find_label(token)
+      label = labels.find_label(token,tokens)
       return True
   return False
 
@@ -357,6 +357,7 @@ def handle_assignment(tokens):
     return False
 
 def handle_traitident(tokens):
+  print "traitident"
   handle_urfunction(tokens)
   label = tokens.get_token()
   if not valid_label(label):
