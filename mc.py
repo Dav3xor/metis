@@ -359,9 +359,6 @@ def handle_assignment(tokens):
 def handle_traitident(tokens):
   print "traitident"
   handle_urfunction(tokens)
-  label = tokens.get_token()
-  if not valid_label(label):
-    raise SyntaxError("trait identifier not valid label")
 
     
 def handle_stmt(tokens):
@@ -391,6 +388,10 @@ def handle_stmt(tokens):
       print "trait"
       tokens.get_token()
       retval = handle_trait(tokens)
+    elif token == "trait":
+      print "traitident"
+      tokens.get_token()
+      retval = handle_traitident(tokens)
     else:
       print "stmt assignment"
       retval = handle_assignment(tokens)
