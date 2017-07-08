@@ -324,6 +324,10 @@ def handle_throw_exception(tokens):
 
 def handle_trait(tokens):
   print "trait"
+  name = valid_label(tokens.get_token())
+  while peek(tokens) != "fin":
+    handle_bs(tokens)
+
   return True
 
 def handle_throw_exception(tokens):
@@ -384,11 +388,7 @@ def handle_stmt(tokens):
   # else, the next token is our thing...
   elif not token:
     token = peek(tokens)
-    if token == ":":
-      print "trait"
-      tokens.get_token()
-      retval = handle_trait(tokens)
-    elif token == "trait":
+    if token == "trait":
       print "traitident"
       tokens.get_token()
       retval = handle_traitident(tokens)
@@ -448,7 +448,7 @@ def handle_typedef(tokens):
   print "typedef"
   name = tokens.get_token()
   typedef_handlers = {'def':      handle_functiondef,
-                      ':':        handle_traitdef}
+                      ':':        handle_trait}
                    
   while peek(tokens) != "fin":
     if handle_typeident(tokens):
