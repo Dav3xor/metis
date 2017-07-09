@@ -13,6 +13,10 @@ class Function(Element):
   def render(self):
     print "rendering function"
 
+class Class(Element):
+  def render(self):
+    print "rendering class"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
