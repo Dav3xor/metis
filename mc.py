@@ -7,8 +7,11 @@ import re
 class Element:
   def __init__(self):
     self.children = []
+    self.type     = "element"
 
-
+class Function(Element):
+  def render(self):
+    print "rendering function"
 
 def peek(tokens):
   token = tokens.get_token()
