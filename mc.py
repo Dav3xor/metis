@@ -12,10 +12,14 @@ class Element:
 class Function(Element):
   def render(self):
     print "rendering function"
+    for child in children:
+      child.render()
 
 class Class(Element):
   def render(self):
     print "rendering class"
+    for child in children:
+      child.render()
 
 def peek(tokens):
   token = tokens.get_token()
