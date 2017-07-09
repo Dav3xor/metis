@@ -4,6 +4,12 @@
 import shlex
 import re
 
+class Element:
+  def __init__(self):
+    self.children = []
+
+
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
