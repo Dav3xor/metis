@@ -163,7 +163,7 @@ def handle_args(tokens):
         break
   print args
 
-def handle_urfunction(tokens):
+def handle_beginfunction(tokens):
   print "functiondef"
   label = valid_label(tokens.get_token())
   if not label:
@@ -178,7 +178,7 @@ def handle_urfunction(tokens):
     print returntype
 
 def handle_functiondef(tokens):
-  handle_urfunction(tokens)
+  handle_beginfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
     raise SyntaxError("function declaration does not end in ':' - " + returntype, tokens)
@@ -379,7 +379,7 @@ def handle_assignment(tokens):
 
 def handle_traitident(tokens):
   print "traitident"
-  handle_urfunction(tokens)
+  handle_beginfunction(tokens)
 
     
 def handle_stmt(tokens):
