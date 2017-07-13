@@ -20,6 +20,9 @@ class Class(Element):
     print "rendering class"
     for child in children:
       child.render()
+class Stmt(Element):
+  def render(self):
+    print "rendering stmt"
 
 def peek(tokens):
   token = tokens.get_token()
