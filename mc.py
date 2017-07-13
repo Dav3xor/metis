@@ -23,7 +23,10 @@ class Class(Element):
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
-
+class Block(Element):
+  def render(self):
+    print "rendering block"
+    
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
