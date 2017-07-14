@@ -26,7 +26,12 @@ class Stmt(Element):
 class Block(Element):
   def render(self):
     print "rendering block"
-    
+class Number(Element):
+  def __init__(self, number):
+    self.number = number
+  def render(self):
+    print "rendering number"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
@@ -291,7 +296,7 @@ def handle_factor(tokens):
     print "number: " + number
     if number[-1] == '.':
       tokens.push_token('.')
-    return True
+    return Number(number)
   else:
     token = peek(tokens)
     print token
