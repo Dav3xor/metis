@@ -353,11 +353,6 @@ def handle_trait(tokens):
 
   return True
 
-def handle_throw_exception(tokens):
-  print "throw exception"
-  print peek(tokens)
-  handle_lexp(tokens)
-
 def handle_assignment(tokens):
   token   = tokens.get_token()
   vartype = None
