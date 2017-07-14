@@ -338,12 +338,12 @@ def handle_lexp(tokens):
 def handle_return(tokens):
   print "return"
   print peek(tokens)
-  handle_lexp(tokens)
+  return handle_lexp(tokens)
 
 def handle_throw_exception(tokens):
   print "throw exception"
   print peek(tokens)
-  handle_lexp(tokens)
+  return handle_lexp(tokens)
 
 def handle_trait(tokens):
   print "trait"
