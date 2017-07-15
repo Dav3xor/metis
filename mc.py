@@ -28,10 +28,16 @@ class Block(Element):
     print "rendering block"
 class Number(Element):
   def __init__(self, number):
-    self.number = number
+    self.value = number
   def render(self):
     print "rendering number"
 
+class String(Element):
+  def __init__(self, string):
+    self.value = string
+  def render(self):
+    print "rendering number"
+  
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
