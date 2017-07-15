@@ -308,8 +308,7 @@ def handle_factor(tokens):
     print token
     if token[0] == '"':
       print token[1:-1]
-      tokens.get_token()
-      return True
+      return String(tokens.get_token()[1:-1])
     elif token in factor_handlers:
       tokens.get_token()
       factor_handlers[token](tokens)
