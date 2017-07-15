@@ -264,11 +264,11 @@ def handle_ffcall(tokens):
 
 def handle_group(tokens):
   print "group"
-  handle_lexp(tokens)
+  lexp = handle_lexp(tokens)
   end = tokens.get_token()
   if end != ")":
     raise SyntaxError("group does not end with ')'", tokens)
-
+  return handle_lexp 
 def handle_vector(tokens):
   while peek(tokens) != '|':
     handle_lexp(tokens)
