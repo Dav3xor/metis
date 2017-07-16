@@ -37,7 +37,14 @@ class String(Element):
     self.value = string
   def render(self):
     print "rendering number"
-  
+
+class Term(Element):  
+  def __init__(self):
+    super(Term, self).__init__()
+    self.value = string
+  def render(self):
+    print "rendering number"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
@@ -268,7 +275,7 @@ def handle_group(tokens):
   end = tokens.get_token()
   if end != ")":
     raise SyntaxError("group does not end with ')'", tokens)
-  return handle_lexp 
+  return lexp 
 def handle_vector(tokens):
   while peek(tokens) != '|':
     handle_lexp(tokens)
