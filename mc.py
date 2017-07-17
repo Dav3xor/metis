@@ -9,6 +9,9 @@ class Element:
     self.children = []
     self.type     = "element"
 
+  def add_child(self, child):
+    self.children.append(child)
+
 class Function(Element):
   def render(self):
     print "rendering function"
@@ -40,8 +43,7 @@ class String(Element):
 
 class Term(Element):  
   def __init__(self):
-    super(Term, self).__init__()
-    self.value = string
+    Element.__init__(self)
   def render(self):
     print "rendering number"
 
@@ -329,15 +331,19 @@ def handle_factor(tokens):
 def handle_term(tokens):
   print "term"
   print peek(tokens)
-  if handle_factor(tokens):
+  factor = handle_factor(tokens)
+  if factor:
+    term = Term()
+    term.add_child(factor)
     operator = peek(tokens)
     while operator in high_precedence:
+      term.add_child(operator)
       print operator
       tokens.get_token()
-      handle_factor(tokens)
+      term.add_child(handle_factor(tokens))
       operator = peek(tokens)
     print peek(tokens) 
-    return True
+    return term
   return False
 
 def handle_lexp(tokens):
