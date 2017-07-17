@@ -390,7 +390,9 @@ def handle_return(tokens):
 def handle_throw_exception(tokens):
   print "throw exception"
   print peek(tokens)
-  return handle_lexp(tokens)
+  throw = Throw()
+  throw.add_child(handle_lexp(tokens))
+  return throw
 
 def handle_trait(tokens):
   print "trait"
