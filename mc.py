@@ -45,13 +45,25 @@ class Term(Element):
   def __init__(self):
     Element.__init__(self)
   def render(self):
-    print "rendering number"
+    print "rendering term"
 
 class Lexp(Element):  
   def __init__(self):
     Element.__init__(self)
   def render(self):
-    print "rendering number"
+    print "rendering lexp"
+
+class Return(Element):  
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering return"
+
+class Throw(Element):  
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering throw"
 
 def peek(tokens):
   token = tokens.get_token()
