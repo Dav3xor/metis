@@ -47,6 +47,12 @@ class Term(Element):
   def render(self):
     print "rendering number"
 
+class Lexp(Element):  
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering number"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
@@ -349,13 +355,17 @@ def handle_term(tokens):
 def handle_lexp(tokens):
   print "lexp"
   print peek(tokens)
-  if handle_term(tokens):
+  term = handle_term(tokens)
+  if term:
+    lexp = Lexp()
+    lexp.add_child(term)
     operator = peek(tokens)
     while operator in low_precedence:
+      lexp.add_child(operator)
       tokens.get_token()
-      handle_term(tokens)
+      lexp.add_child(handle_term(tokens))
       operator = peek(tokens)
-    return True
+    return lexp
   return False
 
 def handle_return(tokens):
