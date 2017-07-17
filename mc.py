@@ -383,7 +383,9 @@ def handle_lexp(tokens):
 def handle_return(tokens):
   print "return"
   print peek(tokens)
-  return handle_lexp(tokens)
+  r = Return()
+  r.add_child(handle_lexp(tokens))
+  return r
 
 def handle_throw_exception(tokens):
   print "throw exception"
