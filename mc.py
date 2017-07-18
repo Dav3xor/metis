@@ -71,6 +71,14 @@ class Trait(Element):
   def render(self):
     print "rendering trait"
 
+class Assignment(Element):  
+  def __init__(self, varname, vartype):
+    self.type = vartype
+    self.name = varname
+    Element.__init__(self)
+  def render(self):
+    print "rendering assignment"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
@@ -424,9 +432,11 @@ def handle_assignment(tokens):
 
   if handle_assignment_operator(tokens):
     print varname
+    assignment = Assignment(varname,vartype)
     if not valid_label(varname):
       raise SyntaxError("variable name: " + varname + " is not a valid label")
-    return handle_lexp(tokens)
+    assignment.add_child(handle_lexp(tokens))
+    return assignment
   else:
     if varname:
       tokens.push_token(varname)
