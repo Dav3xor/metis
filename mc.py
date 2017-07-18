@@ -407,7 +407,7 @@ def handle_trait(tokens):
   while peek(tokens) != "fin":
     trait.add_child(handle_bs(tokens))
 
-  return True
+  return trait
 
 def handle_assignment(tokens):
   token   = tokens.get_token()
