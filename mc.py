@@ -65,6 +65,12 @@ class Throw(Element):
   def render(self):
     print "rendering throw"
 
+class Trait(Element):  
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering trait"
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
@@ -397,8 +403,9 @@ def handle_throw_exception(tokens):
 def handle_trait(tokens):
   print "trait"
   name = valid_label(tokens.get_token())
+  trait = Trait()
   while peek(tokens) != "fin":
-    handle_bs(tokens)
+    trait.add_child(handle_bs(tokens))
 
   return True
 
