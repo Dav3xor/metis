@@ -17,6 +17,7 @@ class Function(Element):
     Element.__init__(self)
     self.args = []
     self.name = name
+    self.return_type = None
   def render(self):
     print "rendering function"
     for child in children:
