@@ -13,6 +13,10 @@ class Element:
     self.children.append(child)
 
 class Function(Element):
+  def __init__(self, name):
+    Element.__init__(self)
+    self.args = []
+    self.name = name
   def render(self):
     print "rendering function"
     for child in children:
@@ -23,6 +27,7 @@ class Class(Element):
     print "rendering class"
     for child in children:
       child.render()
+
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
@@ -224,9 +229,11 @@ def handle_args(tokens):
 def handle_beginfunction(tokens):
   print "functiondef"
   label = valid_label(tokens.get_token())
+
   if not label:
     raise SyntaxError("invalid label - " + label, tokens)
 
+  f = Function(label)
   handle_args(tokens)
   
   if handle_return_arrows(tokens) == '<-':
