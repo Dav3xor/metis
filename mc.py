@@ -254,7 +254,8 @@ def handle_functiondef(tokens):
   while peek(tokens) != "fin":
     f.add_child(handle_bs(tokens))
   print "end function"
-   
+  return f
+
 def handle_assignment_operator(tokens):
   "handling assignment..."
   colon = peek(tokens)
