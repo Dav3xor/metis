@@ -244,7 +244,8 @@ def handle_beginfunction(tokens):
       raise SyntaxError("unknown return type - " + returntype, tokens)
     f.return_type = returntype
     print returntype
-    return f
+  
+  return f
 
 def handle_functiondef(tokens):
   f = handle_beginfunction(tokens)
