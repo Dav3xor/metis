@@ -226,6 +226,7 @@ def handle_args(tokens):
         tokens.push_token(comma)
         break
   print args
+  return args
 
 def handle_beginfunction(tokens):
   print "functiondef"
@@ -235,7 +236,7 @@ def handle_beginfunction(tokens):
     raise SyntaxError("invalid label - " + label, tokens)
 
   f = Function(label)
-  handle_args(tokens)
+  f.args = handle_args(tokens)
   
   if handle_return_arrows(tokens) == '<-':
     returntype = tokens.get_token()
