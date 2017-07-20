@@ -242,15 +242,17 @@ def handle_beginfunction(tokens):
     returntype = tokens.get_token()
     if returntype not in atomic_types:
       raise SyntaxError("unknown return type - " + returntype, tokens)
+    f.return_type = returntype
     print returntype
+    return f
 
 def handle_functiondef(tokens):
-  handle_beginfunction(tokens)
+  f = handle_beginfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
     raise SyntaxError("function declaration does not end in ':' - " + returntype, tokens)
   while peek(tokens) != "fin":
-    handle_bs(tokens)
+    f.add_child(handle_bs(tokens))
   print "end function"
    
 def handle_assignment_operator(tokens):
