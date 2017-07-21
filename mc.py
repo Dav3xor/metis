@@ -77,6 +77,12 @@ class Trait(Element):
   def render(self):
     print "rendering trait"
 
+class Group(Element):  
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering group"
+
 class Assignment(Element):  
   def __init__(self, varname, vartype):
     self.type = vartype
@@ -289,10 +295,12 @@ def handle_return_arrows(tokens):
 
 def handle_group(tokens):
   print "group"
-  handle_lexp(tokens);
+  g = Group()
+  g.add_child(handle_lexp(tokens))
   end = tokens.get_token()
   if end != ')':
    raise SyntaxError("grouped lexp doesn't end with ')'", tokens)
+  return g
 
 def handle_fcall(tokens):
   print "fcall"
