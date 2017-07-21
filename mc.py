@@ -366,8 +366,7 @@ def handle_factor(tokens):
       return String(tokens.get_token()[1:-1])
     elif token in factor_handlers:
       tokens.get_token()
-      factor_handlers[token](tokens)
-      return True
+      return factor_handlers[token](tokens)
     elif valid_label(token):
       tokens.get_token()
       label = labels.find_label(token,tokens)
