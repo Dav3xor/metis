@@ -324,13 +324,6 @@ def handle_ffcall(tokens):
   if end != '}':
    raise SyntaxError("ffcall doesn't end with '}'", tokens)
 
-def handle_group(tokens):
-  print "group"
-  lexp = handle_lexp(tokens)
-  end = tokens.get_token()
-  if end != ")":
-    raise SyntaxError("group does not end with ')'", tokens)
-  return lexp 
 def handle_vector(tokens):
   while peek(tokens) != '|':
     handle_lexp(tokens)
