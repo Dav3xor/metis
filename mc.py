@@ -41,6 +41,12 @@ class Number(Element):
   def render(self):
     print "rendering number"
 
+class Boolean(Element):
+  def __init__(self, value):
+    self.value = value
+  def render(self):
+    print "rendering boolean"
+
 class String(Element):
   def __init__(self, string):
     self.value = string
@@ -339,10 +345,10 @@ def handle_matrix(tokens):
     tokens.get_token()
 
 def handle_true(tokens):
-  return True
+  return Boolean(True)
 
 def handle_false(tokens):
-  return True
+  return Boolean(False)
 
 def handle_factor(tokens):
   factor_handlers = { '(': handle_group,
