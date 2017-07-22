@@ -338,11 +338,11 @@ def handle_fcall(tokens):
 
 def handle_ffcall(tokens):
   print "ffcall"
-  handle_fcall(tokens);
+  f = handle_fcall(tokens);
   end = tokens.get_token()
   if end != '}':
    raise SyntaxError("ffcall doesn't end with '}'", tokens)
-
+  return f
 def handle_vector(tokens):
   while peek(tokens) != '|':
     handle_lexp(tokens)
