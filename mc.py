@@ -23,6 +23,13 @@ class Function(Element):
     for child in children:
       child.render()
 
+class FunctionCall(Element):
+  def __init__(self, name):
+    Element.__init__(self)
+    self.name = name
+  def render(self):
+    print "rendering function call"
+
 class Class(Element):
   def render(self):
     print "rendering class"
@@ -312,13 +319,19 @@ def handle_fcall(tokens):
   print "fcall"
   function_name = tokens.get_token()
   print "function = " + function_name
-  while handle_lexp(tokens):
+
+  f = FunctionCall(function_name)
+
+  lexp = handle_lexp(tokens)
+  while lexp:
+    f.add_child(lexp)
     comma = peek(tokens)
     if comma != ",":
       break
     else:
       tokens.get_token() # consume the comma
-  return True 
+    lexp = handle_lexp(tokens)
+  return f
 
 
 
