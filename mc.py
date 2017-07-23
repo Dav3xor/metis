@@ -57,7 +57,7 @@ class Vector(Element):
     print "rendering vector"
 
 class Matrix(Element):
-  def __init__(self, number):
+  def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering matrix"
@@ -370,15 +370,17 @@ def handle_vector(tokens):
     v.add_child(handle_lexp(tokens))
   # consume the end |
   tokens.get_token()
+  return v
 
 def handle_matrix(tokens):
-  m = Matrix
+  m = Matrix()
   while True:
     m.add_child(handle_vector(tokens))
     if peek(tokens) != '|':
       break
     # consume the next |
     tokens.get_token()
+  return m
 
 def handle_true(tokens):
   return Boolean(True)
