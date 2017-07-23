@@ -51,14 +51,14 @@ class Number(Element):
     print "rendering number"
 
 class Vector(Element):
-  def __init__(self, number):
-    self.value = number
+  def __init__(self):
+    Element.__init__(self)
   def render(self):
     print "rendering vector"
 
 class Matrix(Element):
   def __init__(self, number):
-    self.value = number
+    Element.__init__(self)
   def render(self):
     print "rendering matrix"
 
@@ -412,7 +412,7 @@ def handle_factor(tokens):
     elif valid_label(token):
       tokens.get_token()
       label = labels.find_label(token,tokens)
-      return True
+      return Label(label)
   return False
 
 def handle_term(tokens):
