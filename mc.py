@@ -39,14 +39,28 @@ class Class(Element):
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
+    
 class Block(Element):
   def render(self):
     print "rendering block"
+
 class Number(Element):
   def __init__(self, number):
     self.value = number
   def render(self):
     print "rendering number"
+
+class Vector(Element):
+  def __init__(self, number):
+    self.value = number
+  def render(self):
+    print "rendering vector"
+
+class Matrix(Element):
+  def __init__(self, number):
+    self.value = number
+  def render(self):
+    print "rendering matrix"
 
 class Boolean(Element):
   def __init__(self, value):
@@ -60,6 +74,12 @@ class String(Element):
   def render(self):
     print "rendering number"
 
+class Label(Element):
+  def __init__(self, label):
+    self.value = label
+  def render(self):
+    print "rendering label"
+  
 class Term(Element):  
   def __init__(self):
     Element.__init__(self)
@@ -343,15 +363,18 @@ def handle_ffcall(tokens):
   if end != '}':
    raise SyntaxError("ffcall doesn't end with '}'", tokens)
   return f
+
 def handle_vector(tokens):
+  v = Vector()
   while peek(tokens) != '|':
-    handle_lexp(tokens)
+    v.add_child(handle_lexp(tokens))
   # consume the end |
   tokens.get_token()
 
 def handle_matrix(tokens):
+  m = Matrix
   while True:
-    handle_vector(tokens)
+    m.add_child(handle_vector(tokens))
     if peek(tokens) != '|':
       break
     # consume the next |
