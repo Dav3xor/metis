@@ -503,7 +503,7 @@ def handle_assignment(tokens):
 
 def handle_traitident(tokens):
   print "traitident"
-  handle_beginfunction(tokens)
+  return handle_beginfunction(tokens)
 
     
 def handle_stmt(tokens):
