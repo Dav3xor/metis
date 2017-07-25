@@ -560,10 +560,14 @@ def handle_include(tokens):
   print peek(tokens)
 
 def handle_exp(tokens):
-  handle_lexp(tokens)
-  print "comparator = " + tokens.get_token()
-  handle_lexp(tokens)
+  e = Expression()
+  e.lvalue   = handle_lexp(tokens)
+
+  e.operator = tokens.get_token()
+  e.rvalue   = handle_lexp(tokens)
+  print "operator = " + e.operator
   print "end exp" + peek(tokens)
+  return e
 def handle_if(tokens):
   print "if"
   handle_exp(tokens)
