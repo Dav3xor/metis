@@ -39,6 +39,13 @@ class Class(Element):
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
+
+class Expression(Element):
+  def render(self):
+    self.lvalue   = None
+    self.operator = None
+    self.rvalue   = None
+    print "rendering stmt"
     
 class Block(Element):
   def render(self):
