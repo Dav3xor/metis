@@ -41,12 +41,14 @@ class Stmt(Element):
     print "rendering stmt"
 
 class Expression(Element):
-  def render(self):
+  def __init__(self):
     self.lvalue   = None
     self.operator = None
     self.rvalue   = None
+  def render(self):
     print "rendering stmt"
-    
+class If(Element):
+
 class Block(Element):
   def render(self):
     print "rendering block"
