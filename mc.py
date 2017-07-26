@@ -47,7 +47,19 @@ class Expression(Element):
     self.rvalue   = None
   def render(self):
     print "rendering stmt"
+
+class IfClause(Element):
+  def __init__(self, name):
+    Element.__init__(self)
+  def render(self):
+    print "rendering ifclause"
+
 class If(Element):
+  def __init__(self, name):
+    Element.__init__(self)
+  def render(self):
+    print "rendering if"
+  
 
 class Block(Element):
   def render(self):
