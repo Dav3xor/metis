@@ -614,9 +614,10 @@ def handle_if(tokens):
 
 def handle_while(tokens):
   print "while"
-  handle_exp(tokens)
+  w = While()
+  w.add_child(handle_exp(tokens))
   while peek(tokens) != "fin":
-    handle_bs(tokens)
+    w.add_child(handle_bs(tokens))
 
 def handle_for(tokens):
   if peek(tokens) != ';':
