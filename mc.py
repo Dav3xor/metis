@@ -49,13 +49,13 @@ class Expression(Element):
     print "rendering stmt"
 
 class IfClause(Element):
-  def __init__(self, name):
+  def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering ifclause"
 
 class If(Element):
-  def __init__(self, name):
+  def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering if"
@@ -585,20 +585,25 @@ def handle_exp(tokens):
 
 def handle_if(tokens):
   print "if"
-  handle_exp(tokens)
+  i = If()
+  ic = IfClause()
+  ic.add_child(handle_exp(tokens))
   while peek(tokens) not in ['else','fin']:
-    handle_bs(tokens)
+    ic.add_child(handle_bs(tokens))
+  i.add_child(ic)
   token = peek(tokens)
   while token == "else":
+    ic = IfClause()
     print "else"
     token = tokens.get_token()
     token = peek(tokens)
     if token == "if":
       print "if after else"
       tokens.get_token()
-      handle_exp(tokens) 
+      ic.add_chiild(handle_exp(tokens) )
     while peek(tokens) not in ['else','fin']:
-      handle_bs(tokens)
+      ic.add_child(handle_bs(tokens))
+  return ic
 
 
 def handle_while(tokens):
