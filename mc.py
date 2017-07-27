@@ -59,6 +59,12 @@ class If(Element):
     Element.__init__(self)
   def render(self):
     print "rendering if"
+
+class While(Element):
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering else"
   
 
 class Block(Element):
