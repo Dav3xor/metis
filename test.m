@@ -41,6 +41,11 @@ def complex float x, float y <- float:
   else
     print "2".
   fin
+
+  for i:=0 ; i<5 ; i += 5
+    print i.
+  fin
+
   while x > 5
     print "3".
     print true.
