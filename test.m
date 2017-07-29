@@ -42,7 +42,7 @@ def complex float x, float y <- float:
     print "2".
   fin
 
-  for i:=0 ; i<5 ; i += 5
+  foreach i in x
     print i.
   fin
 

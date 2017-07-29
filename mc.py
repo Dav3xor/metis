@@ -620,10 +620,18 @@ def handle_while(tokens):
     w.add_child(handle_bs(tokens))
   return w
 
-def handle_for(tokens):
-  if peek(tokens) != ';':
-    # we have an initial condition
-    handle_assignment(tokens)
+def handle_foreach(tokens):
+  label = valid_label(tokens.get_token())
+  inx   = tokens.get_token()
+  if inx != "in":
+    raise SyntaxError("foreach requires 'in' keyword")
+
+  e = handle_factor(tokens)
+  
+  while peek(tokens) != "fin":
+    handle_bs(tokens)
+  return True
+
 def handle_typedef(tokens):
   print "typedef"
   name = tokens.get_token()
@@ -646,7 +654,7 @@ def handle_typedef(tokens):
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
-                  'for':       handle_for,
+                  'foreach':   handle_foreach,
                   'def':       handle_functiondef,
                   'type':      handle_typedef}
 
