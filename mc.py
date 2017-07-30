@@ -65,6 +65,12 @@ class While(Element):
     Element.__init__(self)
   def render(self):
     print "rendering else"
+
+class Foreach(Element):
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering foreach"
   
 
 class Block(Element):
@@ -621,6 +627,7 @@ def handle_while(tokens):
   return w
 
 def handle_foreach(tokens):
+  f = Foreach()
   label = valid_label(tokens.get_token())
   if label:
     labels.add_label(label,1)
