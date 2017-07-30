@@ -622,6 +622,8 @@ def handle_while(tokens):
 
 def handle_foreach(tokens):
   label = valid_label(tokens.get_token())
+  if label:
+    labels.add_label(label,1)
   inx   = tokens.get_token()
   if inx != "in":
     raise SyntaxError("foreach requires 'in' keyword")
