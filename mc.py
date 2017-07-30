@@ -630,16 +630,17 @@ def handle_foreach(tokens):
   f = Foreach()
   label = valid_label(tokens.get_token())
   if label:
+    f.add_child(label)
     labels.add_label(label,1)
   inx   = tokens.get_token()
   if inx != "in":
     raise SyntaxError("foreach requires 'in' keyword")
 
-  e = handle_factor(tokens)
+  f.add_child(handle_factor(tokens))
   
   while peek(tokens) != "fin":
-    handle_bs(tokens)
-  return True
+    f.add_child(handle_bs(tokens))
+  return f
 
 def handle_typedef(tokens):
   print "typedef"
