@@ -649,6 +649,7 @@ def handle_foreach(tokens):
 
 def handle_typedef(tokens):
   print "typedef"
+  t = Typedef(name)
   name = tokens.get_token()
   typedef_handlers = {'def':      handle_functiondef,
                       ':':        handle_trait}
