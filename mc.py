@@ -71,7 +71,12 @@ class Foreach(Element):
     Element.__init__(self)
   def render(self):
     print "rendering foreach"
-  
+
+class Typedef(Element): 
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    print "rendering typedef"
 
 class Block(Element):
   def render(self):
