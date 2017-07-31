@@ -73,7 +73,8 @@ class Foreach(Element):
     print "rendering foreach"
 
 class Typedef(Element): 
-  def __init__(self):
+  def __init__(self, name):
+    self.name = name
     Element.__init__(self)
   def render(self):
     print "rendering typedef"
@@ -649,18 +650,20 @@ def handle_foreach(tokens):
 
 def handle_typedef(tokens):
   print "typedef"
-  t = Typedef(name)
   name = tokens.get_token()
+  t = Typedef(name)
   typedef_handlers = {'def':      handle_functiondef,
                       ':':        handle_trait}
                    
   while peek(tokens) != "fin":
-    if handle_typeident(tokens):
+    ti = handle_typeident(tokens)
+    if ti:
+      t.add_child(ti)
       dot = tokens.get_token()
       if dot != ".":
         raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
     elif peek(tokens) in typedef_handlers:
-      typedef_handlers[tokens.get_token()](tokens) 
+      t.add_child(typedef_handlers[tokens.get_token()](tokens))
       if peek(tokens) != "fin":
         raise SyntaxError("block in type declaration doesn't end with 'fin'")
       else:
