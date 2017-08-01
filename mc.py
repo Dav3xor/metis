@@ -618,7 +618,7 @@ def handle_if(tokens):
     if token == "if":
       print "if after else"
       tokens.get_token()
-      ic.add_chiild(handle_exp(tokens) )
+      ic.add_child(handle_exp(tokens) )
     while peek(tokens) not in ['else','fin']:
       ic.add_child(handle_bs(tokens))
   return ic
