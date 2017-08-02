@@ -694,13 +694,15 @@ def handle_bs(tokens):
   # shlex removes comments for us.
   token = peek(tokens)
   print "bs - " + token
-  if handle_block(tokens):
+  b = handle_block(tokens)
+  if b:
     tokens.get_token()
-    print "end block"
-    return True
-  elif handle_stmt(tokens):
+    return b
+  
+  s = handle_stmt(tokens)
+  if s:
     print "end stmt"
-    return True
+    return s
   else:
     print "bad bs?"
     return False
