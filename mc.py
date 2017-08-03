@@ -12,6 +12,13 @@ class Element:
   def add_child(self, child):
     self.children.append(child)
 
+class Head(Element):
+  def __init__(self):
+    Element.__init__(self)
+    def render(self):
+      for child in children:
+        child.render()
+
 class Function(Element):
   def __init__(self, name):
     Element.__init__(self)
