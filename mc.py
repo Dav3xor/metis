@@ -725,5 +725,7 @@ with open("test.m","r") as input:
   lexer = shlex.shlex(input)
   #for token in lexer:
   #  print token
+  h = Head()
+
   while peek(lexer):
-    handle_bs(lexer)
+    h.add_child(handle_bs(lexer))
