@@ -15,9 +15,9 @@ class Element:
 class Head(Element):
   def __init__(self):
     Element.__init__(self)
-    def render(self):
-      for child in children:
-        child.render()
+  def render(self):
+    for child in self.children:
+      child.render()
 
 class Function(Element):
   def __init__(self, name):
@@ -27,7 +27,7 @@ class Function(Element):
     self.return_type = None
   def render(self):
     print "rendering function"
-    for child in children:
+    for child in self.children:
       child.render()
 
 class FunctionCall(Element):
@@ -40,7 +40,7 @@ class FunctionCall(Element):
 class Class(Element):
   def render(self):
     print "rendering class"
-    for child in children:
+    for child in self.children:
       child.render()
 
 class Stmt(Element):
@@ -729,3 +729,5 @@ with open("test.m","r") as input:
 
   while peek(lexer):
     h.add_child(handle_bs(lexer))
+  print dir(h)
+  h.render()
