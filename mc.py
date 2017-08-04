@@ -569,8 +569,7 @@ def handle_stmt(tokens):
   if token in stmt_handlers:
     print "handler"
     #tokens.get_token()
-    stmt_handlers[token](tokens)
-    retval = True
+    return stmt_handlers[token](tokens)
 
   # else, the next token is our thing...
   elif not token:
