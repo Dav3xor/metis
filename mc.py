@@ -12,6 +12,18 @@ class Element:
   def add_child(self, child):
     self.children.append(child)
 
+class File(Element):
+  def __init__(self, filename):
+    self.filename = filename
+
+class Include(Element):
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    for child in self.children:
+      print child.filename
+
+  
 class Head(Element):
   def __init__(self):
     Element.__init__(self)
@@ -569,7 +581,7 @@ def handle_stmt(tokens):
   if token in stmt_handlers:
     print "handler"
     #tokens.get_token()
-    return stmt_handlers[token](tokens)
+    retval = stmt_handlers[token](tokens)
 
   # else, the next token is our thing...
   elif not token:
@@ -591,11 +603,13 @@ def handle_stmt(tokens):
 
 def handle_include(tokens):
   dash = peek(tokens)
+  i = Include()
   while dash == '-':
     tokens.get_token()
-    print "file: " + tokens.get_token()
+    i.add_child(File(tokens.get_token()))
     dash = peek(tokens)
   print peek(tokens)
+  return i
 
 def handle_exp(tokens):
   e = Expression()
@@ -675,7 +689,7 @@ def handle_typedef(tokens):
       else:
         tokens.get_token()
   print "end typedef"
-  
+  return t 
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
@@ -687,7 +701,7 @@ def handle_block(tokens):
   print "block"
   if peek(tokens) in block_handlers:
     # do stuff
-    block_handlers[tokens.get_token()](tokens)
+    return block_handlers[tokens.get_token()](tokens)
     return True
   else:
     return False
