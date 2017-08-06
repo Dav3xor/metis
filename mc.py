@@ -11,7 +11,9 @@ class Element:
 
   def add_child(self, child):
     self.children.append(child)
-
+  def recurse(self):
+    for child in self.children:
+      child.render()
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
