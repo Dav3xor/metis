@@ -12,11 +12,14 @@ class Element:
   def add_child(self, child):
     self.children.append(child)
   def recurse(self):
-    for child in self.children:
-      child.render()
+    if hasattr(self,'children'):
+      for child in self.children:
+        child.render()
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
+  def render(self):
+    print "rendering file"
 
 class Include(Element):
   def __init__(self):
@@ -24,7 +27,7 @@ class Include(Element):
   def render(self):
     for child in self.children:
       print child.filename
-
+      Element.recurse(self)
   
 class Head(Element):
   def __init__(self):
@@ -32,6 +35,7 @@ class Head(Element):
   def render(self):
     for child in self.children:
       child.render()
+      Element.recurse(self)
 
 class Function(Element):
   def __init__(self, name):
@@ -41,8 +45,7 @@ class Function(Element):
     self.return_type = None
   def render(self):
     print "rendering function"
-    for child in self.children:
-      child.render()
+    Element.recurse(self)
 
 class FunctionCall(Element):
   def __init__(self, name):
@@ -50,6 +53,7 @@ class FunctionCall(Element):
     self.name = name
   def render(self):
     print "rendering function call"
+    Element.recurse(self)
 
 class Class(Element):
   def render(self):
