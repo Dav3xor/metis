@@ -25,9 +25,9 @@ class Include(Element):
   def __init__(self):
     Element.__init__(self)
   def render(self):
+    print "rendering include"
     for child in self.children:
       print child.filename
-      Element.recurse(self)
   
 class Head(Element):
   def __init__(self):
