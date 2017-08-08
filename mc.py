@@ -33,9 +33,7 @@ class Head(Element):
   def __init__(self):
     Element.__init__(self)
   def render(self):
-    for child in self.children:
-      child.render()
-      Element.recurse(self)
+    Element.recurse(self)
 
 class Function(Element):
   def __init__(self, name):
