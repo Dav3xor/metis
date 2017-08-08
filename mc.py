@@ -611,7 +611,9 @@ def handle_include(tokens):
   dash = peek(tokens)
   i = Include()
   while dash == '-':
+    # consume the dash...
     tokens.get_token()
+    # add filename to include list
     i.add_child(File(tokens.get_token()))
     dash = peek(tokens)
   print peek(tokens)
