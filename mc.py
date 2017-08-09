@@ -76,12 +76,14 @@ class IfClause(Element):
     Element.__init__(self)
   def render(self):
     print "rendering ifclause"
+    Element.recurse(self)
 
 class If(Element):
   def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering if"
+    Element.recurse(self)
 
 class While(Element):
   def __init__(self):
