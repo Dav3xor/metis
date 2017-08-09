@@ -90,7 +90,8 @@ class While(Element):
     Element.__init__(self)
   def render(self):
     print "rendering else"
-
+    Element.recurse(self)
+    
 class Foreach(Element):
   def __init__(self):
     Element.__init__(self)
