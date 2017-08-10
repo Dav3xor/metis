@@ -99,7 +99,8 @@ class Typedef(Element):
     Element.__init__(self)
   def render(self):
     print "rendering typedef"
-
+    Element.recurse(self)
+    
 class Block(Element):
   def render(self):
     print "rendering block"
