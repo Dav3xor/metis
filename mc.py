@@ -97,6 +97,7 @@ class Foreach(Element):
     Element.__init__(self)
   def render(self):
     print "rendering foreach"
+    Element.recurse(self)
 
 class Typedef(Element): 
   def __init__(self, name):
@@ -120,12 +121,14 @@ class Vector(Element):
     Element.__init__(self)
   def render(self):
     print "rendering vector"
+    Element.recurse(self)
 
 class Matrix(Element):
   def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering matrix"
+    Element.recurse(self)
 
 class Boolean(Element):
   def __init__(self, value):
@@ -665,7 +668,7 @@ def handle_foreach(tokens):
   f = Foreach()
   label = valid_label(tokens.get_token())
   if label:
-    f.add_child(label)
+    f.add_child(Label(label))
     labels.add_label(label,1)
   inx   = tokens.get_token()
   if inx != "in":
