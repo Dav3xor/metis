@@ -93,6 +93,13 @@ class Foreach(Element):
     print "rendering foreach"
     Element.recurse(self)
 
+class Typename(Element): 
+  def __init__(self, vartype, name):
+    self.name = name
+    self.type = vartype
+  def render(self):
+    print "rendering typedef"
+
 class Typedef(Element): 
   def __init__(self, name):
     self.name = name
@@ -685,7 +692,7 @@ def handle_typedef(tokens):
   while peek(tokens) != "fin":
     ti = handle_typeident(tokens)
     if ti:
-      t.add_child(ti)
+      t.add_child(Typename(*ti))
       dot = tokens.get_token()
       if dot != ".":
         raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
