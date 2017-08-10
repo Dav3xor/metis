@@ -53,12 +53,6 @@ class FunctionCall(Element):
     print "rendering function call"
     Element.recurse(self)
 
-class Class(Element):
-  def render(self):
-    print "rendering class"
-    for child in self.children:
-      child.render()
-
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
