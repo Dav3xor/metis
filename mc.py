@@ -138,7 +138,7 @@ class String(Element):
   def __init__(self, string):
     self.value = string
   def render(self):
-    print "rendering number"
+    print "rendering string"
 
 class Label(Element):
   def __init__(self, label):
@@ -151,6 +151,7 @@ class Term(Element):
     Element.__init__(self)
   def render(self):
     print "rendering term"
+    Element.recurse(self)
 
 class Lexp(Element):  
   def __init__(self):
