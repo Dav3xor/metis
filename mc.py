@@ -108,10 +108,6 @@ class Typedef(Element):
     print "rendering typedef"
     Element.recurse(self)
     
-class Block(Element):
-  def render(self):
-    print "rendering block"
-
 class Number(Element):
   def __init__(self, number):
     self.value = number
