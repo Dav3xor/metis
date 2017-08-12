@@ -158,6 +158,7 @@ class Lexp(Element):
     Element.__init__(self)
   def render(self):
     print "rendering lexp"
+    Element.recurse(self)
 
 class Return(Element):  
   def __init__(self):
