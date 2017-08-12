@@ -165,6 +165,7 @@ class Return(Element):
     Element.__init__(self)
   def render(self):
     print "rendering return"
+    Element.recurse(self)
 
 class Throw(Element):  
   def __init__(self):
