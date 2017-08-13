@@ -14,6 +14,8 @@ class Element:
   def recurse(self):
     if hasattr(self,'children'):
       for child in self.children:
+        if type(child) == str:
+          print child
         child.render()
 class File(Element):
   def __init__(self, filename):
