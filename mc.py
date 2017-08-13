@@ -503,7 +503,7 @@ def handle_term(tokens):
     term.add_child(factor)
     operator = peek(tokens)
     while operator in high_precedence:
-      term.add_child(operator)
+      term.add_child(Operator(operator))
       print operator
       tokens.get_token()
       term.add_child(handle_factor(tokens))
