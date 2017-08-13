@@ -116,6 +116,12 @@ class Number(Element):
   def render(self):
     print "rendering number"
 
+class Operator(Element):
+  def __init__(self, operator):
+    self.operator = operator
+  def render(self):
+    print "rendering operator"
+
 class Vector(Element):
   def __init__(self):
     Element.__init__(self)
@@ -629,10 +635,10 @@ def handle_include(tokens):
 def handle_exp(tokens):
   e = Expression()
   e.lvalue   = handle_lexp(tokens)
-
-  e.operator = tokens.get_token()
+  operator   = tokens.get_token()
+  e.operator = Operator(operator)
   e.rvalue   = handle_lexp(tokens)
-  print "operator = " + e.operator
+  print "operator = " + operator
   print "end exp" + peek(tokens)
   return e
 
