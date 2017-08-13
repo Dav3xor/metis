@@ -521,7 +521,7 @@ def handle_lexp(tokens):
     lexp.add_child(term)
     operator = peek(tokens)
     while operator in low_precedence:
-      lexp.add_child(operator)
+      lexp.add_child(Operator(operator))
       tokens.get_token()
       lexp.add_child(handle_term(tokens))
       operator = peek(tokens)
