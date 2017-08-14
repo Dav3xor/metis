@@ -194,6 +194,7 @@ class Group(Element):
     Element.__init__(self)
   def render(self):
     print "rendering group"
+    Element.recurse(self)
 
 class Assignment(Element):  
   def __init__(self, varname, vartype):
