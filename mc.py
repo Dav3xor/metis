@@ -187,6 +187,7 @@ class Trait(Element):
     Element.__init__(self)
   def render(self):
     print "rendering trait"
+    Element.recurse(self)
 
 class Group(Element):  
   def __init__(self):
