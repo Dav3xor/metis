@@ -180,6 +180,7 @@ class Throw(Element):
     Element.__init__(self)
   def render(self):
     print "rendering throw"
+    Element.recurse(self)
 
 class Trait(Element):  
   def __init__(self):
