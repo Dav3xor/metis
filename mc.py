@@ -4,6 +4,13 @@
 import shlex
 import re
 
+  
+class Head(Element):
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    Element.recurse(self)
+
 class Element:
   def __init__(self):
     self.children = []
@@ -30,12 +37,6 @@ class Include(Element):
     print "rendering include"
     for child in self.children:
       print child.filename
-  
-class Head(Element):
-  def __init__(self):
-    Element.__init__(self)
-  def render(self):
-    Element.recurse(self)
 
 class Function(Element):
   def __init__(self, name):
