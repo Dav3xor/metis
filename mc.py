@@ -24,6 +24,7 @@ class Element:
         if type(child) == str:
           print child
         child.render()
+
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
@@ -434,9 +435,6 @@ def handle_fcall(tokens):
     lexp = handle_lexp(tokens)
   return f
 
-
-
-
 def handle_ffcall(tokens):
   print "ffcall"
   f = handle_fcall(tokens);
@@ -756,16 +754,16 @@ def handle_bs(tokens):
 
 
 
-
-with open("test.m","r") as input:
-  input = input.read()
-
-  lexer = shlex.shlex(input)
-  #for token in lexer:
-  #  print token
+def parse_file(filename):
   h = Head()
+  with open("test.m","r") as input:
+    input = input.read()
 
-  while peek(lexer):
-    h.add_child(handle_bs(lexer))
-  print dir(h)
-  h.render()
+    lexer = shlex.shlex(input)
+
+    while peek(lexer):
+      h.add_child(handle_bs(lexer))
+    print dir(h)
+    h.render()
+  return h
+
