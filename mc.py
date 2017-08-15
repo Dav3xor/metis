@@ -3,14 +3,8 @@
 # an attempt at a compiler using shlex...
 import shlex
 import re
-
+import sys
   
-class Head(Element):
-  def __init__(self):
-    Element.__init__(self)
-  def render(self):
-    Element.recurse(self)
-
 class Element:
   def __init__(self):
     self.children = []
@@ -24,6 +18,12 @@ class Element:
         if type(child) == str:
           print child
         child.render()
+
+class Head(Element):
+  def __init__(self):
+    Element.__init__(self)
+  def render(self):
+    Element.recurse(self)
 
 class File(Element):
   def __init__(self, filename):
@@ -756,7 +756,7 @@ def handle_bs(tokens):
 
 def parse_file(filename):
   h = Head()
-  with open("test.m","r") as input:
+  with open(filename,"r") as input:
     input = input.read()
 
     lexer = shlex.shlex(input)
@@ -767,3 +767,5 @@ def parse_file(filename):
     h.render()
   return h
 
+if __name__ == '__main__':
+  parse_file(sys.argv[1]) 
