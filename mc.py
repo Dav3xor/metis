@@ -20,7 +20,7 @@ class Element:
         child.render()
 
 class Head(Element):
-  def __init__(self):
+  def __init__(self, filename):
     Element.__init__(self)
   def render(self):
     Element.recurse(self)
@@ -755,7 +755,7 @@ def handle_bs(tokens):
 
 
 def parse_file(filename):
-  h = Head()
+  h = Head(filename.split('.')[0])
   with open(filename,"r") as input:
     input = input.read()
 
