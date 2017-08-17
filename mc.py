@@ -629,7 +629,7 @@ def handle_include(tokens):
     # consume the dash...
     tokens.get_token()
     # add filename to include list
-    i.add_child(File(tokens.get_token()))
+    i.add_child(parse_file(tokens.get_token()))
     dash = peek(tokens)
   print peek(tokens)
   return i
