@@ -756,6 +756,9 @@ def handle_bs(tokens):
 
 def parse_file(filename):
   h = Head(filename.split('.')[0])
+  if not (filename.endswith('.m') or filename.endswith('.M')):
+    filename += ".m"
+
   with open(filename,"r") as input:
     input = input.read()
 
