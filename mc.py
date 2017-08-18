@@ -36,8 +36,7 @@ class Include(Element):
     Element.__init__(self)
   def render(self):
     print "rendering include"
-    for child in self.children:
-      print child.filename
+    Element.recurse(self)
 
 class Function(Element):
   def __init__(self, name):
@@ -755,9 +754,10 @@ def handle_bs(tokens):
 
 
 def parse_file(filename):
-  h = Head(filename.split('.')[0])
   if not (filename.endswith('.m') or filename.endswith('.M')):
     filename += ".m"
+  
+  h = Head(filename.split('.')[0])
 
   with open(filename,"r") as input:
     input = input.read()
