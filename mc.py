@@ -49,8 +49,8 @@ class Function(Element):
     print "# function: " + self.name
     if len(self.args):
       print "# args: ",
-      for arg in self.args:
-        print arg,
+      args = [' '.join(i) for i in self.args]
+      print ', '.join(args),
       print " "
     if self.return_type:
       print "# returns: " + self.return_type
