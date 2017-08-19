@@ -46,6 +46,11 @@ class Function(Element):
     self.return_type = None
   def render(self):
     print "# function: " + self.name
+    if len(self.args):
+      print "# args: ",
+      for arg in self.args:
+        print arg,
+      print " "
     Element.recurse(self)
 
 class FunctionCall(Element):
