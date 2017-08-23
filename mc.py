@@ -45,7 +45,7 @@ class Function(Element):
     self.name = name
     self.return_type = None
   def render(self):
-    print "# -----------------------------------------"
+    print "# " + "-"*75
     print   "# function: " + self.name
     if len(self.args):
       print "# args:    ",
@@ -54,7 +54,7 @@ class Function(Element):
       print " "
     if self.return_type:
       print "# returns:  " + self.return_type
-    print "# -----------------------------------------"
+    print "# " + "-"*75
     Element.recurse(self)
 
 class FunctionCall(Element):
