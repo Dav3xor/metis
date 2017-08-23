@@ -56,6 +56,9 @@ class Function(Element):
       print "# returns:  " + self.return_type
     print "# " + "-"*75
     Element.recurse(self)
+    print "# " + "-"*75
+    print
+    print
 
 class FunctionCall(Element):
   def __init__(self, name):
