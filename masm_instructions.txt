@@ -40,52 +40,21 @@ MATRIX              label, width, height, values
 
 SHADER              label <shader> END-SHADER
 
-IMATRIX
-                                           string  label   = this->get_string();
-                                           uint32_t width  = this->get_uint8(); 
-                                           uint32_t height = this->get_uint8(); 
-                                           m.add_identity_matrix(width,height,label.c_str()); } },
+IMATRIX             label, width, height
 
-MPUSH
-                                           uint64_t loc    = this->get_addr(m);
-                                           m.add_push_matrix(loc); } },
+MPUSH               location
 
-MMUL
-                                           address_mode src1 = this->get_addr_mode();
-                                           address_mode src2 = this->get_addr_mode();
-                                           uint64_t     dest = this->get_addr(m);
-                                           m.add_matrix_multiply(src1, src2, dest); } },
+MMUL                src1, src2, dest
 
-MADD
-                                           address_mode src1 = this->get_addr_mode();
-                                           address_mode src2 = this->get_addr_mode();
-                                           uint64_t     dest = this->get_addr(m);
-                                           m.add_matrix_add(src1, src2, dest); } },
+MADD                src1, src2, dest
 
-VDOT
-                                           address_mode src1 = this->get_addr_mode();
-                                           address_mode src2 = this->get_addr_mode();
-                                           uint64_t     dest = this->get_addr(m);
-                                           m.add_vector_dot(src1, src2, dest); } },
+VDOT                src1, src2, dest
 
-VCROSS
-                                           address_mode src1 = this->get_addr_mode();
-                                           address_mode src2 = this->get_addr_mode();
-                                           uint64_t     dest = this->get_addr(m);
-                                           m.add_vector_cross(src1, src2, dest); } },
+VCROSS              src1, src2, dest
 
-GLDRAWELEMENTS
-                                           GLenum mode      = this->get_GLenum();
-                                           GLsizei count    = this->get_GLsizei();
-                                           GLenum type      = this->get_GLenum();
-                                           uint64_t indices = this->get_uint64();
-                                           m.add_gldrawelements(mode, count, type, indices); } },
+GLDRAWELEMENTS      mode, count, type, indices
 
-GLDRAWARRAYS
-                                           GLenum mode        = this->get_GLenum();
-                                           GLint first        = this->get_GLint();
-                                           GLsizei count      = this->get_GLsizei();
-                                           m.add_gldrawarrays(mode, first, count); } },
+GLDRAWARRAYS        mode, first, count
 
 GLGENBUFFERS
                                            GLsizei numids           = this->get_GLsizei();
