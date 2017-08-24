@@ -1,61 +1,30 @@
 
 *
 ERROR
-                                           m.add_error      (); } },
 
 END
-                                           m.add_end        (); } }, 
 
 NOOP
-                                           m.add_noop       (); } }, 
 
-JUMP
-                                           m.add_jump       (this->get_addr_mode()); } },
+JUMP                addr_mode
 
-JUMPI
-                                           m.add_jumpi      (this->get_addr(m));   } },
+JUMPI               location 
 
-JIZZ
-                                           address_mode src  = this->get_addr_mode();
-                                           address_mode dest = this->get_addr_mode();
-                                           m.add_jizz       (src,dest); } }, 
+JIZZ                src, dest
 
-JNZ
-                                           address_mode src  = this->get_addr_mode();
-                                           address_mode dest = this->get_addr_mode();
-                                           m.add_jnz        (src,dest); } },
+JNZ                 src, dest
 
-JNE
-                                           address_mode src  = this->get_addr_mode();
-                                           address_mode dest = this->get_addr_mode();
-                                           uint64_t val      = this->get_addr(m);
-                                           m.add_jne        (src, dest, val); } }, 
+JNE                 src, dest, val
 
-JMPE
-                                           address_mode src  = this->get_addr_mode();
-                                           address_mode dest = this->get_addr_mode();
-                                           uint64_t val      = this->get_uint64();
-                                           m.add_jmpe       (src, dest, val); } },
+JMPE                src, dest, val
 
-STORE
-                                           address_mode src  = this->get_addr_mode();
-                                           address_mode dest = this->get_addr_mode();
-                                           m.add_store      (src, dest); } },
+STORE               src, dest
 
-STOREI
-                                           address_mode dest = this->get_addr_mode();
-                                           uint64_t     val  = this->get_addr(m);
-                                           m.add_storei     (dest, val); } },
+STOREI              dest, val
 
-STORESR
-                                           address_mode src    = this->get_addr_mode();
-                                           uint64_t     offset = this->get_addr(m);
-                                           m.add_store_sr     (src, offset); } },
+STORESR             src, offset
 
-LOADSR
-                                           uint64_t     offset = this->get_addr(m);
-                                           address_mode dest   = this->get_addr_mode();
-                                           m.add_load_sr      (offset, dest); } },
+LOADSR              offset, dest
 
 STACK_ADJ
                                            uint64_t     amount = this->get_uint64();
