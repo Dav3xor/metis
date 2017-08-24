@@ -26,64 +26,19 @@ STORESR             src, offset
 
 LOADSR              offset, dest
 
-STACK_ADJ
-                                           uint64_t     amount = this->get_uint64();
-                                           m.add_stack_adj    (amount); } },
+STACK_ADJ           amount
 
-LOC
-                                           m.add_label_ip   (this->get_string().c_str()); } },
+LOC                 label
 
-LABEL
-                                           string label = this->get_string();
-                                           uint64_t val = this->get_uint64();
-                                           m.add_label_val  (label.c_str(), val); } },
+LABEL               label, val
 
-FLOAT
-                                           string label = this->get_string();
-                                           float val = this->get_float(m);
-                                           m.add_label_float  (label.c_str(), val); } },
+FLOAT               label, val
 
-BUFFER
-                                           string  label   = this->get_string();
-                                           uint64_t size   = this->get_uint64(); 
-                                           float *buffer   = new float[size];
-                                           
-                                           for(uint32_t i=0; i<size; i++) {
-                                             buffer[i] = this->get_float(m);
-                                           }
+BUFFER              label, size, values
 
-                                           m.add_buffer((uint8_t *)buffer, size, label.c_str());
-                                           delete[] buffer; } },
+MATRIX              label, width, height, values
 
-MATRIX
-                                           string  label   = this->get_string();
-                                           // have to use uint32_t to get iostream
-                                           // to store as integer, not ascii...
-                                           uint32_t width  = this->get_uint8(); 
-                                           uint32_t height = this->get_uint8(); 
-                                           uint32_t size   = width*height;
-                                           float *mat      = new float[size];
-                                           for(uint32_t i=0; i<size; i++) {
-                                             mat[i] = this->get_float(m);
-                                           }
-                                           m.add_matrix(width, height, (uint8_t *)mat, label.c_str());
-                                           delete[] mat; } },
-
-SHADER
-                                           string  label    = this->get_string();
-                                           string  shader   = "";
-                                           bool    proceed  = true;
-                                           while(proceed) {
-                                             string cur = this->get_line();
-                                             if (trim_copy(cur) == "END-SHADER") {
-                                               proceed=false;
-                                             } else if (infile->eof()) {
-                                               proceed=false;
-                                             } else {
-                                               shader += cur + "\n";
-                                             }
-                                           }
-                                           m.add_data((const uint8_t *)shader.c_str(), shader.length()+1, label.c_str()); }},
+SHADER              label <shader> END-SHADER
 
 IMATRIX
                                            string  label   = this->get_string();
