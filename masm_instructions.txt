@@ -118,20 +118,12 @@ GLTEXIMAGE2D                    target, level, internal_format, width, height, b
 
 GLGETATTRIBLOCATION             attrib_index, attrib
 
-GLACTIVETEXTURE
-                                           GLenum texture                    = this->get_GLenum();
-                                           m.add_glactivetexture(texture); } },
+GLACTIVETEXTURE                 texture
 
-GLCLEAR
-                                           GLbitfield bitfield               = this->get_GLbitfield();
-                                           m.add_glclear(bitfield); } },
+GLCLEAR                         bitfield
 
-GLCLEARCOLOR
-                                           GLclampf r                        = this->get_GLclampf();
-                                           GLclampf g                        = this->get_GLclampf();
-                                           GLclampf b                        = this->get_GLclampf();
-                                           GLclampf a                        = this->get_GLclampf();
-                                           m.add_glclearcolor(r,g,b,a); } },
+GLCLEARCOLOR                    r,g,b,a
+
 NOT
 INC
 DEC
