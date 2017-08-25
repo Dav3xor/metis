@@ -106,46 +106,17 @@ GLGETUNIFORMLOCATION            program_index, uniform_index uniform_name
 
 GLGENTEXTURES                   num_identifiers, start_index
 
-GLBINDTEXTURE
-                                           GLenum target                     = this->get_GLenum();
-                                           metisgl_identifier texture_index  = this->get_metisid(m);
-                                           m.add_glbindtexture(target, texture_index); } },
+GLBINDTEXTURE                   target, texture_index
 
-GLTEXPARAMETERI
-                                           GLenum target                     = this->get_GLenum();
-                                           GLenum pname                      = this->get_GLenum();
-                                           GLint param                       = this->get_GLint();
-                                           m.add_gltexparameteri(target, pname, param); } },
+GLTEXPARAMETERI                 target, pname, param
 
-GLTEXPARAMETERFV
-                                           address_mode src                  = this->get_addr_mode();
-                                           GLenum target                     = this->get_GLenum();
-                                           GLenum pname                      = this->get_GLenum();
-                                           m.add_gltexparameterfv(src, target, pname); } },
+GLTEXPARAMETERFV                src, target, pname
 
-GLGENERATEMIPMAP
-                                           GLenum target                     = this->get_GLenum();
-                                           m.add_glgeneratemipmap(target); } },
+GLGENERATEMIPMAP                target
 
-GLTEXIMAGE2D
-                                           GLenum target                     = this->get_GLenum();
-                                           GLint level                       = this->get_GLint();
-                                           GLint internal_format             = this->get_GLint();
-                                           GLsizei width                     = this->get_GLsizei();
-                                           GLsizei height                    = this->get_GLsizei();
-                                           GLint border                      = this->get_GLint();
-                                           GLenum format                     = this->get_GLenum();
-                                           GLenum type                       = this->get_GLenum();
-                                           uint64_t data_index               = this->get_metisid(m);
-                                      
-                                           m.add_glteximage2d(target, level, internal_format,
-                                                              width, height, border, format,
-                                                              type, data_index); } },
+GLTEXIMAGE2D                    target, level, internal_format, width, height, border, format, type, data_index
 
-GLGETATTRIBLOCATION
-                                           metisgl_identifier attrib_index   = this->get_metisid(m);
-                                           string attrib                     = this->get_string();
-                                           m.add_glgetattriblocation(attrib_index, attrib.c_str()); } },
+GLGETATTRIBLOCATION             attrib_index, attrib
 
 GLACTIVETEXTURE
                                            GLenum texture                    = this->get_GLenum();
