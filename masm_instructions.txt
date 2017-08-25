@@ -56,128 +56,55 @@ GLDRAWELEMENTS      mode, count, type, indices
 
 GLDRAWARRAYS        mode, first, count
 
-GLGENBUFFERS
-                                           GLsizei numids           = this->get_GLsizei();
-                                           metisgl_identifier start = this->get_metisid(m);
-                                           m.add_glgenbuffers(numids, start); } },
+GLGENBUFFERS        numids, start
 
-GLGENVERTEXARRAYS
-                                           GLsizei numids           = this->get_GLsizei();
-                                           metisgl_identifier start = this->get_metisid(m);
-                                           m.add_glgenvertexarrays(numids, start); } },
+GLGENVERTEXARRAYS   numids, start
 
-GLBINDVERTEXARRAY
-                                           metisgl_identifier id    = this->get_metisid(m);
-                                           m.add_glbindvertexarray(id); } },
+GLBINDVERTEXARRAY   id
 
-GLBINDBUFFER
-                                           GLenum target            = this->get_GLenum();
-                                           metisgl_identifier id    = this->get_metisid(m);
-                                           m.add_glbindbuffer(target, id); } },
+GLBINDBUFFER        target, id
 
-GLBUFFERDATA
-                                           GLenum target            = this->get_GLenum();
-                                           GLsizeiptr size          = this->get_GLsizeiptr();
-                                           uint64_t data_index      = this->get_addr(m);
-                                           GLenum usage             = this->get_GLenum();
-                                           m.add_glbufferdata(target, size, data_index, usage); } },
+GLBUFFERDATA        target, size, data_index, usage
 
-GLENABLEVERTEXATTRIBARRAY
-                                           GLuint index             = this->get_GLuint();
-                                           m.add_glenablevertexattribarray(index); } },
+GLENABLEVERTEXATTRIBARRAY       index
 
-GLVERTEXATTRIBPOINTER
-                                           GLuint index             = this->get_GLuint();
-                                           GLint  size              = this->get_GLint();
-                                           
-                                           GLenum type              = this->get_GLenum();
-                                           GLboolean normalized     = this->get_GLboolean();
-                                           GLsizei stride           = this->get_GLsizei();
-                                           uint64_t pointer         = this->get_metisid(m);
-                                           m.add_glvertexattribpointer(index, size, type, normalized, stride, pointer); } },
+GLVERTEXATTRIBPOINTER           index, size, type, normalized, stride, pointer
 
-GLDISABLEVERTEXATTRIBARRAY
-                                           GLuint index             = this->get_GLuint();
-                                           m.add_gldisablevertexattribarray(index); } },
+GLDISABLEVERTEXATTRIBARRAY      index
 
-GLENABLE
-                                           GLenum capability        = this->get_GLenum();
-                                           m.add_glenable(capability); } },
+GLENABLE                        capability
 
-GLDEPTHFUNC
-                                           GLenum function          = this->get_GLenum();
-                                           m.add_gldepthfunc(function); } },
+GLDEPTHFUNC                     function
 
-GLCREATESHADER
-                                           GLenum type              = this->get_GLenum();
-                                           metisgl_identifier index = this->get_metisid(m);
-                                           m.add_glcreateshader(type, index); } },
+GLCREATESHADER                  type, index
 
-GLSHADERSOURCE
-                                           GLuint shader            = this->get_addr(m);
-                                           metisgl_identifier index = this->get_metisid(m);
-                                           m.add_glshadersource(shader, index); } },
+GLSHADERSOURCE                  shader, index
 
-GLCOMPILESHADER
-                                           metisgl_identifier index = this->get_metisid(m);
-                                           m.add_glcompileshader(index); } },
+GLCOMPILESHADER                 index
 
-GLCREATEPROGRAM
-                                           metisgl_identifier index = this->get_metisid(m);
-                                           m.add_glcreateprogram(index); } },
+GLCREATEPROGRAM                 index
 
-GLATTACHSHADER
-                                           metisgl_identifier program_index = this->get_metisid(m);
-                                           metisgl_identifier shader_index  = this->get_metisid(m);
-                                           m.add_glattachshader(program_index, shader_index); } },
+GLATTACHSHADER                  program_index, shader_index
 
-GLLINKPROGRAM
-                                           metisgl_identifier index = this->get_metisid(m);
-                                           m.add_gllinkprogram(index); } },
+GLLINKPROGRAM                   index
 
-GLDETACHSHADER
-                                           metisgl_identifier program_index = this->get_metisid(m);
-                                           metisgl_identifier shader_index  = this->get_metisid(m);
-                                           m.add_gldetachshader(program_index, shader_index); } },
+GLDETACHSHADER                  program_index, shader_index
 
-GLDELETESHADER
-                                           metisgl_identifier shader_index = this->get_metisid(m);
-                                           m.add_gldeleteshader(shader_index); } },
+GLDELETESHADER                  shader_index
 
-GLUSEPROGRAM
-                                           metisgl_identifier program_index = this->get_metisid(m);
-                                           m.add_gluseprogram(program_index); } },
+GLUSEPROGRAM                    program_index
 
-GLUNIFORMFV
-                                           address_mode src                  = this->get_addr_mode();
-                                           metisgl_identifier uniform_index  = this->get_metisid(m);
-                                           m.add_gluniformfv(src, uniform_index); } },
+GLUNIFORMFV                     src, uniform_index
 
-GLUNIFORMIV
-                                           address_mode src                  = this->get_addr_mode();
-                                           metisgl_identifier uniform_index  = this->get_metisid(m);
-                                           m.add_gluniformiv(src, uniform_index); } },
+GLUNIFORMIV                     src, uniform_index
 
-GLUNIFORMUIV
-                                           address_mode src                  = this->get_addr_mode();
-                                           metisgl_identifier uniform_index  = this->get_metisid(m);
-                                           m.add_gluniformuiv(src, uniform_index); } },
+GLUNIFORMUIV                    src, uniform_index
 
-GLUNIFORMMATRIXFV
-                                           address_mode src                  = this->get_addr_mode();
-                                           metisgl_identifier uniform_index  = this->get_metisid(m);
-                                           m.add_gluniformmatrixfv(src, uniform_index); } },
+GLUNIFORMMATRIXFV               src, uniform_index
 
-GLGETUNIFORMLOCATION
-                                           metisgl_identifier program_index  = this->get_metisid(m);
-                                           metisgl_identifier uniform_index  = this->get_metisid(m);
-                                           string uniform_name               = this->get_string();
-                                           m.add_glgetuniformlocation(program_index,uniform_index, uniform_name.c_str()); } },
+GLGETUNIFORMLOCATION            program_index, uniform_index uniform_name
 
-GLGENTEXTURES
-                                           GLsizei num_identifiers           = this->get_addr_mode();
-                                           metisgl_identifier start_index    = this->get_metisid(m);
-                                           m.add_glgentextures(num_identifiers, start_index); } },
+GLGENTEXTURES                   num_identifiers, start_index
 
 GLBINDTEXTURE
                                            GLenum target                     = this->get_GLenum();
