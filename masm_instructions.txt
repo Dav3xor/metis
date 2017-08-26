@@ -1,6 +1,55 @@
+MASM Assembler 
+-----------------------------------------------------------------------------
 
-*
-ERROR
+addressing modes:
+-----------------------------------------------------------------------------
+REGA-D        (registers A through D)
+REGSP         (stack pointer)
+REGIP         (instruction pointer) 
+REGBP         (buffer pointer) 
+REGERR        (error register)
+STACK_PUSH    (push result onto stack)
+STACK_POP     (pop src from stack)
+
+
+
+comments:
+-----------------------------------------------------------------------------
+
+* all comment lines start with an asterisk
+
+* this is a comment
+* this is also a comment
+
+this is not a comment
+
+
+proposed instructions:
+-----------------------------------------------------------------------------
+
+WAIT src 
+
+waits for number of microseconds held in src
+
+OPEN src, dest
+
+opens file pointed to by src, includes sockets?  urls?.  leaves file # in dest
+
+
+CLOSE src
+
+closes file # pointed to by src
+
+READ src (file), dest, maxbytes
+
+WRITE dest (file), data, len
+
+instructions:
+-----------------------------------------------------------------------------
+
+ERROR (no operands)
+
+halts execution, prints an error message to the console.
 
 END
 
