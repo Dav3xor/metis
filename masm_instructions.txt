@@ -47,15 +47,21 @@ WRITE dest (file), data, len
 instructions:
 -----------------------------------------------------------------------------
 
-ERROR (no operands)
+ERROR               (no operands)
 
 halts execution, prints an error message to the console.
 
-END
+END                 (no operands)
 
-NOOP
+normal halt of execution (end of program)
+
+NOOP                (no operands)
+
+no operation, empty instruction
 
 JUMP                addr_mode
+
+jump to location held in addr_mode
 
 JUMPI               location 
 
