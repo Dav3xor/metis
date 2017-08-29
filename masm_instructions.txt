@@ -65,17 +65,31 @@ jump to location held in addr_mode
 
 JUMPI               location 
 
+jump to location held in instruction
+
 JIZZ                src, dest
+
+if value in src is zero, jump to dest
 
 JNZ                 src, dest
 
+if value in src is not zero, jump to dest
+
 JNE                 src, dest, val
+
+if value in src does not equal value in dest, jump to val
 
 JMPE                src, dest, val
 
+if value in src equals value in dest, jump to val
+
 STORE               src, dest
 
+copy value in src, put it in dest
+
 STOREI              dest, val
+
+
 
 STORESR             src, offset
 
