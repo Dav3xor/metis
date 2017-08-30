@@ -27,20 +27,20 @@ this is not a comment
 proposed instructions:
 -----------------------------------------------------------------------------
 
-WAIT src 
+WAIT              src 
 
-waits for number of microseconds held in src
+  waits for number of microseconds held in src
 
-OPEN src, dest
+OPEN              src, dest
 
-opens file pointed to by src, includes sockets?  urls?.  leaves file # in dest
+  opens file pointed to by src, includes sockets?  urls?.  leaves file # in dest
 
 
-CLOSE src
+CLOSE             src
 
-closes file # pointed to by src
+  closes file # pointed to by src
 
-READ src (file), dest, maxbytes
+READ               src (file), dest, maxbytes
 
 WRITE dest (file), data, len
 
@@ -49,55 +49,60 @@ instructions:
 
 ERROR               (no operands)
 
-halts execution, prints an error message to the console.
+  halts execution, prints an error message to the console.
 
 END                 (no operands)
 
-normal halt of execution (end of program)
+  normal halt of execution (end of program)
 
 NOOP                (no operands)
 
-no operation, empty instruction
+  no operation, empty instruction
 
 JUMP                addr_mode
 
-jump to location held in addr_mode
+  jump to location held in addr_mode
 
 JUMPI               location 
 
-jump to location held in instruction
+  jump to location held in instruction
 
 JIZZ                src, dest
 
-if value in src is zero, jump to dest
+  if value in src is zero, jump to dest
 
 JNZ                 src, dest
 
-if value in src is not zero, jump to dest
+  if value in src is not zero, jump to dest
 
 JNE                 src, dest, val
 
-if value in src does not equal value in dest, jump to val
+  if value in src does not equal value in dest, jump to val
 
 JMPE                src, dest, val
 
-if value in src equals value in dest, jump to val
+  if value in src equals value in dest, jump to val
 
 STORE               src, dest
 
-copy value in src, put it in dest
+  copy value in src, put it in dest
 
 STOREI              dest, val
 
-stores value in destination
+  stores value in destination
 
 STORESR             src, offset
 
-stores a value on the stack from src, using the formula:
+  stores a value on the stack from src, using the formula:
 
-stack[REGSP - offset] = src
+  stack[REGSP - offset] = src
 
 LOADSR              offset, dest
+  
+  loads a value from the stack, relative to the stack pointer
+  using offset.
+
+  dest = stack[REGSP - offset]
 
 STACK_ADJ           amount
 
