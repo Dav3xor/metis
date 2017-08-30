@@ -93,7 +93,9 @@ stores value in destination
 
 STORESR             src, offset
 
+stores a value on the stack from src, using the formula:
 
+stack[REGSP - offset] = src
 
 LOADSR              offset, dest
 
