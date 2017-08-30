@@ -89,9 +89,11 @@ copy value in src, put it in dest
 
 STOREI              dest, val
 
-
+stores value in destination
 
 STORESR             src, offset
+
+
 
 LOADSR              offset, dest
 
