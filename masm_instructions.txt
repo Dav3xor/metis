@@ -116,9 +116,23 @@ LOC                 label
 
 LABEL               label, val
 
+  set a label to value val
+
 FLOAT               label, val
 
+  set a label to value val (float)
+
 BUFFER              label, size, values
+
+  set a label to a buffer of size values
+
+  sample:
+
+  BUFFER                buf_name 9
+
+  -0.8 -0.8 0.0
+   0.8 -0.8 0.0
+   0.0  0.8 0.0
 
 MATRIX              label, width, height, values
 
