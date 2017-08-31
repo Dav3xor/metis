@@ -105,8 +105,14 @@ LOADSR              offset, dest
   dest = stack[REGSP - offset]
 
 STACK_ADJ           amount
+  
+  adjust the stack pointer by amount
+
+  REGSP -= amount
 
 LOC                 label
+ 
+  set a label to the current value of REGIP  
 
 LABEL               label, val
 
