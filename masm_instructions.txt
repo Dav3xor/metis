@@ -136,6 +136,14 @@ BUFFER              label, size, values
 
 MATRIX              label, width, height, values
 
+  set a label to a matrix of size width x height
+
+  sample:
+
+  MATRIX    matrix1 3 1
+  
+  1.0 1.0 1.0
+
 SHADER              label <shader> END-SHADER
 
 IMATRIX             label, width, height
