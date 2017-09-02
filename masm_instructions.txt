@@ -169,6 +169,8 @@ IMATRIX             label, width, height
 
 MPUSH               location
 
+ pushes the matrix at location onto the stack 
+
 MMUL                src1, src2, dest
 
 MADD                src1, src2, dest
