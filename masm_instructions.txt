@@ -173,11 +173,27 @@ MPUSH               location
 
 MMUL                src1, src2, dest
 
+ multiplies src1 with src2, putting the results in dest.
+
+ all operands specify addressing modes
+
 MADD                src1, src2, dest
+
+ multiplies src1 with src2, putting the results in dest.
+
+ all operands specify addressing modes
 
 VDOT                src1, src2, dest
 
+ multiplies src1 with src2, putting the results in dest.
+
+ all operands specify addressing modes
+
 VCROSS              src1, src2, dest
+
+ multiplies src1 with src2, putting the results in dest.
+
+ all operands specify addressing modes
 
 GLDRAWELEMENTS      mode, count, type, indices
 
