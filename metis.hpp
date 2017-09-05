@@ -343,6 +343,15 @@ class MetisVM {
                                INS_VECTOR_CROSS                  =   65,   // *   Cross Product
                                INS_MATRIX_ADD                    =   66,   // *   Cross Product
 
+                               // IO
+                               INS_OPEN                          =   80,
+                               INS_CLOSE                         =   81,
+                               INS_READ                          =   82,
+                               INS_WRITE                         =   83,
+                               INS_SELECT                        =   84,
+                               INS_WAIT                          =   85,
+                               INS_CURTIME                       =   86,
+
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
                                INS_GLDRAWARRAYS                  =   97,   
