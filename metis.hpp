@@ -111,6 +111,15 @@ using namespace std;
 #define INS_MATRIX_ADD_SIZE                  10 
 #define INS_VECTOR_DOT_SIZE                  10
 #define INS_VECTOR_CROSS_SIZE                10
+
+#define INS_WAIT_SIZE                        2
+#define INS_CURTIME_SIZE                     2
+#define INS_OPEN_SIZE                        3
+#define INS_CLOSE_SIZE                       2
+#define INS_READ_SIZE                        11 
+#define INS_WRITE_SIZE                       11
+
+
 #define INS_NOOP_SIZE                        1
 #define INS_END_SIZE                         1
 

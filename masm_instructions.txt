@@ -46,7 +46,7 @@ CLOSE             src
 
 READ               src (file), dest, maxbytes
 
-WRITE dest (file), data, len
+WRITE              dest (file), data, len
 
 instructions:
 -----------------------------------------------------------------------------
