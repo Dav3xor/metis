@@ -31,6 +31,10 @@ WAIT              src
 
   waits for number of microseconds held in src
 
+CURTIME           dest
+
+  returns the current time in microseconds
+
 OPEN              src, dest
 
   opens file pointed to by src, includes sockets?  urls?.  leaves file # in dest
