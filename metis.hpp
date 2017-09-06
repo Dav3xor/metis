@@ -474,6 +474,14 @@ class MetisVM {
     uint64_t add_vector_dot       (address_mode src1, address_mode src2, uint64_t destination);
     uint64_t add_vector_cross     (address_mode src1, address_mode src2, uint64_t destination);
 
+    
+    uint64_t add_wait             (address_mode src);
+    uint64_t add_curtime          (address_mode dest);
+    uint64_t add_open             (address_mode src, address_mode dest);
+    uint64_t add_close            (address_mode src);
+    uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
+    uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
+
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
     uint64_t add_not              (address_mode src, address_mode dest);
