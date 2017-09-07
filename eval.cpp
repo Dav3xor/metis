@@ -35,6 +35,7 @@ bool MetisVM::do_eval() {
   GLchar            *string_ptr;
   GLvoid            *glvoid = 0;
   GLint              location;
+  timespec           ts;
 
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -213,6 +214,11 @@ bool MetisVM::do_eval() {
         }
         registers[REGIP] += INS_VECTOR_CROSS_SIZE;
         break;  
+
+      case INS_WAIT:
+        ts.tv_nsec = get_val(ADDR_MODES);
+        nanosleep(&ts, NULL);
+        break;
 
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
