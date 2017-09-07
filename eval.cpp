@@ -1,5 +1,5 @@
+#include <time.h>
 #include "metis.hpp"
-
 
 
 #define LOAD_MATRIX(type)\
@@ -44,9 +44,11 @@ bool MetisVM::do_eval() {
       case INS_JUMP:
         registers[REGIP] = (uint64_t)code_start + get_val(ADDR_MODES);
         break;
+
       case INS_JUMPI:
         registers[REGIP] = (uint64_t)code_start + instruction->commands.jumpi.value;
         break;
+
       case INS_JNE:
         if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
           registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jne.value;
@@ -54,6 +56,7 @@ bool MetisVM::do_eval() {
           registers[REGIP] += INS_JNE_SIZE;
         }
         break; 
+
       case INS_JMPE:
         if(get_val(ADDR_MODES) == get_dest_val(ADDR_MODES)) {
           registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jmpe.value;
@@ -61,6 +64,7 @@ bool MetisVM::do_eval() {
           registers[REGIP] += INS_JMPE_SIZE;
         }
         break; 
+
       case INS_JIZZ:
         if (get_val(ADDR_MODES)==0) {
           registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
@@ -68,6 +72,7 @@ bool MetisVM::do_eval() {
           registers[REGIP] += INS_JIZZ_SIZE;
         }
         break;
+
       case INS_JNZ:
         if (get_val(ADDR_MODES)!=0) {
           registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
@@ -75,29 +80,35 @@ bool MetisVM::do_eval() {
           registers[REGIP] += INS_JNZ_SIZE;
         }
         break;
+
       case INS_STORE:
         set_val(ADDR_MODES,
                 get_val(ADDR_MODES));
         registers[REGIP] += INS_STORE_SIZE;
         break;
+
       case INS_STOREI:
         set_val(ADDR_MODES,
                 instruction->commands.extended.ext.storei.value.ulong);
         registers[REGIP] += INS_STOREI_SIZE;
         break;
+
       case INS_STORE_SR:
         stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole = get_val(ADDR_MODES);
         registers[REGIP] += INS_STORE_SR_SIZE;
         break;
+
       case INS_LOAD_SR:
         set_val(ADDR_MODES,
                 stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole);
         registers[REGIP] += INS_LOAD_SR_SIZE;
         break;
+
       case INS_STACK_ADJ:
         registers[REGSP] -= instruction->commands.stack_adj.amount;
         registers[REGIP] += INS_STACK_ADJ_SIZE;
         break;
+
       
       // math instructions
       case INS_INC:
@@ -105,23 +116,29 @@ bool MetisVM::do_eval() {
                 get_val(ADDR_MODES)+1);
         registers[REGIP] += INS_MATH_SIZE;
         break;
+
       case INS_DEC:
         set_val(ADDR_MODES,
                 get_val(ADDR_MODES)-1);
         registers[REGIP] += INS_MATH_SIZE;
         break;
+
       case INS_ADD:
         MATH_OPERATION(+);
         break;
+
       case INS_SUB:
         MATH_OPERATION(-);
         break;
+
       case INS_MUL:
         MATH_OPERATION(*);
         break;
+
       case INS_DIV:
         MATH_OPERATION(/);
         break;
+
       case INS_MOD:
         MATH_OPERATION(%);
         break;
@@ -130,12 +147,15 @@ bool MetisVM::do_eval() {
       case INS_AND:
         MATH_OPERATION(&);
         break;
+
       case INS_OR:
         MATH_OPERATION(|);
         break;
+
       case INS_XOR:
         MATH_OPERATION(^);
         break;
+
       case INS_NOT:
         set_val(ADDR_MODES, ~get_val(ADDR_MODES));
         registers[REGIP] += INS_MATH_SIZE;
@@ -160,6 +180,7 @@ bool MetisVM::do_eval() {
         }
         registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
         break;    
+
       case INS_MATRIX_ADD:
         // lists of vectors are stored as matrices.
         LOAD_MATRIX(matrix_add);
@@ -170,6 +191,7 @@ bool MetisVM::do_eval() {
         }
         registers[REGIP] += INS_MATRIX_ADD_SIZE;
         break;    
+
       case INS_VECTOR_DOT:
         // lists of vectors are stored as matrices.
         LOAD_MATRIX(vector_dot);
@@ -180,6 +202,7 @@ bool MetisVM::do_eval() {
         }
         registers[REGIP] += INS_VECTOR_DOT_SIZE;
         break;    
+
       case INS_VECTOR_CROSS:
         // lists of vectors are stored as matrices.
         LOAD_MATRIX(vector_cross);
@@ -189,7 +212,8 @@ bool MetisVM::do_eval() {
           d[i*matrix_a->width+2] = (a[i*matrix_a->width+0] * b[i*matrix_a->width+1]) - (a[i*matrix_a->width+1] * b[i*matrix_a->width+0]); // k
         }
         registers[REGIP] += INS_VECTOR_CROSS_SIZE;
-        break;    
+        break;  
+
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
         //if(instruction->commands.gldrawelements.indices==0) {
@@ -204,6 +228,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
         break;
+
       case INS_GLDRAWARRAYS:
         glDrawArrays(instruction->commands.gldrawarrays.mode, 
                      instruction->commands.gldrawarrays.first, 
@@ -213,6 +238,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
         break;
+
       case INS_GLGENBUFFERS:
         glGenBuffers(instruction->commands.glgenbuffers.num_identifiers, 
                      &(glidentifiers[instruction->commands.glgenbuffers.start_index]));
@@ -221,6 +247,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLGENBUFFERS_SIZE;
         break;
+
       case INS_GLGENVERTEXARRAYS:
         glGenVertexArrays(instruction->commands.glgenvertexarrays.num_identifiers,
                           &(glidentifiers[instruction->commands.glgenvertexarrays.start_index]));
@@ -229,6 +256,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
         break;
+
       case INS_GLBINDBUFFER:
         glBindBuffer(instruction->commands.glbindbuffer.target, 
                      glidentifiers[instruction->commands.glbindbuffer.buffer_index]);
@@ -238,6 +266,7 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_GLBINDBUFFER_SIZE;
         break;
 
+
       case INS_GLBINDVERTEXARRAY:
         glBindVertexArray(glidentifiers[instruction->commands.glbindvertexarray.array_index]);
         #ifdef TESTING_ENVIRONMENT
@@ -245,6 +274,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
         break;
+
 
       case INS_GLBUFFERDATA:
 
@@ -257,6 +287,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLBUFFERDATA_SIZE;
         break;
+
       case INS_GLENABLEVERTEXATTRIBARRAY:
         glEnableVertexAttribArray(instruction->commands.glenablevertexattribarray.index);
         #ifdef TESTING_ENVIRONMENT
@@ -264,6 +295,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
         break;
+
       case INS_GLVERTEXATTRIBPOINTER:
         glvoid = 0;
         if(instruction->commands.glvertexattribpointer.pointer) {
@@ -280,6 +312,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
         break;
+
       case INS_GLDISABLEVERTEXATTRIBARRAY:
         glDisableVertexAttribArray(instruction->commands.gldisablevertexattribarray.index);
         #ifdef TESTING_ENVIRONMENT
@@ -287,6 +320,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
         break;
+
       case INS_GLENABLE:
         glEnable(instruction->commands.glenable.capability);
         #ifdef TESTING_ENVIRONMENT
@@ -294,6 +328,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLENABLE_SIZE;
         break;
+
       case INS_GLDEPTHFUNC:
         glDepthFunc(instruction->commands.gldepthfunc.function);
         #ifdef TESTING_ENVIRONMENT
@@ -301,6 +336,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
         break;
+
       case INS_GLCREATESHADER:
         glidentifiers[instruction->commands.glcreateshader.start_index] = glCreateShader(instruction->commands.glcreateshader.type);
         #ifdef TESTING_ENVIRONMENT
@@ -308,6 +344,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLCREATESHADER_SIZE;
         break;
+
       case INS_GLSHADERSOURCE:
         string_ptr = (GLchar *)(code_start + instruction->commands.glshadersource.shader);
         glShaderSource(glidentifiers[instruction->commands.glshadersource.source_index],
@@ -317,6 +354,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
         break;
+
       case INS_GLCOMPILESHADER:
         if(!(doCompileShader(instruction->commands.glcompileshader.shader_index))) {
           return false;
@@ -354,6 +392,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLLINKPROGRAM_SIZE;
         break;
+
       case INS_GLDETACHSHADER:
         glDetachShader(glidentifiers[instruction->commands.gldetachshader.program_index], 
                        glidentifiers[instruction->commands.gldetachshader.shader_index]);
@@ -362,6 +401,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDETACHSHADER_SIZE;
         break;
+
       case INS_GLDELETESHADER:
         glDeleteShader(glidentifiers[instruction->commands.gldeleteshader.shader_index]);
         #ifdef TESTING_ENVIRONMENT
@@ -369,6 +409,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLDELETESHADER_SIZE;
         break;
+
       case INS_GLUSEPROGRAM:
         glUseProgram(glidentifiers[instruction->commands.gluseprogram.program_index]);
         #ifdef TESTING_ENVIRONMENT
@@ -407,16 +448,14 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLUNIFORMFV_SIZE;
         break;
+
       case INS_GLGETUNIFORMLOCATION:
         string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETUNIFORMLOCATION_SIZE);
         glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(glidentifiers[instruction->commands.glgetuniformlocation.program_index],
                                                                                                        (const GLchar *)string_ptr);
 
-
-
         registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
         registers[REGIP] += instruction->commands.glgetuniformlocation.id_length;
-
         break;
         
       case INS_GLGENTEXTURES:
@@ -436,6 +475,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
         break;
+
       case INS_GLTEXPARAMETERI:
         glTexParameteri(instruction->commands.gltexparameteri.target,
                         instruction->commands.gltexparameteri.pname,
@@ -455,6 +495,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
         break;
+
       case INS_GLGENERATEMIPMAP:
         glGenerateMipmap(instruction->commands.glgeneratemipmap.target);
         #ifdef TESTING_ENVIRONMENT
@@ -462,6 +503,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
         break;
+
       case INS_GLTEXIMAGE2D:
         glTexImage2D(instruction->commands.glteximage2d.target,
                      instruction->commands.glteximage2d.level,
@@ -477,6 +519,7 @@ bool MetisVM::do_eval() {
         #endif
         registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
         break;
+
       case INS_GLGETATTRIBLOCATION:
 
         string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETATTRIBLOCATION_SIZE);
@@ -521,20 +564,24 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_DATA_SIZE;
         registers[REGIP] += advance;
         break;
+
       case INS_NOOP:
         registers[REGIP] += INS_NOOP_SIZE;
         break;
+
       case INS_END:
         // don't advance, then we can add instructions over
         // the end instruction...
         return true;
         break;
+
       case INS_ERROR:
         throw MetisException(string("error opcode found -- instruction = ") + 
                              to_string(instruction->type) + string(" IP = ") + 
                              to_string(registers[REGIP]) , 
                              __LINE__, __FILE__);
         break;
+
       default:
         throw MetisException(string("unknown opcode found -- instruction = ") + 
                              to_string(instruction->type) + string(" IP = ") + 
