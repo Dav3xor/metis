@@ -673,6 +673,14 @@ class MetisVM {
               uint64_t destination;
             }__attribute__((packed)) vector_cross;
 
+            struct ext_add_read_t {
+              uint64_t max_bytes;
+            }__attribute__((packed)) read;
+
+            struct ext_add_write_t {
+              uint64_t num_bytes;
+            }__attribute__((packed)) write;
+
             struct gluniformfv_t {
               metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformfv;
