@@ -35,7 +35,8 @@ bool MetisVM::do_eval() {
   GLchar            *string_ptr;
   GLvoid            *glvoid = 0;
   GLint              location;
-  timespec           ts;
+  timespec           ts1;
+  timespec           ts2;
 
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -216,8 +217,15 @@ bool MetisVM::do_eval() {
         break;  
 
       case INS_WAIT:
-        ts.tv_nsec = get_val(ADDR_MODES);
-        nanosleep(&ts, NULL);
+        ts1.tv_nsec = get_val(ADDR_MODES);
+        nanosleep(&ts1, NULL);
+        registers[REGIP] += INS_WAIT_SIZE;
+        break;
+      case INS_CURTIME:
+        clock_gettime(CLOCK_REALTIME, &ts2);
+        set_val(ADDR_MODES,
+                ts2.tv_nsec);
+        registers[REGIP] += INS_CURTIME_SIZE;
         break;
 
       case INS_GLDRAWELEMENTS:
