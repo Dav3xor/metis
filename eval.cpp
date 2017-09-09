@@ -35,6 +35,7 @@ bool MetisVM::do_eval() {
   GLchar            *string_ptr;
   GLvoid            *glvoid = 0;
   GLint              location;
+  FileSpec           *file;
   timespec           ts1;
   timespec           ts2;
 
@@ -225,6 +226,11 @@ bool MetisVM::do_eval() {
         clock_gettime(CLOCK_REALTIME, &ts2);
         set_val(ADDR_MODES,
                 ts2.tv_nsec);
+        registers[REGIP] += INS_CURTIME_SIZE;
+        break;
+
+      case INS_OPEN:
+        file = (FileSpec *)((uint64_t)code_start + get_val(ADDR_MODES));\
         registers[REGIP] += INS_CURTIME_SIZE;
         break;
 
