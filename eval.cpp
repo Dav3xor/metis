@@ -1,6 +1,8 @@
 #include <time.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "metis.hpp"
-
 
 #define LOAD_MATRIX(type)\
         matrix_a      = (MetisMatrixHeader *)((uint64_t)code_start + get_val(ADDR_MODES));\
@@ -35,7 +37,8 @@ bool MetisVM::do_eval() {
   GLchar            *string_ptr;
   GLvoid            *glvoid = 0;
   GLint              location;
-  FileSpec           *file;
+  FileSpec           *filespec;
+  int                file;
   timespec           ts1;
   timespec           ts2;
 
@@ -230,7 +233,12 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_OPEN:
-        file = (FileSpec *)((uint64_t)code_start + get_val(ADDR_MODES));\
+        filespec = (FileSpec *)((uint64_t)code_start + get_val(ADDR_MODES));
+
+        // currently only works with files...  add sockets later
+        file     = open(filespec->path, O_RDONLY);
+
+        set_val(ADDR_MODES, file);
         registers[REGIP] += INS_CURTIME_SIZE;
         break;
 
