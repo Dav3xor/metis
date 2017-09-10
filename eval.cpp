@@ -242,6 +242,11 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_CURTIME_SIZE;
         break;
 
+      case INS_CLOSE:
+        close(get_val(ADDR_MODES));
+        registers[REGIP] += INS_CURTIME_SIZE;
+        break;
+
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
         //if(instruction->commands.gldrawelements.indices==0) {
