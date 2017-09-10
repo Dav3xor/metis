@@ -1,5 +1,6 @@
 #include <time.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "metis.hpp"
@@ -239,12 +240,19 @@ bool MetisVM::do_eval() {
         file     = open(filespec->path, O_RDONLY);
 
         set_val(ADDR_MODES, file);
-        registers[REGIP] += INS_CURTIME_SIZE;
+        registers[REGIP] += INS_OPEN_SIZE;
         break;
 
       case INS_CLOSE:
         close(get_val(ADDR_MODES));
-        registers[REGIP] += INS_CURTIME_SIZE;
+        registers[REGIP] += INS_CLOSE_SIZE;
+        break;
+
+      case INS_READ:
+        buffer = (uint8_t *)((uint64_t)code_start + get_dest_val(ADDR_MODES));
+        read(get_val(ADDR_MODES), 
+             buffer, 
+             instruction->commands.extended.ext.read.max_bytes);
         break;
 
       case INS_GLDRAWELEMENTS:
