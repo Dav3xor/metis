@@ -254,6 +254,13 @@ bool MetisVM::do_eval() {
              buffer, 
              instruction->commands.extended.ext.read.max_bytes);
         break;
+      
+      case INS_WRITE:
+        buffer = (uint8_t *)((uint64_t)code_start + get_dest_val(ADDR_MODES));
+        write(get_val(ADDR_MODES), 
+              buffer, 
+              instruction->commands.extended.ext.write.num_bytes);
+        break;
 
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
