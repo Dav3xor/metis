@@ -340,6 +340,15 @@ uint64_t MetisVM::add_vector_cross(address_mode src1, address_mode src2, uint64_
   RETURN_NEXT();
 }
 
+uint64_t MetisVM::add_wait(address_mode src) {
+  CHECK_INSTRUCTION(INS_WAIT_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_WAIT;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
+  registers[REGIP] += INS_WAIT_SIZE;
+  RETURN_NEXT();
+} 
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
