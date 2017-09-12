@@ -349,6 +349,17 @@ uint64_t MetisVM::add_wait(address_mode src) {
   registers[REGIP] += INS_WAIT_SIZE;
   RETURN_NEXT();
 } 
+
+uint64_t MetisVM::add_curtime(address_mode dest) {
+  CHECK_INSTRUCTION(INS_WAIT_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_CURTIME;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(0, dest);
+  registers[REGIP] += INS_CURTIME_SIZE;
+  RETURN_NEXT();
+} 
+
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
