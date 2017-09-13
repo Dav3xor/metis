@@ -360,6 +360,20 @@ uint64_t MetisVM::add_curtime(address_mode dest) {
   RETURN_NEXT();
 } 
 
+uint64_t MetisVM::add_open(address_mode src, address_mode dest, string &uri,string &mode) {
+  CHECK_INSTRUCTION(INS_WAIT_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_OPEN;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+  cout << uri << endl;
+  cout << mode << endl;
+
+  // TODO: finish...
+
+  registers[REGIP] += INS_OPEN_SIZE;
+  RETURN_NEXT();
+} 
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
