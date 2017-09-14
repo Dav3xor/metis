@@ -488,7 +488,7 @@ class MetisVM {
     
     uint64_t add_wait             (address_mode src);
     uint64_t add_curtime          (address_mode dest);
-    uint64_t add_open             (address_mode src, address_mode dest, string &uri, string &mode);
+    uint64_t add_open             (address_mode src, address_mode dest);
     uint64_t add_close            (address_mode src);
     uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
