@@ -361,13 +361,12 @@ uint64_t MetisVM::add_curtime(address_mode dest) {
 } 
 
 uint64_t MetisVM::add_open(address_mode src, address_mode dest) {
+  FileSpec           *filespec;
   CHECK_INSTRUCTION(INS_WAIT_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_OPEN;      
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
-
-  // TODO: finish...
 
   registers[REGIP] += INS_OPEN_SIZE;
   RETURN_NEXT();
