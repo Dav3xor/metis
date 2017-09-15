@@ -382,6 +382,18 @@ uint64_t MetisVM::add_close(address_mode src) {
   RETURN_NEXT();
 } 
 
+uint64_t MetisVM::add_read(address_mode src, address_mode dest, uint64_t max_bytes) {
+  CHECK_INSTRUCTION(INS_READ_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_READ;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+  instruction->commands.extended.ext.read.max_bytes = max_bytes;
+
+  registers[REGIP] += INS_READ_SIZE;
+  RETURN_NEXT();
+} 
+
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
