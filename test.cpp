@@ -639,20 +639,21 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
-  m.add_data((uint8_t *)data, sizeof(data), "data");
-  m.add_storei(REGA,m.get_label("data"));
+  m.add_data((uint8_t *)fs, sizeof(fs), "fs");
+  m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
+  m.add_storei(REGA,m.get_label("fs"));
+  m.add_storei(REGB,m.get_label("buffer"));
+  m.add_open(REGA,REGC);
+  m.add_read(REGC,REGB,1000)
+  m.add_close(REGC);
   m.add_end();
   
   m.eval();
 
   REQUIRE( m.get_registers()[REGA] == 11);
   REQUIRE( m.get_registers()[REGB] == 10);
-  float *ins_data = (float *)m.get_ptr_from_label("data");
-  REQUIRE( ins_data[0] == 1.1f);
-  REQUIRE( ins_data[1] == 2.2f);
-  REQUIRE( ins_data[2] == 3.3f);
-  REQUIRE( ins_data[3] == 4.4f);
-  REQUIRE( ins_data[4] == 5.5f);
+  char *data = (char *)m.get_ptr_from_label("data");
+  REQUIRE(data == "abc");
 }
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
