@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 
 #include <chrono>
+#include <fcntl.h>
 
 #include "metis.hpp"
 #include "catch.hpp"
@@ -639,12 +640,12 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
-  m.add_data((uint8_t *)fs, sizeof(fs), "fs");
+  m.add_data((uint8_t *)&fs, sizeof(fs), "fs");
   m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
   m.add_storei(REGA,m.get_label("fs"));
   m.add_storei(REGB,m.get_label("buffer"));
   m.add_open(REGA,REGC);
-  m.add_read(REGC,REGB,1000)
+  m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
   m.add_end();
   
@@ -653,7 +654,7 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 11);
   REQUIRE( m.get_registers()[REGB] == 10);
   char *data = (char *)m.get_ptr_from_label("data");
-  REQUIRE(data == "abc");
+  REQUIRE(string(data)== string("abc"));
 }
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
