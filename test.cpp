@@ -651,10 +651,10 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 11);
-  REQUIRE( m.get_registers()[REGB] == 10);
-  char *data = (char *)m.get_ptr_from_label("data");
-  REQUIRE(string(data)== string("abc"));
+  REQUIRE( m.get_registers()[REGA] == 9);
+  REQUIRE( m.get_registers()[REGB] == 286);
+  char *data = (char *)m.get_ptr_from_label("buffer");
+  REQUIRE(string(data)== string("this is a test\n"));
 }
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
