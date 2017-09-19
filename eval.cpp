@@ -253,6 +253,7 @@ bool MetisVM::do_eval() {
         read(get_val(ADDR_MODES), 
              buffer, 
              instruction->commands.extended.ext.read.max_bytes);
+        registers[REGIP] += INS_READ_SIZE;
         break;
       
       case INS_WRITE:
