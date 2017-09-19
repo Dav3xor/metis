@@ -634,7 +634,7 @@ TEST_CASE( "data", "[MetisVM]" ) {
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
+  FileSpec fs = {"testfile", FILE_READ, O_RDONLY};
   uint8_t buffer[256];
 
   MetisVM m(buf,10000, stack, 5, NULL, 0);
