@@ -261,6 +261,7 @@ bool MetisVM::do_eval() {
         write(get_val(ADDR_MODES), 
               buffer, 
               instruction->commands.extended.ext.write.num_bytes);
+        registers[REGIP] += INS_WRITE_SIZE;
         break;
 
       case INS_GLDRAWELEMENTS:

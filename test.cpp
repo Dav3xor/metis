@@ -634,25 +634,35 @@ TEST_CASE( "data", "[MetisVM]" ) {
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  FileSpec fs = {"testfile", FILE_READ, O_RDONLY};
+  FileSpec fs = {"testfile", FILE_READ};
   uint8_t buffer[256];
 
   MetisVM m(buf,10000, stack, 5, NULL, 0);
   m.hard_reset();
 
-  m.add_data((uint8_t *)&fs, sizeof(fs), "fs");
+  m.add_data((uint8_t *)&fs, sizeof(fs), "fsread");
+
+  fs.type = FILE_WRITE;
+  m.add_data((uint8_t *)&fs, sizeof(fs), "fswrite");
+
   m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
-  m.add_storei(REGA,m.get_label("fs"));
+  m.add_storei(REGA,m.get_label("fsread"));
   m.add_storei(REGB,m.get_label("buffer"));
   m.add_open(REGA,REGC);
   m.add_read(REGC,REGB,1000);
+  m.add_close(REGC);
+  
+  m.add_storei(REGA,m.get_label("fswrite"));
+  m.add_storei(REGB,m.get_label("buffer"));
+  m.add_open(REGA,REGC);
+  m.add_write(REGC,REGB,5);
   m.add_close(REGC);
   m.add_end();
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 9);
-  REQUIRE( m.get_registers()[REGB] == 286);
+  REQUIRE( m.get_registers()[REGA] == 282);
+  REQUIRE( m.get_registers()[REGB] == 555);
   char *data = (char *)m.get_ptr_from_label("buffer");
   REQUIRE(string(data)== string("this is a test\n"));
 }

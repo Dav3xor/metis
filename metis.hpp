@@ -167,7 +167,6 @@ enum filetype: uint64_t {FILE_READ                  =    0,
 struct FileSpec {
   char path[256];
   filetype type;
-  int file_flags;
 }__attribute__((packed));
     
 
