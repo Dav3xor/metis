@@ -160,8 +160,10 @@ enum address_mode: uint8_t {REGA                    =    0,
 
 enum filetype: uint64_t {FILE_READ                  =    0,
                          FILE_WRITE                 =    1,
-                         TCP_CLIENT                 =    2,
-                         UDP_CLIENT                 =    3};
+                         FILE_RDWR                  =    2,
+                         FILE_APPEND                =    3
+                         TCP_CLIENT                 =    4,
+                         UDP_CLIENT                 =    5};
 
 
 struct FileSpec {
