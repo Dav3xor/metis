@@ -158,17 +158,15 @@ enum address_mode: uint8_t {REGA                    =    0,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
-enum filetype: uint64_t {FILE_READ                  =    0,
-                         FILE_WRITE                 =    1,
-                         FILE_RDWR                  =    2,
-                         FILE_APPEND                =    3
-                         TCP_CLIENT                 =    4,
-                         UDP_CLIENT                 =    5};
+enum filetype: uint64_t {LOCAL_FILE                 =    1,
+                         TCP_CLIENT                 =    2,
+                         UDP_CLIENT                 =    3};
 
 
 struct FileSpec {
   char path[256];
   filetype type;
+  file_options;
 }__attribute__((packed));
     
 
