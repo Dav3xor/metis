@@ -634,7 +634,7 @@ TEST_CASE( "data", "[MetisVM]" ) {
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  FileSpec fs = {"testfile", FILE_READ};
+  FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
   uint8_t buffer[256];
 
   MetisVM m(buf,10000, stack, 5, NULL, 0);
@@ -642,7 +642,7 @@ TEST_CASE( "file io", "[MetisVM]" ) {
 
   m.add_data((uint8_t *)&fs, sizeof(fs), "fsread");
 
-  fs.type = FILE_WRITE;
+  fs.file_flags = O_WRONLY;
   m.add_data((uint8_t *)&fs, sizeof(fs), "fswrite");
 
   m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
@@ -661,8 +661,8 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   
   m.eval();
 
-  REQUIRE( m.get_registers()[REGA] == 282);
-  REQUIRE( m.get_registers()[REGB] == 555);
+  REQUIRE( m.get_registers()[REGA] == 286);
+  REQUIRE( m.get_registers()[REGB] == 563);
   char *data = (char *)m.get_ptr_from_label("buffer");
   REQUIRE(string(data)== string("this is a test\n"));
 }

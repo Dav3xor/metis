@@ -166,7 +166,7 @@ enum filetype: uint64_t {LOCAL_FILE                 =    1,
 struct FileSpec {
   char path[256];
   filetype type;
-  file_options;
+  int file_flags;
 }__attribute__((packed));
     
 

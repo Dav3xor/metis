@@ -237,7 +237,7 @@ bool MetisVM::do_eval() {
         filespec = (FileSpec *)((uint64_t)code_start + get_val(ADDR_MODES));
 
         // currently only works with files...  add sockets later
-        file     = open(filespec->path, O_RDONLY);
+        file     = open(filespec->path, filespec->file_flags);
 
         set_val(ADDR_MODES, file);
         registers[REGIP] += INS_OPEN_SIZE;
