@@ -654,7 +654,6 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   m.add_close(REGC);
   
   m.add_storei(REGA,m.get_label("fswrite"));
-  m.add_storei(REGB,m.get_label("buffer"));
   m.add_open(REGA,REGC);
   m.add_write(REGC,REGB,5);
   m.add_close(REGC);
