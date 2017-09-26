@@ -402,7 +402,7 @@ uint64_t MetisVM::add_write(address_mode src, address_mode dest, uint64_t num_by
   instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
   instruction->commands.extended.ext.write.num_bytes = num_bytes;
 
-  registers[REGIP] += INS_READ_SIZE;
+  registers[REGIP] += INS_WRITE_SIZE;
   RETURN_NEXT();
 } 
 
