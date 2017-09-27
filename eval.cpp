@@ -262,6 +262,7 @@ bool MetisVM::do_eval() {
               buffer, 
               instruction->commands.extended.ext.write.num_bytes);
         cout << "buf=" << buffer << instruction->commands.extended.ext.write.num_bytes << endl;
+        cout << "file=" << get_val(ADDR_MODES) << endl;
         registers[REGIP] += INS_WRITE_SIZE;
         break;
 
