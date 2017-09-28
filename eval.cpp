@@ -238,7 +238,6 @@ bool MetisVM::do_eval() {
 
         // currently only works with files...  add sockets later
         file     = open(filespec->path, filespec->file_flags);
-        cout << "file=" << filespec->path << " flags=" << filespec->file_flags << "id=" << file << endl;
         set_val(ADDR_MODES, file);
         registers[REGIP] += INS_OPEN_SIZE;
         break;
@@ -253,18 +252,14 @@ bool MetisVM::do_eval() {
         read(get_val(ADDR_MODES), 
              buffer, 
              instruction->commands.extended.ext.read.max_bytes);
-        cout << "file=" << get_val(ADDR_MODES) << endl;
         registers[REGIP] += INS_READ_SIZE;
         break;
       
       case INS_WRITE:
         buffer = (uint8_t *)((uint64_t)code_start + get_dest_val(ADDR_MODES));
-        cout << "file=" << get_val(ADDR_MODES) << endl;
         write(get_val(ADDR_MODES), 
               buffer, 
               instruction->commands.extended.ext.write.num_bytes);
-        cout << "buf=" << buffer << instruction->commands.extended.ext.write.num_bytes << endl;
-        cout << "file=" << get_val(ADDR_MODES) << endl;
         registers[REGIP] += INS_WRITE_SIZE;
         break;
 
