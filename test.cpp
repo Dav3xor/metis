@@ -642,7 +642,7 @@ TEST_CASE( "file io", "[MetisVM]" ) {
 
   m.add_data((uint8_t *)&fs, sizeof(fs), "fsread");
 
-  fs.file_flags = O_WRONLY;
+  fs.file_flags = O_WRONLY|O_CREAT;
   strcpy(fs.path,"outtestfile");
   m.add_data((uint8_t *)&fs, sizeof(fs), "fswrite");
 
