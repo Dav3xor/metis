@@ -61,6 +61,9 @@ using namespace std;
 #define INS_LOAD_SR_SIZE   10
 #define INS_STACK_ADJ_SIZE 9 
 
+
+#define METIS_WRITE_FILE O_WRONLY
+#define METIS_READ_FILE  O_RDONLY
 #define INS_MATH_SIZE     2
 
 #define INS_GLDRAWELEMENTS_SIZE              1+(sizeof(GLenum)*2)+sizeof(GLsizei)+sizeof(uint64_t )
