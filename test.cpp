@@ -641,7 +641,7 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
   m.hard_reset();
   
 
-  m.storei(REGC, 10000000);
+  m.add_storei(REGC, 10000000);
   m.add_curtime(REGA);
   m.add_wait(REGC);
   m.add_curtime(REGA);
