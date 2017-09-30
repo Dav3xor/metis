@@ -631,6 +631,24 @@ TEST_CASE( "data", "[MetisVM]" ) {
   REQUIRE( ins_data[4] == 5.5f);
 }
 
+TEST_CASE( "time instructions", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
+  uint8_t buffer[256];
+
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+  
+
+  m.storei(REGC, 10000000);
+  m.add_curtime(REGA);
+  m.add_wait(REGC);
+  m.add_curtime(REGA);
+
+  m.eval();
+}
+
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
