@@ -645,6 +645,7 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
   m.add_curtime(REGA);
   m.add_wait(REGC);
   m.add_curtime(REGA);
+  m.add_end();
 
   m.eval();
 }
