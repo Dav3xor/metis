@@ -644,10 +644,12 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
   m.add_storei(REGC, 10000000);
   m.add_curtime(REGA);
   m.add_wait(REGC);
-  m.add_curtime(REGA);
+  m.add_curtime(REGB);
   m.add_end();
 
   m.eval();
+  cout << m.get_registers()[REGA] << " - " << m.get_registers()[REGB] << " - " << m.get_registers()[REGC] << endl;
+  REQUIRE(m.get_registers()[REGB] - m.get_registers()[REGA] > 1000000);
 }
 
 TEST_CASE( "file io", "[MetisVM]" ) {
