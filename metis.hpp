@@ -374,6 +374,8 @@ class MetisVM {
                                INS_SELECT                        =   84,
                                INS_WAIT                          =   85,
                                INS_CURTIME                       =   86,
+                               INS_SELECT                        =   87,
+                               INS_SEEK                          =   88,
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
@@ -495,7 +497,9 @@ class MetisVM {
     uint64_t add_close            (address_mode src);
     uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
-
+    uint64_t add_seek             (address_mode file, address_mode offset, address_mode whence);
+    uint64_t add_select           (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
+    
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
     uint64_t add_not              (address_mode src, address_mode dest);
