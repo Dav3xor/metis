@@ -171,7 +171,16 @@ struct FileSpec {
   filetype type;
   int file_flags;
 }__attribute__((packed));
-    
+  
+struct SelectGroup {
+  uint64_t numlines;
+}__attribute__((packed));
+
+struct SelectLine {
+  int fd;
+  int flags;
+  uint64_t handler;
+}__attribute__((packed));
 
 class MasmException: public runtime_error {
   public:
@@ -497,8 +506,8 @@ class MetisVM {
     uint64_t add_close            (address_mode src);
     uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
-    uint64_t add_seek             (address_mode file, address_mode offset, address_mode whence);
-    uint64_t add_select           (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
+    uint64_t add_seek             (address_mode file, address_mode offset, uint64_t whence);
+    uint64_t add_select           (address_mode src);
     
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
