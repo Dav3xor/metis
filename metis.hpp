@@ -383,8 +383,7 @@ class MetisVM {
                                INS_SELECT                        =   84,
                                INS_WAIT                          =   85,
                                INS_CURTIME                       =   86,
-                               INS_SELECT                        =   87,
-                               INS_SEEK                          =   88,
+                               INS_SEEK                          =   87,
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
@@ -707,6 +706,10 @@ class MetisVM {
             struct ext_write_t {
               uint64_t num_bytes;
             }__attribute__((packed)) write;
+          
+            struct ext_seek_t {
+              uint64_t whence;
+            }__attribute__((packed)) seek;
           
             struct gluniformfv_t {
               metisgl_identifier uniform_index;
