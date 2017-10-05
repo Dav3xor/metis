@@ -167,13 +167,15 @@ enum filetype: uint64_t {LOCAL_FILE                 =    1,
 
 
 struct FileSpec {
-  char path[256];
+  char     path[256];
   filetype type;
-  int file_flags;
+  int      file_flags;
 }__attribute__((packed));
   
 struct SelectGroup {
+  fd_set   read_descriptors;
   uint64_t numlines;
+  timeval  timeout;
 }__attribute__((packed));
 
 struct SelectLine {
