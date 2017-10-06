@@ -171,9 +171,15 @@ struct FileSpec {
   filetype type;
   int      file_flags;
 }__attribute__((packed));
-  
+
+struct Seek {
+ int file;
+ uint64_t offset;
+ uint64_t whence;
+}__attribute__((packed));
+
 struct SelectGroup {
-  fd_set   read_descriptors;
+  fd_set   descriptors;
   uint64_t numlines;
   timeval  timeout;
 }__attribute__((packed));
