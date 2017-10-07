@@ -406,6 +406,17 @@ uint64_t MetisVM::add_write(address_mode src, address_mode dest, uint64_t num_by
   RETURN_NEXT();
 } 
 
+uint64_t MetisVM::add_seek(address_mode src_file) {
+  CHECK_INSTRUCTION(INS_SEEK_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_SEEK;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src,0);
+
+  registers[REGIP] += INS_SEEK_SIZE;
+  RETURN_NEXT();
+} 
+
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
