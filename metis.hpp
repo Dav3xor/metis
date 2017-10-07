@@ -121,6 +121,8 @@ using namespace std;
 #define INS_CLOSE_SIZE                       2
 #define INS_READ_SIZE                        11 
 #define INS_WRITE_SIZE                       11
+#define INS_SEEK_SIZE                        2
+#define INS_SELECT_SIZE                      2 
 
 
 #define INS_NOOP_SIZE                        1
