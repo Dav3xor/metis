@@ -411,7 +411,7 @@ uint64_t MetisVM::add_seek(address_mode src_file) {
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_SEEK;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src,0);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src_file,0);
 
   registers[REGIP] += INS_SEEK_SIZE;
   RETURN_NEXT();
