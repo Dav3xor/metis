@@ -39,6 +39,8 @@ bool MetisVM::do_eval() {
   GLvoid            *glvoid = 0;
   GLint              location;
   FileSpec           *filespec;
+  Seek               *seek;
+  SelectGroup        *select;
   int                file;
   timespec           ts1;
   timespec           ts2;
