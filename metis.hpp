@@ -717,10 +717,6 @@ class MetisVM {
               uint64_t num_bytes;
             }__attribute__((packed)) write;
           
-            struct ext_seek_t {
-              uint64_t whence;
-            }__attribute__((packed)) seek;
-          
             struct gluniformfv_t {
               metisgl_identifier uniform_index;
             }__attribute__((packed)) gluniformfv;
