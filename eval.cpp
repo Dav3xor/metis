@@ -40,7 +40,7 @@ bool MetisVM::do_eval() {
   GLint              location;
   FileSpec           *filespec;
   Seek               *seek;
-  SelectGroup        *select;
+  SelectGroup        *selectgroup;
   int                file;
   timespec           ts1;
   timespec           ts2;
@@ -263,6 +263,25 @@ bool MetisVM::do_eval() {
               buffer, 
               instruction->commands.extended.ext.write.num_bytes);
         registers[REGIP] += INS_WRITE_SIZE;
+        break;
+
+      case INS_SEEK:
+        seek = (Seek *)((uint64_t)code_start + get_val(ADDR_MODES));
+
+        lseek(seek->file, 
+              seek->offset, 
+              seek->whence);
+        registers[REGIP] += INS_SEEK_SIZE;
+        break;
+
+      case INS_SELECT:
+        selectgroup = (SelectGroup *)((uint64_t)code_start + get_val(ADDR_MODES));
+
+        select(selectgroup->numlines, 
+               &selectgroup->descriptors, 
+               NULL, NULL, 
+               &selectgroup->timeout);
+        registers[REGIP] += INS_SELECT_SIZE;
         break;
 
       case INS_GLDRAWELEMENTS:
