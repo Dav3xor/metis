@@ -688,6 +688,28 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   REQUIRE(string(data)== string("this is a test\n"));
 }
 
+TEST_CASE( "file seek", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
+  Seek seek   = {5,SEEK_SET};
+
+  uint8_t buffer[256];
+
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+
+  m.add_data((uint8_t *)&fs, sizeof(fs), "fsread");
+
+  m.add_data((uint8_t *)&seek, sizeof(seek), "seek");
+
+  m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
+  m.add_storei(REGA,m.get_label("fsread"));
+  m.add_storei(REGB,m.get_label("buffer"));
+  m.add_open(REGA,REGC);
+  m.add_read(REGC,REGB,1000);
+  m.add_close(REGC);
+
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];

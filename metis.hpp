@@ -175,7 +175,6 @@ struct FileSpec {
 }__attribute__((packed));
 
 struct Seek {
- int file;
  uint64_t offset;
  uint64_t whence;
 }__attribute__((packed));
