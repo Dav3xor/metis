@@ -514,7 +514,7 @@ class MetisVM {
     uint64_t add_close            (address_mode src);
     uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
-    uint64_t add_seek             (address_mode src_seek, src_file);
+    uint64_t add_seek             (address_mode src_seek, address_mode src_file);
     uint64_t add_select           (address_mode src);
     
     // buffer gets made into a gl buffer, stored separately.

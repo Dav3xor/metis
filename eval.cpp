@@ -268,7 +268,7 @@ bool MetisVM::do_eval() {
       case INS_SEEK:
         seek = (Seek *)((uint64_t)code_start + get_val(ADDR_MODES));
 
-        lseek(seek->file, 
+        lseek(get_dest_val(ADDR_MODES), 
               seek->offset, 
               seek->whence);
         registers[REGIP] += INS_SEEK_SIZE;

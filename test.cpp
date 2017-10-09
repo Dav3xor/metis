@@ -709,6 +709,7 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   m.add_open(REGA,REGC);
   m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
+}
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   uint8_t buf[10000];
