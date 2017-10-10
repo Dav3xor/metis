@@ -709,6 +709,12 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   m.add_open(REGA,REGC);
   m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
+  m.add_end();
+  
+  m.eval();
+
+  char *data = (char *)m.get_ptr_from_label("buffer");
+  REQUIRE(string(data)== string("this is a test\n"));
 }
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
