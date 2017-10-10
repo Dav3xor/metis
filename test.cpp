@@ -708,7 +708,7 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   m.add_storei(REGB,m.get_label("buffer"));
   m.add_storei(REGD,m.get_label("seek"));
   m.add_open(REGA,REGC);
-  m.add_seek(REGD, REGC);
+  m.add_seek(REGC, REGD);
   m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
   m.add_end();

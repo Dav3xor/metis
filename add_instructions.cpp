@@ -406,12 +406,12 @@ uint64_t MetisVM::add_write(address_mode src, address_mode dest, uint64_t num_by
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_seek(address_mode src_seek, address_mode src_file) {
+uint64_t MetisVM::add_seek(address_mode src_file, address_mode src_seek) {
   CHECK_INSTRUCTION(INS_SEEK_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_SEEK;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src_seek,src_file);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src_file,src_seek);
 
   registers[REGIP] += INS_SEEK_SIZE;
   RETURN_NEXT();
