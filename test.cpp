@@ -706,7 +706,9 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
   m.add_storei(REGA,m.get_label("fsread"));
   m.add_storei(REGB,m.get_label("buffer"));
+  m.add_storei(REGD,m.get_label("seek"));
   m.add_open(REGA,REGC);
+  m.add_seek(REGD, REGC);
   m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
   m.add_end();
@@ -714,7 +716,7 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   m.eval();
 
   char *data = (char *)m.get_ptr_from_label("buffer");
-  REQUIRE(string(data)== string("this is a test\n"));
+  REQUIRE(string(data)== string("is a test\n"));
 }
 
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
