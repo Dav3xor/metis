@@ -123,6 +123,7 @@ using namespace std;
 #define INS_WRITE_SIZE                       11
 #define INS_SEEK_SIZE                        2
 #define INS_SELECT_SIZE                      2 
+#define INS_REMOVE_SIZE                      2 
 
 
 #define INS_NOOP_SIZE                        1
@@ -393,6 +394,7 @@ class MetisVM {
                                INS_WAIT                          =   85,
                                INS_CURTIME                       =   86,
                                INS_SEEK                          =   87,
+                               INS_REMOVE                        =   88,
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
@@ -516,6 +518,7 @@ class MetisVM {
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
     uint64_t add_seek             (address_mode src_file, address_mode src_seek);
     uint64_t add_select           (address_mode src);
+    uint64_t add_remove           (address_mode src);
     
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);

@@ -284,6 +284,12 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_SELECT_SIZE;
         break;
 
+      case INS_REMOVE:
+        string_ptr = (char *)((uint64_t)code_start + get_val(ADDR_MODES));
+        remove(string_ptr);
+        registers[REGIP] += INS_REMOVE_SIZE;
+        break;
+
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
         //if(instruction->commands.gldrawelements.indices==0) {
