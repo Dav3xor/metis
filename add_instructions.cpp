@@ -428,6 +428,17 @@ uint64_t MetisVM::add_select(address_mode src_select) {
   RETURN_NEXT();
 } 
 
+uint64_t MetisVM::add_remove(address_mode src) {
+  CHECK_INSTRUCTION(INS_REMOVE_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_REMOVE;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src,0);
+
+  registers[REGIP] += INS_REMOVE_SIZE;
+  RETURN_NEXT();
+} 
+
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
