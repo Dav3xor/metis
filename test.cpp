@@ -655,7 +655,7 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
-  char *out_file = "outtestfile";
+  char out_file[12] = "outtestfile";
 
   FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
   uint8_t buffer[256];
