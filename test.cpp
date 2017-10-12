@@ -655,6 +655,8 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
 TEST_CASE( "file io", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
+  char *out_file = "outtestfile";
+
   FileSpec fs = {"testfile", LOCAL_FILE, O_RDONLY};
   uint8_t buffer[256];
 
@@ -664,10 +666,12 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   m.add_data((uint8_t *)&fs, sizeof(fs), "fsread");
 
   fs.file_flags = O_WRONLY|O_CREAT;
-  strcpy(fs.path,"outtestfile");
+  strcpy(fs.path,out_file);
   m.add_data((uint8_t *)&fs, sizeof(fs), "fswrite");
 
   m.add_data((uint8_t *)buffer, sizeof(buffer), "buffer");
+  m.add_data((uint8_t *)out_file, strlen(out_file)+1, "outfile");
+
   m.add_storei(REGA,m.get_label("fsread"));
   m.add_storei(REGB,m.get_label("buffer"));
   m.add_open(REGA,REGC);
@@ -678,6 +682,8 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   m.add_open(REGA,REGC);
   m.add_write(REGC,REGB,5);
   m.add_close(REGC);
+  m.add_storei(REGC, m.get_label("outfile"));
+  m.add_remove(REGC);
   m.add_end();
   
   m.eval();
