@@ -124,6 +124,7 @@ using namespace std;
 #define INS_SEEK_SIZE                        2
 #define INS_SELECT_SIZE                      2 
 #define INS_REMOVE_SIZE                      2 
+#define INS_EXISTS_SIZE                      2 
 
 
 #define INS_NOOP_SIZE                        1
@@ -395,6 +396,7 @@ class MetisVM {
                                INS_CURTIME                       =   86,
                                INS_SEEK                          =   87,
                                INS_REMOVE                        =   88,
+                               INS_EXISTS                        =   89,
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
@@ -519,7 +521,8 @@ class MetisVM {
     uint64_t add_seek             (address_mode src_file, address_mode src_seek);
     uint64_t add_select           (address_mode src);
     uint64_t add_remove           (address_mode src);
-    
+    uint64_t add_exists           (address_mode src, address_mode result);
+
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);
     uint64_t add_not              (address_mode src, address_mode dest);
