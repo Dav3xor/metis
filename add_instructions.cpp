@@ -439,6 +439,17 @@ uint64_t MetisVM::add_remove(address_mode src) {
   RETURN_NEXT();
 } 
 
+uint64_t MetisVM::add_exists(address_mode src, address_mode result) {
+  CHECK_INSTRUCTION(INS_EXISTS_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_EXISTS;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, result);
+
+  registers[REGIP] += INS_EXISTS_SIZE;
+  RETURN_NEXT();
+} 
+  
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
