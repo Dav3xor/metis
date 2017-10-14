@@ -44,7 +44,7 @@ bool MetisVM::do_eval() {
   int                file;
   timespec           ts1;
   timespec           ts2;
-
+  struct stat        filestat;
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
     //printf("--> %u\n", instruction->type);
@@ -290,6 +290,14 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_REMOVE_SIZE;
         break;
 
+      case INS_EXISTS:
+        string_ptr = (char *)((uint64_t)code_start + get_val(ADDR_MODES));
+        remove(string_ptr);
+        set_val(ADDR_MODES,
+                stat(string_ptr, &filestat)==0);
+        registers[REGIP] += INS_EXISTS_SIZE;
+        break;
+        
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
         //if(instruction->commands.gldrawelements.indices==0) {
