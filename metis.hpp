@@ -518,10 +518,10 @@ class MetisVM {
     uint64_t add_close            (address_mode src);
     uint64_t add_read             (address_mode src, address_mode buffer_loc, uint64_t max_bytes);
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
-    uint64_t add_seek             (address_mode src_file, address_mode src_seek);
+    uint64_t add_seek             (address_mode file, address_mode src_seek);
     uint64_t add_select           (address_mode src);
-    uint64_t add_remove           (address_mode src);
-    uint64_t add_exists           (address_mode src, address_mode result);
+    uint64_t add_remove           (address_mode file);
+    uint64_t add_exists           (address_mode file, address_mode result);
 
     // buffer gets made into a gl buffer, stored separately.
     uint64_t add_buffer           (const uint8_t *buffer, const uint64_t length, const char *label);

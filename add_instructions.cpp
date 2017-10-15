@@ -371,7 +371,7 @@ uint64_t MetisVM::add_open(address_mode src, address_mode dest) {
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_close(address_mode src) {
+uint64_t MetisVM::add_close(address_mode file) {
   CHECK_INSTRUCTION(INS_CLOSE_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -382,7 +382,7 @@ uint64_t MetisVM::add_close(address_mode src) {
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_read(address_mode src, address_mode dest, uint64_t max_bytes) {
+uint64_t MetisVM::add_read(address_mode file, address_mode dest, uint64_t max_bytes) {
   CHECK_INSTRUCTION(INS_READ_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -394,7 +394,7 @@ uint64_t MetisVM::add_read(address_mode src, address_mode dest, uint64_t max_byt
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_write(address_mode src, address_mode dest, uint64_t num_bytes) {
+uint64_t MetisVM::add_write(address_mode file, address_mode dest, uint64_t num_bytes) {
   CHECK_INSTRUCTION(INS_WRITE_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -406,7 +406,7 @@ uint64_t MetisVM::add_write(address_mode src, address_mode dest, uint64_t num_by
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_seek(address_mode src_file, address_mode src_seek) {
+uint64_t MetisVM::add_seek(address_mode file, address_mode src_seek) {
   CHECK_INSTRUCTION(INS_SEEK_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -428,7 +428,7 @@ uint64_t MetisVM::add_select(address_mode src_select) {
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_remove(address_mode src) {
+uint64_t MetisVM::add_remove(address_mode file) {
   CHECK_INSTRUCTION(INS_REMOVE_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
@@ -439,12 +439,12 @@ uint64_t MetisVM::add_remove(address_mode src) {
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_exists(address_mode src, address_mode result) {
+uint64_t MetisVM::add_exists(address_mode file, address_mode result) {
   CHECK_INSTRUCTION(INS_EXISTS_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_EXISTS;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src, result);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file, result);
 
   registers[REGIP] += INS_EXISTS_SIZE;
   RETURN_NEXT();
