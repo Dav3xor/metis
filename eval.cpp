@@ -42,6 +42,7 @@ bool MetisVM::do_eval() {
   Seek               *seek;
   SelectGroup        *selectgroup;
   int                file;
+  int                signed_result;
   timespec           ts1 = {0,0};
   timespec           ts2 = {0,0};
   struct stat        filestat;
@@ -294,9 +295,14 @@ bool MetisVM::do_eval() {
 
       case INS_EXISTS:
         string_ptr = (char *)((uint64_t)code_start + get_val(ADDR_MODES));
-        remove(string_ptr);
-        set_val(ADDR_MODES,
-                stat(string_ptr, &filestat)==0);
+        signed_result = stat(string_ptr, &filestat);
+
+        if(signed_result == -1) {
+          set_val(ADDR_MODES, 0);
+        } else {
+          set_val(ADDR_MODES, 1);
+        }
+
         registers[REGIP] += INS_EXISTS_SIZE;
         break;
         
