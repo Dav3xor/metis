@@ -706,9 +706,9 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 286);
   REQUIRE( m.get_registers()[REGB] == 563);
 
-  REQUIRE( m.cur_stack_val(0) == 1000);
-  REQUIRE( m.cur_stack_val(1) == 1000);
-  REQUIRE( m.cur_stack_val(2) == 1000);
+  REQUIRE( m.cur_stack_val(0) == 0);
+  REQUIRE( m.cur_stack_val(1) == 1);
+  REQUIRE( m.cur_stack_val(2) == 0);
 
   char *data = (char *)m.get_ptr_from_label("buffer");
   REQUIRE(string(data)== string("this is a test\n"));
