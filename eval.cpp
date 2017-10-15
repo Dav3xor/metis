@@ -42,8 +42,8 @@ bool MetisVM::do_eval() {
   Seek               *seek;
   SelectGroup        *selectgroup;
   int                file;
-  timespec           ts1;
-  timespec           ts2;
+  timespec           ts1 = {0,0};
+  timespec           ts2 = {0,0};
   struct stat        filestat;
   while(registers[REGIP] <= (uint64_t)code_end) {
     MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
@@ -225,6 +225,8 @@ bool MetisVM::do_eval() {
 
       case INS_WAIT:
         ts1.tv_nsec = get_val(ADDR_MODES);
+        cout << ts1.tv_nsec << endl;
+        cout << ts1.tv_sec << endl;
         nanosleep(&ts1, NULL);
         registers[REGIP] += INS_WAIT_SIZE;
         break;
