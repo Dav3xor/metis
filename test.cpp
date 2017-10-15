@@ -677,19 +677,39 @@ TEST_CASE( "file io", "[MetisVM]" ) {
   m.add_open(REGA,REGC);
   m.add_read(REGC,REGB,1000);
   m.add_close(REGC);
-  
+ 
+  // make sure the output file doesn't exist
+  m.add_storei(REGC, m.get_label("outfile"));
+  m.add_remove(REGC);
+  m.add_exists(REGC, STACK_PUSH);
+
+  // now try to write to it.
   m.add_storei(REGA,m.get_label("fswrite"));
   m.add_open(REGA,REGC);
   m.add_write(REGC,REGB,5);
   m.add_close(REGC);
+
+  // then make sure the written file exists
   m.add_storei(REGC, m.get_label("outfile"));
+  m.add_exists(REGC, STACK_PUSH);
+
+  // and remove it...
   m.add_remove(REGC);
+
+  // and make sure it has been removed...
+  m.add_exists(REGC, STACK_PUSH);
+ 
+  // and done.
   m.add_end();
-  
   m.eval();
 
   REQUIRE( m.get_registers()[REGA] == 286);
   REQUIRE( m.get_registers()[REGB] == 563);
+
+  REQUIRE( m.cur_stack_val(0) == 1000);
+  REQUIRE( m.cur_stack_val(1) == 1000);
+  REQUIRE( m.cur_stack_val(2) == 1000);
+
   char *data = (char *)m.get_ptr_from_label("buffer");
   REQUIRE(string(data)== string("this is a test\n"));
 }

@@ -376,7 +376,7 @@ uint64_t MetisVM::add_close(address_mode file) {
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_CLOSE;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file, 0);
 
   registers[REGIP] += INS_CLOSE_SIZE;
   RETURN_NEXT();
@@ -387,7 +387,7 @@ uint64_t MetisVM::add_read(address_mode file, address_mode dest, uint64_t max_by
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_READ;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file, dest);
   instruction->commands.extended.ext.read.max_bytes = max_bytes;
 
   registers[REGIP] += INS_READ_SIZE;
@@ -399,7 +399,7 @@ uint64_t MetisVM::add_write(address_mode file, address_mode dest, uint64_t num_b
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_WRITE;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src, dest);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file, dest);
   instruction->commands.extended.ext.write.num_bytes = num_bytes;
 
   registers[REGIP] += INS_WRITE_SIZE;
@@ -411,7 +411,7 @@ uint64_t MetisVM::add_seek(address_mode file, address_mode src_seek) {
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_SEEK;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src_file,src_seek);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file,src_seek);
 
   registers[REGIP] += INS_SEEK_SIZE;
   RETURN_NEXT();
@@ -433,7 +433,7 @@ uint64_t MetisVM::add_remove(address_mode file) {
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_REMOVE;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(src,0);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file,0);
 
   registers[REGIP] += INS_REMOVE_SIZE;
   RETURN_NEXT();
