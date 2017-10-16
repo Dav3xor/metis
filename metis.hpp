@@ -125,6 +125,8 @@ using namespace std;
 #define INS_SELECT_SIZE                      2 
 #define INS_REMOVE_SIZE                      2 
 #define INS_EXISTS_SIZE                      2 
+#define INS_MALLOC_SIZE                      2 
+#define INS_FREE_SIZE                        2 
 
 
 #define INS_NOOP_SIZE                        1
@@ -397,6 +399,8 @@ class MetisVM {
                                INS_SEEK                          =   87,
                                INS_REMOVE                        =   88,
                                INS_EXISTS                        =   89,
+                               INS_MALLOC                        =   90,
+                               INS_FREE                          =   91,
 
                                // GL Instructions
                                INS_GLDRAWELEMENTS                =   96,   
