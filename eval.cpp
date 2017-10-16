@@ -35,6 +35,7 @@ bool MetisVM::do_eval() {
   float             *d;
   uint8_t            i,j,k;
   uint32_t           num_bytes;
+  void              *malloc_result;
   GLchar            *string_ptr;
   GLvoid            *glvoid = 0;
   GLint              location;
@@ -306,6 +307,15 @@ bool MetisVM::do_eval() {
         registers[REGIP] += INS_EXISTS_SIZE;
         break;
         
+      case INS_MALLOC:
+        malloc_result = malloc(get_dest_val(ADDR_MODES));
+
+        // TODO: handle errors
+        set_val(ADDR_MODES,(uint64_t)malloc_result);
+
+        registers[REGIP] += INS_MALLOC_SIZE;
+        break;
+
       case INS_GLDRAWELEMENTS:
         glvoid = 0;
         //if(instruction->commands.gldrawelements.indices==0) {
