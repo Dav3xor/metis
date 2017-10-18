@@ -308,7 +308,7 @@ bool MetisVM::do_eval() {
         break;
         
       case INS_MALLOC:
-        malloc_result = malloc(get_dest_val(ADDR_MODES));
+        malloc_result = malloc(get_val(ADDR_MODES));
 
         // TODO: handle errors
         set_val(ADDR_MODES,(uint64_t)malloc_result);

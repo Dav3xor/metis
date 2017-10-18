@@ -450,6 +450,28 @@ uint64_t MetisVM::add_exists(address_mode file, address_mode result) {
   RETURN_NEXT();
 } 
   
+uint64_t MetisVM::add_malloc(address_mode size, address_mode result) {
+  CHECK_INSTRUCTION(INS_MALLOC_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_MALLOC;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(size, result);
+
+  registers[REGIP] += INS_MALLOC_SIZE;
+  RETURN_NEXT();
+} 
+
+uint64_t MetisVM::add_free(address_mode src) {
+  CHECK_INSTRUCTION(INS_FREE_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  instruction->type                        = INS_FREE;      
+  instruction->commands.extended.addr_mode = BUILD_ADDR(src, 0);
+
+  registers[REGIP] += INS_FREE_SIZE;
+  RETURN_NEXT();
+} 
+
 uint64_t MetisVM::add_buffer(const uint8_t *new_buffer, const uint64_t length, const char *label) {
   CHECK_POINTER(new_buffer);
   CHECK_POINTER(label);
