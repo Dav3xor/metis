@@ -317,7 +317,7 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_FREE:
-        free(get_dest_val(ADDR_MODES));
+        free((void *)get_dest_val(ADDR_MODES));
         registers[REGIP] += INS_FREE_SIZE;
         break;
 

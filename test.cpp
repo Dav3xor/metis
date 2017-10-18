@@ -745,6 +745,20 @@ TEST_CASE( "file seek", "[MetisVM]" ) {
   REQUIRE(string(data)== string("is a test\n"));
 }
 
+TEST_CASE( "malloc/free", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+
+  m.add_storei(REGA, 100);
+  m.add_malloc(REGA, REGB);
+  m.add_free(REGB);
+  m.add_end();
+
+  m.eval();
+}
+
 TEST_CASE ( "matrix multiply", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[20];
