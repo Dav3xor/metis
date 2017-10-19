@@ -311,13 +311,20 @@ bool MetisVM::do_eval() {
         malloc_result = malloc(get_val(ADDR_MODES));
 
         // TODO: handle errors
-        set_val(ADDR_MODES,(uint64_t)malloc_result);
+
+        if (malloc_result == NULL) {
+          throw MetisException(string("Malloc returned NULL "),
+                               __LINE__, __FILE__);
+        } 
+
+        set_val(ADDR_MODES, (uint64_t)malloc_result);
 
         registers[REGIP] += INS_MALLOC_SIZE;
         break;
 
       case INS_FREE:
-        free((void *)get_dest_val(ADDR_MODES));
+        cout << "addr: " << get_val(ADDR_MODES);
+        free((void *)get_val(ADDR_MODES));
         registers[REGIP] += INS_FREE_SIZE;
         break;
 
