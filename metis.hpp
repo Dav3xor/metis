@@ -524,7 +524,7 @@ class MetisVM {
     uint64_t add_write            (address_mode dest, address_mode buffer_loc, uint64_t num_bytes);
     uint64_t add_seek             (address_mode file, address_mode src_seek);
     uint64_t add_select           (address_mode src);
-    uint64_t add_remove           (address_mode file);
+    uint64_t add_remove           (address_mode file, address_mode result);
     uint64_t add_exists           (address_mode file, address_mode result);
     uint64_t add_malloc           (address_mode size, address_mode result);
     uint64_t add_free             (address_mode sr);

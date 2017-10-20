@@ -428,12 +428,12 @@ uint64_t MetisVM::add_select(address_mode src_select) {
   RETURN_NEXT();
 } 
 
-uint64_t MetisVM::add_remove(address_mode file) {
+uint64_t MetisVM::add_remove(address_mode file, address_mode result) {
   CHECK_INSTRUCTION(INS_REMOVE_SIZE);
 
   MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
   instruction->type                        = INS_REMOVE;      
-  instruction->commands.extended.addr_mode = BUILD_ADDR(file,0);
+  instruction->commands.extended.addr_mode = BUILD_ADDR(file,result);
 
   registers[REGIP] += INS_REMOVE_SIZE;
   RETURN_NEXT();
