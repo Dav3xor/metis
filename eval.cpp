@@ -290,7 +290,12 @@ bool MetisVM::do_eval() {
 
       case INS_REMOVE:
         string_ptr = (char *)((uint64_t)code_start + get_val(ADDR_MODES));
-        remove(string_ptr);
+        if( remove(string_ptr) != 0 ) {
+          // error
+          set_val(ADDR_MODES, 0);
+        } else {
+          set_val(ADDR_MODES, 1);
+        }
         registers[REGIP] += INS_REMOVE_SIZE;
         break;
 
