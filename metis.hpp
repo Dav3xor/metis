@@ -372,6 +372,10 @@ class MetisVM {
                                INS_MUL                           =   20,   // *   A = A*...  (integer)
                                INS_DIV                           =   21,   // *   A = A/...  (integer)
                                INS_MOD                           =   22,   // *   A = A%...  (integer)
+                               INS_SIN                           =   23,
+                               INS_COS                           =   24,
+                               INS_TAN                           =   25,
+                               INS_ATAN2                         =   26,
 
                                // Bitwise
                                INS_AND                           =   32,   // *   A = A&...  (integer) 
