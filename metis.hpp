@@ -544,6 +544,10 @@ class MetisVM {
     MATH_METHOD(add_mul, INS_MUL); 
     MATH_METHOD(add_div, INS_DIV); 
     MATH_METHOD(add_mod, INS_MOD); 
+    MATH_METHOD(add_sin, INS_MOD); 
+    MATH_METHOD(add_cos, INS_MOD); 
+    MATH_METHOD(add_tan, INS_MOD); 
+    MATH_METHOD(add_atan2, INS_MOD); 
     MATH_METHOD(add_and, INS_AND); 
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
