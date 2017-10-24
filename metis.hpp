@@ -364,7 +364,7 @@ class MetisVM {
                                INS_LOAD_SR                       =   10,   // *   load value from stack offset
                                INS_STACK_ADJ                     =   11,   // *   subtract value from stack
 
-                               // Math
+                               // Integer Math
                                INS_INC                           =   16,   // *   increment ... 
                                INS_DEC                           =   17,   // *   decrement ... 
                                INS_ADD                           =   18,   // *   A = A+...  (integer)
@@ -372,20 +372,27 @@ class MetisVM {
                                INS_MUL                           =   20,   // *   A = A*...  (integer)
                                INS_DIV                           =   21,   // *   A = A/...  (integer)
                                INS_MOD                           =   22,   // *   A = A%...  (integer)
-                               INS_SIN                           =   23,
-                               INS_COS                           =   24,
-                               INS_TAN                           =   25,
-                               INS_ATAN2                         =   26,
+
+                               // FP Math
+                               INS_FPADD                         =   23,
+                               INS_FPSUB                         =   24,
+                               INS_FPMUL                         =   25,
+                               INS_FPDIV                         =   26,
+                               INS_POW                           =   27,
+                               INS_SIN                           =   28,
+                               INS_COS                           =   29,
+                               INS_TAN                           =   30,
+                               INS_ATAN2                         =   31,
 
                                // Bitwise
-                               INS_AND                           =   32,   // *   A = A&...  (integer) 
-                               INS_OR                            =   33,   // *   A = A|...  (integer) 
-                               INS_XOR                           =   34,   // *   A = A^...  (integer) 
-                               INS_NOT                           =   35,   // *   A = A&...  (integer) 
+                               INS_AND                           =   40,   // *   A = A&...  (integer) 
+                               INS_OR                            =   41,   // *   A = A|...  (integer) 
+                               INS_XOR                           =   42,   // *   A = A^...  (integer) 
+                               INS_NOT                           =   43,   // *   A = A&...  (integer) 
                                
                                // Matrix Ops
-                               INS_MATRIX_MULTIPLY               =   48,   // *   Matrix Multiplication
-                               INS_PUSH_MATRIX                   =   49,   //     Push Matrix onto stack
+                               INS_MATRIX_MULTIPLY               =   56,   // *   Matrix Multiplication
+                               INS_PUSH_MATRIX                   =   57,   //     Push Matrix onto stack
                                
                                // Vector Ops                    
                                INS_VECTOR_DOT                    =   64,   // *   Dot Product
