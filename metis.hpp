@@ -144,6 +144,13 @@ using namespace std;
           get_val(ADDR_MODES)); \
   registers[REGIP] += INS_MATH_SIZE;
 
+#define FPMATH_OPERATION(op) \
+  cell = (MetisMemoryCell *) ((uint64_t)code_start + get_val(ADDR_MODES)); \
+  set_val(ADDR_MODES, \
+          get_dest_val(ADDR_MODES) op \
+          get_val(ADDR_MODES)); \
+  registers[REGIP] += INS_MATH_SIZE;
+
 #define MATH_METHOD(method_name,byte_code) \
       uint64_t method_name(address_mode src, address_mode dest) { \
         MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \
@@ -551,6 +558,13 @@ class MetisVM {
     MATH_METHOD(add_mul, INS_MUL); 
     MATH_METHOD(add_div, INS_DIV); 
     MATH_METHOD(add_mod, INS_MOD); 
+
+    MATH_METHOD(add_fpadd, INS_FPADD);
+    MATH_METHOD(add_fpsub, INS_FPSUB);
+    MATH_METHOD(add_fpmul, INS_FPMUL);
+    MATH_METHOD(add_fpdiv, INS_FPDIV);
+    MATH_METHOD(add_pow,   INS_POW);
+
     MATH_METHOD(add_sin, INS_SIN); 
     MATH_METHOD(add_cos, INS_COS); 
     MATH_METHOD(add_tan, INS_TAN); 
