@@ -157,6 +157,11 @@ bool MetisVM::do_eval() {
         MATH_OPERATION(%);
         break;
 
+
+      case INS_FPADD:
+        FPMATH_OPERATION(+);
+        break;
+
       case INS_SIN:
         set_val(ADDR_MODES,
                 sin(get_val(ADDR_MODES)));
