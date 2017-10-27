@@ -31,7 +31,8 @@ bool MetisVM::do_eval() {
   MetisMatrixHeader *matrix_a;
   MetisMatrixHeader *matrix_b;
   MetisMatrixHeader *destination_matrix;
-  MetisMemoryCell   *cell;
+  MetisMemoryCell   *cell1;
+  MetisMemoryCell   *cell2;
   float             *a;
   float             *b;
   float             *d;

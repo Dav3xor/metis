@@ -145,10 +145,11 @@ using namespace std;
   registers[REGIP] += INS_MATH_SIZE;
 
 #define FPMATH_OPERATION(op) \
-  cell = (MetisMemoryCell *) ((uint64_t)code_start + get_val(ADDR_MODES)); \
+  cell1 = (MetisMemoryCell *) ((uint64_t)code_start + get_val(ADDR_MODES)); \
+  cell2 = (MetisMemoryCell *) ((uint64_t)code_start + get_dest_val(ADDR_MODES)); \
   set_val(ADDR_MODES, \
-          get_dest_val(ADDR_MODES) op \
-          get_val(ADDR_MODES)); \
+          cell1->whole_double op \
+          cell2->whole_double); \
   registers[REGIP] += INS_MATH_SIZE;
 
 #define MATH_METHOD(method_name,byte_code) \
