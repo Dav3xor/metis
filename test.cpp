@@ -584,6 +584,24 @@ TEST_CASE( "math", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 1);
   REQUIRE( m.get_registers()[REGB] == 2);
 }
+TEST_CASE( "fp math", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+  m.add_storeidouble(REGA,5.0);
+  m.add_storeidouble(REGB,2.0);
+  m.add_fpadd(REGB, REGA);  // 7
+  m.add_fpsub(REGB, REGA);  // 5
+  m.add_fpmul(REGB, REGA);  // 10
+  m.add_fpdiv(REGB, REGA);  // 5
+  m.add_end();
+
+  m.eval();
+  
+  REQUIRE( m.get_registers()[REGA] == 1);
+  REQUIRE( m.get_registers()[REGB] == 2);
+}
 
 TEST_CASE( "logic ops", "[MetisVM]" ) {
   uint8_t buf[10000];

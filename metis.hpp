@@ -501,23 +501,24 @@ class MetisVM {
       reset();
     }
 
-    uint64_t add_error       (void);
-    uint64_t add_end         (void);   
-    uint64_t add_noop        (void);   
-    uint64_t add_jump        (address_mode src);
-    uint64_t add_jumpi       (uint64_t location);
-    uint64_t add_jizz        (address_mode src, address_mode dest);
-    uint64_t add_jnz         (address_mode src, address_mode dest);
-    uint64_t add_jne         (address_mode src, address_mode dest, uint64_t location);
-    uint64_t add_jmpe        (address_mode src, address_mode dest, uint64_t location);
-    uint64_t add_store       (address_mode src, address_mode dest);
-    uint64_t add_storei      (address_mode dest, uint64_t value);
-    uint64_t add_store_sr    (address_mode src, uint64_t offset);
-    uint64_t add_load_sr     (uint64_t offset, address_mode dest);
-    uint64_t add_stack_adj   (uint64_t amount);
-    uint64_t add_label_ip    (const char *label);
-    uint64_t add_label_val   (const char *label, uint64_t val);
-    uint64_t add_label_float (const char *label, float val);
+    uint64_t add_error        (void);
+    uint64_t add_end          (void);   
+    uint64_t add_noop         (void);   
+    uint64_t add_jump         (address_mode src);
+    uint64_t add_jumpi        (uint64_t location);
+    uint64_t add_jizz         (address_mode src, address_mode dest);
+    uint64_t add_jnz          (address_mode src, address_mode dest);
+    uint64_t add_jne          (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_jmpe         (address_mode src, address_mode dest, uint64_t location);
+    uint64_t add_store        (address_mode src, address_mode dest);
+    uint64_t add_storei       (address_mode dest, uint64_t value);
+    uint64_t add_storeidouble (address_mode dest, double value);
+    uint64_t add_store_sr     (address_mode src, uint64_t offset);
+    uint64_t add_load_sr      (uint64_t offset, address_mode dest);
+    uint64_t add_stack_adj    (uint64_t amount);
+    uint64_t add_label_ip     (const char *label);
+    uint64_t add_label_val    (const char *label, uint64_t val);
+    uint64_t add_label_float  (const char *label, float val);
 
     // data gets mixed in with the instructions
     uint64_t add_data             (const uint8_t *data, 
