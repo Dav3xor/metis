@@ -142,7 +142,7 @@ using namespace std;
   set_val(ADDR_MODES, \
           get_dest_val(ADDR_MODES) op \
           get_val(ADDR_MODES)); \
-  registers[REGIP] += INS_MATH_SIZE;
+  registers[REGIP].whole += INS_MATH_SIZE;
 
 #define FPMATH_OPERATION(op) \
   cell1 = (MetisMemoryCell *) ((uint64_t)code_start + get_val(ADDR_MODES)); \
@@ -150,14 +150,14 @@ using namespace std;
   set_val(ADDR_MODES, \
           cell1->whole_double op \
           cell2->whole_double); \
-  registers[REGIP] += INS_MATH_SIZE;
+  registers[REGIP].whole += INS_MATH_SIZE; \
 
 #define MATH_METHOD(method_name,byte_code) \
       uint64_t method_name(address_mode src, address_mode dest) { \
-        MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP]; \
+        MetisInstruction *instruction                   = (MetisInstruction *)registers[REGIP].whole; \
         instruction->type                               = byte_code; \
         instruction->commands.extended.addr_mode        = BUILD_ADDR(src, dest); \
-        registers[REGIP] += ADVANCE(1, 0); \
+        registers[REGIP].whole += ADVANCE(1, 0); \
         return (uint64_t)code_start-(uint64_t)instruction; \
       }
 
@@ -469,14 +469,14 @@ class MetisVM {
   public:
     // simple reset, do not remove existing code
     void reset(void) {
-      registers[REGA]   = 0;
-      registers[REGB]   = 0;
-      registers[REGC]   = 0;
-      registers[REGD]   = 0;
-      registers[REGSP]  = 0;
-      registers[REGIP]  = (uint64_t)code_start;
-      registers[REGBP]  = (uint64_t)buffer;
-      registers[REGERR] = 0;
+      registers[REGA].whole   = 0;
+      registers[REGB].whole   = 0;
+      registers[REGC].whole   = 0;
+      registers[REGD].whole   = 0;
+      registers[REGSP].whole  = 0;
+      registers[REGIP].whole  = (uint64_t)code_start;
+      registers[REGBP].whole  = (uint64_t)buffer;
+      registers[REGERR].whole = 0;
     };
 
     void hard_reset(void) {
@@ -675,19 +675,19 @@ class MetisVM {
     uint8_t  *get_bufloc_from_label (const char *label) {
       return (uint8_t *)(buffer + get_label(label));
     }
-    uint64_t *get_registers  (void)  { return registers; };
+    uint64_t *get_registers  (void)  { return (uint64_t *)registers; };
 
     uint64_t  cur_stack_val  (uint64_t offset=0)  {
-      if ( registers[REGSP] > 0) {
-        return stack[registers[REGSP]-1-offset].whole; 
+      if ( registers[REGSP].whole > 0) {
+        return stack[registers[REGSP].whole-1-offset].whole; 
       } else {
         throw MetisException("attempted to read empty stack (cur_stack_val)",__LINE__,__FILE__);
       }
     }
-    uint64_t  cur_stack_size (void)  { return registers[REGSP]; };
+    uint64_t  cur_stack_size (void)  { return registers[REGSP].whole; };
   
   private:
-    uint64_t           registers[8];
+    MetisMemoryCell    registers[8];
     uint8_t            isizes[256];
     MetisMemoryCell   *stack;
     uint64_t           stack_size;
@@ -977,19 +977,19 @@ class MetisVM {
     }__attribute__((packed));
 
     void push(uint64_t val) {
-      if( registers[REGSP] >= stack_size) {
+      if( registers[REGSP].whole >= stack_size) {
         throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
       }
-      stack[registers[REGSP]].whole = val;
-      registers[REGSP] += 1;
+      stack[registers[REGSP].whole].whole = val;
+      registers[REGSP].whole += 1;
     }
 
     uint64_t pop() {
-      if(registers[REGSP] == 0) {
+      if(registers[REGSP].whole == 0) {
         throw MetisException("stack empty (pop)",__LINE__,__FILE__);
       }
-      registers[REGSP] -= 1;
-      return stack[registers[REGSP]].whole;
+      registers[REGSP].whole -= 1;
+      return stack[registers[REGSP].whole].whole;
     }
 
     void set_val(uint8_t location, uint64_t value) {
@@ -1004,7 +1004,7 @@ class MetisVM {
         case REGERR:
         case REGIP:
         case REGBP:
-          registers[location] = value;
+          registers[location].whole = value;
           break;
         case STACK_PUSH:
           push(value);
@@ -1013,6 +1013,28 @@ class MetisVM {
           throw MetisException("unknown addressing mode (set_val) - " + to_string(location),__LINE__,__FILE__);
       } 
     }
+    void set_fpval(uint8_t location, double value) {
+      // high bits are destination
+      location = GET_DEST(location);
+      switch (location) {
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGSP:
+        case REGERR:
+        case REGIP:
+        case REGBP:
+          registers[location].whole_double = value;
+          break;
+        case STACK_PUSH:
+          push(value);
+          break;
+        default:
+          throw MetisException("unknown addressing mode (set_val) - " + to_string(location),__LINE__,__FILE__);
+      } 
+    }
+
     uint64_t get_val(uint8_t location) {
       // low bits are source
       location = GET_SRC(location);
@@ -1025,7 +1047,7 @@ class MetisVM {
         case REGERR:
         case REGIP:
         case REGBP:
-          return registers[location];
+          return registers[location].whole;
           break;
         case STACK_POP:
           return pop();
@@ -1047,7 +1069,7 @@ class MetisVM {
         case REGERR:
         case REGIP:
         case REGBP:
-          return registers[location];
+          return registers[location].whole;
           break;
         case STACK_POP:
           return pop();
