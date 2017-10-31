@@ -977,7 +977,7 @@ class MetisVM {
     }__attribute__((packed));
 
     void push(uint64_t val) {
-      if( registers[REGSP].whole >= stack_size) {
+      if( registers[REGSP].ulong >= stack_size) {
         throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
       }
       stack[registers[REGSP].whole].whole = val;
