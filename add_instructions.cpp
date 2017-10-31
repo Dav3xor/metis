@@ -3,7 +3,7 @@
 #define RETURN_NEXT() return (uint64_t)instruction-(uint64_t)code_start;
 
 #define CHECK_INSTRUCTION(instruction_length) \
-  if ((uint8_t *)(registers[REGIP] + instruction_length) > code_end) { \
+  if ((uint8_t *)(registers[REGIP].ulong + instruction_length) > code_end) { \
     throw MetisException("attempt to add instruction past address space",__LINE__,__FILE__); \
   } 
 
@@ -23,27 +23,27 @@ ostringstream MasmException::cnvt;
 uint64_t MetisVM::add_noop(void) {
   CHECK_INSTRUCTION(INS_NOOP_SIZE);
 
-  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                        = INS_NOOP;      
-  registers[REGIP] += INS_NOOP_SIZE;
+  registers[REGIP].ulong += INS_NOOP_SIZE;
   RETURN_NEXT();
 }
 
 uint64_t MetisVM::add_end(void) {
   CHECK_INSTRUCTION(INS_END_SIZE);
 
-  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                        = INS_END;      
-  registers[REGIP] += INS_END_SIZE;
+  registers[REGIP].ulong += INS_END_SIZE;
   RETURN_NEXT();
 }
 
 uint64_t MetisVM::add_error(void) {
   CHECK_INSTRUCTION(INS_ERROR_SIZE);
 
-  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                        = INS_ERROR;      
-  registers[REGIP] += INS_ERROR_SIZE;
+  registers[REGIP].ulong += INS_ERROR_SIZE;
   RETURN_NEXT();
 }
 
@@ -910,17 +910,17 @@ uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index, cons
     throw MetisException(string("attribute location too big (255 byte string max) uniform = ")+attrib_name,__LINE__,__FILE__);
   }
     
-  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction             = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                         = INS_GLGETATTRIBLOCATION;      
   instruction->commands.glgetattriblocation.attrib_index = attrib_index;
   instruction->commands.glgetattriblocation.id_length = length;
-  if (registers[REGIP] + length > (uint64_t)code_end) {
+  if (registers[REGIP].ulong + length > (uint64_t)code_end) {
     throw MetisException(string("out of memory -- (add_glgetattriblocation) uniform = ") + attrib_name,__LINE__,__FILE__);
   }
-  registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
+  registers[REGIP].ulong += INS_GLGETATTRIBLOCATION_SIZE;
 
-  memcpy((void *)registers[REGIP],attrib_name,length);
-  registers[REGIP] += length;
+  memcpy((void *)registers[REGIP].ulong,attrib_name,length);
+  registers[REGIP].ulong += length;
 
   RETURN_NEXT();
 
@@ -929,10 +929,10 @@ uint64_t  MetisVM::add_glgetattriblocation(metisgl_identifier attrib_index, cons
 uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
   CHECK_INSTRUCTION(INS_GLACTIVETEXTURE_SIZE);
 
-  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                             = INS_GLACTIVETEXTURE;
   instruction->commands.glactivetexture.texture = texture;
-  registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
+  registers[REGIP].ulong += INS_GLACTIVETEXTURE_SIZE;
   RETURN_NEXT();
 }
 
@@ -940,21 +940,21 @@ uint64_t  MetisVM::add_glactivetexture(GLenum texture) {
 uint64_t  MetisVM::add_glclear(GLbitfield flags) {
   CHECK_INSTRUCTION(INS_GLCLEAR_SIZE);
 
-  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                             = INS_GLCLEAR;
   instruction->commands.glclear.flags           = flags;
-  registers[REGIP] += INS_GLCLEAR_SIZE;
+  registers[REGIP].ulong += INS_GLCLEAR_SIZE;
   RETURN_NEXT();
 }
 uint64_t  MetisVM::add_glclearcolor(GLclampf r, GLclampf g, GLclampf b,GLclampf a) {
   CHECK_INSTRUCTION(INS_GLCLEARCOLOR_SIZE);
 
-  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP];
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP].ulong;
   instruction->type                             = INS_GLCLEARCOLOR;
   instruction->commands.glclearcolor.r = r;
   instruction->commands.glclearcolor.g = g;
   instruction->commands.glclearcolor.b = b;
   instruction->commands.glclearcolor.a = a;
-  registers[REGIP] += INS_GLCLEARCOLOR_SIZE;
+  registers[REGIP].ulong += INS_GLCLEARCOLOR_SIZE;
   RETURN_NEXT();
 }
