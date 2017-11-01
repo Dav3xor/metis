@@ -28,7 +28,7 @@ void MetisVM::save(const string &filename) {
     outfile.write((char *)&buffer_len,8);
     outfile.write((char *)buffer, (uint64_t)(buffer_end-buffer));
   }
-  uint64_t code_len = registers[REGIP]-(uint64_t)code_start;
+  uint64_t code_len = registers[REGIP].ulong-(uint64_t)code_start;
   outfile.write("C",1);
   outfile.write((char *)&code_len, 8);
   outfile.write((char *)code_start, code_len);
@@ -90,11 +90,11 @@ void MetisVM::load(const string &filename) {
         // TODO: allow multiple code segments, load 
         //       them one after another...
         infile.read((char *)&code_len,8);
-        if (code_len > (uint64_t)(code_end-registers[REGIP])) {
+        if (code_len > (uint64_t)(code_end-registers[REGIP].ulong)) {
           throw MetisException("code too big?!? (load)",__LINE__,__FILE__);
         }
-        infile.read((char *) registers[REGIP], code_len);
-        registers[REGIP] += code_len; 
+        infile.read((char *) registers[REGIP].ulong, code_len);
+        registers[REGIP].ulong += code_len; 
         break;
     }
   }
