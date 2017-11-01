@@ -16,7 +16,7 @@
 
 bool MetisVM::eval(const char *label) {
   reset();
-  registers[REGIP] = (uint64_t)get_ptr_from_label(label);
+  registers[REGIP].ulong = (uint64_t)get_ptr_from_label(label);
   return do_eval();
 }
 
@@ -50,77 +50,77 @@ bool MetisVM::do_eval() {
   timespec           ts1 = {0,0};
   timespec           ts2 = {0,0};
   struct stat        filestat;
-  while(registers[REGIP] <= (uint64_t)code_end) {
-    MetisInstruction *instruction = (MetisInstruction *)registers[REGIP];
+  while(registers[REGIP].ulong <= (uint64_t)code_end) {
+    MetisInstruction *instruction = (MetisInstruction *)registers[REGIP].ulong;
     //printf("--> %u\n", instruction->type);
     switch (instruction->type) {
       // instruction index and stack instructions
       case INS_JUMP:
-        registers[REGIP] = (uint64_t)code_start + get_val(ADDR_MODES);
+        registers[REGIP].ulong = (uint64_t)code_start + get_val(ADDR_MODES);
         break;
 
       case INS_JUMPI:
-        registers[REGIP] = (uint64_t)code_start + instruction->commands.jumpi.value;
+        registers[REGIP].ulong = (uint64_t)code_start + instruction->commands.jumpi.value;
         break;
 
       case INS_JNE:
         if(get_val(ADDR_MODES) != get_dest_val(ADDR_MODES)) {
-          registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jne.value;
+          registers[REGIP].ulong = (uint64_t)code_start + instruction->commands.extended.ext.jne.value;
         } else {
-          registers[REGIP] += INS_JNE_SIZE;
+          registers[REGIP].ulong += INS_JNE_SIZE;
         }
         break; 
 
       case INS_JMPE:
         if(get_val(ADDR_MODES) == get_dest_val(ADDR_MODES)) {
-          registers[REGIP] = (uint64_t)code_start + instruction->commands.extended.ext.jmpe.value;
+          registers[REGIP].ulong = (uint64_t)code_start + instruction->commands.extended.ext.jmpe.value;
         } else {
-          registers[REGIP] += INS_JMPE_SIZE;
+          registers[REGIP].ulong += INS_JMPE_SIZE;
         }
         break; 
 
       case INS_JIZZ:
         if (get_val(ADDR_MODES)==0) {
-          registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
+          registers[REGIP].ulong = (uint64_t)code_start + get_dest_val(ADDR_MODES);
         } else {
-          registers[REGIP] += INS_JIZZ_SIZE;
+          registers[REGIP].ulong += INS_JIZZ_SIZE;
         }
         break;
 
       case INS_JNZ:
         if (get_val(ADDR_MODES)!=0) {
-          registers[REGIP] = (uint64_t)code_start + get_dest_val(ADDR_MODES);
+          registers[REGIP].ulong = (uint64_t)code_start + get_dest_val(ADDR_MODES);
         } else {
-          registers[REGIP] += INS_JNZ_SIZE;
+          registers[REGIP].ulong += INS_JNZ_SIZE;
         }
         break;
 
       case INS_STORE:
         set_val(ADDR_MODES,
                 get_val(ADDR_MODES));
-        registers[REGIP] += INS_STORE_SIZE;
+        registers[REGIP].ulong += INS_STORE_SIZE;
         break;
 
       case INS_STOREI:
         set_val(ADDR_MODES,
                 instruction->commands.extended.ext.storei.value.ulong);
-        registers[REGIP] += INS_STOREI_SIZE;
+        registers[REGIP].ulong += INS_STOREI_SIZE;
         break;
 
       case INS_STORE_SR:
-        stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole = get_val(ADDR_MODES);
-        registers[REGIP] += INS_STORE_SR_SIZE;
+        stack[registers[REGSP].ulong-instruction->commands.extended.ext.store_sr.offset].whole = get_val(ADDR_MODES);
+        registers[REGIP].ulong += INS_STORE_SR_SIZE;
         break;
 
       case INS_LOAD_SR:
         set_val(ADDR_MODES,
-                stack[registers[REGSP]-instruction->commands.extended.ext.store_sr.offset].whole);
-        registers[REGIP] += INS_LOAD_SR_SIZE;
+                stack[registers[REGSP].ulong-instruction->commands.extended.ext.store_sr.offset].whole);
+        registers[REGIP].ulong += INS_LOAD_SR_SIZE;
         break;
 
       case INS_STACK_ADJ:
-        registers[REGSP] -= instruction->commands.stack_adj.amount;
-        registers[REGIP] += INS_STACK_ADJ_SIZE;
+        registers[REGSP].ulong -= instruction->commands.stack_adj.amount;
+        registers[REGIP].ulong += INS_STACK_ADJ_SIZE;
         break;
 
       
@@ -128,13 +128,13 @@ bool MetisVM::do_eval() {
       case INS_INC:
         set_val(ADDR_MODES,
                 get_val(ADDR_MODES)+1);
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_DEC:
         set_val(ADDR_MODES,
                 get_val(ADDR_MODES)-1);
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_ADD:
@@ -177,25 +177,25 @@ bool MetisVM::do_eval() {
       case INS_SIN:
         set_val(ADDR_MODES,
                 sin(get_val(ADDR_MODES)));
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_COS:
         set_val(ADDR_MODES,
                 cos(get_val(ADDR_MODES)));
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_TAN:
         set_val(ADDR_MODES,
                 tan(get_val(ADDR_MODES)));
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
       
       case INS_ATAN2:
         set_val(ADDR_MODES,
                 atan2(get_val(ADDR_MODES), get_val(ADDR_MODES)));
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       // logical operation          
@@ -213,15 +213,15 @@ bool MetisVM::do_eval() {
 
       case INS_NOT:
         set_val(ADDR_MODES, ~get_val(ADDR_MODES));
-        registers[REGIP] += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_PUSH_MATRIX:
         matrix_a = (MetisMatrixHeader *)((uint64_t)code_start + instruction->commands.pushmatrix.location);
         num_bytes     = matrix_a->width * matrix_a->height * 4;
-        memcpy((char *)&stack[registers[REGSP]], (char *)matrix_a, num_bytes+sizeof(MetisMatrixHeader));
-        registers[REGSP] += num_bytes/8 + 1;
-        registers[REGIP] += INS_PUSH_MATRIX_SIZE;
+        memcpy((char *)&stack[registers[REGSP].ulong], (char *)matrix_a, num_bytes+sizeof(MetisMatrixHeader));
+        registers[REGSP].ulong += num_bytes/8 + 1;
+        registers[REGIP].ulong += INS_PUSH_MATRIX_SIZE;
         break;
 
       case INS_MATRIX_MULTIPLY:
@@ -233,7 +233,7 @@ bool MetisVM::do_eval() {
             }
           }
         }
-        registers[REGIP] += INS_MATRIX_MULTIPLY_SIZE;
+        registers[REGIP].ulong += INS_MATRIX_MULTIPLY_SIZE;
         break;    
 
       case INS_MATRIX_ADD:
@@ -244,7 +244,7 @@ bool MetisVM::do_eval() {
             d[i*matrix_a->width+j] = a[i*matrix_a->width+j] + b[i*matrix_a->width+j];
           }
         }
-        registers[REGIP] += INS_MATRIX_ADD_SIZE;
+        registers[REGIP].ulong += INS_MATRIX_ADD_SIZE;
         break;    
 
       case INS_VECTOR_DOT:
@@ -255,7 +255,7 @@ bool MetisVM::do_eval() {
             d[i*destination_matrix->width] += a[i*matrix_a->width+j] * b[i*matrix_a->width+j];
           }
         }
-        registers[REGIP] += INS_VECTOR_DOT_SIZE;
+        registers[REGIP].ulong += INS_VECTOR_DOT_SIZE;
         break;    
 
       case INS_VECTOR_CROSS:
@@ -266,7 +266,7 @@ bool MetisVM::do_eval() {
           d[i*matrix_a->width+1] = (a[i*matrix_a->width+2] * b[i*matrix_a->width+0]) - (a[i*matrix_a->width+0] * b[i*matrix_a->width+2]); // j
           d[i*matrix_a->width+2] = (a[i*matrix_a->width+0] * b[i*matrix_a->width+1]) - (a[i*matrix_a->width+1] * b[i*matrix_a->width+0]); // k
         }
-        registers[REGIP] += INS_VECTOR_CROSS_SIZE;
+        registers[REGIP].ulong += INS_VECTOR_CROSS_SIZE;
         break;  
 
       case INS_WAIT:
@@ -274,13 +274,13 @@ bool MetisVM::do_eval() {
         cout << ts1.tv_nsec << endl;
         cout << ts1.tv_sec << endl;
         nanosleep(&ts1, NULL);
-        registers[REGIP] += INS_WAIT_SIZE;
+        registers[REGIP].ulong += INS_WAIT_SIZE;
         break;
       case INS_CURTIME:
         clock_gettime(CLOCK_REALTIME, &ts2);
         set_val(ADDR_MODES,
                 ts2.tv_nsec);
-        registers[REGIP] += INS_CURTIME_SIZE;
+        registers[REGIP].ulong += INS_CURTIME_SIZE;
         break;
 
       case INS_OPEN:
@@ -289,12 +289,12 @@ bool MetisVM::do_eval() {
         // currently only works with files...  add sockets later
         file     = open(filespec->path, filespec->file_flags);
         set_val(ADDR_MODES, file);
-        registers[REGIP] += INS_OPEN_SIZE;
+        registers[REGIP].ulong += INS_OPEN_SIZE;
         break;
 
       case INS_CLOSE:
         close(get_val(ADDR_MODES));
-        registers[REGIP] += INS_CLOSE_SIZE;
+        registers[REGIP].ulong += INS_CLOSE_SIZE;
         break;
 
       case INS_READ:
@@ -302,7 +302,7 @@ bool MetisVM::do_eval() {
         read(get_val(ADDR_MODES), 
              buffer, 
              instruction->commands.extended.ext.read.max_bytes);
-        registers[REGIP] += INS_READ_SIZE;
+        registers[REGIP].ulong += INS_READ_SIZE;
         break;
       
       case INS_WRITE:
@@ -310,7 +310,7 @@ bool MetisVM::do_eval() {
         write(get_val(ADDR_MODES), 
               buffer, 
               instruction->commands.extended.ext.write.num_bytes);
-        registers[REGIP] += INS_WRITE_SIZE;
+        registers[REGIP].ulong += INS_WRITE_SIZE;
         break;
 
       case INS_SEEK:
@@ -319,7 +319,7 @@ bool MetisVM::do_eval() {
         lseek(get_val(ADDR_MODES), 
               seek->offset, 
               seek->whence);
-        registers[REGIP] += INS_SEEK_SIZE;
+        registers[REGIP].ulong += INS_SEEK_SIZE;
         break;
 
       case INS_SELECT:
@@ -329,7 +329,7 @@ bool MetisVM::do_eval() {
                &selectgroup->descriptors, 
                NULL, NULL, 
                &selectgroup->timeout);
-        registers[REGIP] += INS_SELECT_SIZE;
+        registers[REGIP].ulong += INS_SELECT_SIZE;
         break;
 
       case INS_REMOVE:
@@ -340,7 +340,7 @@ bool MetisVM::do_eval() {
         } else {
           set_val(ADDR_MODES, 1);
         }
-        registers[REGIP] += INS_REMOVE_SIZE;
+        registers[REGIP].ulong += INS_REMOVE_SIZE;
         break;
 
       case INS_EXISTS:
@@ -353,7 +353,7 @@ bool MetisVM::do_eval() {
           set_val(ADDR_MODES, 1);
         }
 
-        registers[REGIP] += INS_EXISTS_SIZE;
+        registers[REGIP].ulong += INS_EXISTS_SIZE;
         break;
         
       case INS_MALLOC:
@@ -368,13 +368,13 @@ bool MetisVM::do_eval() {
 
         set_val(ADDR_MODES, (uint64_t)malloc_result);
 
-        registers[REGIP] += INS_MALLOC_SIZE;
+        registers[REGIP].ulong += INS_MALLOC_SIZE;
         break;
 
       case INS_FREE:
         cout << "addr: " << get_val(ADDR_MODES);
         free((void *)get_val(ADDR_MODES));
-        registers[REGIP] += INS_FREE_SIZE;
+        registers[REGIP].ulong += INS_FREE_SIZE;
         break;
 
       case INS_GLDRAWELEMENTS:
@@ -389,7 +389,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDRAWELEMENTS_SIZE;
+        registers[REGIP].ulong += INS_GLDRAWELEMENTS_SIZE;
         break;
 
       case INS_GLDRAWARRAYS:
@@ -399,7 +399,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDRAWARRAYS_SIZE;
+        registers[REGIP].ulong += INS_GLDRAWARRAYS_SIZE;
         break;
 
       case INS_GLGENBUFFERS:
@@ -408,7 +408,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLGENBUFFERS_SIZE;
+        registers[REGIP].ulong += INS_GLGENBUFFERS_SIZE;
         break;
 
       case INS_GLGENVERTEXARRAYS:
@@ -417,7 +417,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLGENVERTEXARRAYS_SIZE;
+        registers[REGIP].ulong += INS_GLGENVERTEXARRAYS_SIZE;
         break;
 
       case INS_GLBINDBUFFER:
@@ -426,7 +426,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLBINDBUFFER_SIZE;
+        registers[REGIP].ulong += INS_GLBINDBUFFER_SIZE;
         break;
 
 
@@ -435,7 +435,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLBINDVERTEXARRAY_SIZE;
+        registers[REGIP].ulong += INS_GLBINDVERTEXARRAY_SIZE;
         break;
 
 
@@ -448,7 +448,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLBUFFERDATA_SIZE;
+        registers[REGIP].ulong += INS_GLBUFFERDATA_SIZE;
         break;
 
       case INS_GLENABLEVERTEXATTRIBARRAY:
@@ -456,7 +456,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
+        registers[REGIP].ulong += INS_GLENABLEVERTEXATTRIBARRAY_SIZE;
         break;
 
       case INS_GLVERTEXATTRIBPOINTER:
@@ -473,7 +473,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLVERTEXATTRIBPOINTER_SIZE;
+        registers[REGIP].ulong += INS_GLVERTEXATTRIBPOINTER_SIZE;
         break;
 
       case INS_GLDISABLEVERTEXATTRIBARRAY:
@@ -481,7 +481,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
+        registers[REGIP].ulong += INS_GLDISABLEVERTEXATTRIBARRAY_SIZE;
         break;
 
       case INS_GLENABLE:
@@ -489,7 +489,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLENABLE_SIZE;
+        registers[REGIP].ulong += INS_GLENABLE_SIZE;
         break;
 
       case INS_GLDEPTHFUNC:
@@ -497,7 +497,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDEPTHFUNC_SIZE;
+        registers[REGIP].ulong += INS_GLDEPTHFUNC_SIZE;
         break;
 
       case INS_GLCREATESHADER:
@@ -505,7 +505,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLCREATESHADER_SIZE;
+        registers[REGIP].ulong += INS_GLCREATESHADER_SIZE;
         break;
 
       case INS_GLSHADERSOURCE:
@@ -515,7 +515,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLSHADERSOURCE_SIZE;
+        registers[REGIP].ulong += INS_GLSHADERSOURCE_SIZE;
         break;
 
       case INS_GLCOMPILESHADER:
@@ -525,7 +525,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLCOMPILESHADER_SIZE;
+        registers[REGIP].ulong += INS_GLCOMPILESHADER_SIZE;
         break;
 
       case INS_GLCREATEPROGRAM:
@@ -533,7 +533,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLCREATEPROGRAM_SIZE;
+        registers[REGIP].ulong += INS_GLCREATEPROGRAM_SIZE;
         break;
 
       case INS_GLATTACHSHADER:
@@ -543,7 +543,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLATTACHSHADER_SIZE;
+        registers[REGIP].ulong += INS_GLATTACHSHADER_SIZE;
         break;
 
       case INS_GLLINKPROGRAM:
@@ -553,7 +553,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLLINKPROGRAM_SIZE;
+        registers[REGIP].ulong += INS_GLLINKPROGRAM_SIZE;
         break;
 
       case INS_GLDETACHSHADER:
@@ -562,7 +562,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDETACHSHADER_SIZE;
+        registers[REGIP].ulong += INS_GLDETACHSHADER_SIZE;
         break;
 
       case INS_GLDELETESHADER:
@@ -570,7 +570,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLDELETESHADER_SIZE;
+        registers[REGIP].ulong += INS_GLDELETESHADER_SIZE;
         break;
 
       case INS_GLUSEPROGRAM:
@@ -578,7 +578,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLUSEPROGRAM_SIZE;
+        registers[REGIP].ulong += INS_GLUSEPROGRAM_SIZE;
         break;
 
       case INS_GLUNIFORMFV:
@@ -609,16 +609,16 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLUNIFORMFV_SIZE;
+        registers[REGIP].ulong += INS_GLUNIFORMFV_SIZE;
         break;
 
       case INS_GLGETUNIFORMLOCATION:
-        string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETUNIFORMLOCATION_SIZE);
+        string_ptr = (GLchar *)(registers[REGIP].ulong + INS_GLGETUNIFORMLOCATION_SIZE);
         glidentifiers[instruction->commands.glgetuniformlocation.uniform_index] = glGetUniformLocation(glidentifiers[instruction->commands.glgetuniformlocation.program_index],
                                                                                                        (const GLchar *)string_ptr);
 
-        registers[REGIP] += INS_GLGETUNIFORMLOCATION_SIZE;
-        registers[REGIP] += instruction->commands.glgetuniformlocation.id_length;
+        registers[REGIP].ulong += INS_GLGETUNIFORMLOCATION_SIZE;
+        registers[REGIP].ulong += instruction->commands.glgetuniformlocation.id_length;
         break;
         
       case INS_GLGENTEXTURES:
@@ -627,7 +627,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLGENTEXTURES_SIZE;
+        registers[REGIP].ulong += INS_GLGENTEXTURES_SIZE;
         break;
 
       case INS_GLBINDTEXTURE:
@@ -636,7 +636,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLBINDTEXTURE_SIZE;
+        registers[REGIP].ulong += INS_GLBINDTEXTURE_SIZE;
         break;
 
       case INS_GLTEXPARAMETERI:
@@ -646,7 +646,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLTEXPARAMETERI_SIZE;
+        registers[REGIP].ulong += INS_GLTEXPARAMETERI_SIZE;
         break;
 
       case INS_GLTEXPARAMETERFV:
@@ -656,7 +656,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLTEXPARAMETERFV_SIZE;
+        registers[REGIP].ulong += INS_GLTEXPARAMETERFV_SIZE;
         break;
 
       case INS_GLGENERATEMIPMAP:
@@ -664,7 +664,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLGENERATEMIPMAP_SIZE;
+        registers[REGIP].ulong += INS_GLGENERATEMIPMAP_SIZE;
         break;
 
       case INS_GLTEXIMAGE2D:
@@ -680,19 +680,19 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLTEXIMAGE2D_SIZE;
+        registers[REGIP].ulong += INS_GLTEXIMAGE2D_SIZE;
         break;
 
       case INS_GLGETATTRIBLOCATION:
 
-        string_ptr = (GLchar *)(registers[REGIP] + INS_GLGETATTRIBLOCATION_SIZE);
+        string_ptr = (GLchar *)(registers[REGIP].ulong + INS_GLGETATTRIBLOCATION_SIZE);
         glidentifiers[instruction->commands.glgetattriblocation.attrib_index] = glGetAttribLocation(glidentifiers[instruction->commands.glgetattriblocation.attrib_index],
                                                                                                     (const GLchar *)string_ptr);
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLGETATTRIBLOCATION_SIZE;
-        registers[REGIP] += instruction->commands.glgetattriblocation.id_length;
+        registers[REGIP].ulong += INS_GLGETATTRIBLOCATION_SIZE;
+        registers[REGIP].ulong += instruction->commands.glgetattriblocation.id_length;
         break;
         
       case INS_GLACTIVETEXTURE:
@@ -700,7 +700,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLACTIVETEXTURE_SIZE;
+        registers[REGIP].ulong += INS_GLACTIVETEXTURE_SIZE;
         break;
 
       case INS_GLCLEAR:
@@ -708,7 +708,7 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLCLEAR_SIZE;
+        registers[REGIP].ulong += INS_GLCLEAR_SIZE;
         break;
 
       case INS_GLCLEARCOLOR:
@@ -719,17 +719,17 @@ bool MetisVM::do_eval() {
         #ifdef TESTING_ENVIRONMENT
         print_glerrors(__LINE__,__FILE__);
         #endif
-        registers[REGIP] += INS_GLCLEARCOLOR_SIZE;
+        registers[REGIP].ulong += INS_GLCLEARCOLOR_SIZE;
         break;
 
       case INS_DATA:
         advance = instruction->commands.data.length;
-        registers[REGIP] += INS_DATA_SIZE;
-        registers[REGIP] += advance;
+        registers[REGIP].ulong += INS_DATA_SIZE;
+        registers[REGIP].ulong += advance;
         break;
 
       case INS_NOOP:
-        registers[REGIP] += INS_NOOP_SIZE;
+        registers[REGIP].ulong += INS_NOOP_SIZE;
         break;
 
       case INS_END:
@@ -741,14 +741,14 @@ bool MetisVM::do_eval() {
       case INS_ERROR:
         throw MetisException(string("error opcode found -- instruction = ") + 
                              to_string(instruction->type) + string(" IP = ") + 
-                             to_string(registers[REGIP]) , 
+                             to_string(registers[REGIP].ulong) , 
                              __LINE__, __FILE__);
         break;
 
       default:
         throw MetisException(string("unknown opcode found -- instruction = ") + 
                              to_string(instruction->type) + string(" IP = ") + 
-                             to_string(registers[REGIP]) , 
+                             to_string(registers[REGIP].ulong) , 
                              __LINE__, __FILE__);
         return false;
         break;
