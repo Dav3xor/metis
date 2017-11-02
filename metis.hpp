@@ -512,7 +512,7 @@ class MetisVM {
     uint64_t add_jmpe         (address_mode src, address_mode dest, uint64_t location);
     uint64_t add_store        (address_mode src, address_mode dest);
     uint64_t add_storei       (address_mode dest, uint64_t value);
-    uint64_t add_storeidouble (address_mode dest, double value);
+    uint64_t add_storei_double (address_mode dest, double value);
     uint64_t add_store_sr     (address_mode src, uint64_t offset);
     uint64_t add_load_sr      (uint64_t offset, address_mode dest);
     uint64_t add_stack_adj    (uint64_t amount);
@@ -991,6 +991,13 @@ class MetisVM {
       registers[REGSP].whole -= 1;
       return stack[registers[REGSP].whole].whole;
     }
+    uint64_t popfp() {
+      if(registers[REGSP].whole == 0) {
+        throw MetisException("stack empty (pop)",__LINE__,__FILE__);
+      }
+      registers[REGSP].whole -= 1;
+      return stack[registers[REGSP].whole].whole_double;
+    }
 
     void set_val(uint8_t location, uint64_t value) {
       // high bits are destination
@@ -1051,6 +1058,28 @@ class MetisVM {
           break;
         case STACK_POP:
           return pop();
+          break;
+        default:
+          throw MetisException("unknown addressing mode (get_val)",__LINE__,__FILE__);
+          break;
+      }
+    }     
+    double get_fpval(uint64_t location) {
+      // low bits are source
+      location = GET_SRC(location);
+      switch (location) {
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGSP:
+        case REGERR:
+        case REGIP:
+        case REGBP:
+          return registers[location].whole_double;
+          break;
+        case STACK_POP:
+          return popfp();
           break;
         default:
           throw MetisException("unknown addressing mode (get_val)",__LINE__,__FILE__);
