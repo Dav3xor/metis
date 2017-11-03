@@ -133,7 +133,7 @@ uint64_t MetisVM::add_storei(address_mode dest, uint64_t value) {
   RETURN_NEXT();
 }
 
-uint64_t MetisVM::add_storeidouble(address_mode dest, double value) {
+uint64_t MetisVM::add_storei_double(address_mode dest, double value) {
   CHECK_INSTRUCTION(INS_STOREI_SIZE);
 
   MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP].ulong;
