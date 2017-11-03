@@ -676,6 +676,7 @@ class MetisVM {
       return (uint8_t *)(buffer + get_label(label));
     }
     uint64_t *get_registers  (void)  { return (uint64_t *)registers; };
+    MetisMemoryCell *get_registers_cell (void)  { return registers; };
 
     uint64_t  cur_stack_val  (uint64_t offset=0)  {
       if ( registers[REGSP].whole > 0) {

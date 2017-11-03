@@ -600,8 +600,8 @@ TEST_CASE( "fp math", "[MetisVM]" ) {
 
   m.eval();
   
-  REQUIRE( m.get_registers()[REGA].double == 5.0);
-  REQUIRE( m.get_registers()[REGB].double == 5.0);
+  REQUIRE( m.get_registers_cell()[REGA].whole_double == 5.0);
+  REQUIRE( m.get_registers_cell()[REGB].whole_double == 5.0);
 }
 
 TEST_CASE( "logic ops", "[MetisVM]" ) {
