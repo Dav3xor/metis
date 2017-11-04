@@ -145,11 +145,9 @@ using namespace std;
   registers[REGIP].whole += INS_MATH_SIZE;
 
 #define FPMATH_OPERATION(op) \
-  cell1 = (MetisMemoryCell *) ((uint64_t)code_start + get_val(ADDR_MODES)); \
-  cell2 = (MetisMemoryCell *) ((uint64_t)code_start + get_dest_val(ADDR_MODES)); \
-  set_val(ADDR_MODES, \
-          cell1->whole_double op \
-          cell2->whole_double); \
+  set_fpval(ADDR_MODES, \
+            get_dest_fpval(ADDR_MODES) op \
+            get_fpval(ADDR_MODES)); \
   registers[REGIP].whole += INS_MATH_SIZE; \
 
 #define MATH_METHOD(method_name,byte_code) \
@@ -1109,6 +1107,27 @@ class MetisVM {
       }
     }     
       
+    double get_dest_fpval(uint8_t location) {
+      // low bits are source
+      location = location >> 4;
+      switch (location) {
+        case REGA:
+        case REGB:
+        case REGC:
+        case REGD:
+        case REGSP:
+        case REGERR:
+        case REGIP:
+        case REGBP:
+          return registers[location].whole_double;
+          break;
+        case STACK_POP:
+          return popfp();
+          break;
+        default:
+          throw MetisException("unknown addressing mode (get_dest_val) mode = " + to_string(location),__LINE__,__FILE__);
+      }
+    }     
 };
 
 class CountingStreamBuffer : public std::streambuf
