@@ -596,12 +596,13 @@ TEST_CASE( "fp math", "[MetisVM]" ) {
   m.add_fpsub(REGB, REGA);  // 5
   m.add_fpmul(REGB, REGA);  // 12.5
   m.add_fpdiv(REGB, REGA);  // 5
+  m.add_fpdiv(REGB, REGA);  // 5
   m.add_end();
 
   m.eval();
   
-  REQUIRE( m.get_registers_cell()[REGA].whole_double == 5.0);
-  REQUIRE( m.get_registers_cell()[REGB].whole_double == 5.0);
+  REQUIRE( m.get_registers_cell()[REGA].whole_double == 2.0);
+  REQUIRE( m.get_registers_cell()[REGB].whole_double == 2.5);
 }
 
 TEST_CASE( "logic ops", "[MetisVM]" ) {
