@@ -683,6 +683,13 @@ class MetisVM {
         throw MetisException("attempted to read empty stack (cur_stack_val)",__LINE__,__FILE__);
       }
     }
+    MetisMemoryCell *cur_stack_val_cell  (uint64_t offset=0)  {
+      if ( registers[REGSP].whole > 0) {
+        return &stack[registers[REGSP].whole-1-offset]; 
+      } else {
+        throw MetisException("attempted to read empty stack (cur_stack_val)",__LINE__,__FILE__);
+      }
+    }
     uint64_t  cur_stack_size (void)  { return registers[REGSP].whole; };
   
   private:
