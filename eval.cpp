@@ -173,26 +173,26 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_SIN:
-        set_val(ADDR_MODES,
-                sin(get_val(ADDR_MODES)));
+        set_fpval(ADDR_MODES,
+                sin(get_fpval(ADDR_MODES)));
         registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_COS:
-        set_val(ADDR_MODES,
-                cos(get_val(ADDR_MODES)));
+        set_fpval(ADDR_MODES,
+                cos(get_fpval(ADDR_MODES)));
         registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 
       case INS_TAN:
-        set_val(ADDR_MODES,
-                tan(get_val(ADDR_MODES)));
+        set_fpval(ADDR_MODES,
+                tan(get_fpval(ADDR_MODES)));
         registers[REGIP].ulong += INS_MATH_SIZE;
         break;
       
       case INS_ATAN2:
-        set_val(ADDR_MODES,
-                atan2(get_val(ADDR_MODES), get_val(ADDR_MODES)));
+        set_fpval(ADDR_MODES,
+                atan2(get_fpval(ADDR_MODES), get_fpval(ADDR_MODES)));
         registers[REGIP].ulong += INS_MATH_SIZE;
         break;
 

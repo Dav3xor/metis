@@ -606,13 +606,17 @@ TEST_CASE( "fp math", "[MetisVM]" ) {
 
 TEST_CASE( "trig", "[MetisVM]" ) {
   uint8_t buf[10000];
-  uint64_t stack[5];
-  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  uint64_t stack[10];
+  MetisVM m(buf,10000, stack, 10, NULL, 0);
   m.hard_reset();
   m.add_storei_double(REGA,0.0);
+  m.add_storei_double(REGB,0.1);
   m.add_sin(REGA, STACK_PUSH);  // 0.0
   m.add_cos(REGA, STACK_PUSH);  // 1.0
   m.add_tan(REGA, STACK_PUSH);  // 0.0
+  m.add_sin(REGB, STACK_PUSH);  // 0.0
+  m.add_cos(REGB, STACK_PUSH);  // 1.0
+  m.add_tan(REGB, STACK_PUSH);  // 0.0
   m.add_end();
 
   m.eval();
@@ -620,6 +624,9 @@ TEST_CASE( "trig", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val_cell(0)->whole_double == 0.0);
   REQUIRE( m.cur_stack_val_cell(1)->whole_double == 1.0);
   REQUIRE( m.cur_stack_val_cell(2)->whole_double == 0.0);
+  REQUIRE( m.cur_stack_val_cell(5)->whole_double == 0.0);
+  REQUIRE( m.cur_stack_val_cell(4)->whole_double == 1.0);
+  REQUIRE( m.cur_stack_val_cell(5)->whole_double == 0.0);
 }
 
 TEST_CASE( "logic ops", "[MetisVM]" ) {
