@@ -621,12 +621,12 @@ TEST_CASE( "trig", "[MetisVM]" ) {
 
   m.eval();
   
-  REQUIRE( m.cur_stack_val_cell(0)->whole_double == 0.0);
-  REQUIRE( m.cur_stack_val_cell(1)->whole_double == 1.0);
-  REQUIRE( m.cur_stack_val_cell(2)->whole_double == 0.0);
-  REQUIRE( m.cur_stack_val_cell(3)->whole_double == 0.0);
-  REQUIRE( m.cur_stack_val_cell(4)->whole_double == 1.0);
   REQUIRE( m.cur_stack_val_cell(5)->whole_double == 0.0);
+  REQUIRE( m.cur_stack_val_cell(4)->whole_double == 1.0);
+  REQUIRE( m.cur_stack_val_cell(3)->whole_double == 0.0);
+  REQUIRE( m.cur_stack_val_cell(2)->whole_double == 0.0);
+  REQUIRE( m.cur_stack_val_cell(1)->whole_double == 1.0);
+  REQUIRE( m.cur_stack_val_cell(0)->whole_double == 0.0);
 }
 
 TEST_CASE( "logic ops", "[MetisVM]" ) {
