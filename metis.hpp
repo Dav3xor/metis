@@ -990,6 +990,13 @@ class MetisVM {
       stack[registers[REGSP].whole].whole = val;
       registers[REGSP].whole += 1;
     }
+    void pushfp(double val) {
+      if( registers[REGSP].ulong >= stack_size) {
+        throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
+      }
+      stack[registers[REGSP].whole].whole_double = val;
+      registers[REGSP].whole += 1;
+    }
 
     uint64_t pop() {
       if(registers[REGSP].whole == 0) {
@@ -1042,7 +1049,7 @@ class MetisVM {
           registers[location].whole_double = value;
           break;
         case STACK_PUSH:
-          push(value);
+          pushfp(value);
           break;
         default:
           throw MetisException("unknown addressing mode (set_val) - " + to_string(location),__LINE__,__FILE__);
