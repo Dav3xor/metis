@@ -61,6 +61,7 @@ using namespace std;
 #define INS_LOAD_SR_SIZE   10
 #define INS_STACK_ADJ_SIZE 9 
 
+#define INS_ATAN2_SIZE     3 
 
 #define METIS_WRITE_FILE O_WRONLY
 #define METIS_READ_FILE  O_RDONLY
@@ -568,11 +569,12 @@ class MetisVM {
     MATH_METHOD(add_sin, INS_SIN); 
     MATH_METHOD(add_cos, INS_COS); 
     MATH_METHOD(add_tan, INS_TAN); 
-    MATH_METHOD(add_atan2, INS_ATAN2); 
 
     MATH_METHOD(add_and, INS_AND); 
     MATH_METHOD(add_or,  INS_OR); 
     MATH_METHOD(add_xor, INS_XOR); 
+
+    uint64_t add_atan2(address_mode x, address_mode y, address_mode result); 
 
     uint64_t add_gldrawelements(GLenum mode, GLsizei count, 
                                 GLenum type, uint64_t indices);
@@ -715,6 +717,11 @@ class MetisVM {
     struct MetisInstruction {
       instruction type;
       union commands_t {
+        struct extended2_t {
+          uint8_t addr_mode1;
+          uint8_t addr_mode2;
+        }__attribute__((packed))extended2;
+
         struct extended_t {
           uint8_t addr_mode;
           union ext_t {

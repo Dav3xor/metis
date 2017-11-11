@@ -47,6 +47,17 @@ uint64_t MetisVM::add_error(void) {
   RETURN_NEXT();
 }
 
+uint64_t MetisVM::add_atan2(address_mode x, address_mode y, address_mode result) {
+  CHECK_INSTRUCTION(INS_ATAN2_SIZE);
+
+  MetisInstruction *instruction            = (MetisInstruction *)registers[REGIP].ulong;
+  instruction->type                        = INS_ATAN2;      
+  instruction->commands.extended2.addr_mode1 = BUILD_ADDR(x,y);
+  instruction->commands.extended2.addr_mode2 = BUILD_ADDR(0,result);
+  registers[REGIP].ulong += INS_END_SIZE;
+  RETURN_NEXT();
+}
+
 uint64_t MetisVM::add_jump(address_mode src) {
   CHECK_INSTRUCTION(INS_JUMP_SIZE);
 
