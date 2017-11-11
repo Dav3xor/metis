@@ -40,6 +40,8 @@ using namespace std;
 
 #define MAX_LABEL_LEN             128
 #define ADDR_MODES                instruction->commands.extended.addr_mode
+#define ADDR_MODES1               instruction->commands.extended2.addr_mode1
+#define ADDR_MODES2               instruction->commands.extended2.addr_mode2
 
 #define BUILD_ADDR(src, dest)     ((dest << 4) + src)
 #define GET_DEST(location)        (location >> 4)
