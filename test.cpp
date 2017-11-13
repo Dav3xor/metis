@@ -611,16 +611,19 @@ TEST_CASE( "trig", "[MetisVM]" ) {
   m.hard_reset();
   m.add_storei_double(REGA,0.0);
   m.add_storei_double(REGB,0.1);
-  m.add_sin(REGA, STACK_PUSH);  // 0.0
-  m.add_cos(REGA, STACK_PUSH);  // 1.0
-  m.add_tan(REGA, STACK_PUSH);  // 0.0
-  m.add_sin(REGB, STACK_PUSH);  // 0.0
-  m.add_cos(REGB, STACK_PUSH);  // 1.0
-  m.add_tan(REGB, STACK_PUSH);  // 0.0
+  m.add_atan2(REGA, REGB, STACK_PUSH);
+  m.add_sin(REGA, STACK_PUSH);  
+  m.add_cos(REGA, STACK_PUSH);  
+  m.add_tan(REGA, STACK_PUSH);  
+  m.add_sin(REGB, STACK_PUSH);  
+  m.add_cos(REGB, STACK_PUSH);  
+  m.add_tan(REGB, STACK_PUSH);  
+  
   m.add_end();
 
   m.eval();
   
+  REQUIRE( m.cur_stack_val_cell(6)->whole_double == 0.0);
   REQUIRE( m.cur_stack_val_cell(5)->whole_double == 0.0);
   REQUIRE( m.cur_stack_val_cell(4)->whole_double == 1.0);
   REQUIRE( m.cur_stack_val_cell(3)->whole_double == 0.0);
