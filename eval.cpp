@@ -193,7 +193,7 @@ bool MetisVM::do_eval() {
       case INS_ATAN2:
         set_fpval(ADDR_MODES2,
                 atan2(get_fpval(ADDR_MODES1), get_dest_fpval(ADDR_MODES1)));
-        registers[REGIP].ulong += INS_MATH_SIZE;
+        registers[REGIP].ulong += INS_ATAN2_SIZE;
         break;
 
       // logical operation          
