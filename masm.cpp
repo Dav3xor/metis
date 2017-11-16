@@ -655,6 +655,13 @@ MetisASM::MetisASM() :
     MATH_INSTRUCTION("AND", add_and), 
     MATH_INSTRUCTION("OR",  add_or), 
     MATH_INSTRUCTION("XOR", add_xor),
+    MATH_INSTRUCTION("FPADD", add_fpadd), 
+    MATH_INSTRUCTION("FPSUB", add_fpsub), 
+    MATH_INSTRUCTION("FPMUL", add_fpmul), 
+    MATH_INSTRUCTION("FPDIV", add_fpdiv), 
+    MATH_INSTRUCTION("SIN", add_sin), 
+    MATH_INSTRUCTION("COS", add_cos), 
+    MATH_INSTRUCTION("TAN", add_tan), 
   }),
   
   addr_modes({
