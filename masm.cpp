@@ -644,6 +644,11 @@ MetisASM::MetisASM() :
                                                  GLclampf b                        = this->get_GLclampf();
                                                  GLclampf a                        = this->get_GLclampf();
                                                  m.add_glclearcolor(r,g,b,a); } },
+    {"ATAN2",                      HANDLED_BY {  (void)s;
+                                                 address_mode src1 = this->get_addr_mode();
+                                                 address_mode src2 = this->get_addr_mode();
+                                                 address_mode dest = this->get_addr_mode();
+                                                 m.add_atan2(src1, src2, dest); } },
     MATH_INSTRUCTION("NOT", add_not),
     MATH_INSTRUCTION("INC", add_inc), 
     MATH_INSTRUCTION("DEC", add_dec),
