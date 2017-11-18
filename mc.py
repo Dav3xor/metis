@@ -28,6 +28,7 @@ class Head(Element):
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
+    self.add_child(parse_file(filename))
   def render(self):
     print "rendering file"
 
