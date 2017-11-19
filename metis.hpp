@@ -372,7 +372,8 @@ class MetisVM {
                                INS_STORE_SR                      =    9,   // *   store value at stack offset
                                INS_LOAD_SR                       =   10,   // *   load value from stack offset
                                INS_STACK_ADJ                     =   11,   // *   subtract value from stack
-
+                               INS_PUSHR                         =   12,   //     push registers to stack
+                               INS_POPR                          =   12,   //     pop registers from stack
                                // Integer Math
                                INS_INC                           =   16,   // *   increment ... 
                                INS_DEC                           =   17,   // *   decrement ... 
