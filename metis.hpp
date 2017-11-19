@@ -800,6 +800,14 @@ class MetisVM {
           }__attribute__((packed))ext; 
         }__attribute__((packed)) extended;
 
+        struct pushr_t {
+          uint16_t registers;
+        }__attribute__((packed)) pushr;
+
+        struct popr_t {
+          uint16_t registers;
+        }__attribute__((packed)) popr;
+
         struct stack_adj_t {
           uint64_t amount;
         }__attribute__((packed)) stack_adj;
