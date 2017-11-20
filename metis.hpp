@@ -62,7 +62,8 @@ using namespace std;
 #define INS_STORE_SR_SIZE  10
 #define INS_LOAD_SR_SIZE   10
 #define INS_STACK_ADJ_SIZE 9 
-
+#define INS_PUSHR_SIZE     3
+#define INS_POPR_SIZE      3
 #define INS_ATAN2_SIZE     3 
 
 #define METIS_WRITE_FILE O_WRONLY
@@ -373,7 +374,7 @@ class MetisVM {
                                INS_LOAD_SR                       =   10,   // *   load value from stack offset
                                INS_STACK_ADJ                     =   11,   // *   subtract value from stack
                                INS_PUSHR                         =   12,   //     push registers to stack
-                               INS_POPR                          =   12,   //     pop registers from stack
+                               INS_POPR                          =   13,   //     pop registers from stack
                                // Integer Math
                                INS_INC                           =   16,   // *   increment ... 
                                INS_DEC                           =   17,   // *   decrement ... 
@@ -518,6 +519,8 @@ class MetisVM {
     uint64_t add_store_sr     (address_mode src, uint64_t offset);
     uint64_t add_load_sr      (uint64_t offset, address_mode dest);
     uint64_t add_stack_adj    (uint64_t amount);
+    uint64_t add_pushr        (uint16_t amount);
+    uint64_t add_popr         (uint16_t amount);
     uint64_t add_label_ip     (const char *label);
     uint64_t add_label_val    (const char *label, uint64_t val);
     uint64_t add_label_float  (const char *label, float val);
