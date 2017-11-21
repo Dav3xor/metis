@@ -177,6 +177,15 @@ enum address_mode: uint8_t {REGA                    =    0,
                             STACK_PUSH              =    8,
                             STACK_POP               =    9 };
 
+#define REGA_F      1
+#define REGB_F      2
+#define REGC_F      4
+#define REGD_F      8
+#define REGSP_F     16
+#define REGIP_F     32
+#define REGBP_F     64
+#define REGERR_F    128
+
 enum filetype: uint64_t {LOCAL_FILE                 =    1,
                          TCP_CLIENT                 =    2,
                          UDP_CLIENT                 =    3};
