@@ -121,7 +121,13 @@ bool MetisVM::do_eval() {
         registers[REGIP].ulong += INS_STACK_ADJ_SIZE;
         break;
 
-      
+      case INS_PUSHR:
+        if(instruction->commands.pushr.registers & REGA_F) {
+          push(registers[REGIP]);
+        }
+        registers[REGIP].ulong += INS_PUSHR_SIZE;
+        break;
+
       // math instructions
       case INS_INC:
         set_val(ADDR_MODES,

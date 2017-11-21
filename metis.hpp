@@ -1020,6 +1020,15 @@ class MetisVM {
       stack[registers[REGSP].whole].whole = val;
       registers[REGSP].whole += 1;
     }
+    
+    void push(MetisMemoryCell val) {
+      if( registers[REGSP].ulong >= stack_size) {
+        throw MetisException("stack full (push), val = " + to_string(val.whole),__LINE__,__FILE__);
+      }
+      stack[registers[REGSP].whole] = val;
+      registers[REGSP].whole += 1;
+    }
+
     void pushfp(double val) {
       if( registers[REGSP].ulong >= stack_size) {
         throw MetisException("stack full (push), val = " + to_string(val),__LINE__,__FILE__);
