@@ -123,7 +123,28 @@ bool MetisVM::do_eval() {
 
       case INS_PUSHR:
         if(instruction->commands.pushr.registers & REGA_F) {
+          push(registers[REGA]);
+        }
+        if(instruction->commands.pushr.registers & REGB_F) {
+          push(registers[REGB]);
+        }
+        if(instruction->commands.pushr.registers & REGC_F) {
+          push(registers[REGC]);
+        }
+        if(instruction->commands.pushr.registers & REGD_F) {
+          push(registers[REGD]);
+        }
+        if(instruction->commands.pushr.registers & REGSP_F) {
+          push(registers[REGSP]);
+        }
+        if(instruction->commands.pushr.registers & REGIP_F) {
           push(registers[REGIP]);
+        }
+        if(instruction->commands.pushr.registers & REGBP_F) {
+          push(registers[REGBP]);
+        }
+        if(instruction->commands.pushr.registers & REGERR_F) {
+          push(registers[REGERR]);
         }
         registers[REGIP].ulong += INS_PUSHR_SIZE;
         break;

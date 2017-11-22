@@ -1044,7 +1044,7 @@ class MetisVM {
       registers[REGSP].whole -= 1;
       return stack[registers[REGSP].whole].whole;
     }
-    uint64_t popfp() {
+    double popfp() {
       if(registers[REGSP].whole == 0) {
         throw MetisException("stack empty (pop)",__LINE__,__FILE__);
       }
