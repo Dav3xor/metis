@@ -1050,7 +1050,7 @@ class MetisVM {
         throw MetisException("stack empty (pop)",__LINE__,__FILE__);
       }
       registers[REGSP].whole -= 1;
-      return stack[registers[REGSP]];
+      return stack[registers[REGSP].whole];
     }
 
     double popfp() {
