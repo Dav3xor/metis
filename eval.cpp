@@ -149,29 +149,29 @@ bool MetisVM::do_eval() {
         registers[REGIP].ulong += INS_PUSHR_SIZE;
         break;
       case INS_POPR:
-        if(instruction->commands.popr.registers & REGA_F) {
-          registers[REGA] = popcell();
-        }
-        if(instruction->commands.popr.registers & REGB_F) {
-          registers[REGB] = popcell();
-        }
-        if(instruction->commands.popr.registers & REGC_F) {
-          registers[REGC] = popcell();
-        }
-        if(instruction->commands.popr.registers & REGD_F) {
-          registers[REGD] = popcell();
-        }
-        if(instruction->commands.popr.registers & REGSP_F) {
-          registers[REGSP] = popcell();
-        }
-        if(instruction->commands.popr.registers & REGIP_F) {
-          registers[REGIP] = popcell();
+        if(instruction->commands.popr.registers & REGERR_F) {
+          registers[REGERR] = popcell();
         }
         if(instruction->commands.popr.registers & REGBP_F) {
           registers[REGBP] = popcell();
         }
-        if(instruction->commands.popr.registers & REGERR_F) {
-          registers[REGERR] = popcell();
+        if(instruction->commands.popr.registers & REGIP_F) {
+          registers[REGIP] = popcell();
+        }
+        if(instruction->commands.popr.registers & REGSP_F) {
+          registers[REGSP] = popcell();
+        }
+        if(instruction->commands.popr.registers & REGD_F) {
+          registers[REGD] = popcell();
+        }
+        if(instruction->commands.popr.registers & REGC_F) {
+          registers[REGC] = popcell();
+        }
+        if(instruction->commands.popr.registers & REGB_F) {
+          registers[REGB] = popcell();
+        }
+        if(instruction->commands.popr.registers & REGA_F) {
+          registers[REGA] = popcell();
         }
         registers[REGIP].ulong += INS_POPR_SIZE;
         break;
