@@ -540,6 +540,26 @@ TEST_CASE( "stack_adj", "[MetisVM]" ) {
   REQUIRE( m.get_registers()[REGA] == 101);
 }
 
+TEST_CASE( "pushr/popr", "[MetisVM]" ) {
+  uint8_t buf[10000];
+  uint64_t stack[5];
+  MetisVM m(buf,10000, stack, 5, NULL, 0);
+  m.hard_reset();
+
+  m.add_storei(REGA,100);
+  m.add_storei(REGC,200);
+  m.add_storei(REGD,300);
+  m.add_pushr(REGA_F|REGC_F|REGD_F);
+  m.add_end();
+
+  m.eval();
+  REQUIRE( m.cur_stack_val(0) == 300);
+  REQUIRE( m.cur_stack_val(1) == 200);
+  REQUIRE( m.cur_stack_val(2) == 100);
+}
+
+
+
 TEST_CASE( "noop", "[MetisVM]" ) {
   uint8_t buf[10000];
   uint64_t stack[5];
