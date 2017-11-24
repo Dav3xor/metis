@@ -166,6 +166,15 @@ uint64_t MetisVM::add_store_sr(address_mode src, uint64_t offset) {
   RETURN_NEXT();
 }
 
+uint64_t MetisVM::add_pushr(uint16_t registers) {
+  CHECK_INSTRUCTION(INS_STACK_ADJ_SIZE);
+
+  MetisInstruction *instruction                 = (MetisInstruction *)registers[REGIP].ulong;
+  instruction->type                             = INS_STACK_ADJ;      
+  instruction->commands.stack_adj.amount = amount;
+  registers[REGIP].ulong += INS_STACK_ADJ_SIZE;
+  RETURN_NEXT();
+}
 uint64_t MetisVM::add_stack_adj(uint64_t amount) {
   CHECK_INSTRUCTION(INS_STACK_ADJ_SIZE);
 

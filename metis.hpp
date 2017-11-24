@@ -528,8 +528,8 @@ class MetisVM {
     uint64_t add_store_sr     (address_mode src, uint64_t offset);
     uint64_t add_load_sr      (uint64_t offset, address_mode dest);
     uint64_t add_stack_adj    (uint64_t amount);
-    uint64_t add_pushr        (uint16_t amount);
-    uint64_t add_popr         (uint16_t amount);
+    uint64_t add_pushr        (uint16_t registers);
+    uint64_t add_popr         (uint16_t registers);
     uint64_t add_label_ip     (const char *label);
     uint64_t add_label_val    (const char *label, uint64_t val);
     uint64_t add_label_float  (const char *label, float val);
