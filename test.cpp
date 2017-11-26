@@ -569,7 +569,7 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   m.add_popr(REGA_F|REGC_F|REGD_F);
   REQUIRE( m.get_registers()[REGA] == 100);
   REQUIRE( m.get_registers()[REGB] == 200);
-  REQUIRE( m.get_registers()[REGB] == 300);
+  REQUIRE( m.get_registers()[REGC] == 300);
   m.add_end();
 
   m.eval();
