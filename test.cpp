@@ -556,6 +556,23 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   REQUIRE( m.cur_stack_val(0) == 300);
   REQUIRE( m.cur_stack_val(1) == 200);
   REQUIRE( m.cur_stack_val(2) == 100);
+  
+  m.hard_reset();
+
+  m.add_storei(REGA,100);
+  m.add_storei(REGC,200);
+  m.add_storei(REGD,300);
+  m.add_pushr(REGA_F|REGC_F|REGD_F);
+  m.add_storei(REGA,101);
+  m.add_storei(REGC,202);
+  m.add_storei(REGD,303);
+  m.add_popr(REGA_F|REGC_F|REGD_F);
+  REQUIRE( m.get_registers()[REGA] == 100);
+  REQUIRE( m.get_registers()[REGB] == 200);
+  REQUIRE( m.get_registers()[REGB] == 300);
+  m.add_end();
+
+  m.eval();
 }
 
 
