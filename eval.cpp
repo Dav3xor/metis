@@ -122,6 +122,7 @@ bool MetisVM::do_eval() {
         break;
 
       case INS_PUSHR:
+        cout << "pushr" << endl;
         if(instruction->commands.pushr.registers & REGA_F) {
           push(registers[REGA]);
         }
