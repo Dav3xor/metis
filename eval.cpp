@@ -149,29 +149,38 @@ bool MetisVM::do_eval() {
         registers[REGIP].ulong += INS_PUSHR_SIZE;
         break;
       case INS_POPR:
+        cout << "popr" << endl;
         if(instruction->commands.popr.registers & REGERR_F) {
           registers[REGERR] = popcell();
+          cout << "1" << endl;
         }
         if(instruction->commands.popr.registers & REGBP_F) {
           registers[REGBP] = popcell();
+          cout << "2" << endl;
         }
         if(instruction->commands.popr.registers & REGIP_F) {
           registers[REGIP] = popcell();
+          cout << "3" << endl;
         }
         if(instruction->commands.popr.registers & REGSP_F) {
           registers[REGSP] = popcell();
+          cout << "4" << endl;
         }
         if(instruction->commands.popr.registers & REGD_F) {
           registers[REGD] = popcell();
+          cout << "5" << endl;
         }
         if(instruction->commands.popr.registers & REGC_F) {
           registers[REGC] = popcell();
+          cout << "6" << endl;
         }
         if(instruction->commands.popr.registers & REGB_F) {
           registers[REGB] = popcell();
+          cout << "7" << endl;
         }
         if(instruction->commands.popr.registers & REGA_F) {
           registers[REGA] = popcell();
+          cout << "8" << endl;
         }
         registers[REGIP].ulong += INS_POPR_SIZE;
         break;
