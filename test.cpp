@@ -547,15 +547,25 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   m.hard_reset();
 
   m.add_storei(REGA,100);
-  m.add_storei(REGC,200);
-  m.add_storei(REGD,300);
+  m.add_storei(REGB,200);
+  m.add_storei(REGC,300);
+  m.add_storei(REGD,400);
+  m.add_storei(REGSP,500);
+  m.add_storei(REGIP,600);
+  m.add_storei(REGBP,700);
+  m.add_storei(REGERR,800);
   m.add_pushr(REGA_F|REGC_F|REGD_F);
   m.add_end();
 
   m.eval();
-  REQUIRE( m.cur_stack_val(0) == 300);
-  REQUIRE( m.cur_stack_val(1) == 200);
-  REQUIRE( m.cur_stack_val(2) == 100);
+  REQUIRE( m.cur_stack_val(0) == 800);
+  REQUIRE( m.cur_stack_val(1) == 700);
+  REQUIRE( m.cur_stack_val(2) == 600);
+  REQUIRE( m.cur_stack_val(3) == 500);
+  REQUIRE( m.cur_stack_val(4) == 400);
+  REQUIRE( m.cur_stack_val(5) == 300);
+  REQUIRE( m.cur_stack_val(6) == 200);
+  REQUIRE( m.cur_stack_val(7) == 100);
   
   m.hard_reset();
 
@@ -732,7 +742,6 @@ TEST_CASE( "time instructions", "[MetisVM]" ) {
   m.add_end();
 
   m.eval();
-  cout << m.get_registers()[REGA] << " - " << m.get_registers()[REGB] << " - " << m.get_registers()[REGC] << endl;
   REQUIRE(m.get_registers()[REGB] - m.get_registers()[REGA] > 1000000);
 }
 

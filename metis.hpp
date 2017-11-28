@@ -276,7 +276,7 @@ class MetisContext {
       glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   
-      printf("MetisVM: startup\n");
+      //printf("MetisVM: startup\n");
       glfwSetErrorCallback(error_callback); 
       monitor = glfwGetPrimaryMonitor();
     }
