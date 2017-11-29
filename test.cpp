@@ -542,7 +542,7 @@ TEST_CASE( "stack_adj", "[MetisVM]" ) {
 
 TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   uint8_t buf[10000];
-  uint64_t stack[20];
+  uint64_t stack[50];
   MetisVM m(buf,10000, stack, 20, NULL, 0);
   m.hard_reset();
 
@@ -554,7 +554,7 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   m.add_storei(REGIP,600);
   m.add_storei(REGBP,700);
   m.add_storei(REGERR,800);
-  m.add_pushr(REGA_F|REGC_F|REGD_F);
+  m.add_pushr(REGA_F|REGB_F|REGC_F|REGD_F|REGSP_F|REGIP_F|REGBP_F|REGERR_F);
   m.add_end();
 
   m.eval();
