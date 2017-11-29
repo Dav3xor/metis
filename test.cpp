@@ -550,8 +550,7 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   m.add_storei(REGB,200);
   m.add_storei(REGC,300);
   m.add_storei(REGD,400);
-  m.add_storei(REGSP,500);
-  m.add_storei(REGIP,600);
+  // can't set SP/IP without running off the rails
   m.add_storei(REGBP,700);
   m.add_storei(REGERR,800);
   m.add_pushr(REGA_F|REGB_F|REGC_F|REGD_F|REGSP_F|REGIP_F|REGBP_F|REGERR_F);
@@ -560,8 +559,8 @@ TEST_CASE( "pushr/popr", "[MetisVM]" ) {
   m.eval();
   REQUIRE( m.cur_stack_val(0) == 800);
   REQUIRE( m.cur_stack_val(1) == 700);
-  REQUIRE( m.cur_stack_val(2) == 600);
-  REQUIRE( m.cur_stack_val(3) == 500);
+  //REQUIRE( m.cur_stack_val(2) == 600);
+  REQUIRE( m.cur_stack_val(3) == 4);
   REQUIRE( m.cur_stack_val(4) == 400);
   REQUIRE( m.cur_stack_val(5) == 300);
   REQUIRE( m.cur_stack_val(6) == 200);
