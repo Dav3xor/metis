@@ -56,7 +56,10 @@ class Function(Element):
     if self.return_type:
       print "# returns:  " + self.return_type
     print "# " + "-"*75
+    print "PUSHR REGA, REGB, REGC REGD"
     Element.recurse(self)
+    print "POPR REGA, REGB, REGC REGD"
+    print "STORE REGIP, STACK_POP"
     print "# " + "-"*75
     print
     print
