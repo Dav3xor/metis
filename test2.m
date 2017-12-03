@@ -7,8 +7,8 @@ def return_x float x <- float:
   <- x.
 fin
 
-; shortcomment
-;another short comment
+# shortcomment
+#another short comment
 
 def is_positive float x <- bool:
   if x > 0
