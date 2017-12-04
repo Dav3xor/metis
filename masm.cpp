@@ -96,6 +96,22 @@ address_mode MetisASM::get_addr_mode(void) {
     }
 }
 
+uint16_t MetisASM::get_register_list(void) {
+  string input;
+  uint16_t registers;
+
+  *infile >> paren;
+
+  if(input != "(") {
+    throw MasmException("register list doesn't start with '(': " + mode, countbuf->lineNumber(), countbuf->column());
+  }
+  
+  while(true) {
+    *infile >> input;
+
+    if( input == ")")break;
+    
+    
 
 uint64_t MetisASM::get_uint64(void) {
   string val;
