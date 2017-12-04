@@ -98,7 +98,7 @@ address_mode MetisASM::get_addr_mode(void) {
 
 uint16_t MetisASM::get_register_list(void) {
   string input;
-  uint16_t registers;
+  uint16_t registers = 0;
 
   *infile >> paren;
 
@@ -111,6 +111,13 @@ uint16_t MetisASM::get_register_list(void) {
 
     if( input == ")")break;
     
+    if( input == ",")continue;
+
+    registers |= addr_modes[input];
+  }
+
+  return registers
+}
     
 
 uint64_t MetisASM::get_uint64(void) {
