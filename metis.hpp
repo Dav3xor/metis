@@ -1334,6 +1334,7 @@ class MetisASM {
     uint64_t           convert_uint(const string s);
     float              convert_float(const string s);
     address_mode       get_addr_mode(void);
+    uint16_t           get_register_list(void);
     uint64_t           get_uint64(void);
     uint8_t            get_uint8(void);
     float              get_float(MetisVM &m);

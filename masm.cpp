@@ -100,10 +100,10 @@ uint16_t MetisASM::get_register_list(void) {
   string input;
   uint16_t registers = 0;
 
-  *infile >> paren;
+  *infile >> input;
 
   if(input != "(") {
-    throw MasmException("register list doesn't start with '(': " + mode, countbuf->lineNumber(), countbuf->column());
+    throw MasmException("register list doesn't start with '(': ", countbuf->lineNumber(), countbuf->column());
   }
   
   while(true) {
@@ -116,7 +116,7 @@ uint16_t MetisASM::get_register_list(void) {
     registers |= addr_modes[input];
   }
 
-  return registers
+  return registers;
 }
     
 
