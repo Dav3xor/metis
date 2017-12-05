@@ -10,6 +10,13 @@ LOC start
 STOREI REGA 1
 STOREI REGB 2
 
+* push some registers on the stack
+PUSHR ( REGA REGB )
+
+* and pop them back
+POPR ( REGA REGB )
+
+
 * a matrix...
 MATRIX stuff 3 3
   1.1 2.1 3.1
