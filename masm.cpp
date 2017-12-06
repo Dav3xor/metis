@@ -384,14 +384,12 @@ MetisASM::MetisASM() :
                                                  m.add_load_sr      (offset, dest); } },
 
     {"PUSHR",                      HANDLED_BY {  (void)s;
-                                                 uint64_t     offset = this->get_addr(m);
-                                                 address_mode dest   = this->get_addr_mode();
-                                                 m.add_load_sr      (offset, dest); } },
+                                                 uint16_t  registers = this->get_register_list();
+                                                 m.add_pushr        (registers); } },
 
     {"POPR",                       HANDLED_BY {  (void)s;
-                                                 uint64_t     offset = this->get_addr(m);
-                                                 address_mode dest   = this->get_addr_mode();
-                                                 m.add_load_sr      (offset, dest); } },
+                                                 uint16_t  registers = this->get_register_list();
+                                                 m.add_popr         (registers); } },
 
     {"STACK_ADJ",                  HANDLED_BY {  (void)s;
                                                  uint64_t     amount = this->get_uint64();
