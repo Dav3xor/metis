@@ -5,7 +5,7 @@
 
 * save a label of the start of our code...
 LOC start
-
+LOC init
 * store some values in the A and B registers
 STOREI REGA 1
 STOREI REGB 2

@@ -149,7 +149,7 @@ float MetisASM::get_float(MetisVM &m) {
       return m.get_label_float(val.c_str());
     } catch(...) {
       cout << countbuf->lineNumber() << " - " << countbuf->column() << endl;
-      throw MasmException("label not defined: " + val, countbuf->lineNumber(), countbuf->column());
+      throw MasmException("x label not defined: " + val, countbuf->lineNumber(), countbuf->column());
     }
   }
     
@@ -174,7 +174,7 @@ uint64_t MetisASM::get_addr(MetisVM &m) {
       return m.get_label(val.c_str());
     } catch(...) {
       cout << countbuf->lineNumber() << " - " << countbuf->column() << endl;
-      throw MasmException("label not defined: " + val, countbuf->lineNumber(), countbuf->column());
+      throw MasmException("y label not defined: " + val, countbuf->lineNumber(), countbuf->column());
     }
   }
 }
