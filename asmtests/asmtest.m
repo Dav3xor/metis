@@ -54,4 +54,5 @@ NOOP
 NOOP
 
 * the end!
+LOC mainloop
 END
