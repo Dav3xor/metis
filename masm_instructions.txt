@@ -108,6 +108,14 @@ LOADSR              offset, dest
 
   dest = stack[REGSP - offset]
 
+PUSHR               ( REGA REGB ... )
+
+  pushes the registers listed in parentheses onto the stack
+
+POPR                ( REGA REGB ... )
+
+  pops the registers listed in parentheses off the stack
+
 STACK_ADJ           amount
   
   adjust the stack pointer by amount
