@@ -28,7 +28,6 @@ class Head(Element):
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
-    self.add_child(parse_file(filename))
   def render(self):
     print "rendering file"
 
@@ -37,7 +36,8 @@ class Include(Element):
     Element.__init__(self)
   def render(self):
     print "rendering include"
-    Element.recurse(self)
+    for child in self.children:
+      print child.filename
 
 class Function(Element):
   def __init__(self, name):
@@ -46,23 +46,8 @@ class Function(Element):
     self.name = name
     self.return_type = None
   def render(self):
-    print "# " + "-"*75
-    print   "# function: " + self.name
-    if len(self.args):
-      print "# args:    ",
-      args = [' '.join(i) for i in self.args]
-      print ', '.join(args),
-      print " "
-    if self.return_type:
-      print "# returns:  " + self.return_type
-    print "# " + "-"*75
-    print "PUSHR REGA, REGB, REGC REGD"
+    print "rendering function"
     Element.recurse(self)
-    print "POPR REGA, REGB, REGC REGD"
-    print "STORE REGIP, STACK_POP"
-    print "# " + "-"*75
-    print
-    print
 
 class FunctionCall(Element):
   def __init__(self, name):
@@ -644,7 +629,7 @@ def handle_include(tokens):
     # consume the dash...
     tokens.get_token()
     # add filename to include list
-    i.add_child(parse_file(tokens.get_token()))
+    i.add_child(File(tokens.get_token()))
     dash = peek(tokens)
   print peek(tokens)
   return i
@@ -770,11 +755,7 @@ def handle_bs(tokens):
 
 
 def parse_file(filename):
-  if not (filename.endswith('.m') or filename.endswith('.M')):
-    filename += ".m"
-  
   h = Head(filename.split('.')[0])
-
   with open(filename,"r") as input:
     input = input.read()
 
