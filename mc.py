@@ -46,8 +46,18 @@ class Function(Element):
     self.name = name
     self.return_type = None
   def render(self):
+    print "* " + "-"*75
+    print "* Function: " + self.name
+    if len(self.args):
+      print "* Arguments: ",
+      for arg in self.args:
+        print arg,
+      print 
     print "rendering function"
     Element.recurse(self)
+    print "* End: " +self.name
+    print "* " + "-"*75
+    print ""
 
 class FunctionCall(Element):
   def __init__(self, name):
