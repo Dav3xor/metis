@@ -53,8 +53,9 @@ class Function(Element):
       for arg in self.args:
         print arg,
       print 
-    print "rendering function"
+    print "PUSHR ( REGA REGB REGC REGD )"
     Element.recurse(self)
+    print "POPR ( REGA REGB REGC REGD )"
     print "* End: " +self.name
     print "* " + "-"*75
     print ""
