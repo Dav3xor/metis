@@ -4,7 +4,11 @@
 import shlex
 import re
 import sys
-  
+
+types = {}
+globals = {}
+
+
 class Element:
   def __init__(self):
     self.children = []
@@ -29,6 +33,7 @@ class File(Element):
   def __init__(self, filename):
     self.filename = filename
   def render(self):
+    self.parsetree = parse_file(self.filename)
     print "rendering file"
 
 class Include(Element):
