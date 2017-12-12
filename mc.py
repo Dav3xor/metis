@@ -32,8 +32,8 @@ class Head(Element):
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
-  def render(self):
     self.parsetree = parse_file(self.filename)
+  def render(self):
     print "rendering file"
 
 class Include(Element):
@@ -42,6 +42,7 @@ class Include(Element):
   def render(self):
     print "rendering include"
     for child in self.children:
+      child.render()
       print child.filename
 
 class Function(Element):
