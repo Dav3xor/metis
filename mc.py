@@ -32,7 +32,7 @@ class Head(Element):
 class File(Element):
   def __init__(self, filename):
     self.filename = filename
-    self.parsetree = parse_file(self.filename)
+    #self.parsetree = parse_file(self.filename+'.m')
   def render(self):
     print "rendering file"
 
