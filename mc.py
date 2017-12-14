@@ -396,6 +396,7 @@ def handle_functiondef(tokens):
   print "end function"
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
+  functions[f.name] = f
   return f
 
 def handle_assignment_operator(tokens):
