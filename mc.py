@@ -6,6 +6,7 @@ import re
 import sys
 
 types = {}
+functions = {}
 globals = {}
 
 
@@ -393,6 +394,8 @@ def handle_functiondef(tokens):
   while peek(tokens) != "fin":
     f.add_child(handle_bs(tokens))
   print "end function"
+  if f.name in functions:
+    raise SyntaxError("function already defined - " + f.name, tokens)
   return f
 
 def handle_assignment_operator(tokens):
