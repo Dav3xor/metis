@@ -6,7 +6,8 @@ import re
 import sys
 
 types = {}
-functions = {}
+functions = {'print':1,
+             'sqrt':1}
 globals = {}
 
 
@@ -71,8 +72,12 @@ class FunctionCall(Element):
   def __init__(self, name):
     Element.__init__(self)
     self.name = name
+    print functions
+    self.function = functions[self.name]
   def render(self):
     print "rendering function call"
+    for child in self.children:
+      print child
     Element.recurse(self)
 
 class Stmt(Element):
