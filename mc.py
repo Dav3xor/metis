@@ -738,6 +738,11 @@ def handle_typedef(tokens):
       else:
         tokens.get_token()
   print "end typedef"
+  if name in types:
+    raise SyntaxError("typedef already exists: " + name)
+  else:
+    types[name] = ti
+    
   return t 
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
@@ -795,3 +800,5 @@ def parse_file(filename):
 
 if __name__ == '__main__':
   parse_file(sys.argv[1]) 
+  print functions
+  print types
