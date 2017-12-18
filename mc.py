@@ -20,14 +20,14 @@ class Element:
     self.children.append(child)
   def recurse(self,pre=None, post=None):
     if hasattr(self,'children'):
-      if pre:
-        print pre
       for child in self.children:
+        if pre:
+          print pre
         if type(child) == str:
           print child
         child.render()
-      if post:
-        print post
+        if post:
+          print post
 class Head(Element):
   def __init__(self, filename):
     Element.__init__(self)
