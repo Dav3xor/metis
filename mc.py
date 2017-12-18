@@ -18,13 +18,16 @@ class Element:
 
   def add_child(self, child):
     self.children.append(child)
-  def recurse(self):
+  def recurse(self,pre=None, post=None):
     if hasattr(self,'children'):
+      if pre:
+        print pre
       for child in self.children:
         if type(child) == str:
           print child
         child.render()
-
+      if post:
+        print post
 class Head(Element):
   def __init__(self, filename):
     Element.__init__(self)
@@ -78,7 +81,7 @@ class FunctionCall(Element):
     print "rendering function call"
     for child in self.children:
       print child
-    Element.recurse(self)
+    Element.recurse(self, post="STORE REGA, STACK_PUSH")
 
 class Stmt(Element):
   def render(self):
