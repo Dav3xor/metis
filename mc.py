@@ -93,7 +93,7 @@ class Expression(Element):
     self.operator = None
     self.rvalue   = None
   def render(self):
-    print "rendering stmt"
+    print "rendering expression"
 
 class IfClause(Element):
   def __init__(self):
