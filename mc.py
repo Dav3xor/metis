@@ -28,10 +28,15 @@ class Element:
         child.render()
         if post:
           print post
+
 class Head(Element):
   def __init__(self, filename):
     Element.__init__(self)
   def render(self):
+    print "* " + "-"*75
+    print "* MASM Output for: " + sys.argv[1]
+    print "* " + "-"*75
+     
     Element.recurse(self)
 
 class File(Element):
