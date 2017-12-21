@@ -236,7 +236,8 @@ class Assignment(Element):
     Element.__init__(self)
   def render(self):
     print "rendering assignment"
-
+    Element.recurse(self)
+    print "STORESR REGA " #TODO find stack offset of variable
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
