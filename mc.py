@@ -261,6 +261,9 @@ class LabelStack(object):
 
   def add_label(self,label,value):
     self.stack[-1][label] = value
+
+  def print_cur_frame(self):
+    print self.stack[-1]
   def find_label(self,label, tokens):
     for i in reversed(self.stack):
       if label in i:
@@ -401,6 +404,7 @@ def handle_beginfunction(tokens):
   return f
 
 def handle_functiondef(tokens):
+  labels.push_context()
   f = handle_beginfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
@@ -411,6 +415,8 @@ def handle_functiondef(tokens):
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
   functions[f.name] = f
+  labels.print_cur_frame()
+  labels.pop_context()
   return f
 
 def handle_assignment_operator(tokens):
