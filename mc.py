@@ -255,13 +255,16 @@ class LabelStack(object):
   def __init__(self):
     self.stack = [{}]
   def push_context(self):
-    self.stack.append({})
+    self.stack.append({'local_vars':[0]})
   def pop_context(self):
     self.stack.pop()
 
   def add_label(self,label,value):
     self.stack[-1][label] = value
-
+  def add_local_var(self,var):
+    if var not in self.stack[-1]['local_vars']:
+      self.stack[-1]['local_vars'].append(var)
+      
   def print_cur_frame(self):
     print self.stack[-1]
   def find_label(self,label, tokens):
@@ -414,6 +417,7 @@ def handle_functiondef(tokens):
   print "end function"
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
+  f.add_locals(labels.get_locals())
   functions[f.name] = f
   labels.print_cur_frame()
   labels.pop_context()
