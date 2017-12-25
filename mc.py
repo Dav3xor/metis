@@ -10,6 +10,31 @@ functions = {'print':1,
              'sqrt':1}
 globals = {}
 
+class LabelStack(object):
+  def __init__(self):
+    self.stack = [{}]
+  def push_context(self):
+    self.stack.append({})
+  def pop_context(self):
+    self.stack.pop()
+
+  def add_label(self,label,value):
+    self.stack[-1][label] = value
+  def find_label(self,label, tokens):
+    for i in reversed(self.stack):
+      if label in i:
+        return i[label]
+    raise SyntaxError(" label does not exist - " + label, tokens)
+
+
+labels = LabelStack()
+localvars = []
+
+atomic_types = {'string':1, 'bool':1, 
+                'unsigned':1, 'integer':1, 
+                'float':1, 'label':1, 
+                'vector':1, 'matrix':1}
+
 
 class Element:
   def __init__(self):
@@ -251,35 +276,6 @@ class SyntaxError(Exception):
       print "Syntax Error: " + message
 
 
-class LabelStack(object):
-  def __init__(self):
-    self.stack = [{}]
-  def push_context(self):
-    self.stack.append({'local_vars':[0]})
-  def pop_context(self):
-    self.stack.pop()
-
-  def add_label(self,label,value):
-    self.stack[-1][label] = value
-  def add_local_var(self,var):
-    if var not in self.stack[-1]['local_vars']:
-      self.stack[-1]['local_vars'].append(var)
-      
-  def print_cur_frame(self):
-    print self.stack[-1]
-  def find_label(self,label, tokens):
-    for i in reversed(self.stack):
-      if label in i:
-        return i[label]
-    raise SyntaxError(" label does not exist - " + label, tokens)
-
-
-labels = LabelStack()
-
-atomic_types = {'string':1, 'bool':1, 
-                'unsigned':1, 'integer':1, 
-                'float':1, 'label':1, 
-                'vector':1, 'matrix':1}
 
 low_precedence = {'+':1,'-':1}
 
@@ -408,6 +404,7 @@ def handle_beginfunction(tokens):
 
 def handle_functiondef(tokens):
   labels.push_context()
+  local_vars = []
   f = handle_beginfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
@@ -417,10 +414,9 @@ def handle_functiondef(tokens):
   print "end function"
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
-  f.add_locals(labels.get_locals())
   functions[f.name] = f
-  labels.print_cur_frame()
   labels.pop_context()
+  local_vars = []
   return f
 
 def handle_assignment_operator(tokens):
