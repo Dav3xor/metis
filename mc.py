@@ -4,7 +4,7 @@
 import shlex
 import re
 import sys
-
+from collections import OrderedDict
 types = {}
 functions = {'print':1,
              'sqrt':1}
@@ -12,9 +12,9 @@ globals = {}
 
 class LabelStack(object):
   def __init__(self):
-    self.stack = [{}]
+    self.stack = [OrderedDict()]
   def push_context(self):
-    self.stack.append({})
+    self.stack.append(OrderedDict())
   def pop_context(self):
     self.stack.pop()
 
