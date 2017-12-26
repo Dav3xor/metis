@@ -20,7 +20,7 @@ class LabelStack(object):
 
   def add_label(self,label,value):
     self.stack[-1][label] = value
-  def find_label(self,label, tokens):
+  def get_label(self,label, tokens):
     for i in reversed(self.stack):
       if label in i:
         return i[label]
@@ -417,6 +417,7 @@ def handle_functiondef(tokens):
     raise SyntaxError("function already defined - " + f.name, tokens)
   functions[f.name] = f
   labels.pop_context()
+  print local_vars
   local_vars = None
   return f
 
@@ -534,7 +535,7 @@ def handle_factor(tokens):
       return factor_handlers[token](tokens)
     elif valid_label(token):
       tokens.get_token()
-      label = labels.find_label(token,tokens)
+      label = labels.get_label(token,tokens)
       return Label(label)
   return False
 
