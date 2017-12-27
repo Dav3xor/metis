@@ -17,7 +17,8 @@ class LabelStack(object):
     self.stack.append(OrderedDict())
   def pop_context(self):
     self.stack.pop()
-
+  def cur_labels(self):
+    return self.stack[-1]
   def add_label(self,label,value):
     self.stack[-1][label] = value
   def get_label(self,label, tokens):
