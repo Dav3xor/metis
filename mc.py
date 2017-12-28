@@ -29,7 +29,6 @@ class LabelStack(object):
 
 
 labels = LabelStack()
-local_vars = None 
 
 atomic_types = {'string':1, 'bool':1, 
                 'unsigned':1, 'integer':1, 
@@ -404,9 +403,7 @@ def handle_beginfunction(tokens):
   return f
 
 def handle_functiondef(tokens):
-  global local_vars
   labels.push_context()
-  local_vars = []
   f = handle_beginfunction(tokens)
   colon = tokens.get_token()
   if colon != ':':
@@ -417,9 +414,8 @@ def handle_functiondef(tokens):
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
   functions[f.name] = f
+  print labels.cur_labels()
   labels.pop_context()
-  print local_vars
-  local_vars = None
   return f
 
 def handle_assignment_operator(tokens):
@@ -616,7 +612,6 @@ def handle_assignment(tokens):
     if not valid_label(varname):
       raise SyntaxError("variable name: " + varname + " is not a valid label")
     assignment.add_child(handle_lexp(tokens))
-    local_vars.append({'name': varname, 'type': vartype})
     return assignment
   else:
     if varname:
