@@ -612,6 +612,7 @@ def handle_assignment(tokens):
     if not valid_label(varname):
       raise SyntaxError("variable name: " + varname + " is not a valid label")
     assignment.add_child(handle_lexp(tokens))
+    labels.add_label(varname, {'type': 'stack_var', 'name': varname})
     return assignment
   else:
     if varname:
