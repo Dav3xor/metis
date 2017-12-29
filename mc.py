@@ -377,6 +377,7 @@ def handle_args(tokens):
         arg = handle_typeident(tokens)
         if arg:
           args.append(arg)
+          labels.add_label(arg[1], {'storage': 'argument', 'type': arg[0], 'name': arg[1]})
       else:
         tokens.push_token(comma)
         break
@@ -612,7 +613,7 @@ def handle_assignment(tokens):
     if not valid_label(varname):
       raise SyntaxError("variable name: " + varname + " is not a valid label")
     assignment.add_child(handle_lexp(tokens))
-    labels.add_label(varname, {'type': 'stack_var', 'name': varname})
+    labels.add_label(varname, {'storage': 'stack', 'type': 'stack_var', 'name': varname})
     return assignment
   else:
     if varname:
@@ -722,6 +723,7 @@ def handle_foreach(tokens):
   if label:
     f.add_child(Label(label))
     labels.add_label(label,1)
+    labels.add_label(label, {'storage': 'stack', 'type': 'uint', 'name': label})
   inx   = tokens.get_token()
   if inx != "in":
     raise SyntaxError("foreach requires 'in' keyword")
