@@ -722,7 +722,6 @@ def handle_foreach(tokens):
   label = valid_label(tokens.get_token())
   if label:
     f.add_child(Label(label))
-    labels.add_label(label,1)
     labels.add_label(label, {'storage': 'stack', 'type': 'uint', 'name': label})
   inx   = tokens.get_token()
   if inx != "in":
@@ -745,6 +744,7 @@ def handle_typedef(tokens):
     ti = handle_typeident(tokens)
     if ti:
       t.add_child(Typename(*ti))
+      labels.add_label(ti[1], {'storage': 'class_instance', 'type': ti[0], 'name': ti[1]})
       dot = tokens.get_token()
       if dot != ".":
         raise SyntaxError("member declaration in type doesn't end with '.'", tokens)
