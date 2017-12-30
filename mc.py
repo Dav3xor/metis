@@ -363,7 +363,6 @@ def handle_typeident(tokens):
   else:
     tokens.get_token()
     label = valid_label(tokens.get_token())
-    labels.add_label(label,1)
     return (vartype, label)
 
 def handle_args(tokens):
@@ -371,6 +370,7 @@ def handle_args(tokens):
   arg = handle_typeident(tokens) 
   if arg:
     args.append(arg)
+    labels.add_label(arg[1], {'storage': 'argument', 'type': arg[0], 'name': arg[1]})
     while True:
       comma = tokens.get_token()
       if comma == ',':
