@@ -414,6 +414,7 @@ def handle_functiondef(tokens):
   print "end function"
   if f.name in functions:
     raise SyntaxError("function already defined - " + f.name, tokens)
+  f.variables  = labels.cur_labels()
   functions[f.name] = f
   print labels.cur_labels()
   labels.pop_context()
