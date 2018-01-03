@@ -29,6 +29,7 @@ class LabelStack(object):
 
 
 labels = LabelStack()
+cur_labels = None
 
 atomic_types = {'string':1, 'bool':1, 
                 'unsigned':1, 'integer':1, 
@@ -87,6 +88,9 @@ class Function(Element):
     self.name = name
     self.return_type = None
   def render(self):
+    print self.name
+    variables = functions[self.name]
+    print variables
     print "* " + "-"*75
     print "* Function: " + self.name
     if len(self.args):
