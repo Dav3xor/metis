@@ -251,6 +251,14 @@ class Trait(Element):
     print "rendering trait"
     Element.recurse(self)
 
+class TraitIdent(Element):  
+  def __init__(self, signature):
+    Element.__init__(self)
+    self.signature = signature
+  def render(self):
+    print "rendering traitident"
+    Element.recurse(self)
+
 class Group(Element):  
   def __init__(self):
     Element.__init__(self)
@@ -629,7 +637,7 @@ def handle_assignment(tokens):
 
 def handle_traitident(tokens):
   print "traitident"
-  return handle_beginfunction(tokens)
+  return TraitIdent(handle_beginfunction(tokens))
 
     
 def handle_stmt(tokens):
