@@ -774,8 +774,10 @@ def handle_typedef(tokens):
     raise SyntaxError("typedef already exists: " + name)
   else:
     types[name] = ti
-    
+  
+  types[name] = t
   return t 
+
 block_handlers = {'if':        handle_if,
                   'include':   handle_include,
                   'while':     handle_while,
