@@ -637,8 +637,9 @@ def handle_assignment(tokens):
 
 def handle_traitident(tokens):
   print "traitident"
-  return TraitIdent(handle_beginfunction(tokens))
-
+  signature = handle_beginfunction(tokens)
+  types[signature.name] = signature
+  return TraitIdent(signature)
     
 def handle_stmt(tokens):
   # statements start with a return arrow, a colon, a type signature, or a label
