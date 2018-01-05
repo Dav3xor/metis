@@ -6,6 +6,7 @@ import re
 import sys
 from collections import OrderedDict
 types = {}
+traits = {}
 functions = {'print':1,
              'sqrt':1}
 globals = {}
@@ -638,7 +639,7 @@ def handle_assignment(tokens):
 def handle_traitident(tokens):
   print "traitident"
   signature = handle_beginfunction(tokens)
-  types[signature.name] = signature
+  traits[signature.name] = signature
   return TraitIdent(signature)
     
 def handle_stmt(tokens):
