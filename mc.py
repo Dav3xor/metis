@@ -121,6 +121,7 @@ class FunctionCall(Element):
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
+    Element.recurse(self)
 
 class Expression(Element):
   def __init__(self):
