@@ -130,6 +130,8 @@ class Expression(Element):
     self.rvalue   = None
   def render(self):
     print "rendering expression"
+    self.lvalue.recurse()
+    self.rvalue.recurse()
 
 class IfClause(Element):
   def __init__(self):
