@@ -11,6 +11,14 @@ functions = {'print':1,
              'sqrt':1}
 globals = {}
 
+def dump(obj, level=0):
+   for attr in dir(obj):
+      val = getattr(obj, attr)
+      if isinstance(val, (int, float, str, unicode, list, dict, set)):
+           print level*' ', val
+      else:
+           dump(val, level=level+1)
+
 class LabelStack(object):
   def __init__(self):
     self.stack = [OrderedDict()]
@@ -130,6 +138,8 @@ class Expression(Element):
     self.rvalue   = None
   def render(self):
     print "rendering expression"
+    dump(self.lvalue)
+    5/0
     self.lvalue.recurse()
     self.rvalue.recurse()
 
