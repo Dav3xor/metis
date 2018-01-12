@@ -2,6 +2,7 @@
 
 # an attempt at a compiler using shlex...
 import shlex
+from types import InstanceType
 import re
 import sys
 from collections import OrderedDict
@@ -11,13 +12,12 @@ functions = {'print':1,
              'sqrt':1}
 globals = {}
 
-def dump(obj, level=0):
-   for attr in dir(obj):
-      val = getattr(obj, attr)
-      if isinstance(val, (int, float, str, unicode, list, dict, set)):
-           print level*' ', val
-      else:
-           dump(val, level=level+1)
+def dump_obj(obj, level=0):
+    for key, value in obj.__dict__.items():
+        if not isinstance(value, InstanceType):
+             print " " * level + "%s -> %s" % (key, value)
+        else:
+            dump_obj(value, level + 2)
 
 class LabelStack(object):
   def __init__(self):
@@ -138,7 +138,7 @@ class Expression(Element):
     self.rvalue   = None
   def render(self):
     print "rendering expression"
-    dump(self.lvalue)
+    dump_obj(self.lvalue)
     5/0
     self.lvalue.recurse()
     self.rvalue.recurse()
