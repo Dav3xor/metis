@@ -68,11 +68,13 @@ class Head(Element):
   def __init__(self, filename):
     Element.__init__(self)
   def render(self):
-    print "* " + "-"*75
-    print "* MASM Output for: " + sys.argv[1]
-    print "* " + "-"*75
+    output = [
+      "* " + "-"*75,
+      "* MASM Output for: " + sys.argv[1],
+      "* " + "-"*75 ]
      
     Element.recurse(self)
+    return {'output': output}
 
 class File(Element):
   def __init__(self, filename):
@@ -80,6 +82,7 @@ class File(Element):
     #self.parsetree = parse_file(self.filename+'.m')
   def render(self):
     print "rendering file"
+    return {}
 
 class Include(Element):
   def __init__(self):
@@ -89,6 +92,7 @@ class Include(Element):
     for child in self.children:
       child.render()
       print child.filename
+    return {}
 
 class Function(Element):
   def __init__(self, name):
@@ -138,8 +142,7 @@ class Expression(Element):
     self.rvalue   = None
   def render(self):
     print "rendering expression"
-    dump_obj(self.lvalue)
-    5/0
+    dump_obj(self.lvalue,5)
     self.lvalue.recurse()
     self.rvalue.recurse()
 
