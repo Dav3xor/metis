@@ -102,21 +102,23 @@ class Function(Element):
     self.return_type = None
   def render(self):
     print self.name
-    variables = functions[self.name]
-    print variables
-    print "* " + "-"*75
-    print "* Function: " + self.name
+    output = [
+      "* " + "-"*75,
+      "* Function: " + self.name ]
     if len(self.args):
-      print "* Arguments: ",
+      arglist = "* Arguments: "
       for arg in self.args:
-        print arg,
-      print 
-    print "PUSHR ( REGA REGB REGC REGD )"
+        arglist+= str(arg)
+      output.append(arglist)
+    output.append("PUSHR ( REGA REGB REGC REGD )")
     Element.recurse(self)
-    print "POPR ( REGA REGB REGC REGD )"
-    print "* End: " +self.name
-    print "* " + "-"*75
-    print ""
+    output.append("POPR ( REGA REGB REGC REGD )")
+    output.append("* End: " +self.name)
+    output.append("* " + "-"*75)
+    output.append("")
+    print output
+    5/0
+    return {'output': output}
 
 class FunctionCall(Element):
   def __init__(self, name):
