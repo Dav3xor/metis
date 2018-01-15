@@ -108,7 +108,7 @@ class Function(Element):
     if len(self.args):
       arglist = "* Arguments: "
       for arg in self.args:
-        arglist+= str(arg)
+        arglist+= arg[0] + " " + arg[1] 
       output.append(arglist)
     output.append("PUSHR ( REGA REGB REGC REGD )")
     Element.recurse(self)
@@ -117,7 +117,6 @@ class Function(Element):
     output.append("* " + "-"*75)
     output.append("")
     print output
-    5/0
     return {'output': output}
 
 class FunctionCall(Element):
@@ -131,11 +130,13 @@ class FunctionCall(Element):
     for child in self.children:
       print child
     Element.recurse(self, post="STORE REGA, STACK_PUSH")
+    return {}
 
 class Stmt(Element):
   def render(self):
     print "rendering stmt"
     Element.recurse(self)
+    return {}
 
 class Expression(Element):
   def __init__(self):
@@ -147,6 +148,7 @@ class Expression(Element):
     dump_obj(self.lvalue,5)
     self.lvalue.recurse()
     self.rvalue.recurse()
+    return {}
 
 class IfClause(Element):
   def __init__(self):
@@ -154,6 +156,7 @@ class IfClause(Element):
   def render(self):
     print "rendering ifclause"
     Element.recurse(self)
+    return {}
 
 class If(Element):
   def __init__(self):
@@ -161,6 +164,7 @@ class If(Element):
   def render(self):
     print "rendering if"
     Element.recurse(self)
+    return {}
 
 class While(Element):
   def __init__(self):
@@ -168,6 +172,7 @@ class While(Element):
   def render(self):
     print "rendering else"
     Element.recurse(self)
+    return {}
     
 class Foreach(Element):
   def __init__(self):
@@ -175,6 +180,7 @@ class Foreach(Element):
   def render(self):
     print "rendering foreach"
     Element.recurse(self)
+    return {}
 
 class Typename(Element): 
   def __init__(self, vartype, name):
@@ -182,6 +188,7 @@ class Typename(Element):
     self.type = vartype
   def render(self):
     print "rendering typedef"
+    return {}
 
 class Typedef(Element): 
   def __init__(self, name):
@@ -190,18 +197,21 @@ class Typedef(Element):
   def render(self):
     print "rendering typedef"
     Element.recurse(self)
+    return {}
     
 class Number(Element):
   def __init__(self, number):
     self.value = number
   def render(self):
     print "rendering number"
+    return {}
 
 class Operator(Element):
   def __init__(self, operator):
     self.operator = operator
   def render(self):
     print "rendering operator"
+    return {}
 
 class Vector(Element):
   def __init__(self):
@@ -209,6 +219,7 @@ class Vector(Element):
   def render(self):
     print "rendering vector"
     Element.recurse(self)
+    return {}
 
 class Matrix(Element):
   def __init__(self):
@@ -216,24 +227,28 @@ class Matrix(Element):
   def render(self):
     print "rendering matrix"
     Element.recurse(self)
+    return {}
 
 class Boolean(Element):
   def __init__(self, value):
     self.value = value
   def render(self):
     print "rendering boolean"
+    return {}
 
 class String(Element):
   def __init__(self, string):
     self.value = string
   def render(self):
     print "rendering string"
+    return {}
 
 class Label(Element):
   def __init__(self, label):
     self.value = label
   def render(self):
     print "rendering label"
+    return {}
   
 class Term(Element):  
   def __init__(self):
@@ -241,6 +256,7 @@ class Term(Element):
   def render(self):
     print "rendering term"
     Element.recurse(self)
+    return {}
 
 class Lexp(Element):  
   def __init__(self):
@@ -248,6 +264,7 @@ class Lexp(Element):
   def render(self):
     print "rendering lexp"
     Element.recurse(self)
+    return {}
 
 class Return(Element):  
   def __init__(self):
@@ -255,6 +272,7 @@ class Return(Element):
   def render(self):
     print "rendering return"
     Element.recurse(self)
+    return {}
 
 class Throw(Element):  
   def __init__(self):
@@ -262,6 +280,7 @@ class Throw(Element):
   def render(self):
     print "rendering throw"
     Element.recurse(self)
+    return {}
 
 class Trait(Element):  
   def __init__(self):
@@ -269,6 +288,7 @@ class Trait(Element):
   def render(self):
     print "rendering trait"
     Element.recurse(self)
+    return {}
 
 class TraitIdent(Element):  
   def __init__(self, signature):
@@ -277,6 +297,7 @@ class TraitIdent(Element):
   def render(self):
     print "rendering traitident"
     Element.recurse(self)
+    return {}
 
 class Group(Element):  
   def __init__(self):
@@ -284,6 +305,7 @@ class Group(Element):
   def render(self):
     print "rendering group"
     Element.recurse(self)
+    return {}
 
 class Assignment(Element):  
   def __init__(self, varname, vartype):
@@ -293,7 +315,11 @@ class Assignment(Element):
   def render(self):
     print "rendering assignment"
     Element.recurse(self)
-    print "STORESR REGA " #TODO find stack offset of variable
+    result = [ 
+      "STORESR REGA " #TODO find stack offset of variable
+      ]
+    return { 'result': result }
+
 def peek(tokens):
   token = tokens.get_token()
   tokens.push_token(token)
