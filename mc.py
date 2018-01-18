@@ -6,18 +6,6 @@ from types import InstanceType
 import re
 import sys
 from collections import OrderedDict
-types = {}
-traits = {}
-functions = {'print':1,
-             'sqrt':1}
-globals = {}
-
-def dump_obj(obj, level=0):
-    for key, value in obj.__dict__.items():
-        if not isinstance(value, InstanceType):
-             print " " * level + "%s -> %s" % (key, value)
-        else:
-            dump_obj(value, level + 2)
 
 class LabelStack(object):
   def __init__(self):
@@ -37,7 +25,22 @@ class LabelStack(object):
     raise SyntaxError(" label does not exist - " + label, tokens)
 
 
-labels = LabelStack()
+
+
+labels    = LabelStack()
+types     = {}
+traits    = {}
+globals   = {}
+functions = {'print':1,
+             'sqrt':1}
+
+def dump_obj(obj, level=0):
+    for key, value in obj.__dict__.items():
+        if not isinstance(value, InstanceType):
+             print " " * level + "%s -> %s" % (key, value)
+        else:
+            dump_obj(value, level + 2)
+
 cur_labels = None
 
 atomic_types = {'string':1, 'bool':1, 
@@ -246,6 +249,7 @@ class String(Element):
 class Label(Element):
   def __init__(self, label):
     self.value = label
+    self.var = labels.cur_labels()[label['name']]
   def render(self):
     print "rendering label"
     return {}
