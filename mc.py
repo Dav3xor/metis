@@ -252,15 +252,15 @@ class Label(Element):
     self.var = labels.cur_labels()[label['name']]
   def render(self):
     print "rendering label"
-    return {}
+    return {'value':self.value}
   
 class Term(Element):  
   def __init__(self):
     Element.__init__(self)
   def render(self):
     print "rendering term"
-    Element.recurse(self)
-    return {}
+    val = Element.recurse(self)
+    return {'value':val}
 
 class Lexp(Element):  
   def __init__(self):
