@@ -56,7 +56,7 @@ class Element:
 
   def add_child(self, child):
     self.children.append(child)
-  def recurse(self,pre=None, post=None):
+  def recurse(self):
     if hasattr(self,'children'):
       for child in self.children:
         if pre:
@@ -132,7 +132,7 @@ class FunctionCall(Element):
     print "rendering function call"
     for child in self.children:
       print child
-    Element.recurse(self, post="STORE REGA, STACK_PUSH")
+    Element.recurse(self)
     return {}
 
 class Stmt(Element):
