@@ -76,7 +76,7 @@ class Head(Element):
       "* MASM Output for: " + sys.argv[1],
       "* " + "-"*75 ]
      
-    Element.recurse(self)
+    output += Element.recurse(self)['output']
     return {'output': output}
 
 class File(Element):
